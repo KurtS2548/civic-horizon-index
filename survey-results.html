@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Survey Results - Civic Horizon Index</title>
+
+<link rel="stylesheet" href="css/style.css">
+
+</head>
+
+
+<body>
+
+
+<header>
+
+<h1>Civic Horizon Index</h1>
+
+<p>Survey Results</p>
+
+<button onclick="shareResults()">
+
+Share Results
+
+</button>
+
+</header>
+
+
+
+<nav>
+
+<button onclick="location.href='index.html'">
+Home
+</button>
+
+<button onclick="location.href='polls.html'">
+Polls
+</button>
+
+<button onclick="location.href='dashboard.html'">
+Dashboard
+</button>
+
+<button onclick="location.href='history.html'">
+History
+</button>
+
+</nav>
+
+
+
+
+
+<section class="results-container">
+
+
+
+<h2 id="surveyQuestion">
+
+Loading survey...
+
+</h2>
+
+
+
+
+
+<div class="card winner-card">
+
+<h3>Leading Answer</h3>
+
+<h1 id="winningAnswer">
+
+Loading...
+
+</h1>
+
+</div>
+
+
+
+
+
+<div class="card">
+
+<h3>Total Responses</h3>
+
+<h2 id="totalResponses">
+
+0
+
+</h2>
+
+</div>
+
+
+
+
+
+<div class="card">
+
+<h3>Response Breakdown</h3>
+
+<div id="percentageResults">
+
+Loading...
+
+</div>
+
+</div>
+
+
+
+
+
+<div class="card chart-card">
+
+<h3>Vote Distribution</h3>
+
+<canvas id="resultsChart"></canvas>
+
+</div>
+
+
+
+
+
+<div class="card">
+
+<h3>About This Survey</h3>
+
+<p>
+
+The Civic Horizon Index collects anonymous public responses
+to understand which issues matter most to citizens.
+
+</p>
+
+
+<p>
+
+Results update as new votes are submitted. Each survey is
+tracked independently to maintain accurate reporting.
+
+</p>
+
+</div>
+
+
+
+
+
+</section>
+
+
+
+
+
+
+<footer>
+
+<p>
+
+© 2026 Civic Horizon Index
+
+</p>
+
+</footer>
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script type="module" src="js/survey-results.js"></script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Civic Horizon Index</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link
+href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Merriweather:wght@700&display=swap"
+rel="stylesheet"
+>
+
+<link rel="stylesheet" href="css/style.css">
+
+</head>
+
+<body>
+
+
+<!-- HEADER -->
+
+<header class="site-header">
+
+<div class="header-container">
+
+<a href="index.html" class="brand">
+
+<div class="logo-icon">
+    <img src="logo.png" alt="Civic Horizon Index Logo">
+</div>
+
+<div class="logo-text">
+
+<h1>Civic Horizon Index</h1>
+
+<p>
+Understanding America's Priorities
+</p>
+
+</div>
+
+</a>
+
+
+<nav class="main-nav">
+
+<a href="index.html" class="active">
+Home
+</a>
+
+<a href="polls.html">
+Polls
+</a>
+
+<a href="results.html">
+Results
+</a>
+
+<a href="dashboard.html">
+Dashboard
+</a>
+
+<a href="history.html">
+History
+</a>
+
+<a href="about.html">
+About
+</a>
+
+<a href="polls.html" class="survey-nav-button">
+Take the Survey
+</a>
+
+</nav>
+
+</div>
+
+</header>
+
+
+<!-- HERO -->
+
+<section class="hero">
+
+<div class="hero-content">
+
+<p class="hero-label">
+National Civic Data Platform
+</p>
+
+<h2>
+Understanding America’s Priorities
+<span>Through Data</span>
+</h2>
+
+<p class="hero-description">
+
+Civic Horizon Index is a nonpartisan platform dedicated
+to measuring what matters most to Americans.
+
+</p>
+
+<div class="hero-buttons">
+
+<a href="polls.html" class="primary-button">
+Take the National Survey
+</a>
+
+<a href="results.html" class="secondary-button">
+View National Results
+</a>
+
+</div>
+
+</div>
+
+</section>
+<section class="live-ticker">
+
+<div class="ticker-item">
+
+<span class="ticker-live">
+● LIVE
+</span>
+
+<span>
+
+<strong id="tickerResponses">
+0
+</strong>
+
+Americans have participated.
+
+</span>
+
+</div>
+
+
+<div class="ticker-item">
+
+⭐ Highest Priority:
+
+<strong id="tickerTopIssue">
+
+Loading...
+
+</strong>
+
+</div>
+
+
+<div class="ticker-item">
+
+🕒 Last Updated:
+
+<strong id="tickerUpdate">
+
+Loading...
+
+</strong>
+
+</div>
+
+</section>
+
+<!-- FEATURE CARDS -->
+
+<section class="feature-section">
+
+<div class="feature-grid">
+
+
+<div class="feature-card">
+
+<div class="feature-icon">
+📊
+</div>
+
+<h3>
+Real-Time Data
+</h3>
+
+<p>
+
+Track what Americans care about with live,
+aggregated data and insights.
+
+</p>
+
+</div>
+
+
+<div class="feature-card">
+
+<div class="feature-icon">
+🛡️
+</div>
+
+<h3>
+Anonymous Polling
+</h3>
+
+<p>
+
+Your responses are private.
+Every response helps create a clearer national picture.
+
+</p>
+
+</div>
+
+
+<div class="feature-card">
+
+<div class="feature-icon">
+📈
+</div>
+
+<h3>
+Interactive Dashboards
+</h3>
+
+<p>
+
+Explore trends, compare priorities,
+and understand the issues in depth.
+
+</p>
+
+</div>
+
+
+<div class="feature-card">
+
+<div class="feature-icon">
+🤝
+</div>
+
+<h3>
+Nonpartisan
+</h3>
+
+<p>
+
+Independent civic research focused on data,
+transparency, and public understanding.
+
+</p>
+
+</div>
+
+
+</div>
+
+</section>
+
+
+<!-- LIVE STATISTICS -->
+
+<section class="stats-section">
+
+<div class="section-heading">
+
+<p class="section-label">
+Live National Data
+</p>
+
+<h2>
+America’s Public Pulse
+</h2>
+
+<p>
+
+Survey results update as new responses are submitted.
+
+</p>
+
+</div>
+
+
+<div class="stats">
+
+<div class="stat-card">
+
+<h3 id="totalVotes">
+0
+</h3>
+
+<p>
+Total Votes
+</p>
+
+</div>
+
+
+<div class="stat-card">
+
+<h3 id="activeSurveys">
+0
+</h3>
+
+<p>
+Active Surveys
+</p>
+
+</div>
+
+
+<div class="stat-card">
+
+<h3>
+Live
+</h3>
+
+<p>
+Public Data
+</p>
+
+</div>
+
+</div>
+
+</section>
+<!-- LIVE HIGHLIGHTS -->
+
+<section class="live-highlights">
+
+<div class="highlight-card">
+
+<p class="highlight-label">
+Most Discussed Issue
+</p>
+
+<h3 id="mostDiscussedIssue">
+Loading...
+</h3>
+
+<p>
+Based on current survey activity
+</p>
+
+</div>
+
+
+<div class="highlight-card">
+
+<p class="highlight-label">
+Total Responses
+</p>
+
+<h3 id="highlightResponseCount">
+0
+</h3>
+
+<p>
+Responses collected so far
+</p>
+
+</div>
+
+
+<div class="highlight-card">
+
+<p class="highlight-label">
+Last Updated
+</p>
+
+<h3 id="highlightLastUpdated">
+Live
+</h3>
+
+<p>
+Results refresh automatically
+</p>
+
+</div>
+
+</section>
+<!-- TOP NATIONAL PRIORITIES -->
+
+<section class="top-priorities-section">
+
+<div class="section-heading">
+
+<p class="section-label">
+Live National Rankings
+</p>
+
+<h2>
+Top National Priorities
+</h2>
+
+<p>
+See which issues are currently receiving the highest public priority scores.
+</p>
+
+</div>
+
+
+<div class="priority-list" id="topPriorityList">
+
+<div class="priority-row">
+
+<div class="priority-name">
+Economy
+</div>
+
+<div class="priority-bar">
+
+<div class="priority-fill" style="width: 87%;"></div>
+
+</div>
+
+<div class="priority-score">
+8.7
+</div>
+
+</div>
+
+
+<div class="priority-row">
+
+<div class="priority-name">
+Healthcare
+</div>
+
+<div class="priority-bar">
+
+<div class="priority-fill" style="width: 81%;"></div>
+
+</div>
+
+<div class="priority-score">
+8.1
+</div>
+
+</div>
+
+
+<div class="priority-row">
+
+<div class="priority-name">
+Education
+</div>
+
+<div class="priority-bar">
+
+<div class="priority-fill" style="width: 74%;"></div>
+
+</div>
+
+<div class="priority-score">
+7.4
+</div>
+
+</div>
+
+
+<div class="priority-row">
+
+<div class="priority-name">
+Public Safety
+</div>
+
+<div class="priority-bar">
+
+<div class="priority-fill" style="width: 69%;"></div>
+
+</div>
+
+<div class="priority-score">
+6.9
+</div>
+
+</div>
+
+</div>
+
+
+<div class="priority-actions">
+
+<a href="results.html" class="primary-button">
+View All Results
+</a>
+
+<a href="polls.html" class="priority-secondary-button">
+Add Your Voice
+</a>
+
+</div>
+
+</section>
+<!-- CURRENT SURVEY -->
+
+<section class="current-survey">
+
+<div class="survey-container">
+
+<div class="survey-copy">
+
+<p class="section-label">
+Current Survey
+</p>
+
+<h2>
+Current National Survey
+</h2>
+
+<p>
+
+Share your priorities and help create a clearer picture
+of what matters most to Americans.
+
+</p>
+
+<p class="response-text">
+
+Responses:
+
+<strong id="surveyResponseCount">
+0
+</strong>
+
+</p>
+
+</div>
+
+
+<div id="surveyPreview" class="survey-preview">
+
+<p>
+Loading survey...
+</p>
+
+</div>
+
+
+<a href="polls.html" class="primary-button">
+Vote Now
+</a>
+
+</div>
+
+</section>
+
+
+<!-- PUBLIC PULSE -->
+
+<section class="public-pulse">
+
+<div class="section-heading">
+
+<p class="section-label">
+Live Results
+</p>
+
+<h2>
+Current Public Pulse
+</h2>
+
+<p>
+
+See the latest response totals and leading issues.
+
+</p>
+
+</div>
+
+
+<div class="pulse-grid">
+
+
+<div class="pulse-card">
+
+<h3>
+Live Poll Status
+</h3>
+
+<p>
+
+Status:
+
+<strong id="pollStatus">
+Loading...
+</strong>
+
+</p>
+
+<p>
+
+Responses:
+
+<strong id="liveResponses">
+0
+</strong>
+
+</p>
+
+<p>
+
+Leading Answer:
+
+<strong id="liveLeader">
+Loading...
+</strong>
+
+</p>
+
+<p>
+
+Last Updated:
+
+<strong id="lastUpdated">
+Loading...
+</strong>
+
+</p>
+
+</div>
+
+
+<div class="pulse-card">
+
+<h3>
+Response Summary
+</h3>
+
+<div class="mini-stats">
+
+<div>
+
+<strong id="homeResponses">
+0
+</strong>
+
+<span>
+Responses Collected
+</span>
+
+</div>
+
+
+<div>
+
+<strong id="homeWinner">
+Loading...
+</strong>
+
+<span>
+Leading Answer
+</span>
+
+</div>
+
+</div>
+
+</div>
+
+
+<div class="pulse-card rankings-card">
+
+<h3>
+Issue Rankings
+</h3>
+
+<div id="homeRankings">
+Loading...
+</div>
+
+</div>
+
+
+</div>
+
+</section>
+
+
+<!-- FOOTER -->
+
+<footer class="site-footer">
+
+<div class="footer-container">
+
+
+<div class="footer-brand">
+
+<div class="footer-logo-area">
+
+<div class="logo-icon">
+    <img src="logo.png" alt="Civic Horizon Index Logo">
+</div>
+
+<div>
+
+<h2>
+Civic Horizon Index
+</h2>
+
+<p>
+Understanding America's Priorities
+</p>
+
+</div>
+
+</div>
+
+<p class="footer-description">
+
+Helping citizens understand national priorities
+through transparent, independent public data.
+
+</p>
+
+</div>
+
+
+<div class="footer-links">
+
+<h3>
+Quick Links
+</h3>
+
+<a href="index.html">
+Home
+</a>
+
+<a href="polls.html">
+Polls
+</a>
+
+<a href="results.html">
+Results
+</a>
+
+<a href="dashboard.html">
+Dashboard
+</a>
+
+<a href="history.html">
+History
+</a>
+
+<a href="about.html">
+About
+</a>
+
+</div>
+
+
+<div class="footer-contact">
+
+<h3>
+About the Platform
+</h3>
+
+<p>
+Nonpartisan
+</p>
+
+<p>
+Independent
+</p>
+
+<p>
+Data focused
+</p>
+
+</div>
+
+
+</div>
+
+
+<div class="footer-bottom">
+
+<p>
+© 2026 Civic Horizon Index. All rights reserved.
+</p>
+
+</div>
+
+</footer>
+
+
+<script type="module" src="js/home.js"></script>
+
+</body>
+
+</html>

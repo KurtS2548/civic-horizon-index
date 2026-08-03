@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Admin - Civic Horizon Index</title>
+
+<link rel="stylesheet" href="../css/style.css">
+
+</head>
+
+
+<body>
+
+<header>
+
+<h1>Civic Horizon Index</h1>
+
+<p>
+Survey Creator
+</p>
+
+</header>
+
+
+<section class="dashboard">
+
+<h2>Create New Survey</h2>
+
+
+<label>
+Survey Question
+</label>
+
+<br>
+
+<input 
+type="text"
+id="question"
+placeholder="Enter survey question">
+
+
+<br><br>
+
+
+<label>
+Answer Choices
+</label>
+
+<br>
+
+<input 
+type="text"
+id="choice1"
+placeholder="Choice 1">
+
+<br>
+
+<input 
+type="text"
+id="choice2"
+placeholder="Choice 2">
+
+<br>
+
+<input 
+type="text"
+id="choice3"
+placeholder="Choice 3">
+
+<br>
+
+<input 
+type="text"
+id="choice4"
+placeholder="Choice 4">
+
+
+<br><br>
+
+
+<button onclick="createSurvey()">
+Create Survey
+</button>
+
+
+<p id="message"></p>
+
+
+</section>
+
+<script type="module" src="../js/admin.js"></script>
+</body>
+
+</html>
