@@ -4,23 +4,49 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+>
 
 <title>Dashboard - Civic Horizon Index</title>
 
+
+<!-- GOOGLE FONTS -->
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link
+rel="preconnect"
+href="https://fonts.gstatic.com"
+crossorigin
+>
 
 <link
 href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Merriweather:wght@700&display=swap"
 rel="stylesheet"
 >
 
+
+<!-- CHART.JS -->
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+<!-- D3 AND TOPOJSON FOR THE U.S. MAP -->
+
+<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/topojson-client@3"></script>
+
+
+<!-- WEBSITE STYLES -->
 
 <link rel="stylesheet" href="css/style.css">
 
 </head>
+
 
 <body>
 
@@ -31,15 +57,24 @@ rel="stylesheet"
 
 <div class="header-container">
 
+
 <a href="index.html" class="brand">
 
 <div class="logo-icon">
-    <img src="logo.png" alt="Civic Horizon Index Logo">
+
+<img
+src="logo.png"
+alt="Civic Horizon Index Logo"
+>
+
 </div>
+
 
 <div class="logo-text">
 
-<h1>Civic Horizon Index</h1>
+<h1>
+Civic Horizon Index
+</h1>
 
 <p>
 Understanding America's Priorities
@@ -82,6 +117,7 @@ Take the Survey
 
 </nav>
 
+
 </div>
 
 </header>
@@ -102,7 +138,7 @@ Civic Data Dashboard
 <p>
 
 Explore live survey totals, issue rankings,
-and national priority scores.
+geographic results, and national priority scores.
 
 </p>
 
@@ -119,6 +155,7 @@ and national priority scores.
 <!-- TOP SUMMARY CARDS -->
 
 <section class="dashboard-summary">
+
 
 <div class="dashboard-stat-card">
 
@@ -187,17 +224,21 @@ Connected public data
 
 </div>
 
+
 </section>
 
 
-<!-- CHARTS -->
+<!-- DASHBOARD GRID -->
 
 <section class="dashboard-grid">
 
 
+<!-- BAR CHART -->
+
 <div class="dashboard-panel chart-panel-large">
 
 <div class="panel-heading">
+
 
 <div>
 
@@ -211,11 +252,14 @@ Issue Priority Scores
 
 </div>
 
+
 <a href="polls.html" class="primary-button">
 Add Your Voice
 </a>
 
+
 </div>
+
 
 <div class="chart-wrapper">
 
@@ -225,6 +269,8 @@ Add Your Voice
 
 </div>
 
+
+<!-- PIE CHART -->
 
 <div class="dashboard-panel">
 
@@ -244,9 +290,121 @@ Priority Overview
 
 </div>
 
+
 <div class="chart-wrapper chart-wrapper-small">
 
 <canvas id="priorityPieChart"></canvas>
+
+</div>
+
+</div>
+
+
+<!-- INTERACTIVE U.S. MAP -->
+
+<div class="dashboard-panel map-panel">
+
+<div class="panel-heading">
+
+<div>
+
+<p class="section-label">
+Geographic View
+</p>
+
+<h2>
+Interactive U.S. Map
+</h2>
+
+<p class="map-instructions">
+
+Hover over a state or select it to view
+local survey results.
+
+</p>
+
+</div>
+
+</div>
+
+
+<div class="map-dashboard-layout">
+
+
+<!-- SVG MAP CONTAINER -->
+
+<div
+id="usMap"
+class="svg-map-container"
+aria-label="Interactive map of the United States"
+></div>
+
+
+<!-- STATE INFORMATION PANEL -->
+
+<div
+id="stateInformation"
+class="state-information-panel"
+>
+
+<p class="section-label">
+State Overview
+</p>
+
+
+<h3 id="selectedStateName">
+Select a State
+</h3>
+
+
+<p id="selectedStateMessage">
+
+Choose any state on the map to view its current
+survey information.
+
+</p>
+
+
+<div class="state-stat-row">
+
+<span>
+Responses
+</span>
+
+<strong id="selectedStateResponses">
+—
+</strong>
+
+</div>
+
+
+<div class="state-stat-row">
+
+<span>
+Leading Answer
+</span>
+
+<strong id="selectedStateLeader">
+—
+</strong>
+
+</div>
+
+
+<div class="state-stat-row">
+
+<span>
+Current Poll
+</span>
+
+<strong id="selectedStatePoll">
+—
+</strong>
+
+</div>
+
+
+</div>
 
 </div>
 
@@ -272,6 +430,7 @@ Issue Rankings
 </div>
 
 </div>
+
 
 <div id="dashboardRankings">
 
@@ -306,6 +465,7 @@ Survey Activity
 
 
 <div class="activity-list">
+
 
 <div class="activity-row">
 
@@ -358,6 +518,7 @@ Loading...
 
 </div>
 
+
 </div>
 
 </div>
@@ -370,6 +531,7 @@ Loading...
 
 <section class="dashboard-information">
 
+
 <div class="card">
 
 <h3>
@@ -378,7 +540,7 @@ How the Dashboard Works
 
 <p>
 
-The dashboard calculates average issue scores from
+The dashboard calculates combined results from
 submitted national survey responses.
 
 </p>
@@ -389,13 +551,13 @@ submitted national survey responses.
 <div class="card">
 
 <h3>
-Live Rankings
+State Results
 </h3>
 
 <p>
 
-Issue positions may change as more people complete
-the national survey.
+Select a state on the interactive map to explore
+how local survey responses compare.
 
 </p>
 
@@ -417,6 +579,7 @@ than individual personal responses.
 
 </div>
 
+
 </section>
 
 
@@ -437,8 +600,14 @@ than individual personal responses.
 <div class="footer-logo-area">
 
 <div class="logo-icon">
-    <img src="logo.png" alt="Civic Horizon Index Logo">
+
+<img
+src="logo.png"
+alt="Civic Horizon Index Logo"
+>
+
 </div>
+
 
 <div>
 
@@ -453,6 +622,7 @@ Understanding America's Priorities
 </div>
 
 </div>
+
 
 <p class="footer-description">
 
@@ -532,7 +702,21 @@ Data focused
 </footer>
 
 
-<script type="module" src="js/dashboard.js"></script>
+<!-- DASHBOARD JAVASCRIPT -->
+
+<script
+type="module"
+src="js/dashboard.js"
+></script>
+
+
+<!-- INTERACTIVE MAP JAVASCRIPT -->
+
+<script
+type="module"
+src="js/map.js"
+></script>
+
 
 </body>
 

@@ -4,21 +4,44 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+>
 
 <title>Civic Horizon Index</title>
 
+
+<!-- GOOGLE FONTS -->
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link
+rel="preconnect"
+href="https://fonts.gstatic.com"
+crossorigin
+>
 
 <link
 href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Merriweather:wght@700&display=swap"
 rel="stylesheet"
 >
 
+
+<!-- D3 AND TOPOJSON FOR THE MAP -->
+
+<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/topojson-client@3"></script>
+
+
+<!-- WEBSITE STYLES -->
+
 <link rel="stylesheet" href="css/style.css">
 
 </head>
+
 
 <body>
 
@@ -29,15 +52,24 @@ rel="stylesheet"
 
 <div class="header-container">
 
+
 <a href="index.html" class="brand">
 
 <div class="logo-icon">
-    <img src="logo.png" alt="Civic Horizon Index Logo">
+
+<img
+src="logo.png"
+alt="Civic Horizon Index Logo"
+>
+
 </div>
+
 
 <div class="logo-text">
 
-<h1>Civic Horizon Index</h1>
+<h1>
+Civic Horizon Index
+</h1>
 
 <p>
 Understanding America's Priorities
@@ -80,6 +112,7 @@ Take the Survey
 
 </nav>
 
+
 </div>
 
 </header>
@@ -87,25 +120,772 @@ Take the Survey
 
 <!-- HERO -->
 
-<section class="hero">
+<section class="home-hero">
 
-<div class="hero-content">
+<div class="home-hero-overlay"></div>
+
+
+<div class="home-hero-container">
+
+
+<div class="home-hero-content">
 
 <p class="hero-label">
-National Civic Data Platform
+A National Civic Data Platform
+</p>
+
+
+<h1>
+
+See What Matters Most
+
+<span>
+to America
+</span>
+
+</h1>
+
+
+<p class="home-hero-tagline">
+
+Understanding America's Priorities
+
+</p>
+
+
+<p class="home-hero-mission">
+
+Helping America understand itself through the
+collective voices of its people.
+
+</p>
+
+
+<div class="hero-buttons">
+
+<a href="polls.html" class="primary-button">
+Take Today's Survey
+</a>
+
+<a href="dashboard.html" class="secondary-button">
+Explore the Dashboard
+</a>
+
+</div>
+
+
+<div class="hero-trust-row">
+
+<span>
+Nonpartisan
+</span>
+
+<span>
+Transparent
+</span>
+
+<span>
+Anonymous
+</span>
+
+<span>
+Updated Live
+</span>
+
+</div>
+
+</div>
+
+
+<div class="home-hero-insight">
+
+<p class="section-label">
+America Today
+</p>
+
+<h2 id="heroTopIssue">
+Loading national priorities...
+</h2>
+
+<p>
+Current highest-rated national priority
+</p>
+
+
+<div class="hero-score">
+
+<strong id="heroTopScore">
+0.0
+</strong>
+
+<span>
+Civic Horizon Score
+</span>
+
+</div>
+
+
+<div class="hero-response-count">
+
+<strong id="heroResponseCount">
+0
+</strong>
+
+<span>
+voices contributed
+</span>
+
+</div>
+
+</div>
+
+
+</div>
+
+</section>
+
+
+<!-- LIVE STATUS STRIP -->
+
+<section class="home-live-strip">
+
+<div class="home-live-strip-container">
+
+
+<div class="home-live-item">
+
+<span class="live-indicator">
+<span class="live-dot"></span>
+Live
+</span>
+
+<strong id="homeLiveStatus">
+National survey active
+</strong>
+
+</div>
+
+
+<div class="home-live-item">
+
+<span>
+Top Priority
+</span>
+
+<strong id="homeLiveLeader">
+Loading...
+</strong>
+
+</div>
+
+
+<div class="home-live-item">
+
+<span>
+Voices Contributed
+</span>
+
+<strong id="homeLiveResponses">
+0
+</strong>
+
+</div>
+
+
+<div class="home-live-item">
+
+<span>
+Last Updated
+</span>
+
+<strong id="homeLiveUpdated">
+Loading...
+</strong>
+
+</div>
+
+
+</div>
+
+</section>
+
+
+<!-- AMERICA TODAY -->
+
+<section class="america-today-section">
+
+<div class="home-section-container">
+
+
+<div class="section-heading home-centered-heading">
+
+<p class="section-label">
+Live National Snapshot
 </p>
 
 <h2>
-Understanding America’s Priorities
-<span>Through Data</span>
+America Today
 </h2>
 
-<p class="hero-description">
+<p>
 
-Civic Horizon Index is a nonpartisan platform dedicated
-to measuring what matters most to Americans.
+A real-time view of the priorities shared by
+participants across the country.
 
 </p>
+
+</div>
+
+
+<div class="america-today-grid">
+
+
+<div class="america-today-card featured-today-card">
+
+<div class="today-card-icon">
+01
+</div>
+
+<p class="today-card-label">
+Top National Priority
+</p>
+
+<h3 id="todayTopPriority">
+Loading...
+</h3>
+
+<strong id="todayTopScore">
+0.0
+</strong>
+
+<span>
+Average score out of 10
+</span>
+
+</div>
+
+
+<div class="america-today-card">
+
+<div class="today-card-icon">
+02
+</div>
+
+<p class="today-card-label">
+Voices Contributed
+</p>
+
+<h3 id="todayVoices">
+0
+</h3>
+
+<span>
+Complete priority surveys
+</span>
+
+</div>
+
+
+<div class="america-today-card">
+
+<div class="today-card-icon">
+03
+</div>
+
+<p class="today-card-label">
+Most Active State
+</p>
+
+<h3 id="todayActiveState">
+No data yet
+</h3>
+
+<span id="todayActiveStateCount">
+Awaiting responses
+</span>
+
+</div>
+
+
+<div class="america-today-card">
+
+<div class="today-card-icon">
+04
+</div>
+
+<p class="today-card-label">
+National Average
+</p>
+
+<h3 id="todayNationalAverage">
+0.0
+</h3>
+
+<span>
+Overall Civic Horizon Score
+</span>
+
+</div>
+
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- INTERACTIVE MAP PREVIEW -->
+
+<section class="home-map-section">
+
+<div class="home-section-container">
+
+
+<div class="home-map-heading">
+
+<div>
+
+<p class="section-label">
+Geographic Perspective
+</p>
+
+<h2>
+Explore Priorities Across America
+</h2>
+
+<p>
+
+Hover over a state to see its current leading
+priority and response count.
+
+</p>
+
+</div>
+
+
+<a href="dashboard.html" class="text-link">
+Open Full Dashboard →
+</a>
+
+</div>
+
+
+<div class="home-map-panel">
+
+<div
+id="homeUsMap"
+class="home-svg-map-container"
+aria-label="Interactive map of the United States"
+></div>
+
+
+<div class="home-map-side-panel">
+
+<p class="section-label">
+State Snapshot
+</p>
+
+<h3 id="homeSelectedState">
+Hover Over a State
+</h3>
+
+<p id="homeSelectedStateMessage">
+
+Explore how priorities differ across the country.
+
+</p>
+
+
+<div class="home-state-stat">
+
+<span>
+Top Priority
+</span>
+
+<strong id="homeSelectedStatePriority">
+—
+</strong>
+
+</div>
+
+
+<div class="home-state-stat">
+
+<span>
+Priority Score
+</span>
+
+<strong id="homeSelectedStateScore">
+—
+</strong>
+
+</div>
+
+
+<div class="home-state-stat">
+
+<span>
+Responses
+</span>
+
+<strong id="homeSelectedStateResponses">
+—
+</strong>
+
+</div>
+
+
+<a
+href="dashboard.html"
+class="primary-button home-map-button"
+>
+View State Details
+</a>
+
+</div>
+
+</div>
+
+
+<div class="home-map-legend">
+
+<span class="map-legend-title">
+Map colors represent each state's leading priority.
+</span>
+
+<div id="homeMapLegendItems"></div>
+
+</div>
+
+
+</div>
+
+</section>
+
+
+<!-- NATIONAL PRIORITY RANKINGS -->
+
+<section class="home-rankings-section">
+
+<div class="home-section-container">
+
+
+<div class="home-rankings-layout">
+
+
+<div class="home-rankings-copy">
+
+<p class="section-label">
+The Civic Horizon Index
+</p>
+
+<h2>
+The Priorities Shaping America
+</h2>
+
+<p>
+
+Every completed survey contributes to a clearer
+picture of the issues participants believe deserve
+the greatest national attention.
+
+</p>
+
+
+<a href="results.html" class="secondary-button">
+View Complete Results
+</a>
+
+</div>
+
+
+<div class="home-ranking-panel">
+
+<div class="home-ranking-panel-heading">
+
+<div>
+
+<p class="section-label">
+Live Rankings
+</p>
+
+<h3>
+National Priority Scores
+</h3>
+
+</div>
+
+<span id="homeRankingResponses">
+0 responses
+</span>
+
+</div>
+
+
+<div id="homePriorityRankings">
+
+<p>
+Loading national rankings...
+</p>
+
+</div>
+
+</div>
+
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- HOW IT WORKS -->
+
+<section class="home-process-section">
+
+<div class="home-section-container">
+
+
+<div class="section-heading home-centered-heading">
+
+<p class="section-label">
+Participation to Understanding
+</p>
+
+<h2>
+How Your Voice Becomes Insight
+</h2>
+
+<p>
+
+Each response contributes to a transparent,
+aggregated view of public priorities.
+
+</p>
+
+</div>
+
+
+<div class="home-process-grid">
+
+
+<div class="home-process-card">
+
+<span class="process-number">
+01
+</span>
+
+<h3>
+Share Your Priorities
+</h3>
+
+<p>
+
+Rate ten important national issues using a simple
+one-to-ten scale.
+
+</p>
+
+</div>
+
+
+<div class="home-process-card">
+
+<span class="process-number">
+02
+</span>
+
+<h3>
+Join the Larger Picture
+</h3>
+
+<p>
+
+Your anonymous response is combined with submissions
+from participants across the country.
+
+</p>
+
+</div>
+
+
+<div class="home-process-card">
+
+<span class="process-number">
+03
+</span>
+
+<h3>
+Explore the Results
+</h3>
+
+<p>
+
+View national rankings, state-level patterns, and
+live Civic Horizon Scores.
+
+</p>
+
+</div>
+
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- MISSION -->
+
+<section class="home-mission-section">
+
+<div class="home-mission-container">
+
+
+<div class="home-mission-mark">
+“
+</div>
+
+
+<p class="section-label">
+Our Mission
+</p>
+
+
+<h2>
+
+Helping America understand itself through the
+collective voices of its people.
+
+</h2>
+
+
+<p>
+
+Civic Horizon Index provides a transparent,
+nonpartisan place where people can share what matters
+most to them. Every response contributes to a broader
+understanding of the priorities expressed by
+participants across states and communities.
+
+</p>
+
+
+<a href="about.html" class="text-link">
+Learn More About Our Mission →
+</a>
+
+
+</div>
+
+</section>
+
+
+<!-- VALUES -->
+
+<section class="home-values-section">
+
+<div class="home-section-container">
+
+
+<div class="home-values-grid">
+
+
+<div class="home-value-card">
+
+<h3>
+Independent
+</h3>
+
+<p>
+
+The platform is designed to present participant data
+without political party alignment or editorial influence.
+
+</p>
+
+</div>
+
+
+<div class="home-value-card">
+
+<h3>
+Transparent
+</h3>
+
+<p>
+
+Scores, response counts, and methodology are presented
+clearly so visitors can understand the data.
+
+</p>
+
+</div>
+
+
+<div class="home-value-card">
+
+<h3>
+Privacy Conscious
+</h3>
+
+<p>
+
+Public results are displayed in aggregate rather than
+revealing individual survey responses.
+
+</p>
+
+</div>
+
+
+<div class="home-value-card">
+
+<h3>
+Built for Understanding
+</h3>
+
+<p>
+
+The goal is not to tell people what to think, but to
+help them explore what participants are prioritizing.
+
+</p>
+
+</div>
+
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- FINAL CALL TO ACTION -->
+
+<section class="home-final-cta">
+
+<div class="home-final-cta-container">
+
+<p class="section-label">
+Add Your Voice
+</p>
+
+<h2>
+Help Create a Clearer Picture of America
+</h2>
+
+<p>
+
+Your priorities become part of a larger national
+understanding. The survey takes about one minute.
+
+</p>
+
 
 <div class="hero-buttons">
 
@@ -113,569 +893,11 @@ to measuring what matters most to Americans.
 Take the National Survey
 </a>
 
-<a href="results.html" class="secondary-button">
-View National Results
+<a href="dashboard.html" class="secondary-button">
+Explore Live Results
 </a>
 
 </div>
-
-</div>
-
-</section>
-<section class="live-ticker">
-
-<div class="ticker-item">
-
-<span class="ticker-live">
-● LIVE
-</span>
-
-<span>
-
-<strong id="tickerResponses">
-0
-</strong>
-
-Americans have participated.
-
-</span>
-
-</div>
-
-
-<div class="ticker-item">
-
-⭐ Highest Priority:
-
-<strong id="tickerTopIssue">
-
-Loading...
-
-</strong>
-
-</div>
-
-
-<div class="ticker-item">
-
-🕒 Last Updated:
-
-<strong id="tickerUpdate">
-
-Loading...
-
-</strong>
-
-</div>
-
-</section>
-
-<!-- FEATURE CARDS -->
-
-<section class="feature-section">
-
-<div class="feature-grid">
-
-
-<div class="feature-card">
-
-<div class="feature-icon">
-📊
-</div>
-
-<h3>
-Real-Time Data
-</h3>
-
-<p>
-
-Track what Americans care about with live,
-aggregated data and insights.
-
-</p>
-
-</div>
-
-
-<div class="feature-card">
-
-<div class="feature-icon">
-🛡️
-</div>
-
-<h3>
-Anonymous Polling
-</h3>
-
-<p>
-
-Your responses are private.
-Every response helps create a clearer national picture.
-
-</p>
-
-</div>
-
-
-<div class="feature-card">
-
-<div class="feature-icon">
-📈
-</div>
-
-<h3>
-Interactive Dashboards
-</h3>
-
-<p>
-
-Explore trends, compare priorities,
-and understand the issues in depth.
-
-</p>
-
-</div>
-
-
-<div class="feature-card">
-
-<div class="feature-icon">
-🤝
-</div>
-
-<h3>
-Nonpartisan
-</h3>
-
-<p>
-
-Independent civic research focused on data,
-transparency, and public understanding.
-
-</p>
-
-</div>
-
-
-</div>
-
-</section>
-
-
-<!-- LIVE STATISTICS -->
-
-<section class="stats-section">
-
-<div class="section-heading">
-
-<p class="section-label">
-Live National Data
-</p>
-
-<h2>
-America’s Public Pulse
-</h2>
-
-<p>
-
-Survey results update as new responses are submitted.
-
-</p>
-
-</div>
-
-
-<div class="stats">
-
-<div class="stat-card">
-
-<h3 id="totalVotes">
-0
-</h3>
-
-<p>
-Total Votes
-</p>
-
-</div>
-
-
-<div class="stat-card">
-
-<h3 id="activeSurveys">
-0
-</h3>
-
-<p>
-Active Surveys
-</p>
-
-</div>
-
-
-<div class="stat-card">
-
-<h3>
-Live
-</h3>
-
-<p>
-Public Data
-</p>
-
-</div>
-
-</div>
-
-</section>
-<!-- LIVE HIGHLIGHTS -->
-
-<section class="live-highlights">
-
-<div class="highlight-card">
-
-<p class="highlight-label">
-Most Discussed Issue
-</p>
-
-<h3 id="mostDiscussedIssue">
-Loading...
-</h3>
-
-<p>
-Based on current survey activity
-</p>
-
-</div>
-
-
-<div class="highlight-card">
-
-<p class="highlight-label">
-Total Responses
-</p>
-
-<h3 id="highlightResponseCount">
-0
-</h3>
-
-<p>
-Responses collected so far
-</p>
-
-</div>
-
-
-<div class="highlight-card">
-
-<p class="highlight-label">
-Last Updated
-</p>
-
-<h3 id="highlightLastUpdated">
-Live
-</h3>
-
-<p>
-Results refresh automatically
-</p>
-
-</div>
-
-</section>
-<!-- TOP NATIONAL PRIORITIES -->
-
-<section class="top-priorities-section">
-
-<div class="section-heading">
-
-<p class="section-label">
-Live National Rankings
-</p>
-
-<h2>
-Top National Priorities
-</h2>
-
-<p>
-See which issues are currently receiving the highest public priority scores.
-</p>
-
-</div>
-
-
-<div class="priority-list" id="topPriorityList">
-
-<div class="priority-row">
-
-<div class="priority-name">
-Economy
-</div>
-
-<div class="priority-bar">
-
-<div class="priority-fill" style="width: 87%;"></div>
-
-</div>
-
-<div class="priority-score">
-8.7
-</div>
-
-</div>
-
-
-<div class="priority-row">
-
-<div class="priority-name">
-Healthcare
-</div>
-
-<div class="priority-bar">
-
-<div class="priority-fill" style="width: 81%;"></div>
-
-</div>
-
-<div class="priority-score">
-8.1
-</div>
-
-</div>
-
-
-<div class="priority-row">
-
-<div class="priority-name">
-Education
-</div>
-
-<div class="priority-bar">
-
-<div class="priority-fill" style="width: 74%;"></div>
-
-</div>
-
-<div class="priority-score">
-7.4
-</div>
-
-</div>
-
-
-<div class="priority-row">
-
-<div class="priority-name">
-Public Safety
-</div>
-
-<div class="priority-bar">
-
-<div class="priority-fill" style="width: 69%;"></div>
-
-</div>
-
-<div class="priority-score">
-6.9
-</div>
-
-</div>
-
-</div>
-
-
-<div class="priority-actions">
-
-<a href="results.html" class="primary-button">
-View All Results
-</a>
-
-<a href="polls.html" class="priority-secondary-button">
-Add Your Voice
-</a>
-
-</div>
-
-</section>
-<!-- CURRENT SURVEY -->
-
-<section class="current-survey">
-
-<div class="survey-container">
-
-<div class="survey-copy">
-
-<p class="section-label">
-Current Survey
-</p>
-
-<h2>
-Current National Survey
-</h2>
-
-<p>
-
-Share your priorities and help create a clearer picture
-of what matters most to Americans.
-
-</p>
-
-<p class="response-text">
-
-Responses:
-
-<strong id="surveyResponseCount">
-0
-</strong>
-
-</p>
-
-</div>
-
-
-<div id="surveyPreview" class="survey-preview">
-
-<p>
-Loading survey...
-</p>
-
-</div>
-
-
-<a href="polls.html" class="primary-button">
-Vote Now
-</a>
-
-</div>
-
-</section>
-
-
-<!-- PUBLIC PULSE -->
-
-<section class="public-pulse">
-
-<div class="section-heading">
-
-<p class="section-label">
-Live Results
-</p>
-
-<h2>
-Current Public Pulse
-</h2>
-
-<p>
-
-See the latest response totals and leading issues.
-
-</p>
-
-</div>
-
-
-<div class="pulse-grid">
-
-
-<div class="pulse-card">
-
-<h3>
-Live Poll Status
-</h3>
-
-<p>
-
-Status:
-
-<strong id="pollStatus">
-Loading...
-</strong>
-
-</p>
-
-<p>
-
-Responses:
-
-<strong id="liveResponses">
-0
-</strong>
-
-</p>
-
-<p>
-
-Leading Answer:
-
-<strong id="liveLeader">
-Loading...
-</strong>
-
-</p>
-
-<p>
-
-Last Updated:
-
-<strong id="lastUpdated">
-Loading...
-</strong>
-
-</p>
-
-</div>
-
-
-<div class="pulse-card">
-
-<h3>
-Response Summary
-</h3>
-
-<div class="mini-stats">
-
-<div>
-
-<strong id="homeResponses">
-0
-</strong>
-
-<span>
-Responses Collected
-</span>
-
-</div>
-
-
-<div>
-
-<strong id="homeWinner">
-Loading...
-</strong>
-
-<span>
-Leading Answer
-</span>
-
-</div>
-
-</div>
-
-</div>
-
-
-<div class="pulse-card rankings-card">
-
-<h3>
-Issue Rankings
-</h3>
-
-<div id="homeRankings">
-Loading...
-</div>
-
-</div>
-
 
 </div>
 
@@ -694,8 +916,14 @@ Loading...
 <div class="footer-logo-area">
 
 <div class="logo-icon">
-    <img src="logo.png" alt="Civic Horizon Index Logo">
+
+<img
+src="logo.png"
+alt="Civic Horizon Index Logo"
+>
+
 </div>
+
 
 <div>
 
@@ -711,10 +939,11 @@ Understanding America's Priorities
 
 </div>
 
+
 <p class="footer-description">
 
-Helping citizens understand national priorities
-through transparent, independent public data.
+Helping America understand itself through the
+collective voices of its people.
 
 </p>
 
@@ -724,7 +953,7 @@ through transparent, independent public data.
 <div class="footer-links">
 
 <h3>
-Quick Links
+Explore
 </h3>
 
 <a href="index.html">
@@ -732,11 +961,11 @@ Home
 </a>
 
 <a href="polls.html">
-Polls
+Take the Survey
 </a>
 
 <a href="results.html">
-Results
+National Results
 </a>
 
 <a href="dashboard.html">
@@ -757,7 +986,7 @@ About
 <div class="footer-contact">
 
 <h3>
-About the Platform
+Platform Values
 </h3>
 
 <p>
@@ -766,6 +995,10 @@ Nonpartisan
 
 <p>
 Independent
+</p>
+
+<p>
+Transparent
 </p>
 
 <p>
@@ -784,12 +1017,20 @@ Data focused
 © 2026 Civic Horizon Index. All rights reserved.
 </p>
 
+<p>
+Every voice contributes to a clearer understanding.
+</p>
+
 </div>
 
 </footer>
 
 
-<script type="module" src="js/home.js"></script>
+<script
+type="module"
+src="js/home.js"
+></script>
+
 
 </body>
 
