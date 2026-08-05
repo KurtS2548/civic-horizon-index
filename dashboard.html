@@ -13,8 +13,6 @@ content="width=device-width, initial-scale=1.0"
 <title>Dashboard - Civic Horizon Index</title>
 
 
-<!-- GOOGLE FONTS -->
-
 <link rel="preconnect" href="https://fonts.googleapis.com">
 
 <link
@@ -29,106 +27,32 @@ rel="stylesheet"
 >
 
 
-<!-- CHART.JS -->
-
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-
-<!-- D3 AND TOPOJSON FOR THE U.S. MAP -->
 
 <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/topojson-client@3"></script>
 
 
-<!-- WEBSITE STYLES -->
-
 <link rel="stylesheet" href="css/style.css">
 
 </head>
 
 
-<body>
+<body data-page="dashboard">
 
 
-<!-- HEADER -->
+<!-- SHARED HEADER -->
 
-<header class="site-header">
-
-<div class="header-container">
+<div id="sharedHeader"></div>
 
 
-<a href="index.html" class="brand">
-
-<div class="logo-icon">
-
-<img
-src="logo.png"
-alt="Civic Horizon Index Logo"
->
-
-</div>
-
-
-<div class="logo-text">
-
-<h1>
-Civic Horizon Index
-</h1>
-
-<p>
-Understanding America's Priorities
-</p>
-
-</div>
-
-</a>
-
-
-<nav class="main-nav">
-
-<a href="index.html">
-Home
-</a>
-
-<a href="polls.html">
-Polls
-</a>
-
-<a href="results.html">
-Results
-</a>
-
-<a href="dashboard.html" class="active">
-Dashboard
-</a>
-
-<a href="history.html">
-History
-</a>
-
-<a href="about.html">
-About
-</a>
-
-<a href="polls.html" class="survey-nav-button">
-Take the Survey
-</a>
-
-</nav>
-
-
-</div>
-
-</header>
-
-
-<!-- PAGE BANNER -->
+<!-- PAGE HERO -->
 
 <section class="page-banner dashboard-banner">
 
 <p class="hero-label">
-National Analytics
+Live Civic Data
 </p>
 
 <h1>
@@ -137,8 +61,8 @@ Civic Data Dashboard
 
 <p>
 
-Explore live survey totals, issue rankings,
-geographic results, and national priority scores.
+Explore national priority scores, live response
+totals, geographic patterns, and state-level results.
 
 </p>
 
@@ -152,7 +76,7 @@ geographic results, and national priority scores.
 <div class="dashboard-container">
 
 
-<!-- TOP SUMMARY CARDS -->
+<!-- SUMMARY CARDS -->
 
 <section class="dashboard-summary">
 
@@ -160,7 +84,7 @@ geographic results, and national priority scores.
 <div class="dashboard-stat-card">
 
 <p class="dashboard-stat-label">
-Total Responses
+Voices Contributed
 </p>
 
 <h2 id="totalResponses">
@@ -168,7 +92,7 @@ Total Responses
 </h2>
 
 <p>
-Completed surveys
+Completed national surveys
 </p>
 
 </div>
@@ -177,7 +101,7 @@ Completed surveys
 <div class="dashboard-stat-card">
 
 <p class="dashboard-stat-label">
-Top Issue
+Top National Priority
 </p>
 
 <h2 id="topIssue">
@@ -185,7 +109,7 @@ Loading...
 </h2>
 
 <p>
-Highest national priority
+Highest current average score
 </p>
 
 </div>
@@ -194,7 +118,7 @@ Highest national priority
 <div class="dashboard-stat-card">
 
 <p class="dashboard-stat-label">
-Priority Score
+National Average
 </p>
 
 <h2 id="priorityScore">
@@ -202,7 +126,7 @@ Priority Score
 </h2>
 
 <p>
-Average score from 1 to 10
+Average Civic Horizon Score
 </p>
 
 </div>
@@ -233,7 +157,7 @@ Connected public data
 <section class="dashboard-grid">
 
 
-<!-- BAR CHART -->
+<!-- NATIONAL BAR CHART -->
 
 <div class="dashboard-panel chart-panel-large">
 
@@ -249,6 +173,13 @@ National Rankings
 <h2>
 Issue Priority Scores
 </h2>
+
+<p>
+
+Compare the average Civic Horizon Score for all ten
+national issues.
+
+</p>
 
 </div>
 
@@ -270,7 +201,7 @@ Add Your Voice
 </div>
 
 
-<!-- PIE CHART -->
+<!-- DOUGHNUT CHART -->
 
 <div class="dashboard-panel">
 
@@ -279,11 +210,11 @@ Add Your Voice
 <div>
 
 <p class="section-label">
-Response Share
+National Overview
 </p>
 
 <h2>
-Priority Overview
+Priority Score Distribution
 </h2>
 
 </div>
@@ -300,7 +231,7 @@ Priority Overview
 </div>
 
 
-<!-- INTERACTIVE U.S. MAP -->
+<!-- INTERACTIVE MAP -->
 
 <div class="dashboard-panel map-panel">
 
@@ -309,17 +240,17 @@ Priority Overview
 <div>
 
 <p class="section-label">
-Geographic View
+Geographic Perspective
 </p>
 
 <h2>
-Interactive U.S. Map
+Explore Priorities by State
 </h2>
 
 <p class="map-instructions">
 
-Hover over a state or select it to view
-local survey results.
+Hover over a state for a quick view. Select a state
+to see its complete priority rankings.
 
 </p>
 
@@ -331,16 +262,12 @@ local survey results.
 <div class="map-dashboard-layout">
 
 
-<!-- SVG MAP CONTAINER -->
-
 <div
 id="usMap"
 class="svg-map-container"
 aria-label="Interactive map of the United States"
 ></div>
 
-
-<!-- STATE INFORMATION PANEL -->
 
 <div
 id="stateInformation"
@@ -359,8 +286,8 @@ Select a State
 
 <p id="selectedStateMessage">
 
-Choose any state on the map to view its current
-survey information.
+Choose a state on the map to explore its submitted
+National Priorities Survey results.
 
 </p>
 
@@ -381,7 +308,7 @@ Responses
 <div class="state-stat-row">
 
 <span>
-Leading Answer
+Leading Priority
 </span>
 
 <strong id="selectedStateLeader">
@@ -394,11 +321,11 @@ Leading Answer
 <div class="state-stat-row">
 
 <span>
-Current Poll
+Current Survey
 </span>
 
 <strong id="selectedStatePoll">
-—
+National Priorities Survey
 </strong>
 
 </div>
@@ -411,7 +338,7 @@ Current Poll
 </div>
 
 
-<!-- RANKINGS LIST -->
+<!-- NATIONAL RANKINGS -->
 
 <div class="dashboard-panel">
 
@@ -420,11 +347,11 @@ Current Poll
 <div>
 
 <p class="section-label">
-Current Standings
+Live Standings
 </p>
 
 <h2>
-Issue Rankings
+National Issue Rankings
 </h2>
 
 </div>
@@ -470,7 +397,7 @@ Survey Activity
 <div class="activity-row">
 
 <span>
-Poll Status
+Survey Status
 </span>
 
 <strong id="dashboardPollStatus">
@@ -483,7 +410,7 @@ Loading...
 <div class="activity-row">
 
 <span>
-Leading Issue
+Leading Priority
 </span>
 
 <strong id="dashboardLeader">
@@ -527,7 +454,7 @@ Loading...
 </section>
 
 
-<!-- EXPLANATION SECTION -->
+<!-- HOW TO USE THE DASHBOARD -->
 
 <section class="dashboard-information">
 
@@ -535,13 +462,13 @@ Loading...
 <div class="card">
 
 <h3>
-How the Dashboard Works
+Explore National Results
 </h3>
 
 <p>
 
-The dashboard calculates combined results from
-submitted national survey responses.
+The charts and rankings calculate average scores
+from all valid National Priorities Survey submissions.
 
 </p>
 
@@ -551,13 +478,13 @@ submitted national survey responses.
 <div class="card">
 
 <h3>
-State Results
+Explore State Results
 </h3>
 
 <p>
 
-Select a state on the interactive map to explore
-how local survey responses compare.
+Select a state to view its response count, leading
+priority, and complete issue rankings.
 
 </p>
 
@@ -567,13 +494,14 @@ how local survey responses compare.
 <div class="card">
 
 <h3>
-Public Transparency
+Understand the Data
 </h3>
 
 <p>
 
-The dashboard displays combined survey data rather
-than individual personal responses.
+The results reflect voluntary participants and should
+not automatically be treated as a scientific sample
+of the entire population.
 
 </p>
 
@@ -588,102 +516,105 @@ than individual personal responses.
 </main>
 
 
-<!-- FOOTER -->
+<!-- CONNECTED EXPERIENCE -->
 
-<footer class="site-footer">
+<section class="results-connected-section">
 
-<div class="footer-container">
-
-
-<div class="footer-brand">
-
-<div class="footer-logo-area">
-
-<div class="logo-icon">
-
-<img
-src="logo.png"
-alt="Civic Horizon Index Logo"
->
-
-</div>
+<div class="content-container">
 
 
-<div>
+<div class="section-heading home-centered-heading">
+
+<p class="section-label">
+Continue Exploring
+</p>
 
 <h2>
-Civic Horizon Index
+Learn, Practice, and Participate
 </h2>
 
 <p>
-Understanding America's Priorities
-</p>
 
-</div>
-
-</div>
-
-
-<p class="footer-description">
-
-Helping citizens understand national priorities
-through transparent and independent public data.
+Use Civic Academy and Civic Simulations to understand
+the institutions responsible for responding to public
+priorities.
 
 </p>
 
 </div>
 
 
-<div class="footer-links">
+<div class="results-connected-grid">
+
+
+<div class="results-connected-card">
+
+<span class="results-connected-number">
+01
+</span>
 
 <h3>
-Quick Links
-</h3>
-
-<a href="index.html">
-Home
-</a>
-
-<a href="polls.html">
-Polls
-</a>
-
-<a href="results.html">
-Results
-</a>
-
-<a href="dashboard.html">
-Dashboard
-</a>
-
-<a href="history.html">
-History
-</a>
-
-<a href="about.html">
-About
-</a>
-
-</div>
-
-
-<div class="footer-contact">
-
-<h3>
-Platform Values
+Learn How Government Works
 </h3>
 
 <p>
-Nonpartisan
+
+Complete interactive lessons about Congress, checks
+and balances, federalism, courts, and civic participation.
+
 </p>
 
-<p>
-Independent
-</p>
+<a href="academy.html" class="text-link">
+Enter Civic Academy →
+</a>
+
+</div>
+
+
+<div class="results-connected-card">
+
+<span class="results-connected-number">
+02
+</span>
+
+<h3>
+Practice Through Simulations
+</h3>
 
 <p>
-Data focused
+
+Take on a government role, make decisions, and see
+how different choices affect public outcomes.
+
 </p>
+
+<a href="simulations.html" class="text-link">
+Explore Simulations →
+</a>
+
+</div>
+
+
+<div class="results-connected-card">
+
+<span class="results-connected-number">
+03
+</span>
+
+<h3>
+Add Your Priorities
+</h3>
+
+<p>
+
+Complete the National Priorities Survey and become
+part of the live Civic Horizon Index.
+
+</p>
+
+<a href="polls.html" class="text-link">
+Take the Survey →
+</a>
 
 </div>
 
@@ -691,18 +622,22 @@ Data focused
 </div>
 
 
-<div class="footer-bottom">
-
-<p>
-© 2026 Civic Horizon Index. All rights reserved.
-</p>
-
 </div>
 
-</footer>
+</section>
 
 
-<!-- DASHBOARD JAVASCRIPT -->
+<!-- SHARED FOOTER -->
+
+<div id="sharedFooter"></div>
+
+
+<!-- SHARED COMPONENT LOADER -->
+
+<script src="js/load-components.js"></script>
+
+
+<!-- DASHBOARD LOGIC -->
 
 <script
 type="module"
@@ -710,7 +645,7 @@ src="js/dashboard.js"
 ></script>
 
 
-<!-- INTERACTIVE MAP JAVASCRIPT -->
+<!-- MAP LOGIC -->
 
 <script
 type="module"

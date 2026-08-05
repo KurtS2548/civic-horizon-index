@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+>
+
+<title>Civic Simulations - Civic Horizon Index</title>
+
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+
+<link
+rel="preconnect"
+href="https://fonts.gstatic.com"
+crossorigin
+>
+
+<link
+href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Merriweather:wght@700&display=swap"
+rel="stylesheet"
+>
+
+
+<link rel="stylesheet" href="css/style.css">
+
+</head>
+
+
+<body data-page="simulations">
+
+
+<!-- SHARED HEADER -->
+
+<div id="sharedHeader"></div>
+
+
+<!-- HERO -->
+
+<section class="academy-hero simulations-hero">
+
+<div class="academy-hero-container">
+
+
+<div class="academy-hero-content">
+
+<p class="hero-label">
+Interactive Government Experiences
+</p>
+
+<h1>
+Civic Simulations
+</h1>
+
+<p class="academy-hero-introduction">
+
+Experience government by making decisions. Step into
+public offices, respond to realistic challenges, and
+discover how leadership, compromise, law, and public
+trust shape government outcomes.
+
+</p>
+
+
+<div class="academy-hero-buttons">
+
+<a
+href="congress.html"
+class="primary-button"
+id="simulationHeroCongressButton"
+>
+Launch Congress
+</a>
+
+<a
+href="academy.html"
+class="secondary-button"
+>
+Return to Academy
+</a>
+
+</div>
+
+
+<div class="academy-hero-values">
+
+<span>
+Decision-Based
+</span>
+
+<span>
+Multiple Outcomes
+</span>
+
+<span>
+Replayable
+</span>
+
+<span>
+Nonpartisan
+</span>
+
+</div>
+
+</div>
+
+
+<!-- SIMULATION PROGRESS -->
+
+<div class="academy-progress-card">
+
+<p class="section-label">
+Your Simulation Journey
+</p>
+
+<h2>
+Simulation Progress
+</h2>
+
+
+<div class="academy-progress-track">
+
+<div
+id="simulationProgressFill"
+class="academy-progress-fill"
+style="width: 0%;"
+></div>
+
+</div>
+
+
+<div class="academy-progress-details">
+
+<strong id="simulationProgressPercent">
+0%
+</strong>
+
+<span id="simulationProgressText">
+0 of 6 simulations completed
+</span>
+
+</div>
+
+
+<div class="academy-current-rank">
+
+<span>
+Current Achievement
+</span>
+
+<strong id="simulationAchievement">
+New Public Servant
+</strong>
+
+</div>
+
+
+<div class="simulation-progress-summary">
+
+<div>
+
+<span>
+Terms Served
+</span>
+
+<strong id="simulationTermsServed">
+0
+</strong>
+
+</div>
+
+
+<div>
+
+<span>
+Latest Grade
+</span>
+
+<strong id="simulationLatestGrade">
+—
+</strong>
+
+</div>
+
+</div>
+
+
+</div>
+
+
+</div>
+
+</section>
+
+
+<!-- SIMULATIONS -->
+
+<section class="academy-lessons-section">
+
+<div class="academy-section-container">
+
+
+<div class="section-heading home-centered-heading">
+
+<p class="section-label">
+Interactive Experiences
+</p>
+
+<h2>
+Choose a Government Role
+</h2>
+
+<p>
+
+Each simulation places you in a public leadership
+position. Make decisions, manage competing priorities,
+and see how your choices affect public outcomes.
+
+</p>
+
+</div>
+
+
+<div class="academy-roadmap">
+
+
+<!-- CONGRESS -->
+
+<article
+id="congressSimulationCard"
+class="academy-lesson-card academy-lesson-active"
+>
+
+<div class="academy-lesson-status">
+
+<span
+id="congressSimulationStatus"
+class="academy-status-badge available"
+>
+Available
+</span>
+
+<span class="academy-lesson-number">
+Simulation 1
+</span>
+
+</div>
+
+
+<div class="academy-lesson-icon">
+🏛
+</div>
+
+
+<div class="academy-lesson-content">
+
+<h3>
+Member of Congress
+</h3>
+
+<p>
+
+Represent your district, develop legislation, work
+through committees, negotiate with lawmakers, and
+try to pass a bill into law.
+
+</p>
+
+
+<div class="academy-lesson-details">
+
+<span>
+Difficulty: Medium
+</span>
+
+<span>
+About 15 minutes
+</span>
+
+<span>
+Multiple outcomes
+</span>
+
+</div>
+
+
+<div
+id="congressSimulationRecord"
+class="simulation-record"
+hidden
+>
+
+<div>
+
+<span>
+Latest Grade
+</span>
+
+<strong id="congressCardGrade">
+—
+</strong>
+
+</div>
+
+
+<div>
+
+<span>
+Terms Served
+</span>
+
+<strong id="congressCardRuns">
+0
+</strong>
+
+</div>
+
+</div>
+
+
+<a
+href="congress.html"
+id="congressSimulationButton"
+class="primary-button academy-lesson-button"
+>
+Launch Simulation
+</a>
+
+</div>
+
+</article>
+
+
+<!-- PRESIDENT -->
+
+<article class="academy-lesson-card locked">
+
+<div class="academy-lesson-status">
+
+<span class="academy-status-badge coming-soon">
+Coming Soon
+</span>
+
+<span class="academy-lesson-number">
+Simulation 2
+</span>
+
+</div>
+
+
+<div class="academy-lesson-icon">
+🇺🇸
+</div>
+
+
+<div class="academy-lesson-content">
+
+<h3>
+President
+</h3>
+
+<p>
+
+Lead the executive branch, respond to national
+events, negotiate with Congress, and decide whether
+to sign or veto legislation.
+
+</p>
+
+
+<div class="academy-lesson-details">
+
+<span>
+Decision simulation
+</span>
+
+<span>
+National leadership
+</span>
+
+</div>
+
+
+<button
+type="button"
+class="academy-locked-button"
+disabled
+>
+Locked
+</button>
+
+</div>
+
+</article>
+
+
+<!-- SUPREME COURT -->
+
+<article class="academy-lesson-card locked">
+
+<div class="academy-lesson-status">
+
+<span class="academy-status-badge coming-soon">
+Coming Soon
+</span>
+
+<span class="academy-lesson-number">
+Simulation 3
+</span>
+
+</div>
+
+
+<div class="academy-lesson-icon">
+⚖
+</div>
+
+
+<div class="academy-lesson-content">
+
+<h3>
+Supreme Court
+</h3>
+
+<p>
+
+Hear fictional constitutional cases, examine legal
+arguments, and consider how judicial decisions affect
+government and individual rights.
+
+</p>
+
+
+<div class="academy-lesson-details">
+
+<span>
+Case simulation
+</span>
+
+<span>
+Constitutional reasoning
+</span>
+
+</div>
+
+
+<button
+type="button"
+class="academy-locked-button"
+disabled
+>
+Locked
+</button>
+
+</div>
+
+</article>
+
+
+<!-- GOVERNOR -->
+
+<article class="academy-lesson-card locked">
+
+<div class="academy-lesson-status">
+
+<span class="academy-status-badge coming-soon">
+Coming Soon
+</span>
+
+<span class="academy-lesson-number">
+Simulation 4
+</span>
+
+</div>
+
+
+<div class="academy-lesson-icon">
+🗺
+</div>
+
+
+<div class="academy-lesson-content">
+
+<h3>
+Governor
+</h3>
+
+<p>
+
+Lead a state, manage emergencies, negotiate a budget,
+work with the legislature, and balance regional needs.
+
+</p>
+
+
+<div class="academy-lesson-details">
+
+<span>
+State leadership
+</span>
+
+<span>
+Budget decisions
+</span>
+
+</div>
+
+
+<button
+type="button"
+class="academy-locked-button"
+disabled
+>
+Locked
+</button>
+
+</div>
+
+</article>
+
+
+<!-- MAYOR -->
+
+<article class="academy-lesson-card locked">
+
+<div class="academy-lesson-status">
+
+<span class="academy-status-badge coming-soon">
+Coming Soon
+</span>
+
+<span class="academy-lesson-number">
+Simulation 5
+</span>
+
+</div>
+
+
+<div class="academy-lesson-icon">
+🏙
+</div>
+
+
+<div class="academy-lesson-content">
+
+<h3>
+Mayor
+</h3>
+
+<p>
+
+Balance a city budget, improve neighborhoods, respond
+to residents, and manage essential local services.
+
+</p>
+
+
+<div class="academy-lesson-details">
+
+<span>
+Local government
+</span>
+
+<span>
+Community decisions
+</span>
+
+</div>
+
+
+<button
+type="button"
+class="academy-locked-button"
+disabled
+>
+Locked
+</button>
+
+</div>
+
+</article>
+
+
+<!-- CAMPAIGN -->
+
+<article class="academy-lesson-card locked">
+
+<div class="academy-lesson-status">
+
+<span class="academy-status-badge coming-soon">
+Coming Soon
+</span>
+
+<span class="academy-lesson-number">
+Simulation 6
+</span>
+
+</div>
+
+
+<div class="academy-lesson-icon">
+🗳
+</div>
+
+
+<div class="academy-lesson-content">
+
+<h3>
+Campaign Trail
+</h3>
+
+<p>
+
+Run for office, communicate with voters, participate
+in debates, build a coalition, and manage campaign
+resources.
+
+</p>
+
+
+<div class="academy-lesson-details">
+
+<span>
+Election strategy
+</span>
+
+<span>
+Public communication
+</span>
+
+</div>
+
+
+<button
+type="button"
+class="academy-locked-button"
+disabled
+>
+Locked
+</button>
+
+</div>
+
+</article>
+
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- LEARN BY DOING -->
+
+<section class="academy-purpose-section">
+
+<div class="academy-purpose-container">
+
+
+<div class="academy-purpose-copy">
+
+<p class="section-label">
+Why Simulations?
+</p>
+
+<h2>
+Learning by Making Decisions
+</h2>
+
+<p>
+
+Reading can explain the formal responsibilities of
+government. Simulations help visitors understand the
+tradeoffs, relationships, limits, and consequences
+that affect public leadership.
+
+</p>
+
+<p>
+
+The scenarios are educational and nonpartisan. They
+are designed to demonstrate government processes
+rather than promote a political party or policy view.
+
+</p>
+
+</div>
+
+
+<div class="academy-purpose-questions">
+
+<h3>
+Skills You Will Practice
+</h3>
+
+<ul>
+
+<li>
+Listening to constituents
+</li>
+
+<li>
+Building coalitions
+</li>
+
+<li>
+Negotiating compromises
+</li>
+
+<li>
+Understanding constitutional limits
+</li>
+
+<li>
+Balancing competing priorities
+</li>
+
+<li>
+Explaining decisions to the public
+</li>
+
+</ul>
+
+</div>
+
+
+</div>
+
+</section>
+
+
+<!-- CONNECT TO ACADEMY -->
+
+<section class="academy-challenge-preview">
+
+<div class="academy-section-container">
+
+
+<div class="academy-challenge-card">
+
+<div class="academy-challenge-copy">
+
+<p class="section-label">
+Prepare Before You Lead
+</p>
+
+<h2>
+Learn the Process in Civic Academy
+</h2>
+
+<p>
+
+Complete short lessons on the branches of government,
+checks and balances, and the legislative process
+before taking on more advanced simulations.
+
+</p>
+
+
+<a
+href="academy.html"
+class="primary-button"
+>
+Visit Civic Academy
+</a>
+
+</div>
+
+
+<div class="academy-question-preview">
+
+<p>
+Recommended Lessons
+</p>
+
+<h3>
+Prepare for Congress
+</h3>
+
+<div class="academy-preview-answer correct-preview">
+Foundations of Government
+</div>
+
+<div class="academy-preview-answer correct-preview">
+Checks and Balances
+</div>
+
+<div class="academy-preview-answer correct-preview">
+How a Bill Becomes Law
+</div>
+
+</div>
+
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- SHARED FOOTER -->
+
+<div id="sharedFooter"></div>
+
+
+<!-- SHARED COMPONENTS -->
+
+<script src="js/load-components.js"></script>
+
+
+<!-- SIMULATIONS PAGE LOGIC -->
+
+<script
+type="module"
+src="js/simulations.js"
+></script>
+
+
+</body>
+
+</html>

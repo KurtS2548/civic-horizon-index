@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+>
+
+<title>Foundations of American Government - Civic Academy</title>
+
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+
+<link
+rel="preconnect"
+href="https://fonts.gstatic.com"
+crossorigin
+>
+
+<link
+href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Merriweather:wght@700&display=swap"
+rel="stylesheet"
+>
+
+
+<link rel="stylesheet" href="css/style.css">
+
+</head>
+
+
+<body>
+
+
+<!-- HEADER -->
+
+<header class="site-header">
+
+<div class="header-container">
+
+
+<a href="index.html" class="brand">
+
+<div class="logo-icon">
+
+<img
+src="logo.png"
+alt="Civic Horizon Index Logo"
+>
+
+</div>
+
+
+<div class="logo-text">
+
+<h1>
+Civic Horizon Index
+</h1>
+
+<p>
+Understanding America's Priorities
+</p>
+
+</div>
+
+</a>
+
+
+<nav class="main-nav">
+
+<a href="index.html">
+Home
+</a>
+
+<a href="polls.html">
+Polls
+</a>
+
+<a href="results.html">
+Results
+</a>
+
+<a href="dashboard.html">
+Dashboard
+</a>
+
+<a href="academy.html" class="active">
+Civic Academy
+</a>
+
+<a href="history.html">
+History
+</a>
+
+<a href="about.html">
+About
+</a>
+
+<a href="polls.html" class="survey-nav-button">
+Take the Survey
+</a>
+
+</nav>
+
+
+</div>
+
+</header>
+
+
+<!-- LESSON HERO -->
+
+<section class="lesson-hero">
+
+<div class="lesson-hero-container">
+
+
+<div class="lesson-hero-copy">
+
+<p class="hero-label">
+Civic Academy · Lesson 1
+</p>
+
+<h1>
+Foundations of American Government
+</h1>
+
+<p>
+
+Learn where government authority comes from,
+how power is divided, and which institutions are
+responsible for the basic functions of government.
+
+</p>
+
+
+<div class="lesson-meta-row">
+
+<span>
+10 questions
+</span>
+
+<span>
+About 5 minutes
+</span>
+
+<span>
+Beginner
+</span>
+
+</div>
+
+</div>
+
+
+<div class="lesson-progress-card">
+
+<p class="section-label">
+Lesson Progress
+</p>
+
+<div class="lesson-progress-heading">
+
+<strong id="lessonQuestionNumber">
+Question 1 of 10
+</strong>
+
+<span id="lessonProgressPercent">
+10%
+</span>
+
+</div>
+
+
+<div class="lesson-progress-track">
+
+<div
+id="lessonProgressFill"
+class="lesson-progress-fill"
+style="width: 10%;"
+></div>
+
+</div>
+
+
+<p id="lessonScorePreview">
+Score: 0 correct
+</p>
+
+</div>
+
+
+</div>
+
+</section>
+
+
+<!-- QUIZ SECTION -->
+
+<main class="lesson-page-section">
+
+<div class="lesson-page-container">
+
+
+<a href="academy.html" class="lesson-back-link">
+← Back to Civic Academy
+</a>
+
+
+<section
+id="lessonQuizCard"
+class="lesson-quiz-card"
+>
+
+
+<div class="lesson-question-top">
+
+<p class="section-label">
+Who Has the Power?
+</p>
+
+<span id="lessonQuestionCategory">
+Foundations
+</span>
+
+</div>
+
+
+<h2 id="lessonQuestionText">
+Loading question...
+</h2>
+
+
+<p id="lessonQuestionPrompt">
+
+Choose the best answer.
+
+</p>
+
+
+<div
+id="lessonAnswerOptions"
+class="lesson-answer-options"
+></div>
+
+
+<div
+id="lessonFeedback"
+class="lesson-feedback"
+aria-live="polite"
+hidden
+>
+
+
+<div class="lesson-feedback-icon" id="lessonFeedbackIcon">
+✓
+</div>
+
+
+<div>
+
+<h3 id="lessonFeedbackTitle">
+Correct
+</h3>
+
+<p id="lessonFeedbackText"></p>
+
+</div>
+
+
+</div>
+
+
+<div class="lesson-action-row">
+
+<button
+type="button"
+id="lessonNextButton"
+class="primary-button"
+hidden
+>
+Continue
+</button>
+
+</div>
+
+
+</section>
+
+
+<!-- FINAL RESULTS -->
+
+<section
+id="lessonResultsCard"
+class="lesson-results-card"
+hidden
+>
+
+
+<div class="lesson-complete-icon">
+🏛
+</div>
+
+
+<p class="section-label">
+Lesson Complete
+</p>
+
+
+<h2>
+Foundations Complete
+</h2>
+
+
+<p>
+
+You completed the first Civic Academy lesson and
+strengthened your understanding of the basic structure
+of American government.
+
+</p>
+
+
+<div class="lesson-score-grid">
+
+
+<div class="lesson-score-card">
+
+<span>
+Correct Answers
+</span>
+
+<strong id="lessonFinalScore">
+0 / 10
+</strong>
+
+</div>
+
+
+<div class="lesson-score-card">
+
+<span>
+Final Score
+</span>
+
+<strong id="lessonFinalPercent">
+0%
+</strong>
+
+</div>
+
+
+<div class="lesson-score-card">
+
+<span>
+Achievement
+</span>
+
+<strong>
+Civic Explorer I
+</strong>
+
+</div>
+
+
+</div>
+
+
+<div id="lessonResultMessage" class="lesson-result-message">
+
+Great start.
+
+</div>
+
+
+<div class="lesson-results-actions">
+
+<a
+href="academy.html"
+class="primary-button"
+>
+Return to Civic Academy
+</a>
+
+<button
+type="button"
+id="lessonRestartButton"
+class="secondary-button"
+>
+Try Again
+</button>
+
+</div>
+
+
+</section>
+
+
+<!-- WHY IT MATTERS -->
+
+<aside class="lesson-purpose-card">
+
+<p class="section-label">
+Why This Matters
+</p>
+
+<h3>
+Know Where Power Resides
+</h3>
+
+<p>
+
+Understanding which branch or level of government
+holds responsibility helps citizens direct questions,
+concerns, and participation to the right institution.
+
+</p>
+
+</aside>
+
+
+</div>
+
+</main>
+
+
+<!-- FOOTER -->
+
+<footer class="site-footer">
+
+<div class="footer-container">
+
+
+<div class="footer-brand">
+
+<div class="footer-logo-area">
+
+<div class="logo-icon">
+
+<img
+src="logo.png"
+alt="Civic Horizon Index Logo"
+>
+
+</div>
+
+
+<div>
+
+<h2>
+Civic Horizon Index
+</h2>
+
+<p>
+Understanding America's Priorities
+</p>
+
+</div>
+
+</div>
+
+
+<p class="footer-description">
+
+Helping America understand itself through the
+collective voices of its people.
+
+</p>
+
+</div>
+
+
+<div class="footer-links">
+
+<h3>
+Explore
+</h3>
+
+<a href="index.html">
+Home
+</a>
+
+<a href="polls.html">
+Take the Survey
+</a>
+
+<a href="results.html">
+National Results
+</a>
+
+<a href="dashboard.html">
+Dashboard
+</a>
+
+<a href="academy.html">
+Civic Academy
+</a>
+
+<a href="about.html">
+About
+</a>
+
+</div>
+
+
+<div class="footer-contact">
+
+<h3>
+Platform Values
+</h3>
+
+<p>
+Nonpartisan
+</p>
+
+<p>
+Independent
+</p>
+
+<p>
+Transparent
+</p>
+
+<p>
+Educational
+</p>
+
+</div>
+
+
+</div>
+
+
+<div class="footer-bottom">
+
+<p>
+© 2026 Civic Horizon Index. All rights reserved.
+</p>
+
+<p>
+Learn. Participate. Understand.
+</p>
+
+</div>
+
+</footer>
+
+
+<script
+type="module"
+src="js/academy.js"
+></script>
+
+
+</body>
+
+</html>

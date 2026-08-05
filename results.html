@@ -4,120 +4,202 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Results - Civic Horizon Index</title>
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+>
+
+<title>National Results - Civic Horizon Index</title>
+
+
+<!-- GOOGLE FONTS -->
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link
+rel="preconnect"
+href="https://fonts.gstatic.com"
+crossorigin
+>
 
 <link
 href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Merriweather:wght@700&display=swap"
 rel="stylesheet"
 >
 
+
+<!-- CHART.JS -->
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+<!-- WEBSITE STYLES -->
+
 <link rel="stylesheet" href="css/style.css">
 
 </head>
 
-<body>
+
+<body data-page="results">
 
 
-<!-- HEADER -->
+<!-- SHARED HEADER -->
 
-<header class="site-header">
-
-<div class="header-container">
-
-<a href="index.html" class="brand">
-
-<div class="logo-icon">
-    <img src="logo.png" alt="Civic Horizon Index Logo">
-</div>
-
-<div class="logo-text">
-
-<h1>Civic Horizon Index</h1>
-
-<p>
-Understanding America's Priorities
-</p>
-
-</div>
-
-</a>
+<div id="sharedHeader"></div>
 
 
-<nav class="main-nav">
+<!-- RESULTS HERO -->
 
-<a href="index.html">
-Home
-</a>
+<section class="results-hero">
 
-<a href="polls.html">
-Polls
-</a>
-
-<a href="results.html" class="active">
-Results
-</a>
-
-<a href="dashboard.html">
-Dashboard
-</a>
-
-<a href="history.html">
-History
-</a>
-
-<a href="about.html">
-About
-</a>
-
-<a href="polls.html" class="survey-nav-button">
-Take the Survey
-</a>
-
-</nav>
-
-</div>
-
-</header>
+<div class="results-hero-container">
 
 
-<!-- PAGE BANNER -->
-
-<section class="page-banner">
+<div class="results-hero-copy">
 
 <p class="hero-label">
 Live National Results
 </p>
 
 <h1>
-What Americans Are Prioritizing
+The Priorities Shaping America
 </h1>
 
 <p>
 
-View the latest survey results and see which issues
-are receiving the highest public priority scores.
+Explore the issues receiving the highest average
+priority scores from Civic Horizon Index participants.
 
 </p>
+
+
+<div class="results-hero-actions">
+
+<a href="polls.html" class="primary-button">
+Add Your Voice
+</a>
+
+<a href="dashboard.html" class="secondary-button">
+Explore the Dashboard
+</a>
+
+</div>
+
+</div>
+
+
+<div class="results-hero-feature">
+
+<p class="section-label">
+Current National Leader
+</p>
+
+<h2 id="resultsHeroTopIssue">
+Loading national results...
+</h2>
+
+
+<div class="results-hero-score">
+
+<strong id="resultsHeroTopScore">
+0.0
+</strong>
+
+<span>
+Civic Horizon Score
+</span>
+
+</div>
+
+
+<p id="resultsHeroResponseText">
+Based on 0 completed surveys
+</p>
+
+</div>
+
+
+</div>
 
 </section>
 
 
-<!-- RESULTS SUMMARY -->
+<!-- LIVE STATUS STRIP -->
 
-<section class="results-section">
+<section class="results-status-strip">
+
+<div class="results-status-container">
+
+
+<div class="results-status-item">
+
+<span>
+Survey Status
+</span>
+
+<strong id="resultsSurveyStatus">
+Live
+</strong>
+
+</div>
+
+
+<div class="results-status-item">
+
+<span>
+Voices Contributed
+</span>
+
+<strong id="resultsStatusResponses">
+0
+</strong>
+
+</div>
+
+
+<div class="results-status-item">
+
+<span>
+National Average
+</span>
+
+<strong id="resultsStatusAverage">
+0.0
+</strong>
+
+</div>
+
+
+<div class="results-status-item">
+
+<span>
+Last Updated
+</span>
+
+<strong id="resultsStatusUpdated">
+Loading...
+</strong>
+
+</div>
+
+
+</div>
+
+</section>
+
+
+<!-- MAIN RESULTS -->
+
+<main class="results-page-section">
 
 <div class="content-container">
 
 
-<div class="section-heading">
+<div class="section-heading results-page-heading">
 
 <p class="section-label">
-Current Results
+America Today
 </p>
 
 <h2>
@@ -126,20 +208,23 @@ National Priority Rankings
 
 <p>
 
-Results update as new survey responses are submitted.
+Each Civic Horizon Score represents the average
+rating submitted for an issue on a scale from 1 to 10.
 
 </p>
 
 </div>
 
 
-<div class="results-summary-grid">
+<!-- SUMMARY CARDS -->
+
+<section class="results-summary-grid results-summary-grid-large">
 
 
 <div class="result-summary-card">
 
 <p class="result-card-label">
-Total Responses
+Voices Contributed
 </p>
 
 <h3 id="resultResponseCount">
@@ -147,13 +232,13 @@ Total Responses
 </h3>
 
 <p>
-Completed national surveys
+Completed National Priorities Surveys
 </p>
 
 </div>
 
 
-<div class="result-summary-card">
+<div class="result-summary-card featured-result-summary">
 
 <p class="result-card-label">
 Highest Priority
@@ -163,8 +248,8 @@ Highest Priority
 Loading...
 </h3>
 
-<p>
-Current leading issue
+<p id="topPriorityScoreText">
+Current leading national issue
 </p>
 
 </div>
@@ -173,7 +258,7 @@ Current leading issue
 <div class="result-summary-card">
 
 <p class="result-card-label">
-Average Score
+National Average
 </p>
 
 <h3 id="averagePriorityScore">
@@ -181,38 +266,63 @@ Average Score
 </h3>
 
 <p>
-Across all national issues
+Average across all ten issues
 </p>
 
 </div>
 
 
+<div class="result-summary-card">
+
+<p class="result-card-label">
+Issues Measured
+</p>
+
+<h3>
+10
+</h3>
+
+<p>
+National priority categories
+</p>
+
 </div>
 
 
-<!-- RANKINGS -->
-
-<div class="results-layout">
+</section>
 
 
-<div class="results-card">
+<!-- RESULTS GRID -->
+
+<section class="results-main-layout">
+
+
+<div class="results-card results-rankings-card">
 
 <div class="results-card-heading">
 
 <div>
 
 <p class="section-label">
-Issue Rankings
+Live Leaderboard
 </p>
 
 <h2>
 Current National Standings
 </h2>
 
+<p>
+
+Ranked from the highest average Civic Horizon Score
+to the lowest.
+
+</p>
+
 </div>
 
+
 <a href="polls.html" class="primary-button">
-Add Your Response
+Take the Survey
 </a>
 
 </div>
@@ -221,7 +331,7 @@ Add Your Response
 <div id="resultsContainer">
 
 <p>
-Loading results...
+Loading national rankings...
 </p>
 
 </div>
@@ -229,80 +339,243 @@ Loading results...
 </div>
 
 
-<!-- INFORMATION PANEL -->
+<div class="results-card results-chart-card">
 
-<aside class="results-sidebar">
+<div class="results-card-heading">
+
+<div>
+
+<p class="section-label">
+Visual Comparison
+</p>
+
+<h2>
+Priority Score Overview
+</h2>
+
+<p>
+
+Compare the average national score for each measured
+issue.
+
+</p>
+
+</div>
+
+</div>
 
 
-<div class="card">
+<div class="results-chart-wrapper">
+
+<canvas id="resultsPriorityChart"></canvas>
+
+</div>
+
+</div>
+
+
+</section>
+
+
+<!-- RESULT EXPLANATIONS -->
+
+<section class="results-insight-grid">
+
+
+<div class="results-insight-card">
+
+<p class="section-label">
+How to Read the Index
+</p>
 
 <h3>
-How Scores Work
+Higher Scores Reflect Greater Priority
 </h3>
 
 <p>
 
-Each issue receives an average score based on survey
-ratings from 1 through 10.
+A score closer to 10 indicates that participants
+believe the issue deserves greater national attention.
+A lower ranking reflects its relative position among
+the ten issues.
 
 </p>
 
 </div>
 
 
-<div class="card">
+<div class="results-insight-card">
+
+<p class="section-label">
+Live Participation
+</p>
 
 <h3>
-Live Data
+Every Survey Updates the Picture
 </h3>
 
 <p>
 
-Rankings may change whenever new responses are added
-to the national survey.
+As more people contribute, the averages, leaderboard,
+charts, dashboard, and state-level results update
+automatically.
 
 </p>
 
 </div>
 
 
-<div class="card">
+<div class="results-insight-card">
+
+<p class="section-label">
+Explore Further
+</p>
 
 <h3>
-Explore More
+See How Priorities Differ by State
 </h3>
 
 <p>
 
-Visit the dashboard for additional totals, charts,
-and survey analysis.
+Use the interactive dashboard to explore geographic
+patterns across the country.
 
 </p>
 
 <a href="dashboard.html" class="text-link">
-Open the Dashboard →
+Open the Interactive Dashboard →
 </a>
 
 </div>
 
 
-</aside>
+</section>
 
 
 </div>
+
+</main>
+
+
+<!-- CONNECTED EXPERIENCE -->
+
+<section class="results-connected-section">
+
+<div class="content-container">
+
+
+<div class="section-heading home-centered-heading">
+
+<p class="section-label">
+Go Beyond the Numbers
+</p>
+
+<h2>
+Learn How Government Responds
+</h2>
+
+<p>
+
+Explore how public priorities move through government,
+from civic participation to legislation and public
+decision-making.
+
+</p>
+
+</div>
+
+
+<div class="results-connected-grid">
+
+
+<div class="results-connected-card">
+
+<span class="results-connected-number">
+01
+</span>
+
+<h3>
+Learn the Foundations
+</h3>
+
+<p>
+
+Understand the branches of government, federalism,
+elections, and constitutional limits.
+
+</p>
+
+<a href="academy.html" class="text-link">
+Enter Civic Academy →
+</a>
+
+</div>
+
+
+<div class="results-connected-card">
+
+<span class="results-connected-number">
+02
+</span>
+
+<h3>
+Follow a Bill
+</h3>
+
+<p>
+
+Learn how an idea moves through committees, Congress,
+and the president before becoming law.
+
+</p>
+
+<a href="academy-bill-law.html" class="text-link">
+Play the Bill Game →
+</a>
+
+</div>
+
+
+<div class="results-connected-card">
+
+<span class="results-connected-number">
+03
+</span>
+
+<h3>
+Practice Through Simulations
+</h3>
+
+<p>
+
+Step into government roles and see how choices and
+constitutional powers shape outcomes.
+
+</p>
+
+<a href="simulations.html" class="text-link">
+Explore Simulations →
+</a>
+
+</div>
+
+
+</div>
+
 
 </div>
 
 </section>
 
 
-<!-- TRANSPARENCY SECTION -->
+<!-- TRANSPARENCY -->
 
-<section class="results-transparency">
+<section class="results-transparency results-transparency-modern">
 
 <div class="content-container">
 
-<div class="section-heading">
+
+<div class="section-heading home-centered-heading">
 
 <p class="section-label">
 Transparent Public Data
@@ -314,8 +587,9 @@ Designed for Understanding
 
 <p>
 
-Civic Horizon Index presents aggregated survey data
-so visitors can compare national priorities clearly.
+Civic Horizon Index presents aggregated participant
+data clearly while acknowledging the limits of
+voluntary public surveys.
 
 </p>
 
@@ -328,13 +602,14 @@ so visitors can compare national priorities clearly.
 <div class="card">
 
 <h3>
-Public Rankings
+Aggregated Results
 </h3>
 
 <p>
 
-Survey averages are organized from the highest-rated
-issue to the lowest-rated issue.
+Public scores are calculated from combined survey
+responses rather than displaying individual
+submissions.
 
 </p>
 
@@ -344,13 +619,13 @@ issue to the lowest-rated issue.
 <div class="card">
 
 <h3>
-Anonymous Responses
+Consistent Measurement
 </h3>
 
 <p>
 
-Results display combined public data rather than
-individual personal responses.
+Every participant rates the same ten issues using
+the same one-to-ten priority scale.
 
 </p>
 
@@ -360,18 +635,64 @@ individual personal responses.
 <div class="card">
 
 <h3>
-Continuous Updates
+Participation Matters
 </h3>
 
 <p>
 
-New survey submissions are reflected in the results
-as the public dataset grows.
+Results reflect voluntary participants and should
+not automatically be treated as a scientific sample
+of the entire population.
 
 </p>
 
 </div>
 
+
+</div>
+
+
+</div>
+
+</section>
+
+
+<!-- FINAL CALL TO ACTION -->
+
+<section class="results-final-cta">
+
+<div class="results-final-cta-container">
+
+<p class="section-label">
+Your Priorities Matter
+</p>
+
+<h2>
+Add Your Voice to the National Picture
+</h2>
+
+<p>
+
+The National Priorities Survey takes about one minute.
+Your response becomes part of the live Civic Horizon
+Index.
+
+</p>
+
+
+<div class="hero-buttons">
+
+<a href="polls.html" class="primary-button">
+Take the National Survey
+</a>
+
+<a href="academy.html" class="secondary-button">
+Visit Civic Academy
+</a>
+
+<a href="simulations.html" class="secondary-button">
+Explore Simulations
+</a>
 
 </div>
 
@@ -380,114 +701,23 @@ as the public dataset grows.
 </section>
 
 
-<!-- FOOTER -->
+<!-- SHARED FOOTER -->
 
-<footer class="site-footer">
-
-<div class="footer-container">
+<div id="sharedFooter"></div>
 
 
-<div class="footer-brand">
+<!-- SHARED COMPONENT LOADER -->
 
-<div class="footer-logo-area">
-
-<div class="logo-icon">
-    <img src="logo.png" alt="Civic Horizon Index Logo">
-</div>
-
-<div>
-
-<h2>
-Civic Horizon Index
-</h2>
-
-<p>
-Understanding America's Priorities
-</p>
-
-</div>
-
-</div>
-
-<p class="footer-description">
-
-Helping citizens understand national priorities
-through transparent and independent public data.
-
-</p>
-
-</div>
+<script src="js/load-components.js"></script>
 
 
-<div class="footer-links">
+<!-- RESULTS LOGIC -->
 
-<h3>
-Quick Links
-</h3>
+<script
+type="module"
+src="js/results.js"
+></script>
 
-<a href="index.html">
-Home
-</a>
-
-<a href="polls.html">
-Polls
-</a>
-
-<a href="results.html">
-Results
-</a>
-
-<a href="dashboard.html">
-Dashboard
-</a>
-
-<a href="history.html">
-History
-</a>
-
-<a href="about.html">
-About
-</a>
-
-</div>
-
-
-<div class="footer-contact">
-
-<h3>
-Platform Values
-</h3>
-
-<p>
-Nonpartisan
-</p>
-
-<p>
-Independent
-</p>
-
-<p>
-Data focused
-</p>
-
-</div>
-
-
-</div>
-
-
-<div class="footer-bottom">
-
-<p>
-© 2026 Civic Horizon Index. All rights reserved.
-</p>
-
-</div>
-
-</footer>
-
-
-<script type="module" src="js/results.js"></script>
 
 </body>
 

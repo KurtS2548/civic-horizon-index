@@ -4,103 +4,63 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Polls - Civic Horizon Index</title>
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+>
+
+<title>National Priorities Survey - Civic Horizon Index</title>
+
+
+<!-- GOOGLE FONTS -->
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link
+rel="preconnect"
+href="https://fonts.gstatic.com"
+crossorigin
+>
 
 <link
 href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Merriweather:wght@700&display=swap"
 rel="stylesheet"
 >
 
+
+<!-- WEBSITE STYLES -->
+
 <link rel="stylesheet" href="css/style.css">
 
 </head>
 
-<body>
+
+<body data-page="polls">
 
 
-<!-- HEADER -->
+<!-- SHARED HEADER -->
 
-<header class="site-header">
-
-<div class="header-container">
-
-<a href="index.html" class="brand">
-
-<div class="logo-icon">
-    <img src="logo.png" alt="Civic Horizon Index Logo">
-</div>
-
-<div class="logo-text">
-
-<h1>Civic Horizon Index</h1>
-
-<p>
-Understanding America's Priorities
-</p>
-
-</div>
-
-</a>
+<div id="sharedHeader"></div>
 
 
-<nav class="main-nav">
-
-<a href="index.html">
-Home
-</a>
-
-<a href="polls.html" class="active">
-Polls
-</a>
-
-<a href="results.html">
-Results
-</a>
-
-<a href="dashboard.html">
-Dashboard
-</a>
-
-<a href="history.html">
-History
-</a>
-
-<a href="about.html">
-About
-</a>
-
-<a href="polls.html" class="survey-nav-button">
-Take the Survey
-</a>
-
-</nav>
-
-</div>
-
-</header>
-
-
-<!-- PAGE BANNER -->
+<!-- PAGE HERO -->
 
 <section class="page-banner">
 
 <p class="hero-label">
-National Priority Survey
+National Priorities Survey
 </p>
 
 <h1>
-Make Your Voice Count
+Add Your Voice
 </h1>
 
 <p>
 
-Rate the issues that you believe deserve the most
-attention from leaders across the United States.
+Rate the national issues you believe deserve the
+greatest attention. Your response becomes part of
+the live Civic Horizon Index.
 
 </p>
 
@@ -109,37 +69,38 @@ attention from leaders across the United States.
 
 <!-- SURVEY SECTION -->
 
-<section class="content-section">
+<main class="content-section">
 
 <div class="content-container">
+
 
 <div class="section-heading">
 
 <p class="section-label">
-Current National Poll
+About One Minute
 </p>
 
 <h2>
-America’s Priorities
+What Matters Most to You?
 </h2>
 
 <p>
 
-Use the survey below to rate each issue.
-A score of 1 means low priority, while 10 means
-extremely important.
+Rate each issue from 1 to 10. A score of 1 means
+low priority, while a score of 10 means the issue
+deserves the highest level of attention.
 
 </p>
 
 </div>
 
 
-<div class="card">
+<div class="card national-survey-card">
 
 <div id="pollContainer">
 
 <p>
-Loading survey...
+Loading the National Priorities Survey...
 </p>
 
 </div>
@@ -147,7 +108,10 @@ Loading survey...
 </div>
 
 
-<div class="survey-information">
+<!-- SURVEY INFORMATION -->
+
+<section class="survey-information">
+
 
 <div class="card">
 
@@ -157,8 +121,8 @@ Anonymous Participation
 
 <p>
 
-Your survey responses are collected without displaying
-your name or personal identity.
+Your public results are shown in aggregate. Your
+name is not displayed with your survey response.
 
 </p>
 
@@ -168,13 +132,13 @@ your name or personal identity.
 <div class="card">
 
 <h3>
-One Response Matters
+Ten National Issues
 </h3>
 
 <p>
 
-Every completed survey contributes to the overall
-national priority rankings.
+Every participant rates the same ten categories
+using the same one-to-ten scale.
 
 </p>
 
@@ -184,17 +148,99 @@ national priority rankings.
 <div class="card">
 
 <h3>
-Live Results
+Live Civic Data
 </h3>
 
 <p>
 
-After submitting your response, visit the results page
-to see the latest public rankings.
+After submitting, visit the Results or Dashboard
+pages to see the updated national and state-level
+scores.
 
 </p>
 
 </div>
+
+
+</section>
+
+
+<!-- WHY PARTICIPATE -->
+
+<section class="polls-purpose-section">
+
+<div class="card">
+
+<p class="section-label">
+Why Participate?
+</p>
+
+<h2>
+Every Response Adds to the Larger Picture
+</h2>
+
+<p>
+
+One response cannot define a nation. When many people
+share their priorities, however, the combined results
+can reveal meaningful patterns among those who choose
+to participate.
+
+</p>
+
+<p>
+
+Civic Horizon Index is designed to help people learn,
+participate, and explore—not to tell anyone what they
+should believe.
+
+</p>
+
+</div>
+
+</section>
+
+
+</div>
+
+</main>
+
+
+<!-- FINAL CALL TO ACTION -->
+
+<section class="home-final-cta">
+
+<div class="home-final-cta-container">
+
+<p class="section-label">
+After You Submit
+</p>
+
+<h2>
+Explore What Participants Are Prioritizing
+</h2>
+
+<p>
+
+View national rankings, examine state-level patterns,
+or continue learning through Civic Academy.
+
+</p>
+
+
+<div class="hero-buttons">
+
+<a href="results.html" class="primary-button">
+View National Results
+</a>
+
+<a href="dashboard.html" class="secondary-button">
+Explore the Dashboard
+</a>
+
+<a href="academy.html" class="secondary-button">
+Visit Civic Academy
+</a>
 
 </div>
 
@@ -203,114 +249,23 @@ to see the latest public rankings.
 </section>
 
 
-<!-- FOOTER -->
+<!-- SHARED FOOTER -->
 
-<footer class="site-footer">
-
-<div class="footer-container">
+<div id="sharedFooter"></div>
 
 
-<div class="footer-brand">
+<!-- SHARED COMPONENT LOADER -->
 
-<div class="footer-logo-area">
-
-<div class="logo-icon">
-    <img src="logo.png" alt="Civic Horizon Index Logo">
-</div>
-
-<div>
-
-<h2>
-Civic Horizon Index
-</h2>
-
-<p>
-Understanding America's Priorities
-</p>
-
-</div>
-
-</div>
-
-<p class="footer-description">
-
-Helping citizens understand national priorities
-through transparent and independent public data.
-
-</p>
-
-</div>
+<script src="js/load-components.js"></script>
 
 
-<div class="footer-links">
+<!-- SURVEY LOGIC -->
 
-<h3>
-Quick Links
-</h3>
+<script
+type="module"
+src="js/polls.js"
+></script>
 
-<a href="index.html">
-Home
-</a>
-
-<a href="polls.html">
-Polls
-</a>
-
-<a href="results.html">
-Results
-</a>
-
-<a href="dashboard.html">
-Dashboard
-</a>
-
-<a href="history.html">
-History
-</a>
-
-<a href="about.html">
-About
-</a>
-
-</div>
-
-
-<div class="footer-contact">
-
-<h3>
-Platform Values
-</h3>
-
-<p>
-Nonpartisan
-</p>
-
-<p>
-Independent
-</p>
-
-<p>
-Data focused
-</p>
-
-</div>
-
-
-</div>
-
-
-<div class="footer-bottom">
-
-<p>
-© 2026 Civic Horizon Index. All rights reserved.
-</p>
-
-</div>
-
-</footer>
-
-
-<script type="module" src="js/polls.js"></script>
 
 </body>
 

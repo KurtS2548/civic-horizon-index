@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+>
+
+<title>Congress Simulation - Civic Horizon Index</title>
+
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+
+<link
+rel="preconnect"
+href="https://fonts.gstatic.com"
+crossorigin
+>
+
+<link
+href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Merriweather:wght@700&display=swap"
+rel="stylesheet"
+>
+
+
+<link rel="stylesheet" href="css/style.css">
+
+</head>
+
+
+<body data-page="simulations">
+
+
+<!-- SHARED HEADER -->
+
+<div id="sharedHeader"></div>
+
+
+<!-- SIMULATION HERO -->
+
+<section class="congress-hero">
+
+<div class="congress-hero-container">
+
+
+<div class="congress-hero-copy">
+
+<p class="hero-label">
+Civic Simulation
+</p>
+
+<h1>
+You Are a Member of Congress
+</h1>
+
+<p>
+
+Serve a term in the United States House of
+Representatives. Listen to your district, introduce
+legislation, work through committees, negotiate with
+other lawmakers, and try to pass a bill into law.
+
+</p>
+
+
+<div class="lesson-meta-row">
+
+<span>
+Decision simulation
+</span>
+
+<span>
+About 15 minutes
+</span>
+
+<span>
+Multiple outcomes
+</span>
+
+</div>
+
+</div>
+
+
+<div class="congress-hero-dashboard">
+
+<p class="section-label">
+Representative Dashboard
+</p>
+
+<div class="congress-dashboard-grid">
+
+
+<div class="congress-dashboard-stat">
+
+<span>
+Approval
+</span>
+
+<strong id="congressApproval">
+70%
+</strong>
+
+</div>
+
+
+<div class="congress-dashboard-stat">
+
+<span>
+Bipartisan Support
+</span>
+
+<strong id="congressBipartisan">
+50%
+</strong>
+
+</div>
+
+
+<div class="congress-dashboard-stat">
+
+<span>
+Committee Support
+</span>
+
+<strong id="congressCommittee">
+50%
+</strong>
+
+</div>
+
+
+<div class="congress-dashboard-stat">
+
+<span>
+Constituent Trust
+</span>
+
+<strong id="congressTrust">
+70%
+</strong>
+
+</div>
+
+
+<div class="congress-dashboard-stat">
+
+<span>
+Bills Introduced
+</span>
+
+<strong id="congressBillsIntroduced">
+0
+</strong>
+
+</div>
+
+
+<div class="congress-dashboard-stat">
+
+<span>
+Bills Passed
+</span>
+
+<strong id="congressBillsPassed">
+0
+</strong>
+
+</div>
+
+
+</div>
+
+</div>
+
+
+</div>
+
+</section>
+
+
+<!-- SIMULATION AREA -->
+
+<main class="congress-page-section">
+
+<div class="congress-page-container">
+
+
+<a href="simulations.html" class="lesson-back-link">
+← Back to Civic Simulations
+</a>
+
+
+<!-- START SCREEN -->
+
+<section
+id="congressStartScreen"
+class="congress-start-card"
+>
+
+
+<div class="congress-start-icon">
+🏛
+</div>
+
+
+<p class="section-label">
+Welcome to Washington
+</p>
+
+
+<h2>
+Begin Your First Term
+</h2>
+
+
+<p>
+
+Congratulations. You have been elected to represent
+District 14 in the United States House of
+Representatives.
+
+</p>
+
+
+<p>
+
+Your district expects you to address infrastructure,
+housing, healthcare, and veterans' services while
+working with hundreds of other lawmakers.
+
+</p>
+
+
+<div class="congress-district-preview">
+
+
+<div>
+
+<span>
+District
+</span>
+
+<strong>
+14
+</strong>
+
+</div>
+
+
+<div>
+
+<span>
+Population
+</span>
+
+<strong>
+742,000
+</strong>
+
+</div>
+
+
+<div>
+
+<span>
+Political Balance
+</span>
+
+<strong>
+Competitive
+</strong>
+
+</div>
+
+
+<div>
+
+<span>
+Starting Approval
+</span>
+
+<strong>
+70%
+</strong>
+
+</div>
+
+
+</div>
+
+
+<button
+type="button"
+id="congressStartButton"
+class="primary-button"
+>
+Begin Your First Term
+</button>
+
+
+</section>
+
+
+<!-- MAIN GAME SCREEN -->
+
+<section
+id="congressGameScreen"
+class="congress-game-layout"
+hidden
+>
+
+
+<!-- LEFT COLUMN -->
+
+<div class="congress-main-column">
+
+
+<!-- DISTRICT PROFILE -->
+
+<section class="congress-panel congress-district-card">
+
+<div class="congress-panel-heading">
+
+<div>
+
+<p class="section-label">
+Your Constituency
+</p>
+
+<h2>
+District 14
+</h2>
+
+</div>
+
+
+<span id="congressTurnLabel">
+Week 1
+</span>
+
+</div>
+
+
+<div class="congress-district-grid">
+
+
+<div class="congress-profile-stat">
+
+<span>
+Population
+</span>
+
+<strong>
+742,000
+</strong>
+
+</div>
+
+
+<div class="congress-profile-stat">
+
+<span>
+District Type
+</span>
+
+<strong>
+Competitive
+</strong>
+
+</div>
+
+
+<div class="congress-profile-stat">
+
+<span>
+Current Approval
+</span>
+
+<strong id="districtApproval">
+70%
+</strong>
+
+</div>
+
+
+<div class="congress-profile-stat">
+
+<span>
+Constituent Trust
+</span>
+
+<strong id="districtTrust">
+70%
+</strong>
+
+</div>
+
+
+</div>
+
+
+<div class="congress-priority-list">
+
+<h3>
+Top District Priorities
+</h3>
+
+<div>
+🚧 Infrastructure
+</div>
+
+<div>
+🏠 Housing Affordability
+</div>
+
+<div>
+🏥 Healthcare Access
+</div>
+
+<div>
+🎖 Veterans' Services
+</div>
+
+</div>
+
+
+</section>
+
+
+<!-- CURRENT SCENARIO -->
+
+<section
+id="congressScenarioCard"
+class="congress-panel congress-scenario-card"
+>
+
+
+<div class="congress-scenario-top">
+
+<p class="section-label" id="congressScenarioCategory">
+Constituent Request
+</p>
+
+<span id="congressScenarioProgress">
+Decision 1 of 8
+</span>
+
+</div>
+
+
+<h2 id="congressScenarioTitle">
+Loading scenario...
+</h2>
+
+
+<p id="congressScenarioText">
+
+Your first congressional challenge is being prepared.
+
+</p>
+
+
+<div
+id="congressChoiceContainer"
+class="congress-choice-grid"
+></div>
+
+
+<div
+id="congressOutcome"
+class="congress-outcome"
+hidden
+>
+
+
+<div
+id="congressOutcomeIcon"
+class="congress-outcome-icon"
+>
+✓
+</div>
+
+
+<div>
+
+<h3 id="congressOutcomeTitle">
+Decision Recorded
+</h3>
+
+<p id="congressOutcomeText"></p>
+
+</div>
+
+
+</div>
+
+
+<div class="congress-action-row">
+
+<button
+type="button"
+id="congressContinueButton"
+class="primary-button"
+hidden
+>
+Continue
+</button>
+
+</div>
+
+
+</section>
+
+
+<!-- NEWS FEED -->
+
+<section class="congress-panel congress-news-panel">
+
+<div class="congress-panel-heading">
+
+<div>
+
+<p class="section-label">
+Capitol News
+</p>
+
+<h2>
+Latest Headlines
+</h2>
+
+</div>
+
+</div>
+
+
+<div id="congressNewsFeed">
+
+<div class="congress-news-item">
+
+<span>
+District 14
+</span>
+
+<p>
+Newly elected representative arrives in Washington.
+</p>
+
+</div>
+
+</div>
+
+
+</section>
+
+
+</div>
+
+
+<!-- RIGHT COLUMN -->
+
+<aside class="congress-side-column">
+
+
+<!-- LIVE METRICS -->
+
+<section class="congress-panel">
+
+<p class="section-label">
+Live Performance
+</p>
+
+<h2>
+Representative Metrics
+</h2>
+
+
+<div class="congress-metric-list">
+
+
+<div class="congress-metric-row">
+
+<div>
+
+<span>
+Approval Rating
+</span>
+
+<strong id="sideApproval">
+70%
+</strong>
+
+</div>
+
+<div class="congress-metric-track">
+
+<div
+id="sideApprovalBar"
+class="congress-metric-fill"
+style="width: 70%;"
+></div>
+
+</div>
+
+</div>
+
+
+<div class="congress-metric-row">
+
+<div>
+
+<span>
+Bipartisan Support
+</span>
+
+<strong id="sideBipartisan">
+50%
+</strong>
+
+</div>
+
+<div class="congress-metric-track">
+
+<div
+id="sideBipartisanBar"
+class="congress-metric-fill"
+style="width: 50%;"
+></div>
+
+</div>
+
+</div>
+
+
+<div class="congress-metric-row">
+
+<div>
+
+<span>
+Committee Support
+</span>
+
+<strong id="sideCommittee">
+50%
+</strong>
+
+</div>
+
+<div class="congress-metric-track">
+
+<div
+id="sideCommitteeBar"
+class="congress-metric-fill"
+style="width: 50%;"
+></div>
+
+</div>
+
+</div>
+
+
+<div class="congress-metric-row">
+
+<div>
+
+<span>
+Constituent Trust
+</span>
+
+<strong id="sideTrust">
+70%
+</strong>
+
+</div>
+
+<div class="congress-metric-track">
+
+<div
+id="sideTrustBar"
+class="congress-metric-fill"
+style="width: 70%;"
+></div>
+
+</div>
+
+</div>
+
+
+</div>
+
+
+</section>
+
+
+<!-- LEGISLATIVE RECORD -->
+
+<section class="congress-panel">
+
+<p class="section-label">
+Legislative Record
+</p>
+
+<h2>
+Your Term
+</h2>
+
+
+<div class="activity-list">
+
+
+<div class="activity-row">
+
+<span>
+Bills Introduced
+</span>
+
+<strong id="sideBillsIntroduced">
+0
+</strong>
+
+</div>
+
+
+<div class="activity-row">
+
+<span>
+Bills Passed
+</span>
+
+<strong id="sideBillsPassed">
+0
+</strong>
+
+</div>
+
+
+<div class="activity-row">
+
+<span>
+Current Stage
+</span>
+
+<strong id="congressCurrentStage">
+District Outreach
+</strong>
+
+</div>
+
+
+<div class="activity-row">
+
+<span>
+Term Progress
+</span>
+
+<strong id="congressTermProgress">
+0%
+</strong>
+
+</div>
+
+
+</div>
+
+
+</section>
+
+
+<!-- OBJECTIVE -->
+
+<section class="lesson-purpose-card">
+
+<p class="section-label">
+Your Objective
+</p>
+
+<h3>
+Represent and Legislate
+</h3>
+
+<p>
+
+Balance the needs of your district with the realities
+of committees, negotiation, political support, and
+the legislative process.
+
+</p>
+
+</section>
+
+
+</aside>
+
+
+</section>
+
+
+<!-- FINAL REPORT -->
+
+<section
+id="congressResultsScreen"
+class="congress-results-card"
+hidden
+>
+
+
+<div class="lesson-complete-icon">
+🏛
+</div>
+
+
+<p class="section-label">
+Term Complete
+</p>
+
+
+<h2>
+Congressional Report Card
+</h2>
+
+
+<p>
+
+Your decisions shaped your district relationships,
+legislative support, and success in Congress.
+
+</p>
+
+
+<div class="congress-report-grid">
+
+
+<div class="congress-report-card">
+
+<span>
+Final Approval
+</span>
+
+<strong id="finalApproval">
+0%
+</strong>
+
+</div>
+
+
+<div class="congress-report-card">
+
+<span>
+Bipartisan Support
+</span>
+
+<strong id="finalBipartisan">
+0%
+</strong>
+
+</div>
+
+
+<div class="congress-report-card">
+
+<span>
+Committee Support
+</span>
+
+<strong id="finalCommittee">
+0%
+</strong>
+
+</div>
+
+
+<div class="congress-report-card">
+
+<span>
+Constituent Trust
+</span>
+
+<strong id="finalTrust">
+0%
+</strong>
+
+</div>
+
+
+<div class="congress-report-card">
+
+<span>
+Bills Introduced
+</span>
+
+<strong id="finalBillsIntroduced">
+0
+</strong>
+
+</div>
+
+
+<div class="congress-report-card">
+
+<span>
+Bills Passed
+</span>
+
+<strong id="finalBillsPassed">
+0
+</strong>
+
+</div>
+
+
+</div>
+
+
+<div class="congress-final-grade">
+
+<span>
+Overall Grade
+</span>
+
+<strong id="congressFinalGrade">
+B
+</strong>
+
+</div>
+
+
+<div
+id="congressFinalMessage"
+class="lesson-result-message"
+>
+Your term has concluded.
+</div>
+
+
+<div class="lesson-results-actions">
+
+<a
+href="simulations.html"
+class="primary-button"
+>
+Return to Simulations
+</a>
+
+
+<button
+type="button"
+id="congressRestartButton"
+class="secondary-button"
+>
+Serve Another Term
+</button>
+
+</div>
+
+
+</section>
+
+
+</div>
+
+</main>
+
+
+<!-- SHARED FOOTER -->
+
+<div id="sharedFooter"></div>
+
+
+<!-- SHARED COMPONENT LOADER -->
+
+<script src="js/load-components.js"></script>
+
+
+<!-- CONGRESS SIMULATION LOGIC -->
+
+<script
+type="module"
+src="js/congress.js"
+></script>
+
+
+</body>
+
+</html>
