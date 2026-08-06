@@ -1,0 +1,279 @@
+/* ==================================================
+   CIVIC HORIZON INDEX V2
+   HOMEPAGE HERO
+================================================== */
+
+.hero {
+    padding: 88px 0;
+    background:
+        linear-gradient(
+            135deg,
+            #071d2f 0%,
+            #0b253d 55%,
+            #174f7f 100%
+        );
+    color: #ffffff;
+}
+
+.hero__container {
+    display: grid;
+    grid-template-columns:
+        minmax(0, 1.25fr)
+        minmax(300px, 0.75fr);
+    align-items: center;
+    gap: 72px;
+    width: min(1180px, calc(100% - 48px));
+    margin: 0 auto;
+}
+
+
+/* ==================================================
+   HERO COPY
+================================================== */
+
+.hero__content {
+    max-width: 760px;
+}
+
+.hero__eyebrow {
+    margin: 0 0 16px;
+    color: #efc75d;
+    font-size: 0.74rem;
+    font-weight: 800;
+    letter-spacing: 0.11em;
+}
+
+.hero__content h1 {
+    margin: 0;
+    max-width: 760px;
+    color: #ffffff;
+    font-family: "Merriweather", Georgia, serif;
+    font-size: clamp(2.8rem, 6vw, 5rem);
+    line-height: 1.05;
+    letter-spacing: -0.035em;
+}
+
+.hero__description {
+    max-width: 690px;
+    margin: 24px 0 0;
+    color: #d0e1ed;
+    font-size: 1.06rem;
+    line-height: 1.8;
+}
+
+.hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: 30px;
+}
+
+
+/* ==================================================
+   BUTTONS
+================================================== */
+
+.button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px;
+    padding: 12px 21px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    font-size: 0.92rem;
+    font-weight: 800;
+    line-height: 1;
+    text-align: center;
+    text-decoration: none;
+    transition:
+        background-color 180ms ease,
+        border-color 180ms ease,
+        box-shadow 180ms ease,
+        transform 180ms ease;
+}
+
+.button--primary {
+    background: #2d73ad;
+    color: #ffffff;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
+}
+
+.button--primary:hover,
+.button--primary:focus-visible {
+    background: #3b82b8;
+    outline: none;
+    transform: translateY(-1px);
+}
+
+.button--secondary {
+    border-color: rgba(255, 255, 255, 0.6);
+    background: transparent;
+    color: #ffffff;
+}
+
+.button--secondary:hover,
+.button--secondary:focus-visible {
+    border-color: #ffffff;
+    background: rgba(255, 255, 255, 0.08);
+    outline: none;
+}
+
+
+/* ==================================================
+   NATIONAL PULSE CARD
+================================================== */
+
+.hero__card {
+    min-width: 0;
+}
+
+.pulse-card {
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(8px);
+}
+
+.pulse-card__header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 20px 24px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.pulse-card__header > span {
+    font-size: 1.15rem;
+}
+
+.pulse-card__header h2 {
+    margin: 0;
+    color: #ffffff;
+    font-family: "Inter", sans-serif;
+    font-size: 0.82rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.pulse-card__body {
+    padding: 28px 24px 24px;
+}
+
+.pulse-card__label {
+    margin: 0;
+    color: #aac4d9;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+}
+
+.pulse-card__body h3 {
+    margin: 12px 0 20px;
+    color: #ffffff;
+    font-family: "Merriweather", Georgia, serif;
+    font-size: 1.35rem;
+    line-height: 1.5;
+}
+
+.pulse-card__score {
+    margin-bottom: 26px;
+}
+
+.pulse-card__score span {
+    color: #efc75d;
+    font-size: 3rem;
+    font-weight: 800;
+    line-height: 1;
+}
+
+.pulse-card__stats {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.pulse-card__stats > div {
+    padding: 15px;
+    border-radius: 10px;
+    background: rgba(7, 29, 47, 0.42);
+}
+
+.pulse-card__stats strong {
+    display: block;
+    color: #ffffff;
+    font-size: 1.08rem;
+}
+
+.pulse-card__stats small {
+    display: block;
+    margin-top: 3px;
+    color: #aac4d9;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+
+/* ==================================================
+   RESPONSIVE
+================================================== */
+
+@media (max-width: 900px) {
+
+    .hero__container {
+        grid-template-columns: 1fr;
+        gap: 44px;
+    }
+
+    .hero__card {
+        max-width: 620px;
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .hero {
+        padding: 64px 0;
+    }
+
+    .hero__container {
+        width: min(1180px, calc(100% - 32px));
+    }
+
+    .hero__content h1 {
+        font-size: clamp(2.5rem, 12vw, 3.8rem);
+    }
+
+    .hero__actions {
+        display: grid;
+        grid-template-columns: 1fr;
+    }
+
+    .button {
+        width: 100%;
+    }
+
+    .pulse-card__body {
+        padding: 24px 20px 20px;
+    }
+
+    .pulse-card__header {
+        padding: 18px 20px;
+    }
+
+    .pulse-card__score span {
+        font-size: 2.5rem;
+    }
+
+    .pulse-card__stats {
+        grid-template-columns: 1fr;
+    }
+
+}

@@ -1,0 +1,350 @@
+<section class="national-pulse">
+
+    <div class="national-pulse__container">
+
+        <header class="national-pulse__heading">
+
+            <p class="national-pulse__eyebrow">
+                National Pulse
+            </p>
+
+            <h2>
+                A continuing view of national civic sentiment
+            </h2>
+
+            <p>
+                Track how participants feel about the country’s
+                leadership and major institutions through permanent,
+                consistently worded civic surveys.
+            </p>
+
+        </header>
+
+
+        <div class="national-pulse__panel">
+
+
+            <form
+                class="pulse-poll"
+                id="presidentialApprovalForm"
+            >
+
+                <div class="pulse-poll__heading">
+
+                    <span class="pulse-poll__featured">
+                        Featured Tracker
+                    </span>
+
+                    <span class="pulse-poll__status">
+                        Open for Voting
+                    </span>
+
+                    <h3>
+                        Presidential Approval
+                    </h3>
+
+                    <p>
+                        How would you rate the current president’s
+                        job performance?
+                    </p>
+
+                </div>
+
+
+                <fieldset class="pulse-poll__choices">
+
+                    <legend class="visually-hidden">
+                        Select a presidential approval response
+                    </legend>
+
+
+                    <label class="pulse-choice">
+
+                        <input
+                            type="radio"
+                            name="presidentialApproval"
+                            value="Strongly Approve"
+                        >
+
+                        <span>
+                            Strongly Approve
+                        </span>
+
+                    </label>
+
+
+                    <label class="pulse-choice">
+
+                        <input
+                            type="radio"
+                            name="presidentialApproval"
+                            value="Approve"
+                        >
+
+                        <span>
+                            Approve
+                        </span>
+
+                    </label>
+
+
+                    <label class="pulse-choice">
+
+                        <input
+                            type="radio"
+                            name="presidentialApproval"
+                            value="Neutral"
+                        >
+
+                        <span>
+                            Neutral
+                        </span>
+
+                    </label>
+
+
+                    <label class="pulse-choice">
+
+                        <input
+                            type="radio"
+                            name="presidentialApproval"
+                            value="Disapprove"
+                        >
+
+                        <span>
+                            Disapprove
+                        </span>
+
+                    </label>
+
+
+                    <label class="pulse-choice">
+
+                        <input
+                            type="radio"
+                            name="presidentialApproval"
+                            value="Strongly Disapprove"
+                        >
+
+                        <span>
+                            Strongly Disapprove
+                        </span>
+
+                    </label>
+
+                </fieldset>
+
+
+                <button
+                    type="submit"
+                    class="pulse-poll__submit"
+                >
+                    Submit Response
+                </button>
+
+
+                <p
+                    class="pulse-poll__message"
+                    id="presidentialApprovalMessage"
+                    aria-live="polite"
+                ></p>
+
+            </form>
+
+
+            <div class="pulse-results">
+
+                <div class="pulse-results__heading">
+
+                    <div>
+
+                        <p>
+                            Live Results
+                        </p>
+
+                        <h3>
+                            Current Distribution
+                        </h3>
+
+                    </div>
+
+
+                    <div class="pulse-results__total">
+
+                        <strong id="pulseResponseCount">
+                            0
+                        </strong>
+
+                        <span>
+                            Responses
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    class="pulse-results__list"
+                    id="presidentialApprovalResults"
+                >
+
+
+                    <div class="pulse-result">
+
+                        <div class="pulse-result__heading">
+
+                            <span>
+                                Strongly Approve
+                            </span>
+
+                            <strong id="stronglyApprovePercent">
+                                0%
+                            </strong>
+
+                        </div>
+
+                        <div class="pulse-result__track">
+
+                            <div
+                                class="pulse-result__bar"
+                                id="stronglyApproveBar"
+                                style="width: 0%"
+                            ></div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="pulse-result">
+
+                        <div class="pulse-result__heading">
+
+                            <span>
+                                Approve
+                            </span>
+
+                            <strong id="approvePercent">
+                                0%
+                            </strong>
+
+                        </div>
+
+                        <div class="pulse-result__track">
+
+                            <div
+                                class="pulse-result__bar"
+                                id="approveBar"
+                                style="width: 0%"
+                            ></div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="pulse-result">
+
+                        <div class="pulse-result__heading">
+
+                            <span>
+                                Neutral
+                            </span>
+
+                            <strong id="neutralPercent">
+                                0%
+                            </strong>
+
+                        </div>
+
+                        <div class="pulse-result__track">
+
+                            <div
+                                class="pulse-result__bar"
+                                id="neutralBar"
+                                style="width: 0%"
+                            ></div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="pulse-result">
+
+                        <div class="pulse-result__heading">
+
+                            <span>
+                                Disapprove
+                            </span>
+
+                            <strong id="disapprovePercent">
+                                0%
+                            </strong>
+
+                        </div>
+
+                        <div class="pulse-result__track">
+
+                            <div
+                                class="pulse-result__bar"
+                                id="disapproveBar"
+                                style="width: 0%"
+                            ></div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="pulse-result">
+
+                        <div class="pulse-result__heading">
+
+                            <span>
+                                Strongly Disapprove
+                            </span>
+
+                            <strong id="stronglyDisapprovePercent">
+                                0%
+                            </strong>
+
+                        </div>
+
+                        <div class="pulse-result__track">
+
+                            <div
+                                class="pulse-result__bar"
+                                id="stronglyDisapproveBar"
+                                style="width: 0%"
+                            ></div>
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+
+                <div class="pulse-results__footer">
+
+                    <span id="pulseUpdatedText">
+                        Updated live
+                    </span>
+
+                    <a href="civic-pulse.html">
+                        Explore National Pulse →
+                    </a>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</section>
