@@ -119,6 +119,22 @@ async function initializePage() {
 loadComponent(
     "nationalPrioritiesContainer",
     "components/national-priorities.html"
+),
+loadComponent(
+    "communityPollsContainer",
+    "components/community-polls.html"
+),
+loadComponent(
+    "discoverContainer",
+    "components/discover.html"
+),
+loadComponent(
+    "missionContainer",
+    "components/mission.html"
+),
+loadComponent(
+    "footerContainer",
+    "components/footer.html"
 )
 
     ]);

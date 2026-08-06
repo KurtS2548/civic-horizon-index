@@ -1,0 +1,157 @@
+/* ==================================================
+   CIVIC HORIZON INDEX V2
+   DISCOVER CIVIC HORIZON
+================================================== */
+
+.discover {
+    padding: 84px 0;
+    background: #ffffff;
+}
+
+.discover__container {
+    width: min(1180px, calc(100% - 48px));
+    margin: 0 auto;
+}
+
+
+/* ==================================================
+   SECTION HEADING
+================================================== */
+
+.discover__header {
+    max-width: 760px;
+    margin: 0 0 40px;
+}
+
+.discover__eyebrow {
+    margin: 0 0 10px;
+    color: #1f5f99;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.discover__header h2 {
+    margin: 0;
+    color: #102a43;
+    font-family: "Merriweather", Georgia, serif;
+    font-size: clamp(2rem, 4vw, 2.8rem);
+    line-height: 1.2;
+}
+
+.discover__header > p:last-child {
+    margin: 16px 0 0;
+    color: #627d98;
+    line-height: 1.75;
+}
+
+
+/* ==================================================
+   CARD GRID
+================================================== */
+
+.discover__grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 18px;
+}
+
+
+/* ==================================================
+   DISCOVER CARD
+================================================== */
+
+.discover-card {
+    display: flex;
+    min-width: 0;
+    min-height: 290px;
+    padding: 26px;
+    flex-direction: column;
+    border: 1px solid #d9e2ec;
+    border-radius: 14px;
+    background: #ffffff;
+    color: inherit;
+    text-decoration: none;
+    transition:
+        border-color 180ms ease,
+        box-shadow 180ms ease,
+        transform 180ms ease;
+}
+
+.discover-card:hover,
+.discover-card:focus-visible {
+    border-color: #9fbdd4;
+    box-shadow: 0 16px 36px rgba(16, 42, 67, 0.09);
+    outline: none;
+    transform: translateY(-3px);
+}
+
+.discover-card__icon {
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    margin-bottom: 22px;
+    border-radius: 10px;
+    background: #eaf3fb;
+    color: #174f7f;
+    font-size: 1.15rem;
+}
+
+.discover-card h3 {
+    margin: 0;
+    color: #102a43;
+    font-family: "Merriweather", Georgia, serif;
+    font-size: 1.16rem;
+    line-height: 1.4;
+}
+
+.discover-card p {
+    margin: 14px 0 24px;
+    color: #627d98;
+    font-size: 0.88rem;
+    line-height: 1.7;
+}
+
+.discover-card > span:last-child {
+    margin-top: auto;
+    color: #1f5f99;
+    font-size: 0.84rem;
+    font-weight: 800;
+}
+
+
+/* ==================================================
+   RESPONSIVE
+================================================== */
+
+@media (max-width: 1000px) {
+
+    .discover__grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .discover {
+        padding: 64px 0;
+    }
+
+    .discover__container {
+        width: min(1180px, calc(100% - 32px));
+    }
+
+    .discover__grid {
+        grid-template-columns: 1fr;
+    }
+
+    .discover-card {
+        min-height: auto;
+        padding: 23px;
+    }
+
+}
