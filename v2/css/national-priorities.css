@@ -1,0 +1,234 @@
+/* ==================================================
+   CIVIC HORIZON INDEX V2
+   NATIONAL PRIORITIES
+================================================== */
+
+.national-priorities {
+    padding: 84px 0;
+    background: #ffffff;
+}
+
+.national-priorities__container {
+    width: min(1180px, calc(100% - 48px));
+    margin: 0 auto;
+}
+
+
+/* ==================================================
+   SECTION HEADING
+================================================== */
+
+.national-priorities__heading {
+    max-width: 740px;
+    margin-bottom: 38px;
+}
+
+.national-priorities__eyebrow {
+    margin: 0 0 10px;
+    color: #1f5f99;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.national-priorities__heading h2 {
+    margin: 0;
+    color: #102a43;
+    font-family: "Merriweather", Georgia, serif;
+    font-size: clamp(2rem, 4vw, 2.8rem);
+    line-height: 1.2;
+}
+
+.national-priorities__heading > p:last-child {
+    margin: 16px 0 0;
+    color: #627d98;
+    line-height: 1.75;
+}
+
+
+/* ==================================================
+   RANKING PANEL
+================================================== */
+
+.national-priorities__panel {
+    overflow: hidden;
+    border: 1px solid #d9e2ec;
+    border-radius: 16px;
+    background: #ffffff;
+    box-shadow: 0 14px 36px rgba(16, 42, 67, 0.07);
+}
+
+.priority-ranking-list {
+    display: grid;
+}
+
+.priority-ranking-row {
+    display: grid;
+    grid-template-columns: 42px minmax(0, 1fr);
+    gap: 16px;
+    align-items: center;
+    padding: 21px 26px;
+    border-bottom: 1px solid #e5ecf2;
+    color: inherit;
+    text-decoration: none;
+    transition:
+        background-color 180ms ease;
+}
+
+.priority-ranking-row:hover,
+.priority-ranking-row:focus-visible {
+    background: #f8fbfd;
+    outline: none;
+}
+
+.priority-ranking-row:last-child {
+    border-bottom: 0;
+}
+
+.priority-ranking-number {
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: #eaf3fb;
+    color: #174f7f;
+    font-size: 0.9rem;
+    font-weight: 800;
+}
+
+.priority-ranking-row:first-child
+.priority-ranking-number {
+    background: #d5a021;
+    color: #ffffff;
+}
+
+.priority-ranking-content {
+    min-width: 0;
+}
+
+.priority-ranking-heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.priority-ranking-heading h3 {
+    margin: 0;
+    color: #243b53;
+    font-size: 0.98rem;
+    line-height: 1.45;
+}
+
+.priority-ranking-heading strong {
+    flex-shrink: 0;
+    color: #1f5f99;
+    font-size: 1rem;
+}
+
+.priority-ranking-track {
+    width: 100%;
+    height: 9px;
+    margin-top: 11px;
+    overflow: hidden;
+    border-radius: 999px;
+    background: #e6edf3;
+}
+
+.priority-ranking-bar {
+    height: 100%;
+    border-radius: inherit;
+    background: #1f5f99;
+    transition: width 400ms ease;
+}
+
+
+/* ==================================================
+   EMPTY STATE
+================================================== */
+
+.priority-ranking-empty {
+    padding: 48px 24px;
+    text-align: center;
+}
+
+.priority-ranking-empty p {
+    margin: 0;
+    color: #627d98;
+}
+
+
+/* ==================================================
+   FOOTER
+================================================== */
+
+.national-priorities__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 19px 26px;
+    border-top: 1px solid #d9e2ec;
+    background: #f8fafc;
+}
+
+.national-priorities__footer span {
+    color: #7b8fa3;
+    font-size: 0.8rem;
+}
+
+.national-priorities__footer a {
+    color: #1f5f99;
+    font-size: 0.84rem;
+    font-weight: 800;
+    text-decoration: none;
+}
+
+.national-priorities__footer a:hover,
+.national-priorities__footer a:focus-visible {
+    text-decoration: underline;
+    outline: none;
+}
+
+
+/* ==================================================
+   RESPONSIVE
+================================================== */
+
+@media (max-width: 600px) {
+
+    .national-priorities {
+        padding: 64px 0;
+    }
+
+    .national-priorities__container {
+        width: min(1180px, calc(100% - 32px));
+    }
+
+    .priority-ranking-row {
+        grid-template-columns: 34px minmax(0, 1fr);
+        padding: 18px 17px;
+    }
+
+    .priority-ranking-number {
+        width: 32px;
+        height: 32px;
+    }
+
+    .priority-ranking-heading {
+        gap: 12px;
+    }
+
+    .priority-ranking-heading h3 {
+        font-size: 0.9rem;
+    }
+
+    .national-priorities__footer {
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 18px;
+    }
+
+}

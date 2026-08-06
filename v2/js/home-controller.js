@@ -172,6 +172,10 @@ function renderNationalPrioritySummary(
         );
 
         return;
+        renderHomepagePriorityRankings(
+    summary.rankings,
+    participantCount
+);
     }
 
 
@@ -762,7 +766,118 @@ function storeUnsubscribeFunction(
 
 }
 
+/*
+==================================================
+HOMEPAGE PRIORITY RANKINGS
+==================================================
+*/
 
+function renderHomepagePriorityRankings(
+    rankings,
+    participantCount
+) {
+
+    const container =
+        document.getElementById(
+            "homepagePriorityRankings"
+        );
+
+    if (!container) {
+        return;
+    }
+
+    const safeRankings =
+        Array.isArray(rankings)
+            ? rankings
+            : [];
+
+    const rankedIssues =
+        safeRankings
+            .filter(issue => issue && issue.responseCount > 0)
+            .slice(0, 5);
+
+    setText(
+        "priorityParticipantSummary",
+        `${formatNumber(participantCount)} ${
+            participantCount === 1
+                ? "participant contributed"
+                : "participants contributed"
+        }`
+    );
+
+    if (
+        participantCount === 0 ||
+        rankedIssues.length === 0
+    ) {
+
+        container.innerHTML = `
+            <div class="priority-ranking-empty">
+                <p>
+                    National rankings will appear after survey
+                    responses are submitted.
+                </p>
+            </div>
+        `;
+
+        return;
+    }
+
+    container.innerHTML =
+        rankedIssues
+            .map((issue, index) => {
+
+                const barWidth = issue.average * 10;
+
+                return `
+                    <a
+                        href="results.html#national-priorities"
+                        class="priority-ranking-row"
+                    >
+                        <span class="priority-ranking-number">
+                            ${index + 1}
+                        </span>
+
+                        <span class="priority-ranking-content">
+
+                            <span class="priority-ranking-heading">
+
+                                <h3>${escapeHtml(issue.name)}</h3>
+
+                                <strong>
+                                    ${issue.average.toFixed(1)}
+                                </strong>
+
+                            </span>
+
+                            <span class="priority-ranking-track">
+
+                                <span
+                                    class="priority-ranking-bar"
+                                    style="width:${barWidth}%"
+                                ></span>
+
+                            </span>
+
+                        </span>
+
+                    </a>
+                `;
+
+            })
+            .join("");
+
+}
+
+function escapeHtml(text) {
+
+    return String(text)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+
+}
 /*
 ==================================================
 CLEANUP

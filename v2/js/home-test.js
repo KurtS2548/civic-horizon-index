@@ -112,9 +112,14 @@ async function initializePage() {
         ),
 
         loadComponent(
-            "nationalPulseContainer",
-            "components/national-pulse.html"
-        )
+    "nationalPulseContainer",
+    "components/national-pulse.html"
+),
+
+loadComponent(
+    "nationalPrioritiesContainer",
+    "components/national-priorities.html"
+)
 
     ]);
 
