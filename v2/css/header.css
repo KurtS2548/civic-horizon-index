@@ -1,0 +1,416 @@
+/* ==================================================
+   CIVIC HORIZON INDEX V2
+   HEADER
+================================================== */
+
+.site-header {
+    position: relative;
+    z-index: 1000;
+    border-bottom: 1px solid #d9e2ec;
+    background: #ffffff;
+}
+
+.site-header__container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 28px;
+    width: min(1180px, calc(100% - 48px));
+    min-height: 72px;
+    margin: 0 auto;
+}
+
+
+/* ==================================================
+   BRAND
+================================================== */
+
+.site-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 11px;
+    flex-shrink: 0;
+    color: inherit;
+    text-decoration: none;
+}
+
+.site-brand__logo {
+    width: 38px;
+    height: 38px;
+    flex-shrink: 0;
+    padding: 2px;
+    border: 1px solid #d9e2ec;
+    border-radius: 50%;
+    background: #ffffff;
+    object-fit: contain;
+}
+
+.site-brand__text {
+    display: grid;
+    gap: 1px;
+}
+
+.site-brand__text strong {
+    color: #0b253d;
+    font-family: "Merriweather", Georgia, serif;
+    font-size: 0.95rem;
+    line-height: 1.25;
+}
+
+.site-brand__text small {
+    color: #627d98;
+    font-size: 0.65rem;
+    font-weight: 600;
+    line-height: 1.35;
+}
+
+
+/* ==================================================
+   PRIMARY NAVIGATION
+================================================== */
+
+.primary-navigation {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 3px;
+}
+
+.primary-navigation__link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-height: 40px;
+    padding: 9px 10px;
+    border: 0;
+    border-radius: 8px;
+    background: transparent;
+    color: #486581;
+    font-family: "Inter", sans-serif;
+    font-size: 0.84rem;
+    font-weight: 700;
+    line-height: 1;
+    text-decoration: none;
+    white-space: nowrap;
+    transition:
+        background-color 180ms ease,
+        color 180ms ease;
+}
+
+.primary-navigation__link:hover,
+.primary-navigation__link:focus-visible {
+    background: #f5f9fc;
+    color: #1f5f99;
+    outline: none;
+}
+
+.primary-navigation__link.active {
+    background: #eaf3fb;
+    color: #1f5f99;
+}
+
+
+/* ==================================================
+   NAVIGATION GROUPS
+================================================== */
+
+.navigation-group {
+    position: relative;
+}
+
+.navigation-group__button {
+    cursor: pointer;
+}
+
+.navigation-group__chevron {
+    font-size: 0.7rem;
+    transition: transform 180ms ease;
+}
+
+.navigation-group__button[aria-expanded="true"]
+.navigation-group__chevron {
+    transform: rotate(180deg);
+}
+
+
+/* ==================================================
+   DROPDOWN MENUS
+================================================== */
+
+.navigation-dropdown {
+    position: absolute;
+    top: calc(100% + 12px);
+    left: 50%;
+    width: 320px;
+    padding: 9px;
+    visibility: hidden;
+    opacity: 0;
+    border: 1px solid #d9e2ec;
+    border-radius: 12px;
+    background: #ffffff;
+    box-shadow: 0 22px 55px rgba(7, 29, 47, 0.17);
+    transform:
+        translateX(-50%)
+        translateY(-6px);
+    transition:
+        opacity 180ms ease,
+        visibility 180ms ease,
+        transform 180ms ease;
+}
+
+.navigation-dropdown::before {
+    content: "";
+    position: absolute;
+    top: -12px;
+    left: 0;
+    width: 100%;
+    height: 12px;
+}
+
+.navigation-group:hover .navigation-dropdown,
+.navigation-group:focus-within .navigation-dropdown,
+.navigation-group.open .navigation-dropdown {
+    visibility: visible;
+    opacity: 1;
+    transform:
+        translateX(-50%)
+        translateY(0);
+}
+
+.navigation-dropdown a {
+    display: grid;
+    gap: 4px;
+    padding: 13px 14px;
+    border-radius: 8px;
+    color: inherit;
+    text-decoration: none;
+    transition: background-color 180ms ease;
+}
+
+.navigation-dropdown a:hover,
+.navigation-dropdown a:focus-visible {
+    background: #f5f9fc;
+    outline: none;
+}
+
+.navigation-dropdown strong {
+    color: #102a43;
+    font-size: 0.88rem;
+    line-height: 1.3;
+}
+
+.navigation-dropdown span {
+    color: #627d98;
+    font-size: 0.76rem;
+    line-height: 1.5;
+}
+
+
+/* ==================================================
+   HEADER ACTION
+================================================== */
+
+.site-header__action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 40px;
+    margin-left: 6px;
+    padding: 9px 15px;
+    border-radius: 8px;
+    background: #1f5f99;
+    color: #ffffff;
+    font-size: 0.82rem;
+    font-weight: 800;
+    line-height: 1;
+    text-decoration: none;
+    white-space: nowrap;
+    box-shadow: 0 7px 17px rgba(31, 95, 153, 0.18);
+    transition:
+        background-color 180ms ease,
+        transform 180ms ease;
+}
+
+.site-header__action:hover,
+.site-header__action:focus-visible {
+    background: #2d73ad;
+    outline: none;
+    transform: translateY(-1px);
+}
+
+
+/* ==================================================
+   MOBILE MENU BUTTON
+================================================== */
+
+.mobile-menu-button {
+    display: none;
+    width: 42px;
+    height: 42px;
+    padding: 9px;
+    border: 1px solid #d9e2ec;
+    border-radius: 8px;
+    background: #ffffff;
+}
+
+.mobile-menu-button span {
+    display: block;
+    width: 100%;
+    height: 2px;
+    margin: 5px 0;
+    border-radius: 999px;
+    background: #0b253d;
+    transition:
+        transform 180ms ease,
+        opacity 180ms ease;
+}
+
+.mobile-menu-button[aria-expanded="true"]
+span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+}
+
+.mobile-menu-button[aria-expanded="true"]
+span:nth-child(2) {
+    opacity: 0;
+}
+
+.mobile-menu-button[aria-expanded="true"]
+span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+}
+
+
+/* ==================================================
+   RESPONSIVE
+================================================== */
+
+@media (max-width: 1140px) {
+
+    .site-brand__text small {
+        display: none;
+    }
+
+    .primary-navigation {
+        gap: 1px;
+    }
+
+    .primary-navigation__link {
+        padding-inline: 8px;
+        font-size: 0.8rem;
+    }
+
+    .site-header__action {
+        padding-inline: 13px;
+    }
+
+}
+
+
+@media (max-width: 980px) {
+
+    .site-header__container {
+        min-height: 68px;
+    }
+
+    .mobile-menu-button {
+        display: block;
+        flex-shrink: 0;
+    }
+
+    .primary-navigation {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        display: none;
+        width: 100%;
+        max-height: calc(100vh - 68px);
+        padding: 14px 24px 24px;
+        overflow-y: auto;
+        border-top: 1px solid #d9e2ec;
+        background: #ffffff;
+        box-shadow: 0 14px 36px rgba(16, 42, 67, 0.09);
+    }
+
+    .primary-navigation.open {
+        display: block;
+    }
+
+    .primary-navigation__link,
+    .site-header__action {
+        width: 100%;
+        min-height: 48px;
+        margin: 0;
+        padding: 13px 12px;
+        justify-content: space-between;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        text-align: left;
+    }
+
+    .navigation-group {
+        width: 100%;
+    }
+
+    .navigation-dropdown {
+        position: static;
+        display: none;
+        width: 100%;
+        padding: 4px 0 9px 14px;
+        visibility: visible;
+        opacity: 1;
+        border: 0;
+        border-left: 2px solid #eaf3fb;
+        border-radius: 0;
+        box-shadow: none;
+        transform: none;
+        transition: none;
+    }
+
+    .navigation-dropdown::before {
+        display: none;
+    }
+
+    .navigation-group:hover .navigation-dropdown,
+    .navigation-group:focus-within .navigation-dropdown {
+        display: none;
+    }
+
+    .navigation-group.open .navigation-dropdown {
+        display: block;
+    }
+
+    .navigation-dropdown a {
+        padding: 11px 13px;
+    }
+
+    .site-header__action {
+        justify-content: center;
+        margin-top: 10px;
+        color: #ffffff;
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .site-header__container {
+        width: min(1180px, calc(100% - 32px));
+    }
+
+    .site-brand__logo {
+        width: 34px;
+        height: 34px;
+    }
+
+    .site-brand__text strong {
+        font-size: 0.88rem;
+    }
+
+    .primary-navigation {
+        padding-inline: 16px;
+    }
+
+}
