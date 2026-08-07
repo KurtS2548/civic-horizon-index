@@ -953,3 +953,205 @@ body {
     }
 
 }
+/* ==================================================
+   ADMIN LOGIN
+================================================== */
+
+.admin-login {
+    min-height: calc(100vh - 160px);
+    padding: 72px 0;
+    background:
+        linear-gradient(
+            135deg,
+            #071d2f 0%,
+            #0b253d 58%,
+            #174f7f 100%
+        );
+}
+
+.admin-login[hidden] {
+    display: none;
+}
+
+.admin-login__container {
+    display: grid;
+    place-items: center;
+    width: min(1180px, calc(100% - 48px));
+    margin: 0 auto;
+}
+
+.admin-login__panel {
+    width: min(100%, 460px);
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 18px;
+    background: #ffffff;
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.24);
+}
+
+
+/* ==================================================
+   LOGIN HEADING
+================================================== */
+
+.admin-login__heading {
+    padding: 30px 30px 24px;
+    border-bottom: 1px solid #e3eaf0;
+    background: #f8fafc;
+}
+
+.admin-login__heading p {
+    margin: 0 0 8px;
+    color: #1f5f99;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.admin-login__heading h1 {
+    margin: 0;
+    color: #102a43;
+    font-family: "Merriweather", Georgia, serif;
+    font-size: 2rem;
+    line-height: 1.25;
+}
+
+.admin-login__heading span {
+    display: block;
+    margin-top: 10px;
+    color: #627d98;
+    font-size: 0.82rem;
+    line-height: 1.65;
+}
+
+
+/* ==================================================
+   LOGIN FORM
+================================================== */
+
+.admin-login__form {
+    display: grid;
+    gap: 18px;
+    padding: 28px 30px 30px;
+}
+
+.admin-login__field {
+    display: grid;
+    gap: 8px;
+}
+
+.admin-login__field label {
+    color: #334e68;
+    font-size: 0.78rem;
+    font-weight: 800;
+}
+
+.admin-login__field input {
+    width: 100%;
+    min-height: 48px;
+    padding: 11px 13px;
+    border: 1px solid #bcccdc;
+    border-radius: 9px;
+    background: #ffffff;
+    color: #102a43;
+    font-family: "Inter", sans-serif;
+    font-size: 0.9rem;
+}
+
+.admin-login__field input:hover {
+    border-color: #9fb3c8;
+}
+
+.admin-login__field input:focus {
+    border-color: #1f5f99;
+    outline: 3px solid rgba(31, 95, 153, 0.14);
+}
+
+
+/* ==================================================
+   LOGIN BUTTON
+================================================== */
+
+.admin-login__submit {
+    min-height: 48px;
+    margin-top: 4px;
+    border: 0;
+    border-radius: 9px;
+    background: #1f5f99;
+    color: #ffffff;
+    cursor: pointer;
+    font-family: "Inter", sans-serif;
+    font-size: 0.84rem;
+    font-weight: 800;
+    transition:
+        background-color 180ms ease,
+        box-shadow 180ms ease,
+        transform 180ms ease;
+}
+
+.admin-login__submit:hover,
+.admin-login__submit:focus-visible {
+    background: #174f7f;
+    box-shadow: 0 8px 18px rgba(31, 95, 153, 0.2);
+    outline: none;
+    transform: translateY(-1px);
+}
+
+.admin-login__submit:disabled {
+    opacity: 0.6;
+    cursor: default;
+    transform: none;
+}
+
+
+/* ==================================================
+   LOGIN MESSAGE
+================================================== */
+
+.admin-login__message {
+    min-height: 22px;
+    margin: 0;
+    color: #486581;
+    font-size: 0.76rem;
+    line-height: 1.5;
+}
+
+.admin-login__message[data-message-type="error"] {
+    color: #9b2c2c;
+}
+
+.admin-login__message[data-message-type="success"] {
+    color: #276749;
+}
+
+
+/* ==================================================
+   AUTHENTICATED ADMIN STATE
+================================================== */
+
+.admin-page[hidden] {
+    display: none;
+}
+
+
+/* ==================================================
+   RESPONSIVE
+================================================== */
+
+@media (max-width: 600px) {
+
+    .admin-login {
+        padding: 48px 0;
+    }
+
+    .admin-login__container {
+        width: min(1180px, calc(100% - 32px));
+    }
+
+    .admin-login__heading,
+    .admin-login__form {
+        padding-inline: 20px;
+    }
+
+}

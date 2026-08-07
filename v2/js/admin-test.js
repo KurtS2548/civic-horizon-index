@@ -1,9 +1,24 @@
 /*
 ==================================================
 CIVIC HORIZON INDEX V2
-ADMIN CENTER TEST INITIALIZATION
+SECURE ADMIN CENTER INITIALIZATION
 ==================================================
 */
+
+import {
+    subscribeToAuthState,
+    signInAdmin
+} from "./services/auth-service.js";
+
+
+/*
+==================================================
+STATE
+==================================================
+*/
+
+let adminComponentsLoaded = false;
+let adminControllerStarted = false;
 
 
 /*
@@ -29,7 +44,6 @@ async function loadComponent(
         );
 
         return false;
-
     }
 
     try {
@@ -44,7 +58,6 @@ async function loadComponent(
             throw new Error(
                 `Component request failed: ${response.status}`
             );
-
         }
 
         container.innerHTML =
@@ -73,15 +86,13 @@ async function loadComponent(
         `;
 
         return false;
-
     }
-
 }
 
 
 /*
 ==================================================
-PAGE INITIALIZATION
+INITIAL PAGE LOAD
 ==================================================
 */
 
@@ -95,22 +106,9 @@ async function initializeAdminPage() {
         ),
 
         loadComponent(
-            "adminHeroContainer",
-            "components/admin-hero.html"
+            "adminLoginContainer",
+            "components/admin-login.html"
         ),
-
-        loadComponent(
-            "adminOverviewContainer",
-            "components/admin-overview.html"
-        ),
-        loadComponent(
-    "adminCommunityPollsContainer",
-    "components/admin-community-polls.html"
-),
-loadComponent(
-    "adminCreatePollContainer",
-    "components/admin-poll-editor.html"
-),
 
         loadComponent(
             "footerContainer",
@@ -122,18 +120,263 @@ loadComponent(
 
     initializeHeader();
 
-    await initializeLiveAdmin();
+    initializeLoginForm();
+
+    watchAuthentication();
 
 }
 
 
 /*
 ==================================================
-LIVE ADMIN CONTROLS
+AUTHENTICATION WATCH
 ==================================================
 */
 
-async function initializeLiveAdmin() {
+function watchAuthentication() {
+
+    subscribeToAuthState(
+        async user => {
+
+            if (user) {
+
+                await showAuthenticatedAdmin(
+                    user
+                );
+
+            } else {
+
+                showLogin();
+
+            }
+
+        }
+    );
+
+}
+
+
+/*
+==================================================
+LOGIN FORM
+==================================================
+*/
+
+function initializeLoginForm() {
+
+    const form =
+        document.getElementById(
+            "adminLoginForm"
+        );
+
+
+    if (!form) {
+        return;
+    }
+
+
+    form.addEventListener(
+        "submit",
+        handleLoginSubmit
+    );
+
+}
+
+
+async function handleLoginSubmit(
+    event
+) {
+
+    event.preventDefault();
+
+
+    const form =
+        event.currentTarget;
+
+
+    const email =
+        form.elements.email?.value || "";
+
+
+    const password =
+        form.elements.password?.value || "";
+
+
+    const submitButton =
+        document.getElementById(
+            "adminLoginSubmit"
+        );
+
+
+    setLoginMessage(
+        "Signing in...",
+        "info"
+    );
+
+
+    if (submitButton) {
+
+        submitButton.disabled =
+            true;
+
+        submitButton.textContent =
+            "Signing In...";
+
+    }
+
+
+    try {
+
+        await signInAdmin(
+            email,
+            password
+        );
+
+
+        setLoginMessage(
+            "Sign in successful.",
+            "success"
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Admin sign-in failed:",
+            error
+        );
+
+
+        setLoginMessage(
+            getFriendlyAuthError(
+                error
+            ),
+            "error"
+        );
+
+
+        if (submitButton) {
+
+            submitButton.disabled =
+                false;
+
+            submitButton.textContent =
+                "Sign In";
+
+        }
+
+    }
+
+}
+
+
+/*
+==================================================
+SHOW AUTHENTICATED ADMIN
+==================================================
+*/
+
+async function showAuthenticatedAdmin(
+    user
+) {
+
+    const loginContainer =
+        document.getElementById(
+            "adminLoginContainer"
+        );
+
+
+    const adminPage =
+        document.getElementById(
+            "adminPage"
+        );
+
+
+    if (loginContainer) {
+
+        loginContainer.hidden =
+            true;
+
+    }
+
+
+    if (!adminComponentsLoaded) {
+
+        await loadAdminComponents();
+
+        adminComponentsLoaded =
+            true;
+
+    }
+
+
+    if (adminPage) {
+
+        adminPage.hidden =
+            false;
+
+    }
+
+
+    if (!adminControllerStarted) {
+
+        await startAdminController();
+
+        adminControllerStarted =
+            true;
+
+    }
+
+
+    console.log(
+        "Authenticated administrator:",
+        user.email
+    );
+
+}
+
+
+/*
+==================================================
+LOAD ADMIN COMPONENTS
+==================================================
+*/
+
+async function loadAdminComponents() {
+
+    await Promise.all([
+
+        loadComponent(
+            "adminHeroContainer",
+            "components/admin-hero.html"
+        ),
+
+        loadComponent(
+            "adminOverviewContainer",
+            "components/admin-overview.html"
+        ),
+
+        loadComponent(
+            "adminCommunityPollsContainer",
+            "components/admin-community-polls.html"
+        ),
+
+        loadComponent(
+            "adminCreatePollContainer",
+            "components/admin-poll-editor.html"
+        )
+
+    ]);
+
+}
+
+
+/*
+==================================================
+START ADMIN CONTROLLER
+==================================================
+*/
+
+async function startAdminController() {
 
     try {
 
@@ -162,7 +405,7 @@ async function initializeLiveAdmin() {
     } catch (error) {
 
         console.error(
-            "Admin Center live data could not start:",
+            "Admin Center could not start:",
             error
         );
 
@@ -175,7 +418,125 @@ async function initializeLiveAdmin() {
 
 /*
 ==================================================
-FALLBACK STATE
+SHOW LOGIN
+==================================================
+*/
+
+function showLogin() {
+
+    const loginContainer =
+        document.getElementById(
+            "adminLoginContainer"
+        );
+
+
+    const adminPage =
+        document.getElementById(
+            "adminPage"
+        );
+
+
+    if (loginContainer) {
+
+        loginContainer.hidden =
+            false;
+
+    }
+
+
+    if (adminPage) {
+
+        adminPage.hidden =
+            true;
+
+    }
+
+}
+
+
+/*
+==================================================
+LOGIN MESSAGE
+==================================================
+*/
+
+function setLoginMessage(
+    message,
+    type
+) {
+
+    const element =
+        document.getElementById(
+            "adminLoginMessage"
+        );
+
+
+    if (!element) {
+        return;
+    }
+
+
+    element.textContent =
+        message;
+
+
+    element.dataset.messageType =
+        type;
+
+}
+
+
+/*
+==================================================
+FRIENDLY AUTH ERRORS
+==================================================
+*/
+
+function getFriendlyAuthError(
+    error
+) {
+
+    const code =
+        error?.code || "";
+
+
+    if (
+        code === "auth/invalid-credential" ||
+        code === "auth/wrong-password" ||
+        code === "auth/user-not-found"
+    ) {
+
+        return "The email or password is incorrect.";
+
+    }
+
+
+    if (
+        code === "auth/too-many-requests"
+    ) {
+
+        return "Too many sign-in attempts. Please wait and try again.";
+
+    }
+
+
+    if (
+        code === "auth/network-request-failed"
+    ) {
+
+        return "A network error occurred. Check your connection and try again.";
+
+    }
+
+
+    return "Unable to sign in. Please try again.";
+
+}
+
+
+/*
+==================================================
+ADMIN FALLBACK
 ==================================================
 */
 
@@ -457,7 +818,7 @@ function setText(
 
 /*
 ==================================================
-START PAGE
+START
 ==================================================
 */
 
