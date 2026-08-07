@@ -1,0 +1,91 @@
+<section class="admin-section admin-section--light">
+
+    <div class="admin-section__container">
+
+        <header class="admin-section__heading">
+
+            <p class="admin-section__eyebrow">
+                Community Poll Management
+            </p>
+
+            <h2>
+                Manage active and archived polls
+            </h2>
+
+            <p>
+                Review every community poll, see participation,
+                open a poll for editing, or change whether it is
+                currently available to the public.
+            </p>
+
+        </header>
+
+
+        <div class="admin-panel">
+
+            <div class="admin-polls-toolbar">
+
+                <div>
+
+                    <p>
+                        Poll Library
+                    </p>
+
+                    <h3>
+                        Community polls
+                    </h3>
+
+                </div>
+
+
+                <div class="admin-polls-toolbar__filters">
+
+                    <button
+                        type="button"
+                        class="admin-poll-filter is-active"
+                        data-filter="all"
+                    >
+                        All
+                    </button>
+
+                    <button
+                        type="button"
+                        class="admin-poll-filter"
+                        data-filter="active"
+                    >
+                        Active
+                    </button>
+
+                    <button
+                        type="button"
+                        class="admin-poll-filter"
+                        data-filter="inactive"
+                    >
+                        Inactive
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="admin-polls-list"
+                id="adminCommunityPollList"
+            >
+
+                <div class="admin-polls-empty">
+
+                    <p>
+                        Loading community polls...
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>

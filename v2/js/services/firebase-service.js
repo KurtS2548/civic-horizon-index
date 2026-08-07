@@ -203,7 +203,235 @@ export async function submitPrioritySubmission(
 
 /*
 ==================================================
-COMMUNITY POLL SUBMISSION
+COMMUNITY POLL CREATION
+==================================================
+*/
+
+export async function createCommunitySurvey(
+    surveyData
+) {
+
+    const validatedSurvey =
+        validateCommunitySurvey(
+            surveyData
+        );
+
+
+    const surveyReference =
+        push(
+            communitySurveysRef
+        );
+
+
+    const createdAt =
+        new Date().toISOString();
+
+
+    const record = {
+
+        ...validatedSurvey,
+
+        createdAt,
+
+        updatedAt:
+            createdAt
+
+    };
+
+
+    await set(
+        surveyReference,
+        record
+    );
+
+
+    return {
+
+        id:
+            surveyReference.key,
+
+        ...record
+
+    };
+
+}
+
+
+/*
+==================================================
+COMMUNITY POLL UPDATE
+==================================================
+*/
+
+export async function updateCommunitySurvey(
+    surveyId,
+    surveyData
+) {
+
+    if (
+        !surveyId ||
+        typeof surveyId !== "string"
+    ) {
+
+        throw new Error(
+            "A valid community poll ID is required."
+        );
+
+    }
+
+
+    const validatedSurvey =
+        validateCommunitySurvey(
+            surveyData
+        );
+
+
+    const updates = {
+
+        ...validatedSurvey,
+
+        updatedAt:
+            new Date().toISOString()
+
+    };
+
+
+    await update(
+        ref(
+            database,
+            `createdSurveys/${surveyId}`
+        ),
+        updates
+    );
+
+
+    return {
+
+        id:
+            surveyId,
+
+        ...updates
+
+    };
+
+}
+
+
+/*
+==================================================
+COMMUNITY POLL VALIDATION
+==================================================
+*/
+
+function validateCommunitySurvey(
+    surveyData
+) {
+
+    if (
+        !surveyData ||
+        typeof surveyData !== "object"
+    ) {
+
+        throw new Error(
+            "Community poll data is required."
+        );
+
+    }
+
+
+    const question =
+        String(
+            surveyData.question || ""
+        ).trim();
+
+
+    if (
+        question.length < 5
+    ) {
+
+        throw new Error(
+            "The poll question must be at least 5 characters long."
+        );
+
+    }
+
+
+    const choices =
+        Array.isArray(
+            surveyData.choices
+        )
+            ? surveyData.choices
+            : [];
+
+
+    const cleanedChoices =
+        choices
+            .map(
+                choice => {
+
+                    return String(
+                        choice || ""
+                    ).trim();
+
+                }
+            )
+            .filter(Boolean);
+
+
+    if (
+        cleanedChoices.length < 2
+    ) {
+
+        throw new Error(
+            "A community poll must have at least two answer choices."
+        );
+
+    }
+
+
+    const uniqueChoices =
+        [
+            ...new Set(
+                cleanedChoices
+                    .map(
+                        choice =>
+                            choice.toLowerCase()
+                    )
+            )
+        ];
+
+
+    if (
+        uniqueChoices.length !==
+        cleanedChoices.length
+    ) {
+
+        throw new Error(
+            "Poll choices must be unique."
+        );
+
+    }
+
+
+    return {
+
+        question,
+
+        choices:
+            cleanedChoices,
+
+        active:
+            surveyData.active ===
+            true
+
+    };
+
+}
+
+
+/*
+==================================================
+COMMUNITY POLL VOTE SUBMISSION
 ==================================================
 */
 

@@ -1,0 +1,210 @@
+<section class="admin-section admin-section--white">
+
+    <div class="admin-section__container">
+
+        <header class="admin-section__heading">
+
+            <p class="admin-section__eyebrow">
+                Poll Editor
+            </p>
+
+            <h2 id="adminPollEditorHeading">
+                Create a community poll
+            </h2>
+
+            <p>
+                Create a new poll or edit an existing one.
+                Changes will be reflected across the live V2 Polls
+                Center and Results Center.
+            </p>
+
+        </header>
+
+
+        <form
+            class="admin-poll-editor admin-panel"
+            id="adminPollEditorForm"
+        >
+
+            <input
+                type="hidden"
+                id="adminPollId"
+                name="pollId"
+            >
+
+
+            <div class="admin-poll-editor__body">
+
+                <div class="admin-poll-editor__field">
+
+                    <label for="adminPollQuestion">
+                        Poll question
+                    </label>
+
+                    <textarea
+                        id="adminPollQuestion"
+                        name="question"
+                        rows="4"
+                        maxlength="240"
+                        placeholder="Enter the community poll question"
+                        required
+                    ></textarea>
+
+                </div>
+
+
+                <div class="admin-poll-editor__field">
+
+                    <label>
+                        Answer choices
+                    </label>
+
+                    <p class="admin-poll-editor__hint">
+                        Add at least two choices.
+                    </p>
+
+
+                    <div
+                        class="admin-poll-editor__choices"
+                        id="adminPollChoices"
+                    >
+
+                        <div class="admin-poll-choice-row">
+
+                            <input
+                                type="text"
+                                class="admin-poll-choice-input"
+                                placeholder="Choice 1"
+                                maxlength="120"
+                                required
+                            >
+
+                            <button
+                                type="button"
+                                class="admin-poll-choice-remove"
+                                aria-label="Remove choice"
+                            >
+                                Remove
+                            </button>
+
+                        </div>
+
+
+                        <div class="admin-poll-choice-row">
+
+                            <input
+                                type="text"
+                                class="admin-poll-choice-input"
+                                placeholder="Choice 2"
+                                maxlength="120"
+                                required
+                            >
+
+                            <button
+                                type="button"
+                                class="admin-poll-choice-remove"
+                                aria-label="Remove choice"
+                            >
+                                Remove
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <button
+                        type="button"
+                        class="admin-button admin-button--secondary"
+                        id="adminAddPollChoice"
+                    >
+                        + Add Choice
+                    </button>
+
+                </div>
+
+
+                <div class="admin-poll-editor__field">
+
+                    <label class="admin-toggle">
+
+                        <input
+                            type="checkbox"
+                            id="adminPollActive"
+                            name="active"
+                            checked
+                        >
+
+                        <span class="admin-toggle__control"></span>
+
+                        <span class="admin-toggle__text">
+
+                            <strong>
+                                Active poll
+                            </strong>
+
+                            <small>
+                                Make this poll available for public voting.
+                            </small>
+
+                        </span>
+
+                    </label>
+
+                </div>
+
+            </div>
+
+
+            <div class="admin-poll-editor__footer">
+
+                <div>
+
+                    <strong id="adminPollEditorMode">
+                        Creating a new poll
+                    </strong>
+
+                    <p>
+                        Existing votes are preserved when editing
+                        a poll.
+                    </p>
+
+                </div>
+
+
+                <div class="admin-poll-editor__actions">
+
+                    <button
+                        type="button"
+                        class="admin-button admin-button--secondary"
+                        id="adminPollEditorCancel"
+                        hidden
+                    >
+                        Cancel Edit
+                    </button>
+
+
+                    <button
+                        type="submit"
+                        class="admin-button admin-button--primary"
+                        id="adminPollEditorSubmit"
+                    >
+                        Create Poll
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <p
+                class="admin-poll-editor__message"
+                id="adminPollEditorMessage"
+                aria-live="polite"
+            ></p>
+
+        </form>
+
+    </div>
+
+</section>
