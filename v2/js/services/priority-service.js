@@ -6,7 +6,8 @@ NATIONAL PRIORITIES SERVICE
 */
 
 import {
-    subscribeToPrioritySubmissions
+    subscribeToPrioritySubmissions,
+    submitPrioritySubmission
 } from "./firebase-service.js";
 
 
@@ -96,6 +97,89 @@ export function subscribeToNationalPrioritySummary(
         },
         errorCallback
     );
+
+}
+
+
+/*
+==================================================
+SUBMISSION
+==================================================
+*/
+
+export async function submitNationalPriorityRatings(
+    ratings,
+    additionalData = {}
+) {
+
+    const validatedRatings =
+        validatePriorityRatings(
+            ratings
+        );
+
+
+    return submitPrioritySubmission(
+        validatedRatings,
+        additionalData
+    );
+
+}
+
+
+/*
+==================================================
+VALIDATION
+==================================================
+*/
+
+export function validatePriorityRatings(
+    ratings
+) {
+
+    if (
+        !ratings ||
+        typeof ratings !== "object"
+    ) {
+
+        throw new Error(
+            "National priority ratings are required."
+        );
+
+    }
+
+
+    const validatedRatings = {};
+
+
+    nationalIssues.forEach(issue => {
+
+        const rating =
+            Number(
+                ratings[issue.id]
+            );
+
+
+        if (
+            !Number.isFinite(rating) ||
+            rating < 1 ||
+            rating > 10
+        ) {
+
+            throw new Error(
+                `A valid rating from 1 to 10 is required for ${issue.name}.`
+            );
+
+        }
+
+
+        validatedRatings[
+            issue.id
+        ] = rating;
+
+    });
+
+
+    return validatedRatings;
 
 }
 

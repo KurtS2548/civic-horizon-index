@@ -1,0 +1,495 @@
+<section
+    class="polls-section polls-section--white"
+    id="national-priorities"
+>
+
+    <div class="polls-section__container">
+
+        <header class="polls-section__heading">
+
+            <p class="polls-section__eyebrow">
+                National Priorities
+            </p>
+
+            <h2>
+                Rank the issues that matter most
+            </h2>
+
+            <p>
+                Rate each issue from 1 to 10. Your responses
+                contribute to the live national rankings shown
+                throughout Civic Horizon Index.
+            </p>
+
+        </header>
+
+
+        <form
+            class="national-priorities-form polls-panel"
+            id="nationalPrioritiesForm"
+        >
+
+            <div class="national-priorities-form__intro">
+
+                <div>
+
+                    <p>
+                        Priority Scale
+                    </p>
+
+                    <h3>
+                        How important is each issue to you?
+                    </h3>
+
+                </div>
+
+                <div class="national-priorities-form__scale">
+
+                    <span>
+                        1 = Lower Priority
+                    </span>
+
+                    <span>
+                        10 = Highest Priority
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="national-priorities-form__list"
+                id="nationalPrioritiesQuestions"
+            >
+
+
+                <!-- ECONOMY -->
+
+                <div class="priority-question">
+
+                    <div class="priority-question__heading">
+
+                        <label for="priorityEconomy">
+                            Economy & Cost of Living
+                        </label>
+
+                        <output
+                            id="priorityEconomyValue"
+                            for="priorityEconomy"
+                        >
+                            5
+                        </output>
+
+                    </div>
+
+                    <input
+                        type="range"
+                        id="priorityEconomy"
+                        name="economy"
+                        min="1"
+                        max="10"
+                        value="5"
+                        step="1"
+                    >
+
+                    <div class="priority-question__scale">
+
+                        <span>1</span>
+                        <span>10</span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- HEALTHCARE -->
+
+                <div class="priority-question">
+
+                    <div class="priority-question__heading">
+
+                        <label for="priorityHealthcare">
+                            Healthcare
+                        </label>
+
+                        <output
+                            id="priorityHealthcareValue"
+                            for="priorityHealthcare"
+                        >
+                            5
+                        </output>
+
+                    </div>
+
+                    <input
+                        type="range"
+                        id="priorityHealthcare"
+                        name="healthcare"
+                        min="1"
+                        max="10"
+                        value="5"
+                        step="1"
+                    >
+
+                    <div class="priority-question__scale">
+
+                        <span>1</span>
+                        <span>10</span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- EDUCATION -->
+
+                <div class="priority-question">
+
+                    <div class="priority-question__heading">
+
+                        <label for="priorityEducation">
+                            Education
+                        </label>
+
+                        <output
+                            id="priorityEducationValue"
+                            for="priorityEducation"
+                        >
+                            5
+                        </output>
+
+                    </div>
+
+                    <input
+                        type="range"
+                        id="priorityEducation"
+                        name="education"
+                        min="1"
+                        max="10"
+                        value="5"
+                        step="1"
+                    >
+
+                    <div class="priority-question__scale">
+
+                        <span>1</span>
+                        <span>10</span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- HOUSING -->
+
+                <div class="priority-question">
+
+                    <div class="priority-question__heading">
+
+                        <label for="priorityHousing">
+                            Housing
+                        </label>
+
+                        <output
+                            id="priorityHousingValue"
+                            for="priorityHousing"
+                        >
+                            5
+                        </output>
+
+                    </div>
+
+                    <input
+                        type="range"
+                        id="priorityHousing"
+                        name="housing"
+                        min="1"
+                        max="10"
+                        value="5"
+                        step="1"
+                    >
+
+                    <div class="priority-question__scale">
+
+                        <span>1</span>
+                        <span>10</span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- IMMIGRATION -->
+
+                <div class="priority-question">
+
+                    <div class="priority-question__heading">
+
+                        <label for="priorityImmigration">
+                            Immigration
+                        </label>
+
+                        <output
+                            id="priorityImmigrationValue"
+                            for="priorityImmigration"
+                        >
+                            5
+                        </output>
+
+                    </div>
+
+                    <input
+                        type="range"
+                        id="priorityImmigration"
+                        name="immigration"
+                        min="1"
+                        max="10"
+                        value="5"
+                        step="1"
+                    >
+
+                    <div class="priority-question__scale">
+
+                        <span>1</span>
+                        <span>10</span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- PUBLIC SAFETY -->
+
+                <div class="priority-question">
+
+                    <div class="priority-question__heading">
+
+                        <label for="priorityPublicSafety">
+                            Public Safety
+                        </label>
+
+                        <output
+                            id="priorityPublicSafetyValue"
+                            for="priorityPublicSafety"
+                        >
+                            5
+                        </output>
+
+                    </div>
+
+                    <input
+                        type="range"
+                        id="priorityPublicSafety"
+                        name="publicSafety"
+                        min="1"
+                        max="10"
+                        value="5"
+                        step="1"
+                    >
+
+                    <div class="priority-question__scale">
+
+                        <span>1</span>
+                        <span>10</span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- NATIONAL SECURITY -->
+
+                <div class="priority-question">
+
+                    <div class="priority-question__heading">
+
+                        <label for="priorityNationalSecurity">
+                            National Security
+                        </label>
+
+                        <output
+                            id="priorityNationalSecurityValue"
+                            for="priorityNationalSecurity"
+                        >
+                            5
+                        </output>
+
+                    </div>
+
+                    <input
+                        type="range"
+                        id="priorityNationalSecurity"
+                        name="nationalSecurity"
+                        min="1"
+                        max="10"
+                        value="5"
+                        step="1"
+                    >
+
+                    <div class="priority-question__scale">
+
+                        <span>1</span>
+                        <span>10</span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ENVIRONMENT -->
+
+                <div class="priority-question">
+
+                    <div class="priority-question__heading">
+
+                        <label for="priorityEnvironment">
+                            Environment
+                        </label>
+
+                        <output
+                            id="priorityEnvironmentValue"
+                            for="priorityEnvironment"
+                        >
+                            5
+                        </output>
+
+                    </div>
+
+                    <input
+                        type="range"
+                        id="priorityEnvironment"
+                        name="environment"
+                        min="1"
+                        max="10"
+                        value="5"
+                        step="1"
+                    >
+
+                    <div class="priority-question__scale">
+
+                        <span>1</span>
+                        <span>10</span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- GOVERNMENT ACCOUNTABILITY -->
+
+                <div class="priority-question">
+
+                    <div class="priority-question__heading">
+
+                        <label for="priorityGovernmentAccountability">
+                            Government Accountability
+                        </label>
+
+                        <output
+                            id="priorityGovernmentAccountabilityValue"
+                            for="priorityGovernmentAccountability"
+                        >
+                            5
+                        </output>
+
+                    </div>
+
+                    <input
+                        type="range"
+                        id="priorityGovernmentAccountability"
+                        name="governmentAccountability"
+                        min="1"
+                        max="10"
+                        value="5"
+                        step="1"
+                    >
+
+                    <div class="priority-question__scale">
+
+                        <span>1</span>
+                        <span>10</span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- CHILDREN & FAMILIES -->
+
+                <div class="priority-question">
+
+                    <div class="priority-question__heading">
+
+                        <label for="priorityChildrenFamilies">
+                            Children & Families
+                        </label>
+
+                        <output
+                            id="priorityChildrenFamiliesValue"
+                            for="priorityChildrenFamilies"
+                        >
+                            5
+                        </output>
+
+                    </div>
+
+                    <input
+                        type="range"
+                        id="priorityChildrenFamilies"
+                        name="childrenFamilies"
+                        min="1"
+                        max="10"
+                        value="5"
+                        step="1"
+                    >
+
+                    <div class="priority-question__scale">
+
+                        <span>1</span>
+                        <span>10</span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="national-priorities-form__footer">
+
+                <div>
+
+                    <strong>
+                        Your ratings remain part of the live national totals.
+                    </strong>
+
+                    <p>
+                        State information can be used later for
+                        state-level comparisons when available.
+                    </p>
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="national-priorities-form__submit"
+                >
+                    Submit National Priorities
+                </button>
+
+            </div>
+
+
+            <p
+                class="national-priorities-form__message"
+                id="nationalPrioritiesMessage"
+                aria-live="polite"
+            ></p>
+
+        </form>
+
+    </div>
+
+</section>

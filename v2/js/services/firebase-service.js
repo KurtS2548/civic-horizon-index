@@ -26,13 +26,22 @@ DATABASE REFERENCES
 */
 
 const prioritySubmissionsRef =
-    ref(database, "prioritySubmissions");
+    ref(
+        database,
+        "prioritySubmissions"
+    );
 
 const communitySurveysRef =
-    ref(database, "createdSurveys");
+    ref(
+        database,
+        "createdSurveys"
+    );
 
 const communityVotesRef =
-    ref(database, "votes");
+    ref(
+        database,
+        "votes"
+    );
 
 const presidentialApprovalRef =
     ref(
@@ -56,18 +65,9 @@ export function subscribeToPrioritySubmissions(
         prioritySubmissionsRef,
         snapshot => {
 
-            const submissions = [];
-
-            snapshot.forEach(childSnapshot => {
-
-                submissions.push({
-                    id: childSnapshot.key,
-                    ...(childSnapshot.val() || {})
-                });
-
-            });
-
-            callback(submissions);
+            callback(
+                snapshotToArray(snapshot)
+            );
 
         },
         errorCallback
@@ -85,18 +85,9 @@ export function subscribeToCommunitySurveys(
         communitySurveysRef,
         snapshot => {
 
-            const surveys = [];
-
-            snapshot.forEach(childSnapshot => {
-
-                surveys.push({
-                    id: childSnapshot.key,
-                    ...(childSnapshot.val() || {})
-                });
-
-            });
-
-            callback(surveys);
+            callback(
+                snapshotToArray(snapshot)
+            );
 
         },
         errorCallback
@@ -114,18 +105,9 @@ export function subscribeToCommunityVotes(
         communityVotesRef,
         snapshot => {
 
-            const votes = [];
-
-            snapshot.forEach(childSnapshot => {
-
-                votes.push({
-                    id: childSnapshot.key,
-                    ...(childSnapshot.val() || {})
-                });
-
-            });
-
-            callback(votes);
+            callback(
+                snapshotToArray(snapshot)
+            );
 
         },
         errorCallback
@@ -143,18 +125,9 @@ export function subscribeToPresidentialApproval(
         presidentialApprovalRef,
         snapshot => {
 
-            const responses = [];
-
-            snapshot.forEach(childSnapshot => {
-
-                responses.push({
-                    id: childSnapshot.key,
-                    ...(childSnapshot.val() || {})
-                });
-
-            });
-
-            callback(responses);
+            callback(
+                snapshotToArray(snapshot)
+            );
 
         },
         errorCallback
@@ -165,7 +138,72 @@ export function subscribeToPresidentialApproval(
 
 /*
 ==================================================
-PRESIDENTIAL APPROVAL VOTING
+NATIONAL PRIORITIES SUBMISSION
+==================================================
+*/
+
+export async function submitPrioritySubmission(
+    ratings,
+    additionalData = {}
+) {
+
+    if (
+        !ratings ||
+        typeof ratings !== "object"
+    ) {
+
+        throw new Error(
+            "National priority ratings are required."
+        );
+
+    }
+
+
+    const submissionReference =
+        push(
+            prioritySubmissionsRef
+        );
+
+
+    const submissionData = {
+
+        ratings,
+
+        submittedAt:
+            new Date().toISOString(),
+
+        survey:
+            "nationalPriorities",
+
+        surveyVersion:
+            "2.0",
+
+        ...additionalData
+
+    };
+
+
+    await set(
+        submissionReference,
+        submissionData
+    );
+
+
+    return {
+
+        id:
+            submissionReference.key,
+
+        ...submissionData
+
+    };
+
+}
+
+
+/*
+==================================================
+PRESIDENTIAL APPROVAL SUBMISSION
 ==================================================
 */
 
@@ -182,7 +220,11 @@ export async function submitPresidentialApproval(
     ];
 
 
-    if (!validResponses.includes(response)) {
+    if (
+        !validResponses.includes(
+            response
+        )
+    ) {
 
         throw new Error(
             "Invalid presidential approval response."
@@ -192,7 +234,9 @@ export async function submitPresidentialApproval(
 
 
     const responseReference =
-        push(presidentialApprovalRef);
+        push(
+            presidentialApprovalRef
+        );
 
 
     const responseData = {
@@ -218,8 +262,12 @@ export async function submitPresidentialApproval(
 
 
     return {
-        id: responseReference.key,
+
+        id:
+            responseReference.key,
+
         ...responseData
+
     };
 
 }
@@ -234,9 +282,14 @@ ONE-TIME READ HELPERS
 export async function getPrioritySubmissions() {
 
     const snapshot =
-        await get(prioritySubmissionsRef);
+        await get(
+            prioritySubmissionsRef
+        );
 
-    return snapshotToArray(snapshot);
+
+    return snapshotToArray(
+        snapshot
+    );
 
 }
 
@@ -244,9 +297,14 @@ export async function getPrioritySubmissions() {
 export async function getCommunitySurveys() {
 
     const snapshot =
-        await get(communitySurveysRef);
+        await get(
+            communitySurveysRef
+        );
 
-    return snapshotToArray(snapshot);
+
+    return snapshotToArray(
+        snapshot
+    );
 
 }
 
@@ -254,9 +312,14 @@ export async function getCommunitySurveys() {
 export async function getCommunityVotes() {
 
     const snapshot =
-        await get(communityVotesRef);
+        await get(
+            communityVotesRef
+        );
 
-    return snapshotToArray(snapshot);
+
+    return snapshotToArray(
+        snapshot
+    );
 
 }
 
@@ -264,9 +327,14 @@ export async function getCommunityVotes() {
 export async function getPresidentialApprovalResponses() {
 
     const snapshot =
-        await get(presidentialApprovalRef);
+        await get(
+            presidentialApprovalRef
+        );
 
-    return snapshotToArray(snapshot);
+
+    return snapshotToArray(
+        snapshot
+    );
 
 }
 
@@ -307,7 +375,10 @@ export async function updateDatabasePath(
 
 
     await update(
-        ref(database, path),
+        ref(
+            database,
+            path
+        ),
         updates
     );
 
@@ -320,23 +391,41 @@ UTILITY FUNCTIONS
 ==================================================
 */
 
-function snapshotToArray(snapshot) {
+function snapshotToArray(
+    snapshot
+) {
 
     const records = [];
 
-    if (!snapshot.exists()) {
+
+    if (
+        !snapshot ||
+        !snapshot.exists()
+    ) {
+
         return records;
+
     }
 
 
-    snapshot.forEach(childSnapshot => {
+    snapshot.forEach(
+        childSnapshot => {
 
-        records.push({
-            id: childSnapshot.key,
-            ...(childSnapshot.val() || {})
-        });
+            const value =
+                childSnapshot.val();
 
-    });
+
+            records.push({
+
+                id:
+                    childSnapshot.key,
+
+                ...(value || {})
+
+            });
+
+        }
+    );
 
 
     return records;

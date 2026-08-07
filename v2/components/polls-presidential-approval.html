@@ -1,0 +1,250 @@
+<section
+    class="polls-section polls-section--light"
+    id="presidential-approval"
+>
+
+    <div class="polls-section__container">
+
+        <header class="polls-section__heading">
+
+            <p class="polls-section__eyebrow">
+                Presidential Approval
+            </p>
+
+            <h2>
+                How is the president doing?
+            </h2>
+
+            <p>
+                This ongoing tracker measures how Civic Horizon Index
+                participants currently assess the president's job
+                performance.
+            </p>
+
+        </header>
+
+
+        <div class="approval-poll polls-panel">
+
+            <!-- POLL -->
+
+            <form
+                class="approval-poll__form"
+                id="pollsPresidentialApprovalForm"
+            >
+
+                <div class="approval-poll__question">
+
+                    <p>
+                        Ongoing Civic Pulse Tracker
+                    </p>
+
+                    <h3>
+                        How would you rate the current president's
+                        job performance?
+                    </h3>
+
+                </div>
+
+
+                <fieldset class="approval-poll__choices">
+
+                    <legend class="sr-only">
+                        Presidential approval response
+                    </legend>
+
+
+                    <label class="approval-choice">
+
+                        <input
+                            type="radio"
+                            name="presidentialApproval"
+                            value="Strongly Approve"
+                        >
+
+                        <span class="approval-choice__control"></span>
+
+                        <span class="approval-choice__text">
+                            Strongly Approve
+                        </span>
+
+                    </label>
+
+
+                    <label class="approval-choice">
+
+                        <input
+                            type="radio"
+                            name="presidentialApproval"
+                            value="Approve"
+                        >
+
+                        <span class="approval-choice__control"></span>
+
+                        <span class="approval-choice__text">
+                            Approve
+                        </span>
+
+                    </label>
+
+
+                    <label class="approval-choice">
+
+                        <input
+                            type="radio"
+                            name="presidentialApproval"
+                            value="Neutral"
+                        >
+
+                        <span class="approval-choice__control"></span>
+
+                        <span class="approval-choice__text">
+                            Neutral
+                        </span>
+
+                    </label>
+
+
+                    <label class="approval-choice">
+
+                        <input
+                            type="radio"
+                            name="presidentialApproval"
+                            value="Disapprove"
+                        >
+
+                        <span class="approval-choice__control"></span>
+
+                        <span class="approval-choice__text">
+                            Disapprove
+                        </span>
+
+                    </label>
+
+
+                    <label class="approval-choice">
+
+                        <input
+                            type="radio"
+                            name="presidentialApproval"
+                            value="Strongly Disapprove"
+                        >
+
+                        <span class="approval-choice__control"></span>
+
+                        <span class="approval-choice__text">
+                            Strongly Disapprove
+                        </span>
+
+                    </label>
+
+                </fieldset>
+
+
+                <div class="approval-poll__footer">
+
+                    <div>
+
+                        <strong>
+                            Ongoing tracker
+                        </strong>
+
+                        <p>
+                            Your response becomes part of the live
+                            Civic Pulse results.
+                        </p>
+
+                    </div>
+
+
+                    <button
+                        type="submit"
+                        class="approval-poll__submit"
+                    >
+                        Submit Response
+                    </button>
+
+                </div>
+
+
+                <p
+                    class="approval-poll__message"
+                    id="pollsPresidentialApprovalMessage"
+                    aria-live="polite"
+                ></p>
+
+            </form>
+
+
+            <!-- LIVE SNAPSHOT -->
+
+            <aside class="approval-poll__snapshot">
+
+                <p class="approval-poll__snapshot-label">
+                    Live Results
+                </p>
+
+
+                <div class="approval-poll__snapshot-score">
+
+                    <strong id="pollsApprovalHeadline">
+                        0.0%
+                    </strong>
+
+                    <span>
+                        Approve
+                    </span>
+
+                </div>
+
+
+                <div class="approval-poll__snapshot-row">
+
+                    <span>
+                        Disapprove
+                    </span>
+
+                    <strong id="pollsDisapprovalHeadline">
+                        0.0%
+                    </strong>
+
+                </div>
+
+
+                <div class="approval-poll__snapshot-row">
+
+                    <span>
+                        Neutral
+                    </span>
+
+                    <strong id="pollsNeutralHeadline">
+                        0.0%
+                    </strong>
+
+                </div>
+
+
+                <div class="approval-poll__snapshot-total">
+
+                    <strong id="pollsApprovalResponseCount">
+                        0
+                    </strong>
+
+                    <span>
+                        total responses
+                    </span>
+
+                </div>
+
+
+                <a href="results-test.html">
+                    Explore full results →
+                </a>
+
+            </aside>
+
+        </div>
+
+    </div>
+
+</section>
