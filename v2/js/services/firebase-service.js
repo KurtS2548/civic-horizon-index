@@ -203,6 +203,82 @@ export async function submitPrioritySubmission(
 
 /*
 ==================================================
+COMMUNITY POLL SUBMISSION
+==================================================
+*/
+
+export async function submitCommunityVote(
+    surveyId,
+    choice
+) {
+
+    if (
+        !surveyId ||
+        typeof surveyId !== "string"
+    ) {
+
+        throw new Error(
+            "A valid community poll is required."
+        );
+
+    }
+
+
+    if (
+        !choice ||
+        typeof choice !== "string"
+    ) {
+
+        throw new Error(
+            "A valid poll response is required."
+        );
+
+    }
+
+
+    const voteReference =
+        push(
+            communityVotesRef
+        );
+
+
+    const voteData = {
+
+        surveyId:
+            surveyId.trim(),
+
+        choice:
+            choice.trim(),
+
+        submittedAt:
+            new Date().toISOString(),
+
+        source:
+            "v2PollsCenter"
+
+    };
+
+
+    await set(
+        voteReference,
+        voteData
+    );
+
+
+    return {
+
+        id:
+            voteReference.key,
+
+        ...voteData
+
+    };
+
+}
+
+
+/*
+==================================================
 PRESIDENTIAL APPROVAL SUBMISSION
 ==================================================
 */

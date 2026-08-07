@@ -1,0 +1,127 @@
+<section
+    class="community-vote"
+    id="communityVoteSection"
+    hidden
+>
+
+    <div class="polls-section__container">
+
+        <div class="community-vote__panel">
+
+            <div class="community-vote__header">
+
+                <button
+                    type="button"
+                    class="community-vote__back"
+                    id="communityVoteBackButton"
+                >
+                    ← Back to Community Polls
+                </button>
+
+                <span class="community-vote__status">
+                    Open for Voting
+                </span>
+
+            </div>
+
+
+            <div class="community-vote__content">
+
+                <div class="community-vote__main">
+
+                    <p class="community-vote__eyebrow">
+                        Community Poll
+                    </p>
+
+                    <h2 id="communityVoteQuestion">
+                        Loading poll...
+                    </h2>
+
+
+                    <form id="communityVoteForm">
+
+                        <fieldset
+                            class="community-vote__choices"
+                            id="communityVoteChoices"
+                        >
+
+                            <legend class="sr-only">
+                                Select your response
+                            </legend>
+
+                        </fieldset>
+
+
+                        <div class="community-vote__footer">
+
+                            <div>
+
+                                <strong>
+                                    One response per submission
+                                </strong>
+
+                                <p>
+                                    Your vote contributes to the live
+                                    community poll totals.
+                                </p>
+
+                            </div>
+
+
+                            <button
+                                type="submit"
+                                class="community-vote__submit"
+                            >
+                                Submit Vote
+                            </button>
+
+                        </div>
+
+
+                        <p
+                            class="community-vote__message"
+                            id="communityVoteMessage"
+                            aria-live="polite"
+                        ></p>
+
+                    </form>
+
+                </div>
+
+
+                <aside class="community-vote__summary">
+
+                    <p>
+                        Poll Activity
+                    </p>
+
+                    <strong id="communityVoteCurrentTotal">
+                        0
+                    </strong>
+
+                    <span>
+                        total votes
+                    </span>
+
+
+                    <div class="community-vote__summary-note">
+
+                        <strong>
+                            Live results
+                        </strong>
+
+                        <p>
+                            Results update as new votes are submitted.
+                        </p>
+
+                    </div>
+
+                </aside>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>

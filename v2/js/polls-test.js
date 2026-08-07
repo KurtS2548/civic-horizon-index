@@ -35,7 +35,9 @@ async function loadComponent(
     try {
 
         const response =
-            await fetch(componentPath);
+            await fetch(
+                componentPath
+            );
 
         if (!response.ok) {
 
@@ -101,14 +103,21 @@ async function initializePollsPage() {
             "nationalPrioritiesPollContainer",
             "components/polls-national-priorities.html"
         ),
+
         loadComponent(
-    "presidentialApprovalPollContainer",
-    "components/polls-presidential-approval.html"
-),
-loadComponent(
-    "communityPollsPageContainer",
-    "components/polls-community.html"
-),
+            "presidentialApprovalPollContainer",
+            "components/polls-presidential-approval.html"
+        ),
+
+        loadComponent(
+            "communityPollsPageContainer",
+            "components/polls-community.html"
+        ),
+
+        loadComponent(
+            "communityVoteContainer",
+            "components/polls-community-vote.html"
+        ),
 
         loadComponent(
             "footerContainer",
@@ -116,6 +125,7 @@ loadComponent(
         )
 
     ]);
+
 
     initializeHeader();
 
@@ -178,32 +188,64 @@ FALLBACK STATE
 
 function showPollsFallback() {
 
-    const message =
+    const prioritiesMessage =
         document.getElementById(
             "nationalPrioritiesMessage"
         );
 
 
-    if (message) {
+    if (prioritiesMessage) {
 
-        message.textContent =
+        prioritiesMessage.textContent =
             "Live survey submission is temporarily unavailable.";
 
-        message.dataset.messageType =
+        prioritiesMessage.dataset.messageType =
             "error";
 
     }
 
 
-    const submitButton =
+    const prioritiesSubmitButton =
         document.querySelector(
             ".national-priorities-form__submit"
         );
 
 
-    if (submitButton) {
+    if (prioritiesSubmitButton) {
 
-        submitButton.disabled = true;
+        prioritiesSubmitButton.disabled =
+            true;
+
+    }
+
+
+    const approvalMessage =
+        document.getElementById(
+            "pollsPresidentialApprovalMessage"
+        );
+
+
+    if (approvalMessage) {
+
+        approvalMessage.textContent =
+            "Live presidential approval voting is temporarily unavailable.";
+
+        approvalMessage.dataset.messageType =
+            "error";
+
+    }
+
+
+    const approvalSubmitButton =
+        document.querySelector(
+            ".approval-poll__submit"
+        );
+
+
+    if (approvalSubmitButton) {
+
+        approvalSubmitButton.disabled =
+            true;
 
     }
 
@@ -248,10 +290,12 @@ function initializeHeader() {
                         "open"
                     );
 
+
                 menuButton.setAttribute(
                     "aria-expanded",
                     String(isOpen)
                 );
+
 
                 menuButton.setAttribute(
                     "aria-label",
@@ -260,8 +304,11 @@ function initializeHeader() {
                         : "Open navigation menu"
                 );
 
+
                 if (!isOpen) {
+
                     closeDropdowns();
+
                 }
 
             }
@@ -279,27 +326,33 @@ function initializeHeader() {
 
                     event.stopPropagation();
 
+
                     const group =
                         button.closest(
                             ".navigation-group"
                         );
 
+
                     if (!group) {
                         return;
                     }
+
 
                     const isOpen =
                         group.classList.contains(
                             "open"
                         );
 
+
                     closeDropdowns();
+
 
                     if (!isOpen) {
 
                         group.classList.add(
                             "open"
                         );
+
 
                         button.setAttribute(
                             "aria-expanded",
@@ -338,12 +391,15 @@ function initializeHeader() {
         event => {
 
             if (
-                event.key !== "Escape"
+                event.key !==
+                "Escape"
             ) {
                 return;
             }
 
+
             closeDropdowns();
+
 
             if (
                 navigation &&
@@ -356,12 +412,14 @@ function initializeHeader() {
                     "open"
                 );
 
+
                 if (menuButton) {
 
                     menuButton.setAttribute(
                         "aria-expanded",
                         "false"
                     );
+
 
                     menuButton.setAttribute(
                         "aria-label",
@@ -390,27 +448,31 @@ function closeDropdowns() {
         .querySelectorAll(
             ".navigation-group.open"
         )
-        .forEach(group => {
+        .forEach(
+            group => {
 
-            group.classList.remove(
-                "open"
-            );
-
-            const button =
-                group.querySelector(
-                    ".navigation-group__button"
+                group.classList.remove(
+                    "open"
                 );
 
-            if (button) {
 
-                button.setAttribute(
-                    "aria-expanded",
-                    "false"
-                );
+                const button =
+                    group.querySelector(
+                        ".navigation-group__button"
+                    );
+
+
+                if (button) {
+
+                    button.setAttribute(
+                        "aria-expanded",
+                        "false"
+                    );
+
+                }
 
             }
-
-        });
+        );
 
 }
 
