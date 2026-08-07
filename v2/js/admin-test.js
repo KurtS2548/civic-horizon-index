@@ -7,7 +7,8 @@ SECURE ADMIN CENTER INITIALIZATION
 
 import {
     subscribeToAuthState,
-    signInAdmin
+    signInAdmin,
+    signOutAdmin
 } from "./services/auth-service.js";
 
 
@@ -106,6 +107,11 @@ async function initializeAdminPage() {
         ),
 
         loadComponent(
+            "adminSessionContainer",
+            "components/admin-session.html"
+        ),
+
+        loadComponent(
             "adminLoginContainer",
             "components/admin-login.html"
         ),
@@ -121,6 +127,8 @@ async function initializeAdminPage() {
     initializeHeader();
 
     initializeLoginForm();
+
+    initializeSignOut();
 
     watchAuthentication();
 
@@ -271,6 +279,73 @@ async function handleLoginSubmit(
 
 /*
 ==================================================
+SIGN OUT
+==================================================
+*/
+
+function initializeSignOut() {
+
+    const button =
+        document.getElementById(
+            "adminSignOutButton"
+        );
+
+
+    if (!button) {
+        return;
+    }
+
+
+    button.addEventListener(
+        "click",
+        handleSignOut
+    );
+
+}
+
+
+async function handleSignOut() {
+
+    const button =
+        document.getElementById(
+            "adminSignOutButton"
+        );
+
+
+    if (button) {
+
+        button.disabled = true;
+        button.textContent = "Signing Out...";
+
+    }
+
+
+    try {
+
+        await signOutAdmin();
+
+    } catch (error) {
+
+        console.error(
+            "Admin sign-out failed:",
+            error
+        );
+
+
+        if (button) {
+
+            button.disabled = false;
+            button.textContent = "Sign Out";
+
+        }
+
+    }
+
+}
+
+
+/*
+==================================================
 SHOW AUTHENTICATED ADMIN
 ==================================================
 */
@@ -291,10 +366,44 @@ async function showAuthenticatedAdmin(
         );
 
 
+    const sessionBar =
+        document.getElementById(
+            "adminSession"
+        );
+
+
     if (loginContainer) {
 
         loginContainer.hidden =
             true;
+
+    }
+
+
+    if (sessionBar) {
+
+        sessionBar.hidden =
+            false;
+
+    }
+
+
+    setText(
+        "adminSessionEmail",
+        user.email || "Administrator"
+    );
+
+
+    const signOutButton =
+        document.getElementById(
+            "adminSignOutButton"
+        );
+
+
+    if (signOutButton) {
+
+        signOutButton.disabled = false;
+        signOutButton.textContent = "Sign Out";
 
     }
 
@@ -325,12 +434,6 @@ async function showAuthenticatedAdmin(
             true;
 
     }
-
-
-    console.log(
-        "Authenticated administrator:",
-        user.email
-    );
 
 }
 
@@ -436,6 +539,12 @@ function showLogin() {
         );
 
 
+    const sessionBar =
+        document.getElementById(
+            "adminSession"
+        );
+
+
     if (loginContainer) {
 
         loginContainer.hidden =
@@ -448,6 +557,31 @@ function showLogin() {
 
         adminPage.hidden =
             true;
+
+    }
+
+
+    if (sessionBar) {
+
+        sessionBar.hidden =
+            true;
+
+    }
+
+
+    const submitButton =
+        document.getElementById(
+            "adminLoginSubmit"
+        );
+
+
+    if (submitButton) {
+
+        submitButton.disabled =
+            false;
+
+        submitButton.textContent =
+            "Sign In";
 
     }
 

@@ -1155,3 +1155,71 @@ body {
     }
 
 }
+/* ==================================================
+   ADMIN SESSION BAR
+================================================== */
+
+.admin-session {
+    border-bottom: 1px solid #d9e2ec;
+    background: #ffffff;
+}
+
+.admin-session[hidden] {
+    display: none;
+}
+
+.admin-session__container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    width: min(1180px, calc(100% - 48px));
+    margin: 0 auto;
+    padding: 12px 0;
+}
+
+.admin-session__user {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 7px;
+}
+
+.admin-session__user span {
+    color: #7b8fa3;
+    font-size: 0.72rem;
+    font-weight: 700;
+}
+
+.admin-session__user strong {
+    color: #102a43;
+    font-size: 0.8rem;
+}
+
+.admin-session__signout {
+    min-height: 38px;
+    padding: 8px 13px;
+    border: 1px solid #bcccdc;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #334e68;
+    cursor: pointer;
+    font-family: "Inter", sans-serif;
+    font-size: 0.74rem;
+    font-weight: 800;
+}
+
+.admin-session__signout:hover,
+.admin-session__signout:focus-visible {
+    border-color: #9b2c2c;
+    color: #9b2c2c;
+    outline: none;
+}
+
+@media (max-width: 600px) {
+
+    .admin-session__container {
+        width: min(1180px, calc(100% - 32px));
+    }
+
+}
