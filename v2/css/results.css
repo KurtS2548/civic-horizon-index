@@ -1,0 +1,2125 @@
+/* ==================================================
+   CIVIC HORIZON INDEX V2
+   NATIONAL RESULTS CENTER
+================================================== */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    background: #f7f9fb;
+    color: #243b53;
+    font-family: "Inter", sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+
+.results-page {
+    min-height: 65vh;
+}
+
+
+/* ==================================================
+   RESULTS HERO
+================================================== */
+
+.results-hero {
+    padding: 78px 0;
+    background:
+        linear-gradient(
+            135deg,
+            #071d2f 0%,
+            #0b253d 58%,
+            #174f7f 100%
+        );
+    color: #ffffff;
+}
+
+.results-hero__container {
+    display: grid;
+    grid-template-columns:
+        minmax(0, 1.25fr)
+        minmax(280px, 0.75fr);
+    align-items: center;
+    gap: 64px;
+    width: min(1180px, calc(100% - 48px));
+    margin: 0 auto;
+}
+
+.results-hero__content {
+    max-width: 760px;
+}
+
+.results-hero__eyebrow {
+    margin: 0 0 14px;
+    color: #efc75d;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+}
+
+.results-hero__content h1 {
+    margin: 0;
+    color: #ffffff;
+    font-family: "Merriweather", Georgia, serif;
+    font-size: clamp(2.7rem, 6vw, 4.8rem);
+    line-height: 1.06;
+    letter-spacing: -0.035em;
+}
+
+.results-hero__content > p:last-child {
+    max-width: 700px;
+    margin: 22px 0 0;
+    color: #d0e1ed;
+    font-size: 1.04rem;
+    line-height: 1.8;
+}
+
+
+/* ==================================================
+   LIVE STATUS CARD
+================================================== */
+
+.results-hero__status {
+    display: flex;
+    min-width: 0;
+    padding: 28px;
+    flex-direction: column;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 22px 55px rgba(0, 0, 0, 0.18);
+    backdrop-filter: blur(8px);
+}
+
+.results-hero__status-label {
+    color: #efc75d;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+}
+
+.results-hero__status strong {
+    margin-top: 12px;
+    color: #ffffff;
+    font-size: 1.35rem;
+    line-height: 1.35;
+}
+
+.results-hero__status > span:last-child {
+    margin-top: 10px;
+    color: #b8cfdf;
+    font-size: 0.8rem;
+    line-height: 1.6;
+}
+
+
+/* ==================================================
+   RESULTS OVERVIEW
+================================================== */
+
+.results-overview {
+    padding: 78px 0 84px;
+    background: #ffffff;
+}
+
+.results-overview__container {
+    width: min(1180px, calc(100% - 48px));
+    margin: 0 auto;
+}
+
+.results-overview__heading {
+    max-width: 740px;
+    margin-bottom: 36px;
+}
+
+.results-overview__eyebrow {
+    margin: 0 0 10px;
+    color: #1f5f99;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.results-overview__heading h2 {
+    margin: 0;
+    color: #102a43;
+    font-family: "Merriweather", Georgia, serif;
+    font-size: clamp(2rem, 4vw, 2.8rem);
+    line-height: 1.2;
+}
+
+.results-overview__heading > p:last-child {
+    margin: 15px 0 0;
+    color: #627d98;
+    line-height: 1.75;
+}
+
+
+/* ==================================================
+   OVERVIEW GRID
+================================================== */
+
+.results-overview__grid {
+    display: grid;
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.results-stat {
+    display: flex;
+    min-width: 0;
+    min-height: 168px;
+    padding: 24px;
+    flex-direction: column;
+    justify-content: center;
+    border: 1px solid #d9e2ec;
+    border-radius: 13px;
+    background: #ffffff;
+    box-shadow: 0 10px 24px rgba(16, 42, 67, 0.05);
+}
+
+.results-stat__label {
+    color: #627d98;
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.07em;
+    line-height: 1.35;
+    text-transform: uppercase;
+}
+
+.results-stat__value {
+    display: block;
+    max-width: 100%;
+    margin-top: 13px;
+    overflow: hidden;
+    color: #102a43;
+    font-size: 2rem;
+    font-weight: 800;
+    line-height: 1.15;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.results-stat__value--text {
+    font-size: 1.28rem;
+    line-height: 1.35;
+    white-space: normal;
+}
+
+.results-stat__note {
+    margin-top: 9px;
+    color: #7b8fa3;
+    font-size: 0.75rem;
+    line-height: 1.5;
+}
+
+
+/* ==================================================
+   RESPONSIVE
+================================================== */
+
+@media (max-width: 980px) {
+
+    .results-hero__container {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+
+    .results-hero__status {
+        max-width: 620px;
+    }
+
+    .results-overview__grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .results-hero {
+        padding: 62px 0;
+    }
+
+    .results-hero__container,
+    .results-overview__container {
+        width: min(1180px, calc(100% - 32px));
+    }
+
+    .results-hero__content h1 {
+        font-size: clamp(2.35rem, 12vw, 3.6rem);
+    }
+
+    .results-overview {
+        padding: 62px 0 68px;
+    }
+
+    .results-overview__grid {
+        grid-template-columns: 1fr;
+    }
+
+    .results-stat {
+        min-height: auto;
+    }
+
+}
+/* ==================================================
+   FULL NATIONAL PRIORITY RANKINGS
+================================================== */
+
+.results-priorities {
+    padding: 84px 0;
+    background: #f7f9fb;
+}
+
+.results-priorities__container {
+    width: min(1180px, calc(100% - 48px));
+    margin: 0 auto;
+}
+
+
+/* ==================================================
+   SECTION HEADING
+================================================== */
+
+.results-priorities__heading {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 40px;
+    margin-bottom: 38px;
+}
+
+.results-priorities__heading > div:first-child {
+    max-width: 740px;
+}
+
+.results-priorities__eyebrow {
+    margin: 0 0 10px;
+    color: #1f5f99;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.results-priorities__heading h2 {
+    margin: 0;
+    color: #102a43;
+    font-family: "Merriweather", Georgia, serif;
+    font-size: clamp(2rem, 4vw, 2.8rem);
+    line-height: 1.2;
+}
+
+.results-priorities__heading > div:first-child > p:last-child {
+    margin: 16px 0 0;
+    color: #627d98;
+    line-height: 1.75;
+}
+
+
+/* ==================================================
+   SCORE GUIDE
+================================================== */
+
+.results-priorities__scale {
+    display: grid;
+    min-width: 190px;
+    gap: 5px;
+    padding: 17px 19px;
+    border: 1px solid #d9e2ec;
+    border-radius: 11px;
+    background: #ffffff;
+}
+
+.results-priorities__scale strong {
+    margin-bottom: 2px;
+    color: #102a43;
+    font-size: 0.76rem;
+}
+
+.results-priorities__scale span {
+    color: #627d98;
+    font-size: 0.72rem;
+}
+
+
+/* ==================================================
+   RANKING PANEL
+================================================== */
+
+.results-priorities__panel {
+    overflow: hidden;
+    border: 1px solid #d9e2ec;
+    border-radius: 16px;
+    background: #ffffff;
+    box-shadow: 0 14px 36px rgba(16, 42, 67, 0.07);
+}
+
+.results-priorities__panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 17px 26px;
+    border-bottom: 1px solid #d9e2ec;
+    background: #f8fafc;
+}
+
+.results-priorities__panel-header span {
+    color: #627d98;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+}
+
+.results-priorities__list {
+    display: grid;
+}
+
+
+/* ==================================================
+   RANKING ROW
+================================================== */
+
+.results-priority-row {
+    display: grid;
+    grid-template-columns: 44px minmax(0, 1fr);
+    align-items: center;
+    gap: 17px;
+    padding: 21px 26px;
+    border-bottom: 1px solid #e5ecf2;
+    transition: background-color 180ms ease;
+}
+
+.results-priority-row:hover {
+    background: #f8fbfd;
+}
+
+.results-priority-row:last-child {
+    border-bottom: 0;
+}
+
+.results-priority-rank {
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: #eaf3fb;
+    color: #174f7f;
+    font-size: 0.88rem;
+    font-weight: 800;
+}
+
+.results-priority-row:first-child
+.results-priority-rank {
+    background: #d5a021;
+    color: #ffffff;
+}
+
+.results-priority-content {
+    min-width: 0;
+}
+
+.results-priority-heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 22px;
+}
+
+.results-priority-heading h3 {
+    margin: 0;
+    color: #243b53;
+    font-size: 0.96rem;
+    line-height: 1.45;
+}
+
+.results-priority-heading strong {
+    flex-shrink: 0;
+    color: #1f5f99;
+    font-size: 1rem;
+}
+
+.results-priority-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    margin-top: 7px;
+}
+
+.results-priority-meta span {
+    color: #7b8fa3;
+    font-size: 0.72rem;
+}
+
+.results-priority-track {
+    width: 100%;
+    height: 9px;
+    margin-top: 11px;
+    overflow: hidden;
+    border-radius: 999px;
+    background: #e6edf3;
+}
+
+.results-priority-bar {
+    height: 100%;
+    border-radius: inherit;
+    background: #1f5f99;
+    transition: width 400ms ease;
+}
+
+
+/* ==================================================
+   EMPTY STATE
+================================================== */
+
+.results-priorities__empty {
+    padding: 52px 24px;
+    text-align: center;
+}
+
+.results-priorities__empty p {
+    margin: 0;
+    color: #627d98;
+}
+
+
+/* ==================================================
+   FOOTER
+================================================== */
+
+.results-priorities__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 22px;
+    padding: 19px 26px;
+    border-top: 1px solid #d9e2ec;
+    background: #f8fafc;
+}
+
+.results-priorities__footer span {
+    color: #7b8fa3;
+    font-size: 0.8rem;
+}
+
+.results-priorities__footer a {
+    color: #1f5f99;
+    font-size: 0.84rem;
+    font-weight: 800;
+    text-decoration: none;
+}
+
+.results-priorities__footer a:hover,
+.results-priorities__footer a:focus-visible {
+    text-decoration: underline;
+    outline: none;
+}
+
+
+/* ==================================================
+   PRIORITIES RESPONSIVE
+================================================== */
+
+@media (max-width: 760px) {
+
+    .results-priorities__heading {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .results-priorities__scale {
+        width: 100%;
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .results-priorities {
+        padding: 64px 0;
+    }
+
+    .results-priorities__container {
+        width: min(1180px, calc(100% - 32px));
+    }
+
+    .results-priorities__panel-header {
+        padding-inline: 18px;
+    }
+
+    .results-priority-row {
+        grid-template-columns: 34px minmax(0, 1fr);
+        padding: 18px;
+    }
+
+    .results-priority-rank {
+        width: 32px;
+        height: 32px;
+    }
+
+    .results-priority-heading {
+        gap: 12px;
+    }
+
+    .results-priority-heading h3 {
+        font-size: 0.88rem;
+    }
+
+    .results-priorities__footer {
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 18px;
+    }
+
+}
+/* ==================================================
+   CIVIC PULSE RESULTS
+================================================== */
+
+.results-pulse {
+    padding: 84px 0;
+    background: #ffffff;
+}
+
+.results-pulse__container {
+    width: min(1180px, calc(100% - 48px));
+    margin: 0 auto;
+}
+
+
+/* ==================================================
+   SECTION HEADING
+================================================== */
+
+.results-pulse__heading {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 36px;
+    margin-bottom: 38px;
+}
+
+.results-pulse__heading > div {
+    max-width: 740px;
+}
+
+.results-pulse__eyebrow {
+    margin: 0 0 10px;
+    color: #1f5f99;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.results-pulse__heading h2 {
+    margin: 0;
+    color: #102a43;
+    font-family: "Merriweather", Georgia, serif;
+    font-size: clamp(2rem, 4vw, 2.8rem);
+    line-height: 1.2;
+}
+
+.results-pulse__heading > div > p:last-child {
+    margin: 16px 0 0;
+    color: #627d98;
+    line-height: 1.75;
+}
+
+.results-pulse__link {
+    flex-shrink: 0;
+    color: #1f5f99;
+    font-size: 0.84rem;
+    font-weight: 800;
+    text-decoration: none;
+}
+
+.results-pulse__link:hover,
+.results-pulse__link:focus-visible {
+    text-decoration: underline;
+    outline: none;
+}
+
+
+/* ==================================================
+   MAIN PANEL
+================================================== */
+
+.results-pulse__panel {
+    overflow: hidden;
+    border: 1px solid #d9e2ec;
+    border-radius: 16px;
+    background: #ffffff;
+    box-shadow: 0 14px 36px rgba(16, 42, 67, 0.07);
+}
+
+
+/* ==================================================
+   SUMMARY CARDS
+================================================== */
+
+.results-pulse__summary {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    border-bottom: 1px solid #d9e2ec;
+}
+
+.pulse-summary-card {
+    display: flex;
+    min-width: 0;
+    min-height: 180px;
+    padding: 28px;
+    flex-direction: column;
+    justify-content: center;
+    border-right: 1px solid #d9e2ec;
+}
+
+.pulse-summary-card:last-child {
+    border-right: 0;
+}
+
+.pulse-summary-card > span {
+    color: #627d98;
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+}
+
+.pulse-summary-card strong {
+    margin-top: 10px;
+    color: #102a43;
+    font-size: clamp(2rem, 4vw, 2.8rem);
+    line-height: 1.1;
+}
+
+.pulse-summary-card small {
+    margin-top: 8px;
+    color: #7b8fa3;
+    font-size: 0.74rem;
+    line-height: 1.5;
+}
+
+
+/* ==================================================
+   DISTRIBUTION
+================================================== */
+
+.results-pulse__distribution {
+    padding: 30px;
+}
+
+.results-pulse__distribution-heading {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 30px;
+}
+
+.results-pulse__distribution-heading p {
+    margin: 0 0 5px;
+    color: #1f5f99;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.results-pulse__distribution-heading h3 {
+    margin: 0;
+    color: #102a43;
+    font-family: "Merriweather", Georgia, serif;
+    font-size: 1.25rem;
+}
+
+.results-pulse__response-count {
+    display: flex;
+    align-items: baseline;
+    gap: 7px;
+}
+
+.results-pulse__response-count strong {
+    color: #102a43;
+    font-size: 1.4rem;
+}
+
+.results-pulse__response-count span {
+    color: #7b8fa3;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+
+/* ==================================================
+   DISTRIBUTION BARS
+================================================== */
+
+.results-pulse__bars {
+    display: grid;
+    gap: 22px;
+}
+
+.results-pulse-row {
+    min-width: 0;
+}
+
+.results-pulse-row__heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    margin-bottom: 8px;
+}
+
+.results-pulse-row__heading span {
+    color: #334e68;
+    font-size: 0.84rem;
+    font-weight: 700;
+}
+
+.results-pulse-row__heading strong {
+    flex-shrink: 0;
+    color: #1f5f99;
+    font-size: 0.86rem;
+}
+
+.results-pulse-row__track {
+    width: 100%;
+    height: 10px;
+    overflow: hidden;
+    border-radius: 999px;
+    background: #e6edf3;
+}
+
+.results-pulse-row__bar {
+    width: 0;
+    height: 100%;
+    border-radius: inherit;
+    background: #1f5f99;
+    transition: width 400ms ease;
+}
+
+
+/* ==================================================
+   RESPONSIVE
+================================================== */
+
+@media (max-width: 760px) {
+
+    .results-pulse__heading {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .results-pulse__summary {
+        grid-template-columns: 1fr;
+    }
+
+    .pulse-summary-card {
+        min-height: 145px;
+        border-right: 0;
+        border-bottom: 1px solid #d9e2ec;
+    }
+
+    .pulse-summary-card:last-child {
+        border-bottom: 0;
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .results-pulse {
+        padding: 64px 0;
+    }
+
+    .results-pulse__container {
+        width: min(1180px, calc(100% - 32px));
+    }
+
+    .results-pulse__distribution {
+        padding: 22px 18px;
+    }
+
+    .results-pulse__distribution-heading {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .pulse-summary-card {
+        padding: 22px;
+    }
+
+}
+/* ==================================================
+   INTERACTIVE U.S. MAP
+================================================== */
+
+.results-map {
+    padding: 84px 0;
+    background: #f7f9fb;
+}
+
+.results-map__container {
+    width: min(1180px, calc(100% - 48px));
+    margin: 0 auto;
+}
+
+
+/* ==================================================
+   SECTION HEADING
+================================================== */
+
+.results-map__heading {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 36px;
+    margin-bottom: 38px;
+}
+
+.results-map__heading > div:first-child {
+    max-width: 740px;
+}
+
+.results-map__eyebrow {
+    margin: 0 0 10px;
+    color: #1f5f99;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.results-map__heading h2 {
+    margin: 0;
+    color: #102a43;
+    font-family: "Merriweather", Georgia, serif;
+    font-size: clamp(2rem, 4vw, 2.8rem);
+    line-height: 1.2;
+}
+
+.results-map__heading > div:first-child > p:last-child {
+    margin: 16px 0 0;
+    color: #627d98;
+    line-height: 1.75;
+}
+
+.results-map__status {
+    display: grid;
+    min-width: 190px;
+    gap: 5px;
+    padding: 17px 19px;
+    border: 1px solid #d9e2ec;
+    border-radius: 11px;
+    background: #ffffff;
+}
+
+.results-map__status span {
+    color: #627d98;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+}
+
+.results-map__status strong {
+    color: #102a43;
+    font-size: 0.95rem;
+    line-height: 1.4;
+}
+
+
+/* ==================================================
+   MAP LAYOUT
+================================================== */
+
+.results-map__layout {
+    display: grid;
+    grid-template-columns:
+        minmax(0, 1.45fr)
+        minmax(290px, 0.55fr);
+    gap: 22px;
+    align-items: stretch;
+}
+
+.results-map__panel,
+.state-summary {
+    border: 1px solid #d9e2ec;
+    border-radius: 16px;
+    background: #ffffff;
+    box-shadow: 0 14px 36px rgba(16, 42, 67, 0.07);
+}
+
+
+/* ==================================================
+   MAP CANVAS
+================================================== */
+
+.results-map__panel {
+    min-width: 0;
+    overflow: hidden;
+}
+
+.results-map__canvas {
+    display: grid;
+    place-items: center;
+    min-height: 520px;
+    padding: 28px;
+    background:
+        radial-gradient(
+            circle at center,
+            rgba(234, 243, 251, 0.65),
+            rgba(247, 249, 251, 0.95)
+        );
+}
+
+.results-map__placeholder {
+    max-width: 430px;
+    padding: 38px;
+    border: 1px dashed #9fb3c8;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.82);
+    text-align: center;
+}
+
+.results-map__placeholder strong {
+    display: block;
+    color: #102a43;
+    font-family: "Merriweather", Georgia, serif;
+    font-size: 1.3rem;
+}
+
+.results-map__placeholder p {
+    margin: 12px 0 0;
+    color: #627d98;
+    line-height: 1.7;
+}
+
+
+/* ==================================================
+   STATE SUMMARY
+================================================== */
+
+.state-summary {
+    display: flex;
+    min-width: 0;
+    padding: 28px;
+    flex-direction: column;
+}
+
+.state-summary__heading {
+    padding-bottom: 22px;
+    border-bottom: 1px solid #e5ecf2;
+}
+
+.state-summary__heading p {
+    margin: 0 0 6px;
+    color: #1f5f99;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.state-summary__heading h3 {
+    margin: 0;
+    color: #102a43;
+    font-family: "Merriweather", Georgia, serif;
+    font-size: 1.35rem;
+    line-height: 1.4;
+}
+
+
+/* ==================================================
+   STATE STATS
+================================================== */
+
+.state-summary__stats {
+    display: grid;
+    gap: 12px;
+    margin-top: 22px;
+}
+
+.state-summary__stats article {
+    display: grid;
+    gap: 6px;
+    padding: 16px;
+    border-radius: 10px;
+    background: #f7f9fb;
+}
+
+.state-summary__stats span {
+    color: #627d98;
+    font-size: 0.67rem;
+    font-weight: 800;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+}
+
+.state-summary__stats strong {
+    color: #102a43;
+    font-size: 1rem;
+    line-height: 1.45;
+}
+
+
+/* ==================================================
+   COMPARISON
+================================================== */
+
+.state-summary__comparison {
+    margin-top: auto;
+    padding-top: 24px;
+    border-top: 1px solid #e5ecf2;
+}
+
+.state-summary__comparison p {
+    margin: 0 0 8px;
+    color: #1f5f99;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.state-summary__comparison span {
+    color: #627d98;
+    font-size: 0.82rem;
+    line-height: 1.65;
+}
+
+
+/* ==================================================
+   RESPONSIVE
+================================================== */
+
+@media (max-width: 900px) {
+
+    .results-map__heading {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .results-map__status {
+        width: 100%;
+    }
+
+    .results-map__layout {
+        grid-template-columns: 1fr;
+    }
+
+    .results-map__canvas {
+        min-height: 430px;
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .results-map {
+        padding: 64px 0;
+    }
+
+    .results-map__container {
+        width: min(1180px, calc(100% - 32px));
+    }
+
+    .results-map__canvas {
+        min-height: 340px;
+        padding: 18px;
+    }
+
+    .results-map__placeholder {
+        padding: 28px 20px;
+    }
+
+    .state-summary {
+        padding: 22px;
+    }
+
+}
+/* ==================================================
+   INTERACTIVE STATE TILE MAP
+================================================== */
+
+.state-map {
+    display: grid;
+    grid-template-columns: repeat(13, minmax(42px, 1fr));
+    grid-template-rows: repeat(7, 58px);
+    gap: 7px;
+    width: 100%;
+    max-width: 850px;
+    margin: 0 auto;
+}
+
+
+/* ==================================================
+   STATE TILES
+================================================== */
+
+.state-tile {
+    display: grid;
+    place-items: center;
+    min-width: 0;
+    padding: 6px 4px;
+    border: 1px solid #b8c9d8;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #174f7f;
+    cursor: pointer;
+    font-family: "Inter", sans-serif;
+    text-align: center;
+    transition:
+        background-color 180ms ease,
+        border-color 180ms ease,
+        box-shadow 180ms ease,
+        color 180ms ease,
+        transform 180ms ease;
+}
+
+.state-tile:hover,
+.state-tile:focus-visible {
+    border-color: #1f5f99;
+    background: #eaf3fb;
+    box-shadow: 0 8px 18px rgba(16, 42, 67, 0.1);
+    outline: none;
+    transform: translateY(-2px);
+}
+
+.state-tile.is-selected {
+    border-color: #174f7f;
+    background: #174f7f;
+    color: #ffffff;
+    box-shadow: 0 9px 20px rgba(23, 79, 127, 0.24);
+}
+
+.state-tile span {
+    display: block;
+    font-size: 0.76rem;
+    font-weight: 800;
+    line-height: 1;
+}
+
+.state-tile small {
+    display: none;
+}
+
+
+/* ==================================================
+   TILE POSITIONS — ROW 1
+================================================== */
+
+.state-tile--wa {
+    grid-column: 1;
+    grid-row: 1;
+}
+
+.state-tile--mt {
+    grid-column: 3;
+    grid-row: 1;
+}
+
+.state-tile--nd {
+    grid-column: 5;
+    grid-row: 1;
+}
+
+.state-tile--mn {
+    grid-column: 6;
+    grid-row: 1;
+}
+
+.state-tile--wi {
+    grid-column: 7;
+    grid-row: 1;
+}
+
+.state-tile--mi {
+    grid-column: 8;
+    grid-row: 1;
+}
+
+.state-tile--vt {
+    grid-column: 10;
+    grid-row: 1;
+}
+
+.state-tile--nh {
+    grid-column: 11;
+    grid-row: 1;
+}
+
+.state-tile--me {
+    grid-column: 13;
+    grid-row: 1;
+}
+
+
+/* ==================================================
+   TILE POSITIONS — ROW 2
+================================================== */
+
+.state-tile--or {
+    grid-column: 1;
+    grid-row: 2;
+}
+
+.state-tile--id {
+    grid-column: 2;
+    grid-row: 2;
+}
+
+.state-tile--wy {
+    grid-column: 3;
+    grid-row: 2;
+}
+
+.state-tile--sd {
+    grid-column: 5;
+    grid-row: 2;
+}
+
+.state-tile--ia {
+    grid-column: 6;
+    grid-row: 2;
+}
+
+.state-tile--il {
+    grid-column: 7;
+    grid-row: 2;
+}
+
+.state-tile--in {
+    grid-column: 8;
+    grid-row: 2;
+}
+
+.state-tile--oh {
+    grid-column: 9;
+    grid-row: 2;
+}
+
+.state-tile--pa {
+    grid-column: 10;
+    grid-row: 2;
+}
+
+.state-tile--ny {
+    grid-column: 11;
+    grid-row: 2;
+}
+
+.state-tile--ma {
+    grid-column: 12;
+    grid-row: 2;
+}
+
+
+/* ==================================================
+   TILE POSITIONS — ROW 3
+================================================== */
+
+.state-tile--ca {
+    grid-column: 1;
+    grid-row: 3;
+}
+
+.state-tile--nv {
+    grid-column: 2;
+    grid-row: 3;
+}
+
+.state-tile--ut {
+    grid-column: 3;
+    grid-row: 3;
+}
+
+.state-tile--co {
+    grid-column: 4;
+    grid-row: 3;
+}
+
+.state-tile--ne {
+    grid-column: 5;
+    grid-row: 3;
+}
+
+.state-tile--mo {
+    grid-column: 6;
+    grid-row: 3;
+}
+
+.state-tile--ky {
+    grid-column: 7;
+    grid-row: 3;
+}
+
+.state-tile--wv {
+    grid-column: 8;
+    grid-row: 3;
+}
+
+.state-tile--va {
+    grid-column: 9;
+    grid-row: 3;
+}
+
+.state-tile--md {
+    grid-column: 10;
+    grid-row: 3;
+}
+
+.state-tile--nj {
+    grid-column: 11;
+    grid-row: 3;
+}
+
+.state-tile--ct {
+    grid-column: 12;
+    grid-row: 3;
+}
+
+.state-tile--ri {
+    grid-column: 13;
+    grid-row: 3;
+}
+
+
+/* ==================================================
+   TILE POSITIONS — ROW 4
+================================================== */
+
+.state-tile--az {
+    grid-column: 2;
+    grid-row: 4;
+}
+
+.state-tile--nm {
+    grid-column: 3;
+    grid-row: 4;
+}
+
+.state-tile--ks {
+    grid-column: 5;
+    grid-row: 4;
+}
+
+.state-tile--ar {
+    grid-column: 6;
+    grid-row: 4;
+}
+
+.state-tile--tn {
+    grid-column: 7 / span 2;
+    grid-row: 4;
+}
+
+.state-tile--nc {
+    grid-column: 9 / span 2;
+    grid-row: 4;
+}
+
+.state-tile--sc {
+    grid-column: 11;
+    grid-row: 4;
+}
+
+.state-tile--de {
+    grid-column: 12;
+    grid-row: 4;
+}
+
+
+/* ==================================================
+   TILE POSITIONS — ROW 5
+================================================== */
+
+.state-tile--ok {
+    grid-column: 4 / span 2;
+    grid-row: 5;
+}
+
+.state-tile--la {
+    grid-column: 6;
+    grid-row: 5;
+}
+
+.state-tile--ms {
+    grid-column: 7;
+    grid-row: 5;
+}
+
+.state-tile--al {
+    grid-column: 8;
+    grid-row: 5;
+}
+
+.state-tile--ga {
+    grid-column: 9;
+    grid-row: 5;
+}
+
+
+/* ==================================================
+   TILE POSITIONS — ROW 6
+================================================== */
+
+.state-tile--tx {
+    grid-column: 4 / span 2;
+    grid-row: 6;
+}
+
+.state-tile--fl {
+    grid-column: 9 / span 2;
+    grid-row: 6;
+}
+
+
+/* ==================================================
+   ALASKA AND HAWAII
+================================================== */
+
+.state-tile--ak {
+    grid-column: 1 / span 2;
+    grid-row: 7;
+}
+
+.state-tile--hi {
+    grid-column: 3 / span 2;
+    grid-row: 7;
+}
+
+
+/* ==================================================
+   TABLET RESPONSIVE
+================================================== */
+
+@media (max-width: 760px) {
+
+    .state-map {
+        grid-template-columns: repeat(10, minmax(38px, 1fr));
+        grid-template-rows: none;
+        gap: 6px;
+    }
+
+    .state-tile {
+        grid-column: auto !important;
+        grid-row: auto !important;
+        min-height: 48px;
+    }
+
+}
+
+
+/* ==================================================
+   MOBILE RESPONSIVE
+================================================== */
+
+@media (max-width: 520px) {
+
+    .state-map {
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
+
+    .state-tile {
+        min-height: 52px;
+        padding: 6px 2px;
+    }
+
+    .state-tile span {
+        font-size: 0.72rem;
+    }
+
+}
+/* ==================================================
+   COMMUNITY POLL ANALYTICS
+================================================== */
+
+.results-community {
+    padding: 84px 0;
+    background: #ffffff;
+}
+
+.results-community__container {
+    width: min(1180px, calc(100% - 48px));
+    margin: 0 auto;
+}
+
+
+/* ==================================================
+   SECTION HEADING
+================================================== */
+
+.results-community__heading {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 36px;
+    margin-bottom: 38px;
+}
+
+.results-community__heading > div {
+    max-width: 740px;
+}
+
+.results-community__eyebrow {
+    margin: 0 0 10px;
+    color: #1f5f99;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.results-community__heading h2 {
+    margin: 0;
+    color: #102a43;
+    font-family: "Merriweather", Georgia, serif;
+    font-size: clamp(2rem, 4vw, 2.8rem);
+    line-height: 1.2;
+}
+
+.results-community__heading > div > p:last-child {
+    margin: 16px 0 0;
+    color: #627d98;
+    line-height: 1.75;
+}
+
+.results-community__link {
+    flex-shrink: 0;
+    color: #1f5f99;
+    font-size: 0.84rem;
+    font-weight: 800;
+    text-decoration: none;
+}
+
+.results-community__link:hover,
+.results-community__link:focus-visible {
+    text-decoration: underline;
+    outline: none;
+}
+
+
+/* ==================================================
+   SUMMARY CARDS
+================================================== */
+
+.results-community__summary {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.community-summary-card {
+    display: flex;
+    min-width: 0;
+    min-height: 175px;
+    padding: 24px;
+    flex-direction: column;
+    justify-content: center;
+    border: 1px solid #d9e2ec;
+    border-radius: 13px;
+    background: #ffffff;
+    box-shadow: 0 10px 24px rgba(16, 42, 67, 0.05);
+}
+
+.community-summary-card > span {
+    color: #627d98;
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.07em;
+    line-height: 1.4;
+    text-transform: uppercase;
+}
+
+.community-summary-card strong {
+    display: block;
+    max-width: 100%;
+    margin-top: 12px;
+    overflow: hidden;
+    color: #102a43;
+    font-size: 2rem;
+    font-weight: 800;
+    line-height: 1.15;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.community-summary-card__text {
+    font-family: "Merriweather", Georgia, serif;
+    font-size: 1.1rem !important;
+    line-height: 1.45 !important;
+    white-space: normal !important;
+}
+
+.community-summary-card small {
+    margin-top: 9px;
+    color: #7b8fa3;
+    font-size: 0.74rem;
+    line-height: 1.5;
+}
+
+
+/* ==================================================
+   ANALYTICS PANEL
+================================================== */
+
+.results-community__panel {
+    overflow: hidden;
+    border: 1px solid #d9e2ec;
+    border-radius: 16px;
+    background: #ffffff;
+    box-shadow: 0 14px 36px rgba(16, 42, 67, 0.07);
+}
+
+.results-community__panel-heading {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 22px 26px;
+    border-bottom: 1px solid #d9e2ec;
+    background: #f8fafc;
+}
+
+.results-community__panel-heading p {
+    margin: 0 0 5px;
+    color: #1f5f99;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.results-community__panel-heading h3 {
+    margin: 0;
+    color: #102a43;
+    font-family: "Merriweather", Georgia, serif;
+    font-size: 1.25rem;
+}
+
+.results-community__panel-heading > span {
+    color: #7b8fa3;
+    font-size: 0.72rem;
+    font-weight: 700;
+}
+
+
+/* ==================================================
+   POLL ANALYTICS LIST
+================================================== */
+
+.results-community__list {
+    display: grid;
+}
+
+.results-community-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 28px;
+    align-items: center;
+    padding: 22px 26px;
+    border-bottom: 1px solid #e5ecf2;
+    transition: background-color 180ms ease;
+}
+
+.results-community-row:hover {
+    background: #f8fbfd;
+}
+
+.results-community-row:last-child {
+    border-bottom: 0;
+}
+
+.results-community-row__content {
+    min-width: 0;
+}
+
+.results-community-row__status {
+    display: inline-flex;
+    align-items: center;
+    min-height: 25px;
+    padding: 5px 9px;
+    border-radius: 999px;
+    background: #e7f7eb;
+    color: #176b2c;
+    font-size: 0.64rem;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+.results-community-row h4 {
+    margin: 11px 0 0;
+    color: #243b53;
+    font-family: "Merriweather", Georgia, serif;
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+.results-community-row__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: 9px;
+}
+
+.results-community-row__meta span {
+    color: #7b8fa3;
+    font-size: 0.72rem;
+}
+
+.results-community-row__count {
+    display: grid;
+    min-width: 100px;
+    gap: 4px;
+    text-align: right;
+}
+
+.results-community-row__count strong {
+    color: #1f5f99;
+    font-size: 1.35rem;
+}
+
+.results-community-row__count span {
+    color: #7b8fa3;
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+
+/* ==================================================
+   EMPTY STATE
+================================================== */
+
+.results-community__empty {
+    padding: 52px 24px;
+    text-align: center;
+}
+
+.results-community__empty p {
+    margin: 0;
+    color: #627d98;
+    line-height: 1.7;
+}
+
+
+/* ==================================================
+   RESPONSIVE
+================================================== */
+
+@media (max-width: 820px) {
+
+    .results-community__heading {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .results-community__summary {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .results-community {
+        padding: 64px 0;
+    }
+
+    .results-community__container {
+        width: min(1180px, calc(100% - 32px));
+    }
+
+    .results-community__panel-heading {
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 20px 18px;
+    }
+
+    .results-community-row {
+        grid-template-columns: 1fr;
+        gap: 18px;
+        padding: 20px 18px;
+    }
+
+    .results-community-row__count {
+        min-width: 0;
+        text-align: left;
+    }
+
+    .community-summary-card {
+        min-height: auto;
+    }
+
+}
+/* ==================================================
+   GEOGRAPHIC U.S. SVG MAP
+================================================== */
+
+/* Hide the obsolete tile-map layout */
+.state-map,
+.state-tile {
+    display: none !important;
+}
+
+
+/* ==================================================
+   MAP PANEL
+================================================== */
+
+.results-map__canvas {
+    position: relative;
+    display: block;
+    width: 100%;
+    min-height: 520px;
+    padding: 20px;
+    overflow: hidden;
+    background:
+        radial-gradient(
+            circle at center,
+            rgba(234, 243, 251, 0.72),
+            rgba(247, 249, 251, 0.98)
+        );
+}
+
+.results-map-svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    min-height: 460px;
+}
+
+
+/* ==================================================
+   STATE SHAPES
+================================================== */
+
+.results-map-state {
+    fill: #d9e7f1;
+    stroke: #ffffff;
+    stroke-width: 1.4;
+    cursor: pointer;
+    transition:
+        fill 180ms ease,
+        filter 180ms ease;
+}
+
+.results-map-state:hover,
+.results-map-state:focus {
+    fill: #8bb6d6;
+    filter:
+        drop-shadow(
+            0 4px 5px rgba(16, 42, 67, 0.16)
+        );
+    outline: none;
+}
+
+.results-map-state.is-selected {
+    fill: #174f7f;
+}
+
+.results-map-state.is-selected:hover,
+.results-map-state.is-selected:focus {
+    fill: #123f66;
+}
+
+
+/* ==================================================
+   STATE ABBREVIATIONS
+================================================== */
+
+.results-map-svg__labels {
+    pointer-events: none;
+}
+
+.results-map-svg__labels text {
+    fill: #174f7f;
+    font-family: "Inter", sans-serif;
+    font-size: 9px;
+    font-weight: 800;
+    paint-order: stroke;
+    stroke: rgba(255, 255, 255, 0.9);
+    stroke-width: 2px;
+    stroke-linejoin: round;
+}
+
+.results-map-svg:has(
+    .results-map-state.is-selected
+)
+.results-map-svg__labels text {
+    opacity: 0.82;
+}
+
+
+/* ==================================================
+   MAP TOOLTIP
+================================================== */
+
+.results-map-tooltip {
+    position: absolute;
+    z-index: 20;
+    padding: 7px 10px;
+    visibility: hidden;
+    opacity: 0;
+    border-radius: 7px;
+    background: #071d2f;
+    color: #ffffff;
+    font-size: 0.75rem;
+    font-weight: 700;
+    line-height: 1.3;
+    pointer-events: none;
+    box-shadow:
+        0 8px 20px rgba(7, 29, 47, 0.22);
+    transform: translateY(3px);
+    transition:
+        opacity 120ms ease,
+        visibility 120ms ease,
+        transform 120ms ease;
+}
+
+.results-map-tooltip.is-visible {
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+
+/* ==================================================
+   MAP INSTRUCTIONS
+================================================== */
+
+.results-map__instruction {
+    margin: 0;
+    padding: 14px 22px;
+    border-top: 1px solid #d9e2ec;
+    background: #ffffff;
+    color: #627d98;
+    font-size: 0.76rem;
+    line-height: 1.55;
+    text-align: center;
+}
+
+
+/* ==================================================
+   RESET BUTTON
+================================================== */
+
+.results-map__reset {
+    margin-top: 8px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: #1f5f99;
+    cursor: pointer;
+    font-family: "Inter", sans-serif;
+    font-size: 0.74rem;
+    font-weight: 800;
+    line-height: 1.4;
+    text-align: left;
+}
+
+.results-map__reset:hover,
+.results-map__reset:focus-visible {
+    text-decoration: underline;
+    outline: none;
+}
+
+
+/* ==================================================
+   MAP LOADING AND ERROR STATE
+================================================== */
+
+.results-map__placeholder {
+    display: grid;
+    place-items: center;
+    max-width: 470px;
+    min-height: 230px;
+    margin: 90px auto;
+    padding: 34px;
+    border: 1px dashed #9fb3c8;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.88);
+    text-align: center;
+}
+
+.results-map__placeholder strong {
+    color: #102a43;
+    font-family: "Merriweather", Georgia, serif;
+    font-size: 1.25rem;
+}
+
+.results-map__placeholder p {
+    margin: 12px 0 0;
+    color: #627d98;
+    line-height: 1.7;
+}
+
+
+/* ==================================================
+   RESPONSIVE SVG MAP
+================================================== */
+
+@media (max-width: 900px) {
+
+    .results-map__canvas {
+        min-height: 430px;
+    }
+
+    .results-map-svg {
+        min-height: 390px;
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .results-map__canvas {
+        min-height: 330px;
+        padding: 10px;
+    }
+
+    .results-map-svg {
+        min-height: 300px;
+    }
+
+    .results-map-svg__labels text {
+        font-size: 7px;
+        stroke-width: 1.5px;
+    }
+
+    .results-map__instruction {
+        padding-inline: 16px;
+        text-align: left;
+    }
+
+}
