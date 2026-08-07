@@ -116,6 +116,10 @@ loadComponent(
     "resultsCommunityContainer",
     "components/results-community.html"
 ),
+loadComponent(
+    "resultsApprovalContainer",
+    "components/results-approval.html"
+),
 
         loadComponent(
             "footerContainer",

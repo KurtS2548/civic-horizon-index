@@ -21,6 +21,11 @@ import {
 } from "./controllers/results-pulse-controller.js";
 
 import {
+    initializeResultsApprovalController,
+    destroyResultsApprovalController
+} from "./controllers/results-approval-controller.js";
+
+import {
     initializeResultsMapController,
     destroyResultsMapController
 } from "./controllers/results-map-controller.js";
@@ -60,6 +65,8 @@ export function initializeResultsController() {
 
     initializeResultsPulseController();
 
+    initializeResultsApprovalController();
+
     initializeResultsMapController();
 
     initializeResultsCommunityController();
@@ -84,6 +91,8 @@ export function destroyResultsController() {
     destroyResultsPrioritiesController();
 
     destroyResultsPulseController();
+
+    destroyResultsApprovalController();
 
     destroyResultsMapController();
 

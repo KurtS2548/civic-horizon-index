@@ -1,0 +1,167 @@
+/* ==================================================
+   CIVIC HORIZON INDEX V2
+   RESULTS CENTER POLISH
+================================================== */
+
+
+/* ==================================================
+   SECTION RHYTHM
+================================================== */
+
+.results-overview,
+.results-pulse,
+.results-approval,
+.results-community {
+    border-bottom: 1px solid #edf2f7;
+}
+
+.results-priorities,
+.results-map {
+    border-bottom: 1px solid #e3eaf0;
+}
+
+
+/* ==================================================
+   CONSISTENT SECTION WIDTH
+================================================== */
+
+.results-overview__container,
+.results-priorities__container,
+.results-pulse__container,
+.results-approval__container,
+.results-map__container,
+.results-community__container {
+    width: min(1180px, calc(100% - 48px));
+    margin-inline: auto;
+}
+
+
+/* ==================================================
+   CARD HOVER REFINEMENT
+================================================== */
+
+.results-stat,
+.pulse-summary-card,
+.community-summary-card,
+.state-explorer__stats article {
+    transition:
+        border-color 180ms ease,
+        box-shadow 180ms ease,
+        transform 180ms ease;
+}
+
+.results-stat:hover,
+.pulse-summary-card:hover,
+.community-summary-card:hover,
+.state-explorer__stats article:hover {
+    border-color: #bcccdc;
+    box-shadow: 0 12px 26px rgba(16, 42, 67, 0.07);
+    transform: translateY(-2px);
+}
+
+
+/* ==================================================
+   SCORE EMPHASIS
+================================================== */
+
+.results-priority-heading strong,
+.results-pulse-row__heading strong {
+    font-variant-numeric: tabular-nums;
+}
+
+.approval-summary__score strong,
+.results-stat__value,
+.community-summary-card strong {
+    font-variant-numeric: tabular-nums;
+}
+
+
+/* ==================================================
+   LIVE DATA LABELS
+================================================== */
+
+.results-hero__status-label,
+.results-approval__status strong {
+    letter-spacing: 0.02em;
+}
+
+
+/* ==================================================
+   EMPTY STATES
+================================================== */
+
+.results-priorities__empty,
+.results-community__empty {
+    background: #fbfcfd;
+}
+
+
+/* ==================================================
+   SECTION LINKS
+================================================== */
+
+.results-pulse__link,
+.results-community__link,
+.results-priorities__footer a {
+    transition:
+        color 180ms ease,
+        transform 180ms ease;
+}
+
+.results-pulse__link:hover,
+.results-community__link:hover,
+.results-priorities__footer a:hover {
+    color: #174f7f;
+}
+
+
+/* ==================================================
+   STATE EXPLORER
+================================================== */
+
+.state-explorer__selector,
+.state-explorer__results {
+    min-height: 100%;
+}
+
+.state-explorer__quick-grid button {
+    box-shadow: 0 2px 6px rgba(16, 42, 67, 0.03);
+}
+
+
+/* ==================================================
+   APPROVAL TRACKER
+================================================== */
+
+.approval-result-bar__fill {
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+.approval-summary__score strong {
+    letter-spacing: -0.04em;
+}
+
+
+/* ==================================================
+   MOBILE POLISH
+================================================== */
+
+@media (max-width: 600px) {
+
+    .results-overview__container,
+    .results-priorities__container,
+    .results-pulse__container,
+    .results-approval__container,
+    .results-map__container,
+    .results-community__container {
+        width: min(1180px, calc(100% - 32px));
+    }
+
+    .results-stat,
+    .community-summary-card,
+    .pulse-summary-card {
+        border-radius: 11px;
+    }
+
+}
