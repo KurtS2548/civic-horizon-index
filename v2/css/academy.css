@@ -1,0 +1,694 @@
+/* ==================================================
+   CIVIC HORIZON INDEX V2
+   CIVIC ACADEMY
+================================================== */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    background: #f7f9fb;
+    color: #243b53;
+    font-family: "Inter", sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+
+.academy-page {
+    min-height: 65vh;
+}
+
+
+/* ==================================================
+   HERO
+================================================== */
+
+.academy-hero {
+    padding: 78px 0;
+    background:
+        linear-gradient(
+            135deg,
+            #071d2f 0%,
+            #0b253d 58%,
+            #174f7f 100%
+        );
+    color: #ffffff;
+}
+
+.academy-hero__container {
+    display: grid;
+    grid-template-columns:
+        minmax(0, 1.25fr)
+        minmax(280px, 0.75fr);
+    align-items: center;
+    gap: 64px;
+    width: min(1180px, calc(100% - 48px));
+    margin: 0 auto;
+}
+
+.academy-hero__content {
+    max-width: 760px;
+}
+
+.academy-hero__eyebrow,
+.academy-section-eyebrow {
+    margin: 0 0 12px;
+    color: #efc75d;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.academy-hero__content h1 {
+    margin: 0;
+    color: #ffffff;
+    font-family: "Merriweather", Georgia, serif;
+    font-size: clamp(2.7rem, 6vw, 4.6rem);
+    line-height: 1.06;
+    letter-spacing: -0.035em;
+}
+
+.academy-hero__content > p:last-of-type {
+    max-width: 700px;
+    margin: 22px 0 0;
+    color: #d0e1ed;
+    font-size: 1.04rem;
+    line-height: 1.8;
+}
+
+.academy-hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 28px;
+}
+
+
+/* ==================================================
+   BUTTONS
+================================================== */
+
+.academy-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 46px;
+    padding: 11px 18px;
+    border-radius: 9px;
+    font-size: 0.82rem;
+    font-weight: 800;
+    text-decoration: none;
+    transition:
+        background-color 180ms ease,
+        border-color 180ms ease,
+        color 180ms ease,
+        transform 180ms ease,
+        box-shadow 180ms ease;
+}
+
+.academy-button--primary {
+    border: 1px solid #1f5f99;
+    background: #1f5f99;
+    color: #ffffff;
+}
+
+.academy-button--primary:hover,
+.academy-button--primary:focus-visible {
+    background: #174f7f;
+    border-color: #174f7f;
+    box-shadow: 0 8px 18px rgba(31, 95, 153, 0.2);
+    outline: none;
+    transform: translateY(-1px);
+}
+
+.academy-button--secondary {
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    background: rgba(255, 255, 255, 0.08);
+    color: #ffffff;
+}
+
+.academy-button--secondary:hover,
+.academy-button--secondary:focus-visible {
+    background: rgba(255, 255, 255, 0.14);
+    outline: none;
+}
+
+
+/* ==================================================
+   HERO CARD
+================================================== */
+
+.academy-hero__card {
+    display: flex;
+    padding: 28px;
+    flex-direction: column;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 22px 55px rgba(0, 0, 0, 0.18);
+    backdrop-filter: blur(8px);
+}
+
+.academy-hero__card > span {
+    color: #efc75d;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+}
+
+.academy-hero__card strong {
+    margin-top: 12px;
+    color: #ffffff;
+    font-size: 2rem;
+    line-height: 1.1;
+}
+
+.academy-hero__card small {
+    margin-top: 8px;
+    color: #b8cfdf;
+    font-size: 0.78rem;
+    line-height: 1.6;
+}
+
+
+/* ==================================================
+   SHARED SECTIONS
+================================================== */
+
+.academy-section {
+    padding: 84px 0;
+}
+
+.academy-section--white {
+    background: #ffffff;
+}
+
+.academy-section--light {
+    background: #f7f9fb;
+}
+
+.academy-section__container,
+.academy-progress-section__container {
+    width: min(1180px, calc(100% - 48px));
+    margin: 0 auto;
+}
+
+.academy-section__heading {
+    max-width: 760px;
+    margin-bottom: 38px;
+}
+
+.academy-section__heading h2 {
+    margin: 0;
+    color: #102a43;
+    font-family: "Merriweather", Georgia, serif;
+    font-size: clamp(2rem, 4vw, 2.8rem);
+    line-height: 1.2;
+}
+
+.academy-section__heading > p:last-child {
+    margin: 16px 0 0;
+    color: #627d98;
+    line-height: 1.75;
+}
+
+.academy-section .academy-section-eyebrow {
+    color: #1f5f99;
+}
+
+
+/* ==================================================
+   PROGRESS
+================================================== */
+
+.academy-progress-section {
+    padding: 44px 0;
+    background: #ffffff;
+    border-bottom: 1px solid #e5ecf2;
+}
+
+.academy-progress-card {
+    padding: 26px 28px;
+    border: 1px solid #d9e2ec;
+    border-radius: 14px;
+    background: #ffffff;
+    box-shadow: 0 10px 28px rgba(16, 42, 67, 0.06);
+}
+
+.academy-progress-card__heading {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+}
+
+.academy-progress-card__heading h2 {
+    margin: 0;
+    color: #102a43;
+    font-family: "Merriweather", Georgia, serif;
+    font-size: 1.5rem;
+}
+
+.academy-progress-card__rank {
+    text-align: right;
+}
+
+.academy-progress-card__rank span {
+    display: block;
+    color: #7b8fa3;
+    font-size: 0.68rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+}
+
+.academy-progress-card__rank strong {
+    display: block;
+    margin-top: 6px;
+    color: #102a43;
+    font-size: 0.92rem;
+}
+
+.academy-progress-track {
+    height: 12px;
+    margin-top: 24px;
+    overflow: hidden;
+    border-radius: 999px;
+    background: #e4ebf2;
+}
+
+.academy-progress-fill {
+    height: 100%;
+    border-radius: inherit;
+    background: #1f5f99;
+    transition: width 300ms ease;
+}
+
+.academy-progress-details {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    margin-top: 12px;
+}
+
+.academy-progress-details strong {
+    color: #102a43;
+    font-size: 1rem;
+}
+
+.academy-progress-details span {
+    color: #627d98;
+    font-size: 0.76rem;
+}
+
+
+/* ==================================================
+   PILLARS
+================================================== */
+
+.academy-pillars-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.academy-pillar-card {
+    padding: 26px;
+    border: 1px solid #d9e2ec;
+    border-radius: 14px;
+    background: #ffffff;
+    box-shadow: 0 10px 24px rgba(16, 42, 67, 0.05);
+}
+
+.academy-pillar-card__number {
+    color: #1f5f99;
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+}
+
+.academy-pillar-card h3 {
+    margin: 13px 0 0;
+    color: #102a43;
+    font-family: "Merriweather", Georgia, serif;
+    font-size: 1.2rem;
+}
+
+.academy-pillar-card p {
+    margin: 10px 0 0;
+    color: #627d98;
+    font-size: 0.82rem;
+    line-height: 1.7;
+}
+
+
+/* ==================================================
+   LESSON ROADMAP
+================================================== */
+
+.academy-roadmap {
+    display: grid;
+    gap: 16px;
+}
+
+.academy-lesson-card {
+    overflow: hidden;
+    border: 1px solid #d9e2ec;
+    border-radius: 14px;
+    background: #ffffff;
+    box-shadow: 0 10px 24px rgba(16, 42, 67, 0.05);
+}
+
+.academy-lesson-card__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 14px 20px;
+    border-bottom: 1px solid #e5ecf2;
+    background: #f8fafc;
+}
+
+.academy-status-badge {
+    display: inline-flex;
+    align-items: center;
+    min-height: 25px;
+    padding: 5px 9px;
+    border-radius: 999px;
+    font-size: 0.64rem;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+.academy-status-badge.available {
+    background: #e7f7eb;
+    color: #176b2c;
+}
+
+.academy-status-badge.completed {
+    background: #eaf3fb;
+    color: #174f7f;
+}
+
+.academy-status-badge.coming-soon {
+    background: #edf2f7;
+    color: #627d98;
+}
+
+.academy-lesson-number {
+    color: #7b8fa3;
+    font-size: 0.72rem;
+    font-weight: 800;
+}
+
+.academy-lesson-card__body {
+    display: grid;
+    grid-template-columns: 64px minmax(0, 1fr);
+    gap: 22px;
+    padding: 24px;
+}
+
+.academy-lesson-card__index {
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: #eaf3fb;
+    color: #174f7f;
+    font-size: 0.78rem;
+    font-weight: 800;
+}
+
+.academy-lesson-card__content h3 {
+    margin: 0;
+    color: #102a43;
+    font-family: "Merriweather", Georgia, serif;
+    font-size: 1.16rem;
+    line-height: 1.45;
+}
+
+.academy-lesson-card__content p {
+    margin: 10px 0 0;
+    color: #627d98;
+    font-size: 0.82rem;
+    line-height: 1.7;
+}
+
+.academy-lesson-details {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 14px;
+}
+
+.academy-lesson-details span {
+    padding: 6px 9px;
+    border-radius: 999px;
+    background: #f2f6f9;
+    color: #627d98;
+    font-size: 0.68rem;
+    font-weight: 700;
+}
+
+.academy-lesson-button,
+.academy-locked-button {
+    margin-top: 18px;
+}
+
+.academy-locked-button {
+    min-height: 44px;
+    padding: 10px 16px;
+    border: 1px solid #d9e2ec;
+    border-radius: 8px;
+    background: #edf2f7;
+    color: #829ab1;
+    font-family: "Inter", sans-serif;
+    font-size: 0.78rem;
+    font-weight: 800;
+    cursor: not-allowed;
+}
+
+.academy-lesson-card.locked {
+    opacity: 0.92;
+}
+
+
+/* ==================================================
+   PURPOSE
+================================================== */
+
+.academy-purpose-grid {
+    display: grid;
+    grid-template-columns:
+        minmax(0, 1.15fr)
+        minmax(300px, 0.85fr);
+    gap: 34px;
+    align-items: start;
+}
+
+.academy-purpose-copy h2 {
+    margin: 0;
+    color: #102a43;
+    font-family: "Merriweather", Georgia, serif;
+    font-size: clamp(2rem, 4vw, 2.7rem);
+    line-height: 1.25;
+}
+
+.academy-purpose-copy p:not(.academy-section-eyebrow) {
+    margin: 16px 0 0;
+    color: #627d98;
+    line-height: 1.75;
+}
+
+.academy-purpose-questions {
+    padding: 26px;
+    border: 1px solid #d9e2ec;
+    border-radius: 14px;
+    background: #f8fafc;
+}
+
+.academy-purpose-questions__label {
+    margin: 0;
+    color: #1f5f99;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.academy-purpose-questions ul {
+    margin: 18px 0 0;
+    padding-left: 20px;
+}
+
+.academy-purpose-questions li {
+    color: #486581;
+    line-height: 1.65;
+}
+
+.academy-purpose-questions li + li {
+    margin-top: 10px;
+}
+
+
+/* ==================================================
+   SIMULATION PREVIEW
+================================================== */
+
+.academy-simulation-card {
+    display: grid;
+    grid-template-columns:
+        minmax(0, 1fr)
+        minmax(320px, 0.7fr);
+    gap: 34px;
+    padding: 32px;
+    border: 1px solid #d9e2ec;
+    border-radius: 16px;
+    background: #ffffff;
+    box-shadow: 0 14px 36px rgba(16, 42, 67, 0.07);
+}
+
+.academy-simulation-card__copy h2 {
+    margin: 0;
+    color: #102a43;
+    font-family: "Merriweather", Georgia, serif;
+    font-size: clamp(2rem, 4vw, 2.6rem);
+}
+
+.academy-simulation-card__copy > p:last-of-type {
+    margin: 16px 0 0;
+    color: #627d98;
+    line-height: 1.75;
+}
+
+.academy-simulation-card__copy .academy-button {
+    margin-top: 22px;
+}
+
+.academy-simulation-preview {
+    padding: 24px;
+    border: 1px solid #d9e2ec;
+    border-radius: 12px;
+    background: #f8fafc;
+}
+
+.academy-simulation-preview > p {
+    margin: 0;
+    color: #1f5f99;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.academy-simulation-preview h3 {
+    margin: 10px 0 0;
+    color: #102a43;
+    font-family: "Merriweather", Georgia, serif;
+    font-size: 1.1rem;
+}
+
+.academy-simulation-choice {
+    margin-top: 10px;
+    padding: 12px 14px;
+    border: 1px solid #d9e2ec;
+    border-radius: 9px;
+    background: #ffffff;
+    color: #486581;
+    font-size: 0.78rem;
+    font-weight: 700;
+}
+
+.academy-simulation-choice--highlight {
+    border-color: #9fbdd4;
+    background: #eaf3fb;
+    color: #174f7f;
+}
+
+
+/* ==================================================
+   RESPONSIVE
+================================================== */
+
+@media (max-width: 980px) {
+
+    .academy-hero__container,
+    .academy-purpose-grid,
+    .academy-simulation-card {
+        grid-template-columns: 1fr;
+    }
+
+    .academy-hero__card {
+        max-width: 620px;
+    }
+
+}
+
+
+@media (max-width: 760px) {
+
+    .academy-pillars-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .academy-progress-card__heading {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .academy-progress-card__rank {
+        text-align: left;
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .academy-hero {
+        padding: 62px 0;
+    }
+
+    .academy-hero__container,
+    .academy-section__container,
+    .academy-progress-section__container {
+        width: min(1180px, calc(100% - 32px));
+    }
+
+    .academy-hero__content h1 {
+        font-size: clamp(2.35rem, 12vw, 3.6rem);
+    }
+
+    .academy-section {
+        padding: 64px 0;
+    }
+
+    .academy-progress-card,
+    .academy-pillar-card,
+    .academy-simulation-card {
+        padding: 22px 18px;
+    }
+
+    .academy-lesson-card__body {
+        grid-template-columns: 1fr;
+        padding: 20px 18px;
+    }
+
+    .academy-progress-details {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+}
