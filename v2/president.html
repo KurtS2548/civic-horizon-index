@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="Civic Horizon Index President simulation."
+    >
+
+    <title>
+        President Simulation | Civic Horizon Index
+    </title>
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Merriweather:wght@700&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="css/header.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="css/footer.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="css/president.css"
+    >
+
+</head>
+
+<body>
+
+    <div id="headerContainer"></div>
+
+
+    <main class="president-page">
+
+        <section class="president-hero">
+
+            <div class="president-hero__container">
+
+                <div class="president-hero__copy">
+
+                    <p class="president-eyebrow">
+                        Civic Simulation
+                    </p>
+
+                    <h1>
+                        You Are the President
+                    </h1>
+
+                    <p>
+                        Lead the executive branch through a full series
+                        of national decisions. Work with Congress, respond
+                        to crises, consider appointments, manage public trust,
+                        and operate within constitutional limits.
+                    </p>
+
+
+                    <div class="president-hero__meta">
+
+                        <span>
+                            Decision simulation
+                        </span>
+
+                        <span>
+                            About 15 minutes
+                        </span>
+
+                        <span>
+                            Multiple outcomes
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <aside class="president-hero__dashboard">
+
+                    <p class="president-eyebrow">
+                        Presidential Dashboard
+                    </p>
+
+                    <div class="president-dashboard-grid">
+
+                        <div>
+                            <span>Approval</span>
+                            <strong id="presidentApproval">62%</strong>
+                        </div>
+
+                        <div>
+                            <span>Congressional Relations</span>
+                            <strong id="presidentCongress">55%</strong>
+                        </div>
+
+                        <div>
+                            <span>Institutional Trust</span>
+                            <strong id="presidentTrust">68%</strong>
+                        </div>
+
+                        <div>
+                            <span>National Stability</span>
+                            <strong id="presidentStability">70%</strong>
+                        </div>
+
+                        <div>
+                            <span>Bills Signed</span>
+                            <strong id="presidentBillsSigned">0</strong>
+                        </div>
+
+                        <div>
+                            <span>Major Actions</span>
+                            <strong id="presidentMajorActions">0</strong>
+                        </div>
+
+                    </div>
+
+                </aside>
+
+            </div>
+
+        </section>
+
+
+        <section class="president-content">
+
+            <div class="president-content__container">
+
+
+                <!-- START SCREEN -->
+
+                <section
+                    id="presidentStartScreen"
+                    class="president-start-card"
+                >
+
+                    <a
+                        href="simulator.html"
+                        class="president-back-link"
+                    >
+                        ← Back to Civic Simulations
+                    </a>
+
+                    <p class="president-eyebrow">
+                        Inauguration Day
+                    </p>
+
+                    <h2>
+                        Begin Your Term
+                    </h2>
+
+                    <p>
+                        You have taken the oath of office and now lead
+                        the executive branch of the United States government.
+                    </p>
+
+                    <p>
+                        Your administration faces legislative negotiations,
+                        appointments, foreign-policy choices, emergency
+                        decisions, and constant public scrutiny.
+                    </p>
+
+
+                    <div class="president-national-preview">
+
+                        <div>
+                            <span>Starting Approval</span>
+                            <strong>62%</strong>
+                        </div>
+
+                        <div>
+                            <span>Congressional Relations</span>
+                            <strong>55%</strong>
+                        </div>
+
+                        <div>
+                            <span>Institutional Trust</span>
+                            <strong>68%</strong>
+                        </div>
+
+                        <div>
+                            <span>National Stability</span>
+                            <strong>70%</strong>
+                        </div>
+
+                    </div>
+
+
+                    <button
+                        type="button"
+                        id="presidentStartButton"
+                        class="president-button president-button--primary"
+                    >
+                        Begin Your Term
+                    </button>
+
+                </section>
+
+
+                <!-- GAME SCREEN -->
+
+                <section
+                    id="presidentGameScreen"
+                    class="president-game-layout"
+                    hidden
+                >
+
+                    <div class="president-main-column">
+
+
+                        <section class="president-panel">
+
+                            <div class="president-panel__heading">
+
+                                <div>
+
+                                    <p class="president-eyebrow">
+                                        The Administration
+                                    </p>
+
+                                    <h2>
+                                        Executive Branch
+                                    </h2>
+
+                                </div>
+
+                                <span id="presidentTurnLabel">
+                                    Month 1
+                                </span>
+
+                            </div>
+
+
+                            <div class="president-profile-grid">
+
+                                <div>
+                                    <span>Current Approval</span>
+                                    <strong id="executiveApproval">62%</strong>
+                                </div>
+
+                                <div>
+                                    <span>Congressional Relations</span>
+                                    <strong id="executiveCongress">55%</strong>
+                                </div>
+
+                                <div>
+                                    <span>Institutional Trust</span>
+                                    <strong id="executiveTrust">68%</strong>
+                                </div>
+
+                                <div>
+                                    <span>National Stability</span>
+                                    <strong id="executiveStability">70%</strong>
+                                </div>
+
+                            </div>
+
+
+                            <div class="president-priorities">
+
+                                <h3>
+                                    Presidential Responsibilities
+                                </h3>
+
+                                <div>
+                                    Execute Federal Law
+                                </div>
+
+                                <div>
+                                    Work with Congress
+                                </div>
+
+                                <div>
+                                    National Security
+                                </div>
+
+                                <div>
+                                    Public Leadership
+                                </div>
+
+                            </div>
+
+                        </section>
+
+
+                        <section
+                            id="presidentScenarioCard"
+                            class="president-panel president-scenario-card"
+                        >
+
+                            <div class="president-scenario-top">
+
+                                <p
+                                    class="president-eyebrow"
+                                    id="presidentScenarioCategory"
+                                >
+                                    Legislative Decision
+                                </p>
+
+                                <span id="presidentScenarioProgress">
+                                    Decision 1 of 8
+                                </span>
+
+                            </div>
+
+
+                            <h2 id="presidentScenarioTitle">
+                                Loading scenario...
+                            </h2>
+
+
+                            <p id="presidentScenarioText">
+                                Your first presidential challenge is being prepared.
+                            </p>
+
+
+                            <div
+                                id="presidentChoiceContainer"
+                                class="president-choice-grid"
+                            ></div>
+
+
+                            <div
+                                id="presidentOutcome"
+                                class="president-outcome"
+                                hidden
+                            >
+
+                                <div
+                                    id="presidentOutcomeIcon"
+                                    class="president-outcome-icon"
+                                >
+                                    •
+                                </div>
+
+                                <div>
+
+                                    <h3 id="presidentOutcomeTitle">
+                                        Decision Recorded
+                                    </h3>
+
+                                    <p id="presidentOutcomeText"></p>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="president-action-row">
+
+                                <button
+                                    type="button"
+                                    id="presidentContinueButton"
+                                    class="president-button president-button--primary"
+                                    hidden
+                                >
+                                    Continue
+                                </button>
+
+                            </div>
+
+                        </section>
+
+
+                        <section class="president-panel">
+
+                            <div class="president-panel__heading">
+
+                                <div>
+
+                                    <p class="president-eyebrow">
+                                        National News
+                                    </p>
+
+                                    <h2>
+                                        Latest Headlines
+                                    </h2>
+
+                                </div>
+
+                            </div>
+
+
+                            <div id="presidentNewsFeed">
+
+                                <div class="president-news-item">
+
+                                    <span>
+                                        White House
+                                    </span>
+
+                                    <p>
+                                        New administration begins first term.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                        </section>
+
+                    </div>
+
+
+                    <aside class="president-side-column">
+
+
+                        <section class="president-panel">
+
+                            <p class="president-eyebrow">
+                                Live Performance
+                            </p>
+
+                            <h2>
+                                Presidential Metrics
+                            </h2>
+
+
+                            <div class="president-metric-list">
+
+
+                                <div class="president-metric-row">
+
+                                    <div>
+                                        <span>Approval Rating</span>
+                                        <strong id="sidePresidentApproval">62%</strong>
+                                    </div>
+
+                                    <div class="president-metric-track">
+                                        <div
+                                            id="sidePresidentApprovalBar"
+                                            class="president-metric-fill"
+                                            style="width: 62%;"
+                                        ></div>
+                                    </div>
+
+                                </div>
+
+
+                                <div class="president-metric-row">
+
+                                    <div>
+                                        <span>Congressional Relations</span>
+                                        <strong id="sidePresidentCongress">55%</strong>
+                                    </div>
+
+                                    <div class="president-metric-track">
+                                        <div
+                                            id="sidePresidentCongressBar"
+                                            class="president-metric-fill"
+                                            style="width: 55%;"
+                                        ></div>
+                                    </div>
+
+                                </div>
+
+
+                                <div class="president-metric-row">
+
+                                    <div>
+                                        <span>Institutional Trust</span>
+                                        <strong id="sidePresidentTrust">68%</strong>
+                                    </div>
+
+                                    <div class="president-metric-track">
+                                        <div
+                                            id="sidePresidentTrustBar"
+                                            class="president-metric-fill"
+                                            style="width: 68%;"
+                                        ></div>
+                                    </div>
+
+                                </div>
+
+
+                                <div class="president-metric-row">
+
+                                    <div>
+                                        <span>National Stability</span>
+                                        <strong id="sidePresidentStability">70%</strong>
+                                    </div>
+
+                                    <div class="president-metric-track">
+                                        <div
+                                            id="sidePresidentStabilityBar"
+                                            class="president-metric-fill"
+                                            style="width: 70%;"
+                                        ></div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </section>
+
+
+                        <section class="president-panel">
+
+                            <p class="president-eyebrow">
+                                Presidential Record
+                            </p>
+
+                            <h2>
+                                Your Term
+                            </h2>
+
+
+                            <div class="president-activity-list">
+
+                                <div>
+                                    <span>Bills Signed</span>
+                                    <strong id="sidePresidentBillsSigned">0</strong>
+                                </div>
+
+                                <div>
+                                    <span>Major Actions</span>
+                                    <strong id="sidePresidentMajorActions">0</strong>
+                                </div>
+
+                                <div>
+                                    <span>Current Stage</span>
+                                    <strong id="presidentCurrentStage">
+                                        First 100 Days
+                                    </strong>
+                                </div>
+
+                                <div>
+                                    <span>Term Progress</span>
+                                    <strong id="presidentTermProgress">
+                                        0%
+                                    </strong>
+                                </div>
+
+                            </div>
+
+                        </section>
+
+
+                        <section class="president-objective-card">
+
+                            <p class="president-eyebrow">
+                                Your Objective
+                            </p>
+
+                            <h3>
+                                Lead Within the Constitution
+                            </h3>
+
+                            <p>
+                                Use executive authority effectively while
+                                respecting Congress, the courts, federal law,
+                                and the limits of presidential power.
+                            </p>
+
+                        </section>
+
+                    </aside>
+
+                </section>
+
+
+                <!-- FINAL REPORT -->
+
+                <section
+                    id="presidentResultsScreen"
+                    class="president-results-card"
+                    hidden
+                >
+
+                    <p class="president-eyebrow">
+                        Term Complete
+                    </p>
+
+                    <h2>
+                        Presidential Report Card
+                    </h2>
+
+                    <p>
+                        Your decisions shaped public confidence,
+                        congressional cooperation, institutional trust,
+                        and national stability.
+                    </p>
+
+
+                    <div class="president-report-grid">
+
+                        <div>
+                            <span>Final Approval</span>
+                            <strong id="finalPresidentApproval">0%</strong>
+                        </div>
+
+                        <div>
+                            <span>Congressional Relations</span>
+                            <strong id="finalPresidentCongress">0%</strong>
+                        </div>
+
+                        <div>
+                            <span>Institutional Trust</span>
+                            <strong id="finalPresidentTrust">0%</strong>
+                        </div>
+
+                        <div>
+                            <span>National Stability</span>
+                            <strong id="finalPresidentStability">0%</strong>
+                        </div>
+
+                        <div>
+                            <span>Bills Signed</span>
+                            <strong id="finalPresidentBillsSigned">0</strong>
+                        </div>
+
+                        <div>
+                            <span>Major Actions</span>
+                            <strong id="finalPresidentMajorActions">0</strong>
+                        </div>
+
+                    </div>
+
+
+                    <div class="president-final-grade">
+
+                        <span>
+                            Overall Grade
+                        </span>
+
+                        <strong id="presidentFinalGrade">
+                            B
+                        </strong>
+
+                    </div>
+
+
+                    <div
+                        id="presidentFinalMessage"
+                        class="president-final-message"
+                    >
+                        Your term has concluded.
+                    </div>
+
+
+                    <div class="president-results-actions">
+
+                        <a
+                            href="simulator.html"
+                            class="president-button president-button--primary"
+                        >
+                            Return to Simulations
+                        </a>
+
+                        <button
+                            type="button"
+                            id="presidentRestartButton"
+                            class="president-button president-button--secondary"
+                        >
+                            Serve Another Term
+                        </button>
+
+                    </div>
+
+                </section>
+
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <div id="footerContainer"></div>
+
+
+    <script
+        type="module"
+        src="js/president.js"
+    ></script>
+
+</body>
+
+</html>

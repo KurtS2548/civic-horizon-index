@@ -259,6 +259,8 @@ function updateSimulationProgress() {
 
 
     updateCongressRecord();
+    updatePresidentRecord();
+
 
 }
 
@@ -370,6 +372,76 @@ function updateCongressRecord() {
     const simulationButton =
         document.getElementById(
             "congressSimulationButton"
+        );
+
+
+    if (
+        simulationButton &&
+        completed
+    ) {
+
+        simulationButton.textContent =
+            "Serve Another Term";
+
+    }
+
+}
+function updatePresidentRecord() {
+
+    const completed =
+        getStoredValue(
+            "civicPresidentSimulationCompleted"
+        ) === "true";
+
+
+    const grade =
+        getStoredValue(
+            "civicPresidentSimulationLastGrade"
+        ) || "—";
+
+
+    const runs =
+        Number(
+            getStoredValue(
+                "civicPresidentSimulationRuns"
+            ) || 0
+        );
+
+
+    setText(
+        "presidentCardGrade",
+        runs > 0
+            ? grade
+            : "—"
+    );
+
+
+    setText(
+        "presidentCardRuns",
+        runs
+    );
+
+
+    const record =
+        document.getElementById(
+            "presidentSimulationRecord"
+        );
+
+
+    if (
+        record &&
+        runs > 0
+    ) {
+
+        record.hidden =
+            false;
+
+    }
+
+
+    const simulationButton =
+        document.getElementById(
+            "presidentSimulationButton"
         );
 
 

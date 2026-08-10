@@ -1,1122 +1,649 @@
-/*
-==================================================
-CIVIC HORIZON INDEX V2
-MEMBER OF CONGRESS SIMULATION
-==================================================
-*/
-
-
-/*
-==================================================
-SCENARIOS
-==================================================
-*/
-
 const congressScenarios = [
-
     {
         category: "Constituent Request",
-
-        title:
-            "A major bridge in District 14 needs expensive repairs.",
-
+        title: "A bridge in your district has become unsafe.",
         text:
-            "Residents want action, but federal infrastructure funding is competitive. How do you respond?",
-
-        stage:
-            "District Outreach",
-
+            "Residents, local officials, and emergency responders are asking for federal help. What do you do first?",
+        stage: "District Outreach",
         choices: [
-
             {
-                text:
-                    "Hold a public meeting and build a detailed infrastructure proposal",
-
-                outcomeTitle:
-                    "You build a strong public case",
-
+                text: "Visit the bridge and meet local officials",
+                outcomeTitle: "You listened before acting",
                 outcomeText:
-                    "Residents appreciate being heard, and the detailed proposal gives you a credible starting point in Congress.",
-
+                    "The visit builds trust and gives you useful information, although it delays the legislative process slightly.",
                 approval: 5,
-                bipartisan: 1,
+                bipartisan: 0,
                 committee: 2,
-                trust: 7,
+                trust: 8,
                 billsIntroduced: 0,
                 billsPassed: 0,
-
                 headline:
-                    "District 14 representative launches public infrastructure initiative."
+                    "Representative visits unsafe bridge and meets community leaders."
             },
-
             {
-                text:
-                    "Promise the bridge will be fully funded immediately",
-
-                outcomeTitle:
-                    "The promise generates enthusiasm",
-
+                text: "Immediately draft a federal infrastructure bill",
+                outcomeTitle: "You moved quickly",
                 outcomeText:
-                    "Residents like the commitment, but the promise gets ahead of what one member of Congress can guarantee.",
-
-                approval: 4,
-                bipartisan: 0,
-                committee: -2,
-                trust: -3,
-                billsIntroduced: 0,
-                billsPassed: 0,
-
-                headline:
-                    "Representative makes ambitious bridge funding pledge."
-            },
-
-            {
-                text:
-                    "Tell residents the issue is entirely the state's responsibility",
-
-                outcomeTitle:
-                    "Residents feel dismissed",
-
-                outcomeText:
-                    "State and local governments have important roles, but federal infrastructure programs may also be relevant.",
-
-                approval: -6,
-                bipartisan: 0,
-                committee: 0,
-                trust: -8,
-                billsIntroduced: 0,
-                billsPassed: 0,
-
-                headline:
-                    "District leaders criticize congressional response to bridge concerns."
-            },
-
-            {
-                text:
-                    "Ignore the issue and focus on national media appearances",
-
-                outcomeTitle:
-                    "District concerns go unanswered",
-
-                outcomeText:
-                    "Your visibility increases, but constituents become frustrated that a local priority received little attention.",
-
-                approval: -8,
-                bipartisan: -1,
-                committee: 0,
-                trust: -10,
-                billsIntroduced: 0,
-                billsPassed: 0,
-
-                headline:
-                    "District groups question representative's focus on national attention."
-            }
-
-        ]
-    },
-
-
-    {
-        category: "Legislation",
-
-        title:
-            "You are ready to introduce an infrastructure bill.",
-
-        text:
-            "How do you design the legislation before formally introducing it?",
-
-        stage:
-            "Drafting Legislation",
-
-        choices: [
-
-            {
-                text:
-                    "Write a narrowly targeted bill with clear funding rules",
-
-                outcomeTitle:
-                    "The proposal earns a serious review",
-
-                outcomeText:
-                    "The focused bill does not satisfy every group, but colleagues see it as realistic and workable.",
-
-                approval: 2,
-                bipartisan: 4,
-                committee: 5,
-                trust: 3,
-                billsIntroduced: 1,
-                billsPassed: 0,
-
-                headline:
-                    "District 14 representative introduces targeted infrastructure bill."
-            },
-
-            {
-                text:
-                    "Add unrelated programs to attract as many groups as possible",
-
-                outcomeTitle:
-                    "The bill becomes difficult to defend",
-
-                outcomeText:
-                    "More interests are included, but the broader package attracts criticism over cost and complexity.",
-
-                approval: -1,
-                bipartisan: -2,
-                committee: -5,
-                trust: -2,
-                billsIntroduced: 1,
-                billsPassed: 0,
-
-                headline:
-                    "Broad infrastructure package faces questions over expanding scope."
-            },
-
-            {
-                text:
-                    "Consult lawmakers from both parties before introduction",
-
-                outcomeTitle:
-                    "Early coalition-building pays off",
-
-                outcomeText:
-                    "The bill changes during discussions, but it enters Congress with a wider base of support.",
-
+                    "Your fast response impresses some constituents, but the proposal lacks technical details and congressional support.",
                 approval: 3,
-                bipartisan: 8,
-                committee: 4,
+                bipartisan: -2,
+                committee: -4,
                 trust: 3,
                 billsIntroduced: 1,
                 billsPassed: 0,
-
                 headline:
-                    "Bipartisan lawmakers join District 14 infrastructure proposal."
+                    "New infrastructure bill introduced after bridge complaints."
             },
-
             {
-                text:
-                    "Introduce the bill without discussing it with anyone",
-
-                outcomeTitle:
-                    "The bill starts without a coalition",
-
+                text: "Ask engineers to prepare a formal assessment",
+                outcomeTitle: "You gathered evidence",
                 outcomeText:
-                    "You maintain full control over the proposal, but colleagues have little reason to prioritize it.",
-
-                approval: 0,
-                bipartisan: -6,
-                committee: -4,
-                trust: -1,
-                billsIntroduced: 1,
+                    "The study creates a stronger factual record and improves your position with the committee.",
+                approval: 1,
+                bipartisan: 2,
+                committee: 7,
+                trust: 4,
+                billsIntroduced: 0,
                 billsPassed: 0,
-
                 headline:
-                    "Infrastructure bill introduced with limited congressional backing."
+                    "Engineering review ordered for District 14 bridge."
+            },
+            {
+                text: "Ignore the request and focus on national issues",
+                outcomeTitle: "The district noticed",
+                outcomeText:
+                    "Residents feel overlooked, and local coverage becomes sharply critical.",
+                approval: -10,
+                bipartisan: 0,
+                committee: 0,
+                trust: -14,
+                billsIntroduced: 0,
+                billsPassed: 0,
+                headline:
+                    "Local leaders criticize representative's response to bridge concerns."
             }
-
         ]
     },
-
-
     {
-        category: "Committee Review",
-
-        title:
-            "Your bill has been referred to a House committee.",
-
+        category: "Bill Development",
+        title: "You decide to pursue infrastructure funding.",
         text:
-            "Committee members want more evidence about cost and local impact. What do you do?",
-
-        stage:
-            "Committee Review",
-
+            "Which strategy gives your proposal the strongest chance of moving forward?",
+        stage: "Writing Legislation",
         choices: [
-
             {
-                text:
-                    "Provide evidence, invite experts, and accept reasonable amendments",
-
-                outcomeTitle:
-                    "The committee strengthens the bill",
-
+                text: "Write a bill focused only on your district",
+                outcomeTitle: "The proposal is locally focused",
                 outcomeText:
-                    "The process takes time, but members gain confidence in the proposal and its underlying evidence.",
-
-                approval: 2,
-                bipartisan: 5,
+                    "Your district appreciates the attention, but lawmakers from other areas have little reason to support it.",
+                approval: 5,
+                bipartisan: -4,
+                committee: -2,
+                trust: 4,
+                billsIntroduced: 1,
+                billsPassed: 0,
+                headline:
+                    "District-specific bridge bill introduced in the House."
+            },
+            {
+                text: "Build a regional infrastructure coalition",
+                outcomeTitle: "You expanded the coalition",
+                outcomeText:
+                    "Members from several states join the effort, improving bipartisan and committee support.",
+                approval: 3,
+                bipartisan: 9,
+                committee: 7,
+                trust: 3,
+                billsIntroduced: 1,
+                billsPassed: 0,
+                headline:
+                    "Bipartisan regional infrastructure coalition announces new bill."
+            },
+            {
+                text: "Attach the funding to an unrelated bill",
+                outcomeTitle: "The strategy creates controversy",
+                outcomeText:
+                    "The tactic may move quickly, but critics object that the funding was added without enough debate.",
+                approval: -2,
+                bipartisan: -5,
+                committee: -3,
+                trust: -4,
+                billsIntroduced: 1,
+                billsPassed: 0,
+                headline:
+                    "Bridge funding added to unrelated legislation, drawing criticism."
+            },
+            {
+                text: "Wait for someone else to introduce a bill",
+                outcomeTitle: "You avoided the risk",
+                outcomeText:
+                    "You preserve political capital, but constituents question whether you are leading.",
+                approval: -4,
+                bipartisan: 1,
+                committee: 1,
+                trust: -6,
+                billsIntroduced: 0,
+                billsPassed: 0,
+                headline:
+                    "District leaders ask when their representative will act."
+            }
+        ]
+    },
+    {
+        category: "Committee Work",
+        title: "Your bill has been referred to committee.",
+        text:
+            "The committee chair has not promised a hearing. What do you do?",
+        stage: "Committee Review",
+        choices: [
+            {
+                text: "Gather expert testimony and request a hearing",
+                outcomeTitle: "You strengthened the record",
+                outcomeText:
+                    "Engineers, emergency officials, and residents provide evidence that helps the committee take the bill seriously.",
+                approval: 3,
+                bipartisan: 3,
                 committee: 10,
                 trust: 4,
                 billsIntroduced: 0,
                 billsPassed: 0,
-
                 headline:
-                    "Committee advances revised infrastructure proposal after detailed hearing."
+                    "Experts testify on infrastructure safety before House committee."
             },
-
             {
-                text:
-                    "Attack committee members who question the bill",
-
-                outcomeTitle:
-                    "Relationships deteriorate",
-
+                text: "Publicly attack the committee chair",
+                outcomeTitle: "The confrontation backfires",
                 outcomeText:
-                    "The confrontation attracts attention but makes committee members less willing to help move the legislation.",
-
-                approval: -1,
+                    "The criticism attracts attention but damages your relationship with committee leadership.",
+                approval: 1,
                 bipartisan: -6,
                 committee: -12,
-                trust: -3,
-                billsIntroduced: 0,
-                billsPassed: 0,
-
-                headline:
-                    "Tensions rise during infrastructure committee review."
-            },
-
-            {
-                text:
-                    "Withdraw the bill rather than allow amendments",
-
-                outcomeTitle:
-                    "The proposal stops moving",
-
-                outcomeText:
-                    "You preserve the original language, but the infrastructure effort loses its path through Congress.",
-
-                approval: -7,
-                bipartisan: -2,
-                committee: -5,
-                trust: -7,
-                billsIntroduced: 0,
-                billsPassed: 0,
-
-                headline:
-                    "District 14 infrastructure bill withdrawn during committee process."
-            },
-
-            {
-                text:
-                    "Accept every requested change without reviewing it",
-
-                outcomeTitle:
-                    "The bill loses focus",
-
-                outcomeText:
-                    "Committee resistance falls, but the proposal becomes harder to explain to your district.",
-
-                approval: -2,
-                bipartisan: 4,
-                committee: 6,
-                trust: -5,
-                billsIntroduced: 0,
-                billsPassed: 0,
-
-                headline:
-                    "Heavily amended infrastructure proposal emerges from committee."
-            }
-
-        ]
-    },
-
-
-    {
-        category: "Coalition Building",
-
-        title:
-            "The bill reaches the House floor, but you do not yet have enough votes.",
-
-        text:
-            "How do you try to build the coalition needed for passage?",
-
-        stage:
-            "House Negotiation",
-
-        choices: [
-
-            {
-                text:
-                    "Negotiate specific policy compromises with undecided members",
-
-                outcomeTitle:
-                    "A broader coalition forms",
-
-                outcomeText:
-                    "The final bill is not exactly what you started with, but the compromise brings important votes aboard.",
-
-                approval: 2,
-                bipartisan: 8,
-                committee: 3,
-                trust: 2,
-                billsIntroduced: 0,
-                billsPassed: 0,
-
-                headline:
-                    "Infrastructure coalition expands after House negotiations."
-            },
-
-            {
-                text:
-                    "Refuse all compromise",
-
-                outcomeTitle:
-                    "Support stalls",
-
-                outcomeText:
-                    "Some constituents admire the firm position, but the bill remains short of the votes needed to advance.",
-
-                approval: 0,
-                bipartisan: -10,
-                committee: -3,
                 trust: -1,
                 billsIntroduced: 0,
                 billsPassed: 0,
-
                 headline:
-                    "Infrastructure vote uncertain as negotiations stall."
+                    "Lawmaker clashes with committee chair over stalled bill."
             },
-
             {
-                text:
-                    "Explain which changes you will accept and why",
-
-                outcomeTitle:
-                    "Transparency helps the negotiation",
-
+                text: "Negotiate changes requested by committee members",
+                outcomeTitle: "You chose negotiation",
                 outcomeText:
-                    "Lawmakers understand your limits, while constituents can see why compromises are being considered.",
-
-                approval: 3,
-                bipartisan: 6,
-                committee: 3,
-                trust: 7,
-                billsIntroduced: 0,
-                billsPassed: 0,
-
-                headline:
-                    "Representative outlines public framework for infrastructure compromise."
-            },
-
-            {
-                text:
-                    "Make private promises you may not be able to keep",
-
-                outcomeTitle:
-                    "Support grows, but credibility weakens",
-
-                outcomeText:
-                    "Some votes move your way, but colleagues become concerned about commitments that may not be realistic.",
-
+                    "The bill becomes less ambitious, but it gains broader support and a clearer path forward.",
                 approval: 1,
-                bipartisan: -3,
-                committee: -2,
-                trust: -7,
+                bipartisan: 8,
+                committee: 8,
+                trust: 1,
                 billsIntroduced: 0,
                 billsPassed: 0,
-
                 headline:
-                    "Questions emerge about private commitments in infrastructure negotiations."
+                    "Infrastructure proposal revised after committee negotiations."
+            },
+            {
+                text: "Do nothing and wait",
+                outcomeTitle: "The bill stalls",
+                outcomeText:
+                    "Without active support, the committee takes no action and the bill loses momentum.",
+                approval: -5,
+                bipartisan: 0,
+                committee: -6,
+                trust: -5,
+                billsIntroduced: 0,
+                billsPassed: 0,
+                headline:
+                    "Infrastructure bill remains stalled in committee."
             }
-
         ]
     },
-
-
+    {
+        category: "Negotiation",
+        title: "Another member offers support for your bill.",
+        text:
+            "They want limited rural hospital funding included in the package. How do you respond?",
+        stage: "Coalition Building",
+        choices: [
+            {
+                text: "Accept the addition without reviewing its cost",
+                outcomeTitle: "You gained a vote but created risk",
+                outcomeText:
+                    "The coalition grows, but concerns about cost and scope make the bill harder to defend.",
+                approval: -1,
+                bipartisan: 5,
+                committee: -3,
+                trust: -2,
+                billsIntroduced: 0,
+                billsPassed: 0,
+                headline:
+                    "Infrastructure bill expands to include rural hospital funding."
+            },
+            {
+                text: "Reject any changes to the bill",
+                outcomeTitle: "You protected the original proposal",
+                outcomeText:
+                    "The bill stays focused, but you lose an opportunity to broaden support.",
+                approval: 1,
+                bipartisan: -7,
+                committee: -2,
+                trust: 1,
+                billsIntroduced: 0,
+                billsPassed: 0,
+                headline:
+                    "Representative rejects proposed infrastructure compromise."
+            },
+            {
+                text: "Negotiate a limited, paid-for addition",
+                outcomeTitle: "You found a workable compromise",
+                outcomeText:
+                    "The revised agreement attracts support while limiting the additional cost.",
+                approval: 4,
+                bipartisan: 10,
+                committee: 5,
+                trust: 4,
+                billsIntroduced: 0,
+                billsPassed: 0,
+                headline:
+                    "Bipartisan compromise expands support for infrastructure package."
+            },
+            {
+                text: "Delay the decision until after the vote",
+                outcomeTitle: "Your colleague loses confidence",
+                outcomeText:
+                    "The delay avoids immediate conflict, but potential supporters question whether they can rely on you.",
+                approval: -2,
+                bipartisan: -5,
+                committee: -1,
+                trust: -3,
+                billsIntroduced: 0,
+                billsPassed: 0,
+                headline:
+                    "Uncertainty grows around infrastructure coalition."
+            }
+        ]
+    },
     {
         category: "House Vote",
-
-        title:
-            "The House is ready to vote on your infrastructure bill.",
-
+        title: "Your bill reaches the House floor.",
         text:
-            "You are still a few votes short. What is your final approach?",
-
-        stage:
-            "House Vote",
-
+            "Support is close, and several undecided members are asking for changes. What do you do?",
+        stage: "House Floor",
         choices: [
-
             {
-                text:
-                    "Make one final bipartisan policy compromise",
-
-                outcomeTitle:
-                    "The bill passes the House",
-
+                text: "Accept a reasonable amendment to gain support",
+                outcomeTitle: "The amendment secures votes",
                 outcomeText:
-                    "The compromise costs you part of the original proposal, but enough lawmakers support the final package.",
-
+                    "The bill changes slightly, but the coalition becomes large enough to pass it through the House.",
                 approval: 3,
                 bipartisan: 7,
-                committee: 4,
+                committee: 2,
                 trust: 2,
                 billsIntroduced: 0,
                 billsPassed: 1,
-
                 headline:
-                    "House approves bipartisan infrastructure legislation."
+                    "Infrastructure bill passes House after bipartisan amendment."
             },
-
             {
-                text:
-                    "Keep the original bill unchanged and accept the result",
-
-                outcomeTitle:
-                    "The bill narrowly fails",
-
+                text: "Refuse all changes and demand a vote",
+                outcomeTitle: "The bill falls short",
                 outcomeText:
-                    "Your position remains consistent, but the legislation does not gain enough support for passage.",
-
-                approval: -3,
-                bipartisan: -6,
-                committee: -2,
-                trust: 0,
+                    "Your supporters remain loyal, but the bill fails because several undecided members vote against it.",
+                approval: -4,
+                bipartisan: -8,
+                committee: -3,
+                trust: -3,
                 billsIntroduced: 0,
                 billsPassed: 0,
-
                 headline:
-                    "Infrastructure proposal falls short in House vote."
+                    "Infrastructure proposal fails in closely divided House vote."
             },
-
             {
-                text:
-                    "Remove a controversial provision to secure the final votes",
-
-                outcomeTitle:
-                    "A smaller bill passes",
-
+                text: "Withdraw the bill before the vote",
+                outcomeTitle: "You avoid a public defeat",
                 outcomeText:
-                    "The measure accomplishes less than originally planned, but it moves forward with a workable majority.",
-
-                approval: 1,
-                bipartisan: 5,
-                committee: 4,
-                trust: 1,
+                    "The bill can be revised later, but constituents are frustrated that the effort did not reach a final vote.",
+                approval: -2,
+                bipartisan: 1,
+                committee: 0,
+                trust: -5,
                 billsIntroduced: 0,
-                billsPassed: 1,
-
+                billsPassed: 0,
                 headline:
-                    "Revised infrastructure bill wins House approval."
+                    "Representative withdraws infrastructure bill before House vote."
             },
-
             {
-                text:
-                    "Promise unrelated favors for votes",
-
-                outcomeTitle:
-                    "The promises produce short-term support",
-
+                text: "Make promises you cannot guarantee",
+                outcomeTitle: "The promises produce short-term support",
                 outcomeText:
                     "The bill moves forward, but your credibility suffers when colleagues question whether the promises can be kept.",
-
                 approval: 1,
                 bipartisan: -4,
                 committee: -2,
                 trust: -8,
                 billsIntroduced: 0,
                 billsPassed: 1,
-
                 headline:
                     "Infrastructure vote succeeds amid questions about private commitments."
             }
-
         ]
     },
-
-
     {
         category: "Senate Negotiation",
-
-        title:
-            "The Senate passes a different version of the bill.",
-
+        title: "The Senate passes a different version of the bill.",
         text:
             "Both chambers must agree on identical language. What approach do you support?",
-
-        stage:
-            "Resolving Differences",
-
+        stage: "Resolving Differences",
         choices: [
-
             {
-                text:
-                    "Work with Senate negotiators on a compromise",
-
-                outcomeTitle:
-                    "The chambers reach agreement",
-
+                text: "Work with Senate negotiators on a compromise",
+                outcomeTitle: "The chambers reach agreement",
                 outcomeText:
                     "Neither side gets everything it wanted, but a final version gains enough support in both chambers.",
-
                 approval: 3,
                 bipartisan: 8,
                 committee: 5,
                 trust: 3,
                 billsIntroduced: 0,
                 billsPassed: 1,
-
                 headline:
                     "House and Senate negotiators reach infrastructure compromise."
             },
-
             {
-                text:
-                    "Demand that the Senate accept the House version",
-
-                outcomeTitle:
-                    "Negotiations break down",
-
+                text: "Demand that the Senate accept the House version",
+                outcomeTitle: "Negotiations break down",
                 outcomeText:
                     "The firm position satisfies some supporters, but the bill remains stalled between the chambers.",
-
                 approval: -2,
                 bipartisan: -9,
                 committee: -4,
                 trust: -2,
                 billsIntroduced: 0,
                 billsPassed: 0,
-
                 headline:
                     "Infrastructure negotiations stall over competing versions."
             },
-
             {
-                text:
-                    "Remove the most controversial section",
-
-                outcomeTitle:
-                    "The narrower bill advances",
-
+                text: "Remove the most controversial section",
+                outcomeTitle: "The narrower bill advances",
                 outcomeText:
                     "The final package accomplishes less, but it becomes easier for both chambers to approve.",
-
                 approval: 1,
                 bipartisan: 6,
                 committee: 4,
                 trust: 0,
                 billsIntroduced: 0,
                 billsPassed: 1,
-
                 headline:
                     "Narrower infrastructure package clears negotiations."
             },
-
             {
-                text:
-                    "Abandon the bill",
-
-                outcomeTitle:
-                    "The effort ends",
-
+                text: "Abandon the bill",
+                outcomeTitle: "The effort ends",
                 outcomeText:
                     "You avoid further conflict, but the bridge problem remains unresolved and public disappointment grows.",
-
                 approval: -8,
                 bipartisan: -1,
                 committee: -3,
                 trust: -10,
                 billsIntroduced: 0,
                 billsPassed: 0,
-
                 headline:
                     "Infrastructure bill abandoned after House-Senate disagreement."
             }
-
         ]
     },
-
-
     {
         category: "Presidential Decision",
-
-        title:
-            "The bill reaches the president.",
-
+        title: "The bill reaches the president.",
         text:
             "The administration wants one final change before signing. What do you do?",
-
-        stage:
-            "Executive Review",
-
+        stage: "Executive Review",
         choices: [
-
             {
-                text:
-                    "Negotiate a limited final change",
-
-                outcomeTitle:
-                    "The bill is signed",
-
+                text: "Negotiate a limited final change",
+                outcomeTitle: "The bill is signed",
                 outcomeText:
                     "The final compromise preserves the core project and secures presidential approval.",
-
                 approval: 5,
                 bipartisan: 5,
                 committee: 2,
                 trust: 4,
                 billsIntroduced: 0,
                 billsPassed: 1,
-
                 headline:
                     "President signs bipartisan infrastructure package."
             },
-
             {
-                text:
-                    "Refuse and risk a veto",
-
-                outcomeTitle:
-                    "The president vetoes the bill",
-
+                text: "Refuse and risk a veto",
+                outcomeTitle: "The president vetoes the bill",
                 outcomeText:
                     "Your supporters praise your position, but the bill now faces a difficult override effort.",
-
                 approval: -1,
                 bipartisan: -5,
                 committee: -1,
                 trust: 0,
                 billsIntroduced: 0,
                 billsPassed: 0,
-
                 headline:
                     "President vetoes infrastructure legislation after negotiations fail."
             },
-
             {
-                text:
-                    "Publicly accuse the president of bad faith",
-
-                outcomeTitle:
-                    "The conflict dominates the news",
-
+                text: "Publicly accuse the president of bad faith",
+                outcomeTitle: "The conflict dominates the news",
                 outcomeText:
                     "The confrontation energizes some supporters but damages future cooperation.",
-
                 approval: 0,
                 bipartisan: -8,
                 committee: -2,
                 trust: -2,
                 billsIntroduced: 0,
                 billsPassed: 0,
-
                 headline:
                     "Public dispute erupts over infrastructure bill."
             },
-
             {
-                text:
-                    "Withdraw support for your own bill",
-
-                outcomeTitle:
-                    "The coalition collapses",
-
+                text: "Withdraw support for your own bill",
+                outcomeTitle: "The coalition collapses",
                 outcomeText:
                     "Colleagues and constituents are confused by the reversal, and your credibility declines.",
-
                 approval: -7,
                 bipartisan: -6,
                 committee: -5,
                 trust: -11,
                 billsIntroduced: 0,
                 billsPassed: 0,
-
                 headline:
                     "Bill sponsor withdraws support during final negotiations."
             }
-
         ]
     },
-
-
     {
         category: "Public Accountability",
-
-        title:
-            "Your term is nearing its end.",
-
+        title: "Your term is nearing its end.",
         text:
             "Constituents want to know what you accomplished. How do you close your term?",
-
-        stage:
-            "End of Term",
-
+        stage: "End of Term",
         choices: [
-
             {
-                text:
-                    "Hold a public town hall and answer questions",
-
-                outcomeTitle:
-                    "You faced the public directly",
-
+                text: "Hold a public town hall and answer questions",
+                outcomeTitle: "You faced the public directly",
                 outcomeText:
                     "The meeting includes criticism, but your willingness to explain your decisions increases public trust.",
-
                 approval: 4,
                 bipartisan: 1,
                 committee: 0,
                 trust: 9,
                 billsIntroduced: 0,
                 billsPassed: 0,
-
                 headline:
                     "Representative holds open town hall on first-term record."
             },
-
             {
-                text:
-                    "Publish a detailed report with results and setbacks",
-
-                outcomeTitle:
-                    "You chose transparency",
-
+                text: "Publish a detailed report with results and setbacks",
+                outcomeTitle: "You chose transparency",
                 outcomeText:
                     "The report acknowledges both successes and failures, strengthening your reputation for honesty.",
-
                 approval: 3,
                 bipartisan: 2,
                 committee: 1,
                 trust: 8,
                 billsIntroduced: 0,
                 billsPassed: 0,
-
                 headline:
                     "District 14 representative releases detailed legislative report."
             },
-
             {
-                text:
-                    "Highlight only successes and avoid difficult questions",
-
-                outcomeTitle:
-                    "The message feels incomplete",
-
+                text: "Highlight only successes and avoid difficult questions",
+                outcomeTitle: "The message feels incomplete",
                 outcomeText:
                     "Supporters respond positively, but critics and local reporters challenge the omissions.",
-
                 approval: -1,
                 bipartisan: 0,
                 committee: 0,
                 trust: -6,
                 billsIntroduced: 0,
                 billsPassed: 0,
-
                 headline:
                     "Local media questions representative's account of congressional record."
             },
-
             {
-                text:
-                    "Skip public events and focus on fundraising",
-
-                outcomeTitle:
-                    "Constituents feel ignored",
-
+                text: "Skip public events and focus on fundraising",
+                outcomeTitle: "Constituents feel ignored",
                 outcomeText:
                     "Your campaign resources improve, but trust and approval fall sharply.",
-
                 approval: -9,
                 bipartisan: 0,
                 committee: 0,
                 trust: -13,
                 billsIntroduced: 0,
                 billsPassed: 0,
-
                 headline:
                     "District groups criticize representative's absence from public events."
             }
-
         ]
     }
-
 ];
 
 
-/*
-==================================================
-GAME STATE
-==================================================
-*/
-
 const gameState = {
-
     approval: 70,
     bipartisan: 50,
     committee: 50,
     trust: 70,
     billsIntroduced: 0,
     billsPassed: 0
-
 };
 
 
 let currentScenarioIndex = 0;
-
 let decisionLocked = false;
 
 
-/*
-==================================================
-DOM REFERENCES
-==================================================
-*/
-
 const startScreen =
-    document.getElementById(
-        "congressStartScreen"
-    );
-
+    document.getElementById("congressStartScreen");
 
 const gameScreen =
-    document.getElementById(
-        "congressGameScreen"
-    );
-
+    document.getElementById("congressGameScreen");
 
 const resultsScreen =
-    document.getElementById(
-        "congressResultsScreen"
-    );
-
+    document.getElementById("congressResultsScreen");
 
 const startButton =
-    document.getElementById(
-        "congressStartButton"
-    );
-
+    document.getElementById("congressStartButton");
 
 const restartButton =
-    document.getElementById(
-        "congressRestartButton"
-    );
-
+    document.getElementById("congressRestartButton");
 
 const continueButton =
-    document.getElementById(
-        "congressContinueButton"
-    );
-
+    document.getElementById("congressContinueButton");
 
 const scenarioCategory =
-    document.getElementById(
-        "congressScenarioCategory"
-    );
-
+    document.getElementById("congressScenarioCategory");
 
 const scenarioProgress =
-    document.getElementById(
-        "congressScenarioProgress"
-    );
-
+    document.getElementById("congressScenarioProgress");
 
 const scenarioTitle =
-    document.getElementById(
-        "congressScenarioTitle"
-    );
-
+    document.getElementById("congressScenarioTitle");
 
 const scenarioText =
-    document.getElementById(
-        "congressScenarioText"
-    );
-
+    document.getElementById("congressScenarioText");
 
 const choiceContainer =
-    document.getElementById(
-        "congressChoiceContainer"
-    );
-
+    document.getElementById("congressChoiceContainer");
 
 const outcome =
-    document.getElementById(
-        "congressOutcome"
-    );
-
+    document.getElementById("congressOutcome");
 
 const outcomeIcon =
-    document.getElementById(
-        "congressOutcomeIcon"
-    );
-
+    document.getElementById("congressOutcomeIcon");
 
 const outcomeTitle =
-    document.getElementById(
-        "congressOutcomeTitle"
-    );
-
+    document.getElementById("congressOutcomeTitle");
 
 const outcomeText =
-    document.getElementById(
-        "congressOutcomeText"
-    );
-
+    document.getElementById("congressOutcomeText");
 
 const newsFeed =
-    document.getElementById(
-        "congressNewsFeed"
-    );
+    document.getElementById("congressNewsFeed");
 
 
-/*
-==================================================
-COMPONENT LOADING
-==================================================
-*/
-
-async function loadComponent(
-    containerId,
-    componentPath
-) {
-
-    const container =
-        document.getElementById(
-            containerId
-        );
-
-
-    if (!container) {
-        return false;
-    }
-
-
-    try {
-
-        const response =
-            await fetch(
-                componentPath
-            );
-
-
-        if (!response.ok) {
-
-            throw new Error(
-                `Component request failed: ${response.status}`
-            );
-
-        }
-
-
-        container.innerHTML =
-            await response.text();
-
-
-        return true;
-
-    } catch (error) {
-
-        console.error(
-            `Could not load ${componentPath}:`,
-            error
-        );
-
-
-        return false;
-
-    }
-
-}
-
-
-/*
-==================================================
-HELPERS
-==================================================
-*/
-
-function clamp(
-    value
-) {
+function clamp(value) {
 
     return Math.max(
         0,
-        Math.min(
-            100,
-            value
-        )
+        Math.min(100, value)
     );
 
 }
 
 
-function setText(
-    id,
-    value
-) {
+function setText(id, value) {
 
     const element =
-        document.getElementById(
-            id
-        );
+        document.getElementById(id);
 
 
     if (element) {
-
-        element.textContent =
-            String(value);
-
+        element.textContent = value;
     }
 
 }
 
 
 function updateMetric(
-    valueId,
-    barId,
+    valueID,
+    barID,
     value
 ) {
 
     setText(
-        valueId,
+        valueID,
         `${value}%`
     );
 
 
     const bar =
-        document.getElementById(
-            barId
-        );
+        document.getElementById(barID);
 
 
     if (bar) {
-
-        bar.style.width =
-            `${value}%`;
-
+        bar.style.width = `${value}%`;
     }
 
 }
 
 
-/*
-==================================================
-DASHBOARD
-==================================================
-*/
-
 function updateDashboard() {
 
     gameState.approval =
-        clamp(
-            gameState.approval
-        );
-
+        clamp(gameState.approval);
 
     gameState.bipartisan =
-        clamp(
-            gameState.bipartisan
-        );
-
+        clamp(gameState.bipartisan);
 
     gameState.committee =
-        clamp(
-            gameState.committee
-        );
-
+        clamp(gameState.committee);
 
     gameState.trust =
-        clamp(
-            gameState.trust
-        );
+        clamp(gameState.trust);
 
 
     setText(
@@ -1124,54 +651,45 @@ function updateDashboard() {
         `${gameState.approval}%`
     );
 
-
     setText(
         "congressBipartisan",
         `${gameState.bipartisan}%`
     );
-
 
     setText(
         "congressCommittee",
         `${gameState.committee}%`
     );
 
-
     setText(
         "congressTrust",
         `${gameState.trust}%`
     );
-
 
     setText(
         "congressBillsIntroduced",
         gameState.billsIntroduced
     );
 
-
     setText(
         "congressBillsPassed",
         gameState.billsPassed
     );
-
 
     setText(
         "districtApproval",
         `${gameState.approval}%`
     );
 
-
     setText(
         "districtTrust",
         `${gameState.trust}%`
     );
 
-
     setText(
         "sideBillsIntroduced",
         gameState.billsIntroduced
     );
-
 
     setText(
         "sideBillsPassed",
@@ -1185,20 +703,17 @@ function updateDashboard() {
         gameState.approval
     );
 
-
     updateMetric(
         "sideBipartisan",
         "sideBipartisanBar",
         gameState.bipartisan
     );
 
-
     updateMetric(
         "sideCommittee",
         "sideCommitteeBar",
         gameState.committee
     );
-
 
     updateMetric(
         "sideTrust",
@@ -1224,12 +739,6 @@ function updateDashboard() {
 }
 
 
-/*
-==================================================
-RENDER SCENARIO
-==================================================
-*/
-
 function renderScenario() {
 
     const scenario =
@@ -1239,64 +748,29 @@ function renderScenario() {
 
 
     if (!scenario) {
-
         showFinalResults();
-
         return;
-
     }
 
 
-    decisionLocked =
-        false;
+    decisionLocked = false;
+
+    outcome.hidden = true;
+
+    continueButton.hidden = true;
 
 
-    if (outcome) {
+    scenarioCategory.textContent =
+        scenario.category;
 
-        outcome.hidden =
-            true;
+    scenarioProgress.textContent =
+        `Decision ${currentScenarioIndex + 1} of ${congressScenarios.length}`;
 
-    }
+    scenarioTitle.textContent =
+        scenario.title;
 
-
-    if (continueButton) {
-
-        continueButton.hidden =
-            true;
-
-    }
-
-
-    if (scenarioCategory) {
-
-        scenarioCategory.textContent =
-            scenario.category;
-
-    }
-
-
-    if (scenarioProgress) {
-
-        scenarioProgress.textContent =
-            `Decision ${currentScenarioIndex + 1} of ${congressScenarios.length}`;
-
-    }
-
-
-    if (scenarioTitle) {
-
-        scenarioTitle.textContent =
-            scenario.title;
-
-    }
-
-
-    if (scenarioText) {
-
-        scenarioText.textContent =
-            scenario.text;
-
-    }
+    scenarioText.textContent =
+        scenario.text;
 
 
     setText(
@@ -1304,43 +778,56 @@ function renderScenario() {
         `Week ${1 + currentScenarioIndex * 6}`
     );
 
-
     setText(
         "congressCurrentStage",
         scenario.stage
     );
 
 
-    if (choiceContainer) {
+    choiceContainer.innerHTML =
+        scenario.choices
+            .map((choice, index) => {
 
-        choiceContainer.innerHTML =
-            scenario.choices
-                .map(
-                    (choice, index) => {
+                return `
 
-                        return `
-                            <button
-                                type="button"
-                                class="congress-choice-button"
-                                data-choice-index="${index}"
-                            >
+                    <button
+                        type="button"
+                        class="congress-choice-button"
+                        data-choice-index="${index}"
+                    >
 
-                                <span>
-                                    ${String.fromCharCode(65 + index)}
-                                </span>
+                        <span>
+                            ${String.fromCharCode(
+                                65 + index
+                            )}
+                        </span>
 
-                                <strong>
-                                    ${escapeHtml(choice.text)}
-                                </strong>
+                        <strong>
+                            ${choice.text}
+                        </strong>
 
-                            </button>
-                        `;
+                    </button>
 
-                    }
-                )
-                .join("");
+                `;
 
-    }
+            })
+            .join("");
+
+
+    const choiceButtons =
+        choiceContainer.querySelectorAll(
+            ".congress-choice-button"
+        );
+
+
+    choiceButtons.forEach(button => {
+
+        button.addEventListener(
+            "click",
+            handleChoice
+        );
+
+    });
 
 
     updateDashboard();
@@ -1348,47 +835,28 @@ function renderScenario() {
 }
 
 
-/*
-==================================================
-HANDLE CHOICE
-==================================================
-*/
+function handleChoice(event) {
 
-function handleChoice(
-    event
-) {
-
-    const selectedButton =
-        event.target.closest(
-            ".congress-choice-button"
-        );
-
-
-    if (
-        !selectedButton ||
-        decisionLocked
-    ) {
-
+    if (decisionLocked) {
         return;
-
     }
 
 
-    decisionLocked =
-        true;
+    decisionLocked = true;
 
+
+    const selectedButton =
+        event.currentTarget;
 
     const choiceIndex =
         Number(
             selectedButton.dataset.choiceIndex
         );
 
-
     const scenario =
         congressScenarios[
             currentScenarioIndex
         ];
-
 
     const choice =
         scenario.choices[
@@ -1397,20 +865,14 @@ function handleChoice(
 
 
     const choiceButtons =
-        choiceContainer
-            ?.querySelectorAll(
-                ".congress-choice-button"
-            );
+        choiceContainer.querySelectorAll(
+            ".congress-choice-button"
+        );
 
 
-    choiceButtons?.forEach(
-        button => {
-
-            button.disabled =
-                true;
-
-        }
-    );
+    choiceButtons.forEach(button => {
+        button.disabled = true;
+    });
 
 
     selectedButton.classList.add(
@@ -1421,29 +883,23 @@ function handleChoice(
     gameState.approval +=
         choice.approval;
 
-
     gameState.bipartisan +=
         choice.bipartisan;
-
 
     gameState.committee +=
         choice.committee;
 
-
     gameState.trust +=
         choice.trust;
 
-
     gameState.billsIntroduced +=
         choice.billsIntroduced;
-
 
     gameState.billsPassed +=
         choice.billsPassed;
 
 
     updateDashboard();
-
 
     addHeadline(
         scenario.category,
@@ -1458,130 +914,68 @@ function handleChoice(
         choice.trust;
 
 
-    if (outcomeIcon) {
+    if (totalChange >= 10) {
 
-        if (
-            totalChange >=
-            10
-        ) {
+        outcomeIcon.textContent = "✓";
 
-            outcomeIcon.textContent =
-                "✓";
+    } else if (totalChange <= -10) {
 
-        } else if (
-            totalChange <=
-            -10
-        ) {
+        outcomeIcon.textContent = "!";
 
-            outcomeIcon.textContent =
-                "!";
+    } else {
 
-        } else {
-
-            outcomeIcon.textContent =
-                "•";
-
-        }
+        outcomeIcon.textContent = "•";
 
     }
 
 
-    if (outcomeTitle) {
+    outcomeTitle.textContent =
+        choice.outcomeTitle;
 
-        outcomeTitle.textContent =
-            choice.outcomeTitle;
+    outcomeText.textContent =
+        choice.outcomeText;
 
-    }
-
-
-    if (outcomeText) {
-
-        outcomeText.textContent =
-            choice.outcomeText;
-
-    }
+    outcome.hidden = false;
 
 
-    if (outcome) {
+    continueButton.textContent =
+        currentScenarioIndex ===
+        congressScenarios.length - 1
+            ? "View Report Card"
+            : "Continue";
 
-        outcome.hidden =
-            false;
-
-    }
-
-
-    if (continueButton) {
-
-        continueButton.textContent =
-            currentScenarioIndex ===
-            congressScenarios.length - 1
-                ? "View Report Card"
-                : "Continue";
-
-
-        continueButton.hidden =
-            false;
-
-    }
+    continueButton.hidden = false;
 
 }
 
-
-/*
-==================================================
-CAPITOL NEWS
-==================================================
-*/
 
 function addHeadline(
     category,
     headline
 ) {
 
-    if (!newsFeed) {
-        return;
-    }
-
-
     const newsItem =
-        document.createElement(
-            "div"
-        );
+        document.createElement("div");
 
 
     newsItem.className =
         "congress-news-item";
 
 
-    const categoryElement =
-        document.createElement(
-            "span"
-        );
+    newsItem.innerHTML = `
+
+        <span>
+            ${category}
+        </span>
+
+        <p>
+            ${headline}
+        </p>
+
+    `;
 
 
-    categoryElement.textContent =
-        category;
-
-
-    const headlineElement =
-        document.createElement(
-            "p"
-        );
-
-
-    headlineElement.textContent =
-        headline;
-
-
-    newsItem.append(
-        categoryElement,
-        headlineElement
-    );
-
-
-    newsFeed.prepend(
-        newsItem
-    );
+    newsFeed.prepend(newsItem);
 
 
     const newsItems =
@@ -1590,10 +984,7 @@ function addHeadline(
         );
 
 
-    if (
-        newsItems.length >
-        5
-    ) {
+    if (newsItems.length > 5) {
 
         newsItems[
             newsItems.length - 1
@@ -1604,12 +995,6 @@ function addHeadline(
 }
 
 
-/*
-==================================================
-CONTINUE SIMULATION
-==================================================
-*/
-
 function continueSimulation() {
 
     if (!decisionLocked) {
@@ -1617,8 +1002,7 @@ function continueSimulation() {
     }
 
 
-    currentScenarioIndex +=
-        1;
+    currentScenarioIndex += 1;
 
 
     if (
@@ -1636,23 +1020,19 @@ function continueSimulation() {
     renderScenario();
 
 
-    document
-        .getElementById(
+    const scenarioCard =
+        document.getElementById(
             "congressScenarioCard"
-        )
-        ?.scrollIntoView({
-            behavior: "smooth",
-            block: "start"
-        });
+        );
+
+
+    scenarioCard?.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+    });
 
 }
 
-
-/*
-==================================================
-GRADE
-==================================================
-*/
 
 function calculateGrade() {
 
@@ -1677,97 +1057,48 @@ function calculateGrade() {
         legislativeBonus;
 
 
-    if (
-        finalScore >=
-        92
-    ) {
+    if (finalScore >= 92) {
         return "A+";
     }
 
-
-    if (
-        finalScore >=
-        86
-    ) {
+    if (finalScore >= 86) {
         return "A";
     }
 
-
-    if (
-        finalScore >=
-        80
-    ) {
+    if (finalScore >= 80) {
         return "A−";
     }
 
-
-    if (
-        finalScore >=
-        74
-    ) {
+    if (finalScore >= 74) {
         return "B+";
     }
 
-
-    if (
-        finalScore >=
-        68
-    ) {
+    if (finalScore >= 68) {
         return "B";
     }
 
-
-    if (
-        finalScore >=
-        62
-    ) {
+    if (finalScore >= 62) {
         return "B−";
     }
 
-
-    if (
-        finalScore >=
-        56
-    ) {
+    if (finalScore >= 56) {
         return "C+";
     }
 
-
-    if (
-        finalScore >=
-        50
-    ) {
+    if (finalScore >= 50) {
         return "C";
     }
-
 
     return "Needs Improvement";
 
 }
 
 
-/*
-==================================================
-FINAL RESULTS
-==================================================
-*/
-
 function showFinalResults() {
 
-    if (gameScreen) {
+    gameScreen.hidden = true;
 
-        gameScreen.hidden =
-            true;
-
-    }
-
-
-    if (resultsScreen) {
-
-        resultsScreen.hidden =
-            false;
-
-    }
+    resultsScreen.hidden = false;
 
 
     const grade =
@@ -1779,36 +1110,30 @@ function showFinalResults() {
         `${gameState.approval}%`
     );
 
-
     setText(
         "finalBipartisan",
         `${gameState.bipartisan}%`
     );
-
 
     setText(
         "finalCommittee",
         `${gameState.committee}%`
     );
 
-
     setText(
         "finalTrust",
         `${gameState.trust}%`
     );
-
 
     setText(
         "finalBillsIntroduced",
         gameState.billsIntroduced
     );
 
-
     setText(
         "finalBillsPassed",
         gameState.billsPassed
     );
-
 
     setText(
         "congressFinalGrade",
@@ -1822,244 +1147,142 @@ function showFinalResults() {
         );
 
 
-    if (finalMessage) {
+    if (
+        grade === "A+" ||
+        grade === "A"
+    ) {
 
-        if (
-            grade === "A+" ||
-            grade === "A"
-        ) {
+        finalMessage.textContent =
+            "Outstanding term. You maintained public trust, built strong relationships, and produced meaningful legislative results.";
 
-            finalMessage.textContent =
-                "Outstanding term. You maintained public trust, built strong relationships, and produced meaningful legislative results.";
+    } else if (
+        grade === "A−" ||
+        grade === "B+"
+    ) {
 
-        } else if (
-            grade === "A−" ||
-            grade === "B+"
-        ) {
+        finalMessage.textContent =
+            "Strong term. You balanced district needs with congressional realities and built a credible record.";
 
-            finalMessage.textContent =
-                "Strong term. You balanced district needs with congressional realities and built a credible record.";
+    } else if (
+        grade === "B" ||
+        grade === "B−"
+    ) {
 
-        } else if (
-            grade === "B" ||
-            grade === "B−"
-        ) {
+        finalMessage.textContent =
+            "Solid term. You achieved meaningful progress, although some choices limited your support or effectiveness.";
 
-            finalMessage.textContent =
-                "Solid term. You achieved meaningful progress, although some choices limited your support or effectiveness.";
+    } else if (
+        grade === "C+" ||
+        grade === "C"
+    ) {
 
-        } else if (
-            grade === "C+" ||
-            grade === "C"
-        ) {
+        finalMessage.textContent =
+            "Mixed term. Stronger coalition-building and public accountability could improve your future results.";
 
-            finalMessage.textContent =
-                "Mixed term. Stronger coalition-building and public accountability could improve your future results.";
+    } else {
 
-        } else {
-
-            finalMessage.textContent =
-                "A difficult term. Review how negotiation, committee relationships, trust, and communication affected your outcomes.";
-
-        }
+        finalMessage.textContent =
+            "A difficult term. Review how negotiation, committee relationships, trust, and communication affected your outcomes.";
 
     }
 
 
-    saveSimulationRecord(
+    localStorage.setItem(
+        "civicCongressSimulationCompleted",
+        "true"
+    );
+
+    localStorage.setItem(
+        "civicCongressSimulationLastGrade",
         grade
     );
 
 
-    resultsScreen?.scrollIntoView({
+    const previousRuns =
+        Number(
+            localStorage.getItem(
+                "civicCongressSimulationRuns"
+            ) || 0
+        );
+
+
+    localStorage.setItem(
+        "civicCongressSimulationRuns",
+        String(previousRuns + 1)
+    );
+
+
+    resultsScreen.scrollIntoView({
         behavior: "smooth",
-        block: "start"
+        block: "center"
     });
 
 }
 
-
-/*
-==================================================
-SAVE SIMULATION RECORD
-==================================================
-*/
-
-function saveSimulationRecord(
-    grade
-) {
-
-    try {
-
-        window.localStorage.setItem(
-            "civicCongressSimulationCompleted",
-            "true"
-        );
-
-
-        window.localStorage.setItem(
-            "civicCongressSimulationLastGrade",
-            grade
-        );
-
-
-        const previousRuns =
-            Number(
-                window.localStorage.getItem(
-                    "civicCongressSimulationRuns"
-                ) || 0
-            );
-
-
-        window.localStorage.setItem(
-            "civicCongressSimulationRuns",
-            String(
-                previousRuns + 1
-            )
-        );
-
-    } catch (error) {
-
-        console.warn(
-            "Congress simulation record could not be saved:",
-            error
-        );
-
-    }
-
-}
-
-
-/*
-==================================================
-RESET SIMULATION
-==================================================
-*/
 
 function resetSimulation() {
 
-    gameState.approval =
-        70;
+    gameState.approval = 70;
+    gameState.bipartisan = 50;
+    gameState.committee = 50;
+    gameState.trust = 70;
+    gameState.billsIntroduced = 0;
+    gameState.billsPassed = 0;
 
 
-    gameState.bipartisan =
-        50;
+    currentScenarioIndex = 0;
+
+    decisionLocked = false;
 
 
-    gameState.committee =
-        50;
+    resultsScreen.hidden = true;
+
+    startScreen.hidden = true;
+
+    gameScreen.hidden = false;
 
 
-    gameState.trust =
-        70;
+    newsFeed.innerHTML = `
 
+        <div class="congress-news-item">
 
-    gameState.billsIntroduced =
-        0;
+            <span>
+                District 14
+            </span>
 
+            <p>
+                Newly elected representative begins another term.
+            </p>
 
-    gameState.billsPassed =
-        0;
+        </div>
 
-
-    currentScenarioIndex =
-        0;
-
-
-    decisionLocked =
-        false;
-
-
-    if (resultsScreen) {
-
-        resultsScreen.hidden =
-            true;
-
-    }
-
-
-    if (startScreen) {
-
-        startScreen.hidden =
-            true;
-
-    }
-
-
-    if (gameScreen) {
-
-        gameScreen.hidden =
-            false;
-
-    }
-
-
-    if (newsFeed) {
-
-        newsFeed.innerHTML = `
-            <div class="congress-news-item">
-
-                <span>
-                    District 14
-                </span>
-
-                <p>
-                    Newly elected representative begins another term.
-                </p>
-
-            </div>
-        `;
-
-    }
+    `;
 
 
     renderScenario();
 
 
-    gameScreen?.scrollIntoView({
+    gameScreen.scrollIntoView({
         behavior: "smooth",
         block: "start"
     });
 
 }
 
-
-/*
-==================================================
-START SIMULATION
-==================================================
-*/
 
 function startSimulation() {
 
-    if (startScreen) {
+    startScreen.hidden = true;
 
-        startScreen.hidden =
-            true;
+    gameScreen.hidden = false;
 
-    }
-
-
-    if (gameScreen) {
-
-        gameScreen.hidden =
-            false;
-
-    }
-
-
-    if (resultsScreen) {
-
-        resultsScreen.hidden =
-            true;
-
-    }
+    resultsScreen.hidden = true;
 
 
     renderScenario();
 
 
-    gameScreen?.scrollIntoView({
+    gameScreen.scrollIntoView({
         behavior: "smooth",
         block: "start"
     });
@@ -2067,263 +1290,34 @@ function startSimulation() {
 }
 
 
-/*
-==================================================
-HEADER
-==================================================
-*/
+if (startButton) {
 
-function initializeHeader() {
-
-    const menuButton =
-        document.getElementById(
-            "mobileMenuButton"
-        );
-
-
-    const navigation =
-        document.getElementById(
-            "primaryNavigation"
-        );
-
-
-    const dropdownButtons =
-        document.querySelectorAll(
-            ".navigation-group__button"
-        );
-
-
-    if (
-        menuButton &&
-        navigation
-    ) {
-
-        menuButton.addEventListener(
-            "click",
-            () => {
-
-                const isOpen =
-                    navigation.classList.toggle(
-                        "open"
-                    );
-
-
-                menuButton.setAttribute(
-                    "aria-expanded",
-                    String(isOpen)
-                );
-
-
-                menuButton.setAttribute(
-                    "aria-label",
-                    isOpen
-                        ? "Close navigation menu"
-                        : "Open navigation menu"
-                );
-
-
-                if (!isOpen) {
-
-                    closeDropdowns();
-
-                }
-
-            }
-        );
-
-    }
-
-
-    dropdownButtons.forEach(
-        button => {
-
-            button.addEventListener(
-                "click",
-                event => {
-
-                    event.stopPropagation();
-
-
-                    const group =
-                        button.closest(
-                            ".navigation-group"
-                        );
-
-
-                    if (!group) {
-                        return;
-                    }
-
-
-                    const isOpen =
-                        group.classList.contains(
-                            "open"
-                        );
-
-
-                    closeDropdowns();
-
-
-                    if (!isOpen) {
-
-                        group.classList.add(
-                            "open"
-                        );
-
-
-                        button.setAttribute(
-                            "aria-expanded",
-                            "true"
-                        );
-
-                    }
-
-                }
-            );
-
-        }
-    );
-
-
-    document.addEventListener(
+    startButton.addEventListener(
         "click",
-        event => {
-
-            if (
-                !event.target.closest(
-                    ".navigation-group"
-                )
-            ) {
-
-                closeDropdowns();
-
-            }
-
-        }
+        startSimulation
     );
 
 }
 
 
-/*
-==================================================
-DROPDOWN HELPERS
-==================================================
-*/
+if (continueButton) {
 
-function closeDropdowns() {
-
-    document
-        .querySelectorAll(
-            ".navigation-group.open"
-        )
-        .forEach(
-            group => {
-
-                group.classList.remove(
-                    "open"
-                );
-
-
-                const button =
-                    group.querySelector(
-                        ".navigation-group__button"
-                    );
-
-
-                if (button) {
-
-                    button.setAttribute(
-                        "aria-expanded",
-                        "false"
-                    );
-
-                }
-
-            }
-        );
+    continueButton.addEventListener(
+        "click",
+        continueSimulation
+    );
 
 }
 
 
-/*
-==================================================
-ESCAPE HTML
-==================================================
-*/
+if (restartButton) {
 
-function escapeHtml(
-    value
-) {
-
-    return String(value)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
+    restartButton.addEventListener(
+        "click",
+        resetSimulation
+    );
 
 }
 
 
-/*
-==================================================
-EVENT LISTENERS
-==================================================
-*/
-
-choiceContainer?.addEventListener(
-    "click",
-    handleChoice
-);
-
-
-startButton?.addEventListener(
-    "click",
-    startSimulation
-);
-
-
-continueButton?.addEventListener(
-    "click",
-    continueSimulation
-);
-
-
-restartButton?.addEventListener(
-    "click",
-    resetSimulation
-);
-
-
-/*
-==================================================
-INITIALIZE
-==================================================
-*/
-
-async function initializeCongressPage() {
-
-    await Promise.all([
-
-        loadComponent(
-            "headerContainer",
-            "components/header.html"
-        ),
-
-        loadComponent(
-            "footerContainer",
-            "components/footer.html"
-        )
-
-    ]);
-
-
-    initializeHeader();
-
-    updateDashboard();
-
-}
-
-
-initializeCongressPage();
+updateDashboard();

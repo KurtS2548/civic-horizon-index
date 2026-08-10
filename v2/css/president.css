@@ -1,0 +1,779 @@
+/* ==================================================
+   CIVIC HORIZON INDEX V2
+   PRESIDENT SIMULATION
+================================================== */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    background: #f7f9fb;
+    color: #243b53;
+    font-family: "Inter", sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+
+.president-page {
+    min-height: 65vh;
+}
+
+
+/* ==================================================
+   HERO
+================================================== */
+
+.president-hero {
+    padding: 72px 0;
+    background:
+        linear-gradient(
+            135deg,
+            #071d2f 0%,
+            #0b253d 58%,
+            #174f7f 100%
+        );
+    color: #ffffff;
+}
+
+.president-hero__container {
+    display: grid;
+    grid-template-columns:
+        minmax(0, 1.2fr)
+        minmax(340px, 0.8fr);
+    align-items: center;
+    gap: 50px;
+    width: min(1180px, calc(100% - 48px));
+    margin: 0 auto;
+}
+
+.president-eyebrow {
+    margin: 0 0 10px;
+    color: #1f5f99;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+}
+
+.president-hero .president-eyebrow {
+    color: #efc75d;
+}
+
+.president-hero__copy h1 {
+    margin: 0;
+    color: #ffffff;
+    font-family: "Merriweather", Georgia, serif;
+    font-size: clamp(2.6rem, 6vw, 4.3rem);
+    line-height: 1.08;
+    letter-spacing: -0.03em;
+}
+
+.president-hero__copy > p:last-of-type {
+    max-width: 720px;
+    margin: 20px 0 0;
+    color: #d0e1ed;
+    line-height: 1.8;
+}
+
+.president-hero__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+    margin-top: 24px;
+}
+
+.president-hero__meta span {
+    padding: 7px 10px;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.07);
+    color: #d5e4ef;
+    font-size: 0.68rem;
+    font-weight: 700;
+}
+
+
+/* ==================================================
+   HERO DASHBOARD
+================================================== */
+
+.president-hero__dashboard {
+    padding: 26px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 22px 55px rgba(0, 0, 0, 0.18);
+    backdrop-filter: blur(8px);
+}
+
+.president-dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    margin-top: 16px;
+}
+
+.president-dashboard-grid > div {
+    padding: 13px 14px;
+    border: 1px solid rgba(255, 255, 255, 0.13);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.president-dashboard-grid span {
+    display: block;
+    color: #b8cfdf;
+    font-size: 0.65rem;
+    font-weight: 700;
+}
+
+.president-dashboard-grid strong {
+    display: block;
+    margin-top: 5px;
+    color: #ffffff;
+    font-size: 1rem;
+}
+
+
+/* ==================================================
+   CONTENT
+================================================== */
+
+.president-content {
+    padding: 64px 0 88px;
+}
+
+.president-content__container {
+    width: min(1180px, calc(100% - 48px));
+    margin: 0 auto;
+}
+
+.president-back-link {
+    display: inline-flex;
+    margin-bottom: 22px;
+    color: #1f5f99;
+    font-size: 0.78rem;
+    font-weight: 800;
+    text-decoration: none;
+}
+
+.president-back-link:hover {
+    text-decoration: underline;
+}
+
+
+/* ==================================================
+   START / RESULTS CARDS
+================================================== */
+
+.president-start-card,
+.president-results-card {
+    padding: 32px;
+    border: 1px solid #d9e2ec;
+    border-radius: 16px;
+    background: #ffffff;
+    box-shadow: 0 14px 36px rgba(16, 42, 67, 0.07);
+}
+
+.president-start-card h2,
+.president-results-card h2 {
+    margin: 0;
+    color: #102a43;
+    font-family: "Merriweather", Georgia, serif;
+    font-size: clamp(2rem, 4vw, 2.7rem);
+}
+
+.president-start-card > p:not(.president-eyebrow),
+.president-results-card > p:not(.president-eyebrow) {
+    max-width: 760px;
+    margin: 14px 0 0;
+    color: #627d98;
+    line-height: 1.75;
+}
+
+.president-national-preview {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 26px;
+}
+
+.president-national-preview > div {
+    padding: 16px;
+    border: 1px solid #e1e8ef;
+    border-radius: 10px;
+    background: #f8fafc;
+}
+
+.president-national-preview span {
+    display: block;
+    color: #7b8fa3;
+    font-size: 0.66rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.president-national-preview strong {
+    display: block;
+    margin-top: 6px;
+    color: #102a43;
+    font-size: 1rem;
+}
+
+
+/* ==================================================
+   BUTTONS
+================================================== */
+
+.president-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-family: "Inter", sans-serif;
+    font-size: 0.78rem;
+    font-weight: 800;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.president-button--primary {
+    border: 1px solid #1f5f99;
+    background: #1f5f99;
+    color: #ffffff;
+}
+
+.president-button--primary:hover,
+.president-button--primary:focus-visible {
+    background: #174f7f;
+    border-color: #174f7f;
+    outline: none;
+}
+
+.president-button--secondary {
+    border: 1px solid #bcccdc;
+    background: #ffffff;
+    color: #334e68;
+}
+
+.president-start-card .president-button {
+    margin-top: 24px;
+}
+
+
+/* ==================================================
+   GAME LAYOUT
+================================================== */
+
+.president-game-layout {
+    display: grid;
+    grid-template-columns:
+        minmax(0, 1.65fr)
+        minmax(300px, 0.75fr);
+    gap: 20px;
+}
+
+.president-main-column,
+.president-side-column {
+    display: grid;
+    gap: 18px;
+    align-content: start;
+}
+
+.president-panel {
+    padding: 24px;
+    border: 1px solid #d9e2ec;
+    border-radius: 14px;
+    background: #ffffff;
+    box-shadow: 0 10px 24px rgba(16, 42, 67, 0.05);
+}
+
+.president-panel h2 {
+    margin: 0;
+    color: #102a43;
+    font-family: "Merriweather", Georgia, serif;
+    font-size: 1.35rem;
+}
+
+.president-panel__heading,
+.president-scenario-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 18px;
+}
+
+.president-panel__heading > span,
+.president-scenario-top > span {
+    color: #7b8fa3;
+    font-size: 0.72rem;
+    font-weight: 800;
+}
+
+
+/* ==================================================
+   PROFILE
+================================================== */
+
+.president-profile-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 10px;
+    margin-top: 18px;
+}
+
+.president-profile-grid > div {
+    padding: 13px 14px;
+    border: 1px solid #e5ecf2;
+    border-radius: 9px;
+    background: #f8fafc;
+}
+
+.president-profile-grid span {
+    display: block;
+    color: #7b8fa3;
+    font-size: 0.64rem;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.president-profile-grid strong {
+    display: block;
+    margin-top: 5px;
+    color: #102a43;
+    font-size: 0.88rem;
+}
+
+.president-priorities {
+    margin-top: 20px;
+}
+
+.president-priorities h3 {
+    margin: 0 0 10px;
+    color: #102a43;
+    font-size: 0.86rem;
+}
+
+.president-priorities > div {
+    display: inline-flex;
+    margin: 0 7px 7px 0;
+    padding: 7px 10px;
+    border-radius: 999px;
+    background: #f2f6f9;
+    color: #486581;
+    font-size: 0.7rem;
+    font-weight: 700;
+}
+
+
+/* ==================================================
+   SCENARIO
+================================================== */
+
+.president-scenario-card > h2 {
+    margin-top: 8px;
+}
+
+.president-scenario-card > p {
+    margin: 12px 0 0;
+    color: #627d98;
+    line-height: 1.7;
+}
+
+.president-choice-grid {
+    display: grid;
+    gap: 10px;
+    margin-top: 22px;
+}
+
+.president-choice-button {
+    display: grid;
+    grid-template-columns: 34px minmax(0, 1fr);
+    gap: 12px;
+    align-items: center;
+    width: 100%;
+    min-height: 54px;
+    padding: 12px 14px;
+    border: 1px solid #d9e2ec;
+    border-radius: 10px;
+    background: #ffffff;
+    color: #334e68;
+    cursor: pointer;
+    font-family: "Inter", sans-serif;
+    text-align: left;
+}
+
+.president-choice-button > span {
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    background: #eaf3fb;
+    color: #174f7f;
+    font-size: 0.74rem;
+    font-weight: 800;
+}
+
+.president-choice-button strong {
+    font-size: 0.8rem;
+    line-height: 1.5;
+}
+
+.president-choice-button:hover,
+.president-choice-button:focus-visible {
+    border-color: #9fbdd4;
+    background: #f8fbfd;
+    outline: none;
+}
+
+.president-choice-button:disabled {
+    cursor: default;
+}
+
+.president-choice-selected {
+    border-color: #1f5f99;
+    background: #eef6fc;
+}
+
+
+/* ==================================================
+   OUTCOME
+================================================== */
+
+.president-outcome {
+    display: grid;
+    grid-template-columns: 42px minmax(0, 1fr);
+    gap: 14px;
+    margin-top: 20px;
+    padding: 18px;
+    border-radius: 10px;
+    background: #f8fafc;
+}
+
+.president-outcome[hidden] {
+    display: none;
+}
+
+.president-outcome-icon {
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: #eaf3fb;
+    color: #174f7f;
+    font-weight: 800;
+}
+
+.president-outcome h3 {
+    margin: 0;
+    color: #102a43;
+    font-size: 0.9rem;
+}
+
+.president-outcome p {
+    margin: 6px 0 0;
+    color: #627d98;
+    font-size: 0.8rem;
+    line-height: 1.65;
+}
+
+.president-action-row {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 18px;
+}
+
+
+/* ==================================================
+   NEWS
+================================================== */
+
+#presidentNewsFeed {
+    display: grid;
+    gap: 10px;
+    margin-top: 18px;
+}
+
+.president-news-item {
+    padding: 13px 14px;
+    border: 1px solid #e5ecf2;
+    border-radius: 9px;
+    background: #f8fafc;
+}
+
+.president-news-item span {
+    color: #1f5f99;
+    font-size: 0.64rem;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.president-news-item p {
+    margin: 6px 0 0;
+    color: #486581;
+    font-size: 0.76rem;
+    line-height: 1.6;
+}
+
+
+/* ==================================================
+   SIDE METRICS
+================================================== */
+
+.president-metric-list {
+    display: grid;
+    gap: 16px;
+    margin-top: 18px;
+}
+
+.president-metric-row > div:first-child {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.president-metric-row span {
+    color: #627d98;
+    font-size: 0.72rem;
+    font-weight: 700;
+}
+
+.president-metric-row strong {
+    color: #102a43;
+    font-size: 0.78rem;
+}
+
+.president-metric-track {
+    height: 8px;
+    margin-top: 7px;
+    overflow: hidden;
+    border-radius: 999px;
+    background: #e4ebf2;
+}
+
+.president-metric-fill {
+    height: 100%;
+    border-radius: inherit;
+    background: #1f5f99;
+    transition: width 220ms ease;
+}
+
+
+/* ==================================================
+   ACTIVITY
+================================================== */
+
+.president-activity-list {
+    display: grid;
+    gap: 10px;
+    margin-top: 16px;
+}
+
+.president-activity-list > div {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 11px 0;
+    border-bottom: 1px solid #edf2f7;
+}
+
+.president-activity-list > div:last-child {
+    border-bottom: 0;
+}
+
+.president-activity-list span {
+    color: #627d98;
+    font-size: 0.72rem;
+}
+
+.president-activity-list strong {
+    color: #102a43;
+    font-size: 0.76rem;
+    text-align: right;
+}
+
+
+/* ==================================================
+   OBJECTIVE
+================================================== */
+
+.president-objective-card {
+    padding: 22px;
+    border-left: 4px solid #1f5f99;
+    border-radius: 10px;
+    background: #ffffff;
+}
+
+.president-objective-card h3 {
+    margin: 0;
+    color: #102a43;
+    font-family: "Merriweather", Georgia, serif;
+    font-size: 1rem;
+}
+
+.president-objective-card p:last-child {
+    margin: 8px 0 0;
+    color: #627d98;
+    font-size: 0.78rem;
+    line-height: 1.65;
+}
+
+
+/* ==================================================
+   RESULTS
+================================================== */
+
+.president-results-card[hidden] {
+    display: none;
+}
+
+.president-report-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 26px;
+}
+
+.president-report-grid > div {
+    padding: 16px;
+    border: 1px solid #e1e8ef;
+    border-radius: 10px;
+    background: #f8fafc;
+}
+
+.president-report-grid span {
+    display: block;
+    color: #7b8fa3;
+    font-size: 0.65rem;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.president-report-grid strong {
+    display: block;
+    margin-top: 6px;
+    color: #102a43;
+    font-size: 1rem;
+}
+
+.president-final-grade {
+    margin-top: 22px;
+    padding: 20px;
+    border-radius: 12px;
+    background: #102a43;
+    text-align: center;
+}
+
+.president-final-grade span {
+    display: block;
+    color: #b8cfdf;
+    font-size: 0.68rem;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.president-final-grade strong {
+    display: block;
+    margin-top: 6px;
+    color: #ffffff;
+    font-size: 2rem;
+}
+
+.president-final-message {
+    margin-top: 20px;
+    color: #486581;
+    line-height: 1.7;
+    text-align: center;
+}
+
+.president-results-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 24px;
+}
+
+
+/* ==================================================
+   RESPONSIVE
+================================================== */
+
+@media (max-width: 980px) {
+
+    .president-hero__container,
+    .president-game-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .president-hero__dashboard {
+        max-width: 700px;
+    }
+
+}
+
+
+@media (max-width: 760px) {
+
+    .president-national-preview,
+    .president-profile-grid,
+    .president-report-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .president-hero {
+        padding: 60px 0;
+    }
+
+    .president-hero__container,
+    .president-content__container {
+        width: min(1180px, calc(100% - 32px));
+    }
+
+    .president-start-card,
+    .president-results-card,
+    .president-panel {
+        padding: 20px 18px;
+    }
+
+    .president-dashboard-grid,
+    .president-national-preview,
+    .president-profile-grid,
+    .president-report-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .president-panel__heading,
+    .president-scenario-top {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .president-action-row {
+        justify-content: stretch;
+    }
+
+    .president-action-row .president-button,
+    .president-results-actions .president-button {
+        width: 100%;
+    }
+
+}

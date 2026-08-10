@@ -1,0 +1,1262 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="Civic Pulse tracks ongoing national sentiment on leadership, institutions, the economy, media, and the direction of the country."
+    >
+
+    <title>
+        Civic Pulse | Civic Horizon Index
+    </title>
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Merriweather:wght@700&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="css/header.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="css/footer.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="css/civic-pulse.css"
+    >
+
+</head>
+
+<body>
+
+    <div id="headerContainer"></div>
+
+
+    <main class="civic-pulse-page">
+
+
+        <!-- HERO -->
+
+        <section class="civic-pulse-hero">
+
+            <div class="civic-pulse-hero__container">
+
+                <div class="civic-pulse-hero__content">
+
+                    <p class="civic-pulse-eyebrow">
+                        Permanent National Trackers
+                    </p>
+
+                    <h1>
+                        Civic Pulse
+                    </h1>
+
+                    <p>
+                        Follow how Civic Horizon participants feel about
+                        national leadership, institutions, the economy,
+                        news media, and the direction of the country.
+                    </p>
+
+
+                    <div class="civic-pulse-hero__links">
+
+                        <a href="#presidential-approval">
+                            Presidential Approval
+                        </a>
+
+                        <a href="#national-confidence">
+                            National Confidence
+                        </a>
+
+                        <a href="#country-direction">
+                            Country Direction
+                        </a>
+
+                    </div>
+
+                </div>
+
+
+                <aside class="civic-pulse-hero__card">
+
+                    <span>
+                        Ongoing Measurement
+                    </span>
+
+                    <strong>
+                        Track change over time
+                    </strong>
+
+                    <small>
+                        Permanent questions remain available so sentiment
+                        can be compared as national conditions change.
+                    </small>
+
+                </aside>
+
+            </div>
+
+        </section>
+
+
+        <!-- NATIONAL SNAPSHOT -->
+
+        <section class="civic-pulse-snapshot">
+
+            <div class="civic-pulse-section__container">
+
+                <header class="civic-pulse-section__heading">
+
+                    <p class="civic-pulse-eyebrow">
+                        National Snapshot
+                    </p>
+
+                    <h2>
+                        The pulse right now
+                    </h2>
+
+                    <p>
+                        A quick view of the permanent Civic Pulse trackers.
+                    </p>
+
+                </header>
+
+
+                <div class="civic-pulse-snapshot-grid">
+
+
+                    <article class="civic-pulse-snapshot-card">
+
+                        <span>
+                            Presidential Approval
+                        </span>
+
+                        <strong id="pulseApprovalSummary">
+                            Awaiting responses
+                        </strong>
+
+                        <a href="#presidential-approval">
+                            View approval tracker
+                        </a>
+
+                    </article>
+
+
+                    <article class="civic-pulse-snapshot-card">
+
+                        <span>
+                            Country Direction
+                        </span>
+
+                        <strong id="pulseDirectionSummary">
+                            Awaiting responses
+                        </strong>
+
+                        <a href="#country-direction">
+                            View direction tracker
+                        </a>
+
+                    </article>
+
+
+                    <article class="civic-pulse-snapshot-card">
+
+                        <span>
+                            Economic Confidence
+                        </span>
+
+                        <strong id="pulseEconomySummary">
+                            Awaiting responses
+                        </strong>
+
+                        <a href="#national-confidence">
+                            View confidence tracker
+                        </a>
+
+                    </article>
+
+
+                    <article class="civic-pulse-snapshot-card">
+
+                        <span>
+                            Institutional Confidence
+                        </span>
+
+                        <strong id="pulseInstitutionSummary">
+                            Awaiting responses
+                        </strong>
+
+                        <a href="#national-confidence">
+                            Explore institutions
+                        </a>
+
+                    </article>
+
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- PRESIDENTIAL APPROVAL -->
+
+        <section
+            id="presidential-approval"
+            class="civic-pulse-section civic-pulse-section--white"
+        >
+
+            <div class="civic-pulse-section__container">
+
+                <header class="civic-pulse-section__heading">
+
+                    <p class="civic-pulse-eyebrow">
+                        Leadership Tracker
+                    </p>
+
+                    <h2>
+                        Presidential Approval
+                    </h2>
+
+                    <p>
+                        How do Civic Horizon participants rate the current
+                        president's overall job performance?
+                    </p>
+
+                </header>
+
+
+                <div class="civic-pulse-feature-grid">
+
+
+                    <article class="civic-pulse-feature-card">
+
+                        <div class="civic-pulse-feature-card__top">
+
+                            <div>
+
+                                <span>
+                                    Approve
+                                </span>
+
+                                <strong id="pulseApprovalPercent">
+                                    —
+                                </strong>
+
+                            </div>
+
+
+                            <div>
+
+                                <span>
+                                    Disapprove
+                                </span>
+
+                                <strong id="pulseDisapprovalPercent">
+                                    —
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="civic-pulse-bar-group">
+
+                            <div>
+
+                                <span>
+                                    Approve
+                                </span>
+
+                                <div class="civic-pulse-progress-track">
+
+                                    <div
+                                        id="pulseApprovalFill"
+                                        class="civic-pulse-progress-fill"
+                                        style="width: 0%;"
+                                    ></div>
+
+                                </div>
+
+                            </div>
+
+
+                            <div>
+
+                                <span>
+                                    Disapprove
+                                </span>
+
+                                <div class="civic-pulse-progress-track">
+
+                                    <div
+                                        id="pulseDisapprovalFill"
+                                        class="civic-pulse-progress-fill"
+                                        style="width: 0%;"
+                                    ></div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <p
+                            id="pulseApprovalParticipation"
+                            class="civic-pulse-feature-note"
+                        >
+                            Awaiting responses.
+                        </p>
+
+                    </article>
+
+
+                    <article class="civic-pulse-vote-card">
+
+                        <p class="civic-pulse-card-label">
+                            Add Your View
+                        </p>
+
+                        <h3>
+                            How would you rate the president's overall job performance?
+                        </h3>
+
+
+                        <div class="civic-pulse-vote-options">
+
+                            <button
+                                type="button"
+                                class="civic-pulse-vote-button"
+                                data-approval-vote="approve"
+                            >
+                                Approve
+                            </button>
+
+                            <button
+                                type="button"
+                                class="civic-pulse-vote-button"
+                                data-approval-vote="disapprove"
+                            >
+                                Disapprove
+                            </button>
+
+                        </div>
+
+
+                        <p
+                            id="pulseApprovalMessage"
+                            class="civic-pulse-vote-message"
+                        ></p>
+
+                    </article>
+
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- COUNTRY DIRECTION -->
+
+        <section
+            id="country-direction"
+            class="civic-pulse-section civic-pulse-section--light"
+        >
+
+            <div class="civic-pulse-section__container">
+
+                <header class="civic-pulse-section__heading">
+
+                    <p class="civic-pulse-eyebrow">
+                        National Mood
+                    </p>
+
+                    <h2>
+                        Direction of the Country
+                    </h2>
+
+                    <p>
+                        Do participants believe the country is generally
+                        moving in the right direction or on the wrong track?
+                    </p>
+
+                </header>
+
+
+                <div class="civic-pulse-feature-grid">
+
+
+                    <article class="civic-pulse-feature-card">
+
+                        <div class="civic-pulse-feature-card__top">
+
+                            <div>
+
+                                <span>
+                                    Right Direction
+                                </span>
+
+                                <strong id="directionRightPercent">
+                                    —
+                                </strong>
+
+                            </div>
+
+
+                            <div>
+
+                                <span>
+                                    Wrong Track
+                                </span>
+
+                                <strong id="directionWrongPercent">
+                                    —
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="civic-pulse-bar-group">
+
+                            <div>
+
+                                <span>
+                                    Right Direction
+                                </span>
+
+                                <div class="civic-pulse-progress-track">
+
+                                    <div
+                                        id="directionRightFill"
+                                        class="civic-pulse-progress-fill"
+                                        style="width: 0%;"
+                                    ></div>
+
+                                </div>
+
+                            </div>
+
+
+                            <div>
+
+                                <span>
+                                    Wrong Track
+                                </span>
+
+                                <div class="civic-pulse-progress-track">
+
+                                    <div
+                                        id="directionWrongFill"
+                                        class="civic-pulse-progress-fill"
+                                        style="width: 0%;"
+                                    ></div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <p
+                            id="directionParticipation"
+                            class="civic-pulse-feature-note"
+                        >
+                            Awaiting responses.
+                        </p>
+
+                    </article>
+
+
+                    <article class="civic-pulse-vote-card">
+
+                        <p class="civic-pulse-card-label">
+                            Add Your View
+                        </p>
+
+                        <h3>
+                            How do you feel about the direction of the country?
+                        </h3>
+
+
+                        <div class="civic-pulse-vote-options">
+
+                            <button
+                                type="button"
+                                class="civic-pulse-vote-button"
+                                data-direction-vote="right"
+                            >
+                                Right Direction
+                            </button>
+
+                            <button
+                                type="button"
+                                class="civic-pulse-vote-button"
+                                data-direction-vote="wrong"
+                            >
+                                Wrong Track
+                            </button>
+
+                        </div>
+
+
+                        <p
+                            id="directionVoteMessage"
+                            class="civic-pulse-vote-message"
+                        ></p>
+
+                    </article>
+
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- NATIONAL CONFIDENCE -->
+
+        <section
+            id="national-confidence"
+            class="civic-pulse-section civic-pulse-section--white"
+        >
+
+            <div class="civic-pulse-section__container">
+
+                <header class="civic-pulse-section__heading">
+
+                    <p class="civic-pulse-eyebrow">
+                        Confidence Tracker
+                    </p>
+
+                    <h2>
+                        National Confidence
+                    </h2>
+
+                    <p>
+                        Measure confidence across institutions and national
+                        conditions using permanent Civic Pulse questions.
+                    </p>
+
+                </header>
+
+
+                <div class="civic-pulse-confidence-grid">
+
+
+                    <article class="civic-pulse-confidence-card">
+
+                        <div>
+
+                            <span>
+                                Federal Government
+                            </span>
+
+                            <strong id="confidenceGovernmentValue">
+                                —
+                            </strong>
+
+                        </div>
+
+                        <div class="civic-pulse-progress-track">
+
+                            <div
+                                id="confidenceGovernmentFill"
+                                class="civic-pulse-progress-fill"
+                                style="width: 0%;"
+                            ></div>
+
+                        </div>
+
+                        <p>
+                            Confidence in the federal government overall.
+                        </p>
+
+                    </article>
+
+
+                    <article class="civic-pulse-confidence-card">
+
+                        <div>
+
+                            <span>
+                                Congress
+                            </span>
+
+                            <strong id="confidenceCongressValue">
+                                —
+                            </strong>
+
+                        </div>
+
+                        <div class="civic-pulse-progress-track">
+
+                            <div
+                                id="confidenceCongressFill"
+                                class="civic-pulse-progress-fill"
+                                style="width: 0%;"
+                            ></div>
+
+                        </div>
+
+                        <p>
+                            Confidence in Congress as a national institution.
+                        </p>
+
+                    </article>
+
+
+                    <article class="civic-pulse-confidence-card">
+
+                        <div>
+
+                            <span>
+                                Supreme Court
+                            </span>
+
+                            <strong id="confidenceCourtValue">
+                                —
+                            </strong>
+
+                        </div>
+
+                        <div class="civic-pulse-progress-track">
+
+                            <div
+                                id="confidenceCourtFill"
+                                class="civic-pulse-progress-fill"
+                                style="width: 0%;"
+                            ></div>
+
+                        </div>
+
+                        <p>
+                            Confidence in the Supreme Court.
+                        </p>
+
+                    </article>
+
+
+                    <article class="civic-pulse-confidence-card">
+
+                        <div>
+
+                            <span>
+                                Economy
+                            </span>
+
+                            <strong id="confidenceEconomyValue">
+                                —
+                            </strong>
+
+                        </div>
+
+                        <div class="civic-pulse-progress-track">
+
+                            <div
+                                id="confidenceEconomyFill"
+                                class="civic-pulse-progress-fill"
+                                style="width: 0%;"
+                            ></div>
+
+                        </div>
+
+                        <p>
+                            Confidence in current economic conditions.
+                        </p>
+
+                    </article>
+
+
+                    <article class="civic-pulse-confidence-card">
+
+                        <div>
+
+                            <span>
+                                News Media
+                            </span>
+
+                            <strong id="confidenceMediaValue">
+                                —
+                            </strong>
+
+                        </div>
+
+                        <div class="civic-pulse-progress-track">
+
+                            <div
+                                id="confidenceMediaFill"
+                                class="civic-pulse-progress-fill"
+                                style="width: 0%;"
+                            ></div>
+
+                        </div>
+
+                        <p>
+                            Confidence in national news media.
+                        </p>
+
+                    </article>
+
+
+                    <article class="civic-pulse-confidence-card">
+
+                        <div>
+
+                            <span>
+                                Democratic Institutions
+                            </span>
+
+                            <strong id="confidenceDemocracyValue">
+                                —
+                            </strong>
+
+                        </div>
+
+                        <div class="civic-pulse-progress-track">
+
+                            <div
+                                id="confidenceDemocracyFill"
+                                class="civic-pulse-progress-fill"
+                                style="width: 0%;"
+                            ></div>
+
+                        </div>
+
+                        <p>
+                            Confidence in the functioning of democratic institutions.
+                        </p>
+
+                    </article>
+
+
+                </div>
+
+
+                <article class="civic-pulse-confidence-survey civic-pulse-confidence-survey--interactive">
+
+    <div class="civic-pulse-confidence-survey__heading">
+
+        <p class="civic-pulse-card-label">
+            Confidence Survey
+        </p>
+
+        <h3>
+            Add your confidence ratings
+        </h3>
+
+        <p>
+            Rate your confidence in each area from very low
+            to very high. You can update your answers later.
+        </p>
+
+    </div>
+
+
+    <div class="civic-confidence-question-list">
+
+
+        <!-- FEDERAL GOVERNMENT -->
+
+        <div class="civic-confidence-question">
+
+            <div class="civic-confidence-question__heading">
+
+                <strong>
+                    Federal Government
+                </strong>
+
+                <span id="confidenceGovernmentUserValue">
+                    Not rated
+                </span>
+
+            </div>
+
+
+            <div
+                class="civic-confidence-options"
+                data-confidence-group="government"
+            >
+
+                <button
+                    type="button"
+                    data-confidence-value="20"
+                >
+                    Very Low
+                </button>
+
+                <button
+                    type="button"
+                    data-confidence-value="40"
+                >
+                    Low
+                </button>
+
+                <button
+                    type="button"
+                    data-confidence-value="60"
+                >
+                    Moderate
+                </button>
+
+                <button
+                    type="button"
+                    data-confidence-value="80"
+                >
+                    High
+                </button>
+
+                <button
+                    type="button"
+                    data-confidence-value="100"
+                >
+                    Very High
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- CONGRESS -->
+
+        <div class="civic-confidence-question">
+
+            <div class="civic-confidence-question__heading">
+
+                <strong>
+                    Congress
+                </strong>
+
+                <span id="confidenceCongressUserValue">
+                    Not rated
+                </span>
+
+            </div>
+
+
+            <div
+                class="civic-confidence-options"
+                data-confidence-group="congress"
+            >
+
+                <button type="button" data-confidence-value="20">
+                    Very Low
+                </button>
+
+                <button type="button" data-confidence-value="40">
+                    Low
+                </button>
+
+                <button type="button" data-confidence-value="60">
+                    Moderate
+                </button>
+
+                <button type="button" data-confidence-value="80">
+                    High
+                </button>
+
+                <button type="button" data-confidence-value="100">
+                    Very High
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- SUPREME COURT -->
+
+        <div class="civic-confidence-question">
+
+            <div class="civic-confidence-question__heading">
+
+                <strong>
+                    Supreme Court
+                </strong>
+
+                <span id="confidenceCourtUserValue">
+                    Not rated
+                </span>
+
+            </div>
+
+
+            <div
+                class="civic-confidence-options"
+                data-confidence-group="court"
+            >
+
+                <button type="button" data-confidence-value="20">
+                    Very Low
+                </button>
+
+                <button type="button" data-confidence-value="40">
+                    Low
+                </button>
+
+                <button type="button" data-confidence-value="60">
+                    Moderate
+                </button>
+
+                <button type="button" data-confidence-value="80">
+                    High
+                </button>
+
+                <button type="button" data-confidence-value="100">
+                    Very High
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- ECONOMY -->
+
+        <div class="civic-confidence-question">
+
+            <div class="civic-confidence-question__heading">
+
+                <strong>
+                    Economy
+                </strong>
+
+                <span id="confidenceEconomyUserValue">
+                    Not rated
+                </span>
+
+            </div>
+
+
+            <div
+                class="civic-confidence-options"
+                data-confidence-group="economy"
+            >
+
+                <button type="button" data-confidence-value="20">
+                    Very Low
+                </button>
+
+                <button type="button" data-confidence-value="40">
+                    Low
+                </button>
+
+                <button type="button" data-confidence-value="60">
+                    Moderate
+                </button>
+
+                <button type="button" data-confidence-value="80">
+                    High
+                </button>
+
+                <button type="button" data-confidence-value="100">
+                    Very High
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- NEWS MEDIA -->
+
+        <div class="civic-confidence-question">
+
+            <div class="civic-confidence-question__heading">
+
+                <strong>
+                    News Media
+                </strong>
+
+                <span id="confidenceMediaUserValue">
+                    Not rated
+                </span>
+
+            </div>
+
+
+            <div
+                class="civic-confidence-options"
+                data-confidence-group="media"
+            >
+
+                <button type="button" data-confidence-value="20">
+                    Very Low
+                </button>
+
+                <button type="button" data-confidence-value="40">
+                    Low
+                </button>
+
+                <button type="button" data-confidence-value="60">
+                    Moderate
+                </button>
+
+                <button type="button" data-confidence-value="80">
+                    High
+                </button>
+
+                <button type="button" data-confidence-value="100">
+                    Very High
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- DEMOCRATIC INSTITUTIONS -->
+
+        <div class="civic-confidence-question">
+
+            <div class="civic-confidence-question__heading">
+
+                <strong>
+                    Democratic Institutions
+                </strong>
+
+                <span id="confidenceDemocracyUserValue">
+                    Not rated
+                </span>
+
+            </div>
+
+
+            <div
+                class="civic-confidence-options"
+                data-confidence-group="democracy"
+            >
+
+                <button type="button" data-confidence-value="20">
+                    Very Low
+                </button>
+
+                <button type="button" data-confidence-value="40">
+                    Low
+                </button>
+
+                <button type="button" data-confidence-value="60">
+                    Moderate
+                </button>
+
+                <button type="button" data-confidence-value="80">
+                    High
+                </button>
+
+                <button type="button" data-confidence-value="100">
+                    Very High
+                </button>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+    <div class="civic-confidence-submit-row">
+
+        <button
+            type="button"
+            id="confidenceSubmitButton"
+            class="civic-pulse-button"
+        >
+            Save Confidence Ratings
+        </button>
+
+        <p
+            id="confidenceSurveyMessage"
+            class="civic-pulse-vote-message"
+        ></p>
+
+    </div>
+
+</article>
+
+            </div>
+
+        </section>
+
+
+        <!-- TRENDS -->
+
+        <section class="civic-pulse-section civic-pulse-section--light">
+
+            <div class="civic-pulse-section__container">
+
+                <header class="civic-pulse-section__heading">
+
+                    <p class="civic-pulse-eyebrow">
+                        Trend Center
+                    </p>
+
+                    <h2>
+                        How sentiment changes
+                    </h2>
+
+                    <p>
+                        Once enough responses are collected over time,
+                        Civic Pulse will display historical changes rather
+                        than only current percentages.
+                    </p>
+
+                </header>
+
+
+                <div class="civic-pulse-trend-grid">
+
+
+                    <article class="civic-pulse-trend-card">
+
+                        <span>
+                            Presidential Approval
+                        </span>
+
+                        <strong>
+                            Trend history
+                        </strong>
+
+                        <p>
+                            Compare approval across days, weeks, and months.
+                        </p>
+
+                        <div class="civic-pulse-trend-placeholder">
+                            Historical trend data will appear here.
+                        </div>
+
+                    </article>
+
+
+                    <article class="civic-pulse-trend-card">
+
+                        <span>
+                            National Confidence
+                        </span>
+
+                        <strong>
+                            Confidence over time
+                        </strong>
+
+                        <p>
+                            Watch confidence rise or fall across institutions.
+                        </p>
+
+                        <div class="civic-pulse-trend-placeholder">
+                            Historical trend data will appear here.
+                        </div>
+
+                    </article>
+
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- METHODOLOGY -->
+
+        <section class="civic-pulse-methodology">
+
+            <div class="civic-pulse-section__container">
+
+                <div class="civic-pulse-methodology__grid">
+
+                    <div>
+
+                        <p class="civic-pulse-eyebrow">
+                            Understanding the Numbers
+                        </p>
+
+                        <h2>
+                            Transparent by design
+                        </h2>
+
+                        <p>
+                            Civic Pulse results represent responses from
+                            Civic Horizon Index participants. Unless a future
+                            methodology specifically uses representative
+                            sampling and weighting, these results should not
+                            be described as a scientific estimate of all
+                            Americans.
+                        </p>
+
+                        <p>
+                            The goal is to provide a transparent view of
+                            participant sentiment and how it changes over time.
+                        </p>
+
+                    </div>
+
+
+                    <aside>
+
+                        <strong>
+                            Nonpartisan presentation
+                        </strong>
+
+                        <p>
+                            Civic Horizon Index does not endorse a political
+                            party, candidate, officeholder, institution,
+                            or policy position.
+                        </p>
+
+                    </aside>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+
+    <div id="footerContainer"></div>
+
+
+    <script
+        type="module"
+        src="js/civic-pulse.js"
+    ></script>
+
+</body>
+
+</html>

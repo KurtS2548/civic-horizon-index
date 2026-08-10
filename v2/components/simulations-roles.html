@@ -126,66 +126,106 @@
 
             <!-- SIMULATION 2 -->
 
-            <article class="simulation-role-card locked">
+            <article class="simulation-role-card">
 
-                <div class="simulation-role-card__header">
+    <div class="simulation-role-card__header">
 
-                    <span class="simulation-status-badge coming-soon">
-                        Coming Soon
+        <span
+            id="presidentSimulationStatus"
+            class="simulation-status-badge available"
+        >
+            Available
+        </span>
+
+        <span class="simulation-role-number">
+            Simulation 2
+        </span>
+
+    </div>
+
+
+    <div class="simulation-role-card__body">
+
+        <span class="simulation-role-index">
+            02
+        </span>
+
+        <div>
+
+            <h3>
+                President
+            </h3>
+
+            <p>
+                Lead the executive branch, respond to national
+                events, negotiate with Congress, and decide
+                whether to sign or veto legislation.
+            </p>
+
+
+            <div class="simulation-role-details">
+
+                <span>
+                    Decision simulation
+                </span>
+
+                <span>
+                    About 15 minutes
+                </span>
+
+                <span>
+                    Multiple outcomes
+                </span>
+
+            </div>
+
+
+            <div
+                id="presidentSimulationRecord"
+                class="simulation-role-record"
+                hidden
+            >
+
+                <div>
+
+                    <span>
+                        Latest Grade
                     </span>
 
-                    <span class="simulation-role-number">
-                        Simulation 2
-                    </span>
+                    <strong id="presidentCardGrade">
+                        —
+                    </strong>
 
                 </div>
 
+                <div>
 
-                <div class="simulation-role-card__body">
-
-                    <span class="simulation-role-index">
-                        02
+                    <span>
+                        Terms Served
                     </span>
 
-                    <div>
-
-                        <h3>
-                            President
-                        </h3>
-
-                        <p>
-                            Lead the executive branch, respond to national
-                            events, negotiate with Congress, and decide
-                            whether to sign or veto legislation.
-                        </p>
-
-
-                        <div class="simulation-role-details">
-
-                            <span>
-                                Decision simulation
-                            </span>
-
-                            <span>
-                                National leadership
-                            </span>
-
-                        </div>
-
-
-                        <button
-                            type="button"
-                            class="simulation-locked-button"
-                            disabled
-                        >
-                            Locked
-                        </button>
-
-                    </div>
+                    <strong id="presidentCardRuns">
+                        0
+                    </strong>
 
                 </div>
 
-            </article>
+            </div>
+
+
+            <a
+                href="president.html"
+                id="presidentSimulationButton"
+                class="simulation-button simulation-button--primary"
+            >
+                Launch Simulation
+            </a>
+
+        </div>
+
+    </div>
+
+</article>
 
 
             <!-- SIMULATION 3 -->
