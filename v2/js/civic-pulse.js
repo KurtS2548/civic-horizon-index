@@ -2,24 +2,108 @@
 ==================================================
 CIVIC HORIZON INDEX V2
 CIVIC PULSE
+LIVE FIREBASE CONTROLLER
 ==================================================
 */
 
 
-const approvalStorageKey =
-    "civicPulsePresidentialApprovalVotes";
+import {
 
-const approvalUserVoteKey =
+    subscribeToPresidentialApproval,
+
+    subscribeToCountryDirection,
+
+    subscribeToNationalConfidence,
+
+    submitPresidentialApproval,
+
+    submitCountryDirection,
+
+    submitNationalConfidence
+
+} from "./services/firebase-service.js";
+
+
+/*
+==================================================
+LOCAL PARTICIPANT KEYS
+==================================================
+*/
+
+const participantIdStorageKey =
+    "civicPulseParticipantId";
+
+
+const approvalSelectionStorageKey =
     "civicPulseUserApprovalVote";
 
-const directionStorageKey =
-    "civicPulseCountryDirectionVotes";
 
-const directionUserVoteKey =
+const directionSelectionStorageKey =
     "civicPulseUserDirectionVote";
 
-const confidenceStorageKey =
+
+const confidenceSelectionStorageKey =
     "civicPulseConfidenceRatings";
+
+
+/*
+==================================================
+LIVE DATA STATE
+==================================================
+*/
+
+const pulseState = {
+
+    approvalResponses: [],
+
+    directionResponses: [],
+
+    confidenceResponses: []
+
+};
+
+
+/*
+==================================================
+PAGE INITIALIZATION
+==================================================
+*/
+
+async function initializeCivicPulsePage() {
+
+    await Promise.all([
+
+        loadComponent(
+            "headerContainer",
+            "components/header.html"
+        ),
+
+        loadComponent(
+            "footerContainer",
+            "components/footer.html"
+        )
+
+    ]);
+
+
+    initializeHeader();
+
+
+    initializeApprovalVoting();
+
+
+    initializeDirectionVoting();
+
+
+    initializeConfidenceVoting();
+
+
+    restoreLocalSelections();
+
+
+    initializeLiveSubscriptions();
+
+}
 
 
 /*
@@ -40,7 +124,9 @@ async function loadComponent(
 
 
     if (!container) {
+
         return false;
+
     }
 
 
@@ -84,40 +170,154 @@ async function loadComponent(
 
 /*
 ==================================================
-INITIALIZE PAGE
+LIVE FIREBASE SUBSCRIPTIONS
 ==================================================
 */
 
-async function initializeCivicPulsePage() {
+function initializeLiveSubscriptions() {
 
-    await Promise.all([
+    subscribeToPresidentialApproval(
 
-        loadComponent(
-            "headerContainer",
-            "components/header.html"
-        ),
+        responses => {
 
-        loadComponent(
-            "footerContainer",
-            "components/footer.html"
-        )
-
-    ]);
+            pulseState.approvalResponses =
+                responses;
 
 
-    initializeHeader();
+            renderApprovalTracker();
 
-    initializeApprovalVoting();
+        },
 
-    initializeDirectionVoting();
+        error => {
 
-    initializeConfidenceVoting();
+            console.error(
+                "Presidential Approval could not be loaded:",
+                error
+            );
 
-    updateApprovalTracker();
 
-    updateDirectionTracker();
+            setText(
+                "pulseApprovalParticipation",
+                "Live results are temporarily unavailable."
+            );
 
-    initializeConfidenceState();
+        }
+
+    );
+
+
+    subscribeToCountryDirection(
+
+        responses => {
+
+            pulseState.directionResponses =
+                responses;
+
+
+            renderDirectionTracker();
+
+        },
+
+        error => {
+
+            console.error(
+                "Country Direction could not be loaded:",
+                error
+            );
+
+
+            setText(
+                "directionParticipation",
+                "Live results are temporarily unavailable."
+            );
+
+        }
+
+    );
+
+
+    subscribeToNationalConfidence(
+
+        responses => {
+
+            pulseState.confidenceResponses =
+                responses;
+
+
+            renderConfidenceTracker();
+
+        },
+
+        error => {
+
+            console.error(
+                "National Confidence could not be loaded:",
+                error
+            );
+
+
+            setText(
+                "confidenceSurveyMessage",
+                "Live confidence results are temporarily unavailable."
+            );
+
+        }
+
+    );
+
+}
+
+
+/*
+==================================================
+PARTICIPANT ID
+==================================================
+*/
+
+function getParticipantId() {
+
+    const existing =
+        getStoredValue(
+            participantIdStorageKey
+        );
+
+
+    if (existing) {
+
+        return existing;
+
+    }
+
+
+    let participantId;
+
+
+    if (
+        window.crypto &&
+        typeof window.crypto.randomUUID ===
+        "function"
+    ) {
+
+        participantId =
+            `participant-${window.crypto.randomUUID()}`;
+
+    } else {
+
+        participantId =
+            `participant-${Date.now()}-${Math.random()
+                .toString(36)
+                .slice(2, 12)}`;
+
+    }
+
+
+    setStoredValue(
+        participantIdStorageKey,
+        participantId
+    );
+
+
+    return participantId;
 
 }
 
@@ -130,87 +330,187 @@ PRESIDENTIAL APPROVAL VOTING
 
 function initializeApprovalVoting() {
 
-    const buttons =
-        document.querySelectorAll(
+    document
+        .querySelectorAll(
             "[data-approval-vote]"
+        )
+        .forEach(
+            button => {
+
+                button.addEventListener(
+                    "click",
+                    async () => {
+
+                        const vote =
+                            button.dataset.approvalVote;
+
+
+                        if (
+                            vote !== "approve" &&
+                            vote !== "disapprove"
+                        ) {
+
+                            return;
+
+                        }
+
+
+                        setApprovalButtonsDisabled(
+                            true
+                        );
+
+
+                        setText(
+                            "pulseApprovalMessage",
+                            "Saving your response..."
+                        );
+
+
+                        try {
+
+                            const firebaseResponse =
+                                vote === "approve"
+                                    ? "Approve"
+                                    : "Disapprove";
+
+
+                            await submitPresidentialApproval(
+                                firebaseResponse,
+                                getParticipantId()
+                            );
+
+
+                            setStoredValue(
+                                approvalSelectionStorageKey,
+                                vote
+                            );
+
+
+                            restoreApprovalSelection();
+
+
+                            setText(
+                                "pulseApprovalMessage",
+                                "Your response has been recorded."
+                            );
+
+                        } catch (error) {
+
+                            console.error(
+                                "Approval response could not be saved:",
+                                error
+                            );
+
+
+                            setText(
+                                "pulseApprovalMessage",
+                                "Your response could not be saved. Please try again."
+                            );
+
+                        } finally {
+
+                            setApprovalButtonsDisabled(
+                                false
+                            );
+
+                        }
+
+                    }
+                );
+
+            }
         );
-
-
-    buttons.forEach(
-        button => {
-
-            button.addEventListener(
-                "click",
-                () => {
-
-                    const vote =
-                        button.dataset.approvalVote;
-
-
-                    recordSingleChoiceVote(
-                        approvalStorageKey,
-                        approvalUserVoteKey,
-                        vote,
-                        [
-                            "approve",
-                            "disapprove"
-                        ]
-                    );
-
-
-                    setText(
-                        "pulseApprovalMessage",
-                        "Your response has been recorded on this device."
-                    );
-
-
-                    updateApprovalTracker();
-
-                }
-            );
-
-        }
-    );
 
 }
 
 
 /*
 ==================================================
-UPDATE APPROVAL TRACKER
+PRESIDENTIAL APPROVAL RESULTS
 ==================================================
 */
 
-function updateApprovalTracker() {
+function renderApprovalTracker() {
 
-    const votes =
-        getVoteTotals(
-            approvalStorageKey,
-            {
-                approve: 0,
-                disapprove: 0
+    let approve =
+        0;
+
+
+    let disapprove =
+        0;
+
+
+    let neutral =
+        0;
+
+
+    pulseState.approvalResponses
+        .forEach(
+            record => {
+
+                const response =
+                    String(
+                        record.response || ""
+                    );
+
+
+                if (
+                    response ===
+                    "Approve" ||
+                    response ===
+                    "Strongly Approve"
+                ) {
+
+                    approve +=
+                        1;
+
+                } else if (
+                    response ===
+                    "Disapprove" ||
+                    response ===
+                    "Strongly Disapprove"
+                ) {
+
+                    disapprove +=
+                        1;
+
+                } else if (
+                    response ===
+                    "Neutral"
+                ) {
+
+                    neutral +=
+                        1;
+
+                }
+
             }
         );
 
 
-    const total =
-        votes.approve +
-        votes.disapprove;
+    const decisiveResponses =
+        approve +
+        disapprove;
+
+
+    const totalResponses =
+        decisiveResponses +
+        neutral;
 
 
     const approvePercent =
-        total > 0
+        decisiveResponses > 0
             ? Math.round(
                 (
-                    votes.approve /
-                    total
+                    approve /
+                    decisiveResponses
                 ) * 100
             )
             : 0;
 
 
     const disapprovePercent =
-        total > 0
+        decisiveResponses > 0
             ? 100 -
                 approvePercent
             : 0;
@@ -218,7 +518,7 @@ function updateApprovalTracker() {
 
     setText(
         "pulseApprovalPercent",
-        total > 0
+        decisiveResponses > 0
             ? `${approvePercent}%`
             : "—"
     );
@@ -226,25 +526,9 @@ function updateApprovalTracker() {
 
     setText(
         "pulseDisapprovalPercent",
-        total > 0
+        decisiveResponses > 0
             ? `${disapprovePercent}%`
             : "—"
-    );
-
-
-    setText(
-        "pulseApprovalSummary",
-        total > 0
-            ? `${approvePercent}% approve`
-            : "Awaiting responses"
-    );
-
-
-    setText(
-        "pulseApprovalParticipation",
-        total > 0
-            ? `${total} response${total === 1 ? "" : "s"} recorded on this device.`
-            : "Awaiting responses."
     );
 
 
@@ -260,96 +544,264 @@ function updateApprovalTracker() {
     );
 
 
-    restoreSelectedButtons(
-        "[data-approval-vote]",
-        "approvalVote",
-        approvalUserVoteKey
-    );
+    if (
+        totalResponses >
+        0
+    ) {
+
+        const neutralText =
+            neutral > 0
+                ? ` ${neutral} neutral response${neutral === 1 ? "" : "s"} are not included in the approve/disapprove percentage.`
+                : "";
+
+
+        setText(
+            "pulseApprovalParticipation",
+            `${totalResponses} total response${totalResponses === 1 ? "" : "s"}.${neutralText}`
+        );
+
+
+        setText(
+            "pulseApprovalSummary",
+            decisiveResponses > 0
+                ? `${approvePercent}% approve`
+                : "Awaiting approve/disapprove responses"
+        );
+
+    } else {
+
+        setText(
+            "pulseApprovalParticipation",
+            "Awaiting responses."
+        );
+
+
+        setText(
+            "pulseApprovalSummary",
+            "Awaiting responses"
+        );
+
+    }
 
 }
 
 
 /*
 ==================================================
-COUNTRY DIRECTION
+APPROVAL BUTTON STATE
+==================================================
+*/
+
+function restoreApprovalSelection() {
+
+    const selectedVote =
+        getStoredValue(
+            approvalSelectionStorageKey
+        );
+
+
+    document
+        .querySelectorAll(
+            "[data-approval-vote]"
+        )
+        .forEach(
+            button => {
+
+                button.classList.toggle(
+                    "is-selected",
+                    button.dataset.approvalVote ===
+                    selectedVote
+                );
+
+            }
+        );
+
+}
+
+
+function setApprovalButtonsDisabled(
+    disabled
+) {
+
+    document
+        .querySelectorAll(
+            "[data-approval-vote]"
+        )
+        .forEach(
+            button => {
+
+                button.disabled =
+                    disabled;
+
+            }
+        );
+
+}
+
+
+/*
+==================================================
+COUNTRY DIRECTION VOTING
 ==================================================
 */
 
 function initializeDirectionVoting() {
 
-    const buttons =
-        document.querySelectorAll(
+    document
+        .querySelectorAll(
             "[data-direction-vote]"
+        )
+        .forEach(
+            button => {
+
+                button.addEventListener(
+                    "click",
+                    async () => {
+
+                        const vote =
+                            button.dataset.directionVote;
+
+
+                        if (
+                            vote !== "right" &&
+                            vote !== "wrong"
+                        ) {
+
+                            return;
+
+                        }
+
+
+                        setDirectionButtonsDisabled(
+                            true
+                        );
+
+
+                        setText(
+                            "directionVoteMessage",
+                            "Saving your response..."
+                        );
+
+
+                        try {
+
+                            const firebaseResponse =
+                                vote === "right"
+                                    ? "Right Direction"
+                                    : "Wrong Track";
+
+
+                            await submitCountryDirection(
+                                firebaseResponse,
+                                getParticipantId()
+                            );
+
+
+                            setStoredValue(
+                                directionSelectionStorageKey,
+                                vote
+                            );
+
+
+                            restoreDirectionSelection();
+
+
+                            setText(
+                                "directionVoteMessage",
+                                "Your response has been recorded."
+                            );
+
+                        } catch (error) {
+
+                            console.error(
+                                "Country Direction response could not be saved:",
+                                error
+                            );
+
+
+                            setText(
+                                "directionVoteMessage",
+                                "Your response could not be saved. Please try again."
+                            );
+
+                        } finally {
+
+                            setDirectionButtonsDisabled(
+                                false
+                            );
+
+                        }
+
+                    }
+                );
+
+            }
         );
-
-
-    buttons.forEach(
-        button => {
-
-            button.addEventListener(
-                "click",
-                () => {
-
-                    const vote =
-                        button.dataset.directionVote;
-
-
-                    recordSingleChoiceVote(
-                        directionStorageKey,
-                        directionUserVoteKey,
-                        vote,
-                        [
-                            "right",
-                            "wrong"
-                        ]
-                    );
-
-
-                    setText(
-                        "directionVoteMessage",
-                        "Your response has been recorded on this device."
-                    );
-
-
-                    updateDirectionTracker();
-
-                }
-            );
-
-        }
-    );
 
 }
 
 
 /*
 ==================================================
-UPDATE COUNTRY DIRECTION
+COUNTRY DIRECTION RESULTS
 ==================================================
 */
 
-function updateDirectionTracker() {
+function renderDirectionTracker() {
 
-    const votes =
-        getVoteTotals(
-            directionStorageKey,
-            {
-                right: 0,
-                wrong: 0
+    let right =
+        0;
+
+
+    let wrong =
+        0;
+
+
+    pulseState.directionResponses
+        .forEach(
+            record => {
+
+                const response =
+                    String(
+                        record.response || ""
+                    );
+
+
+                if (
+                    response ===
+                    "Right Direction"
+                ) {
+
+                    right +=
+                        1;
+
+                }
+
+
+                if (
+                    response ===
+                    "Wrong Track"
+                ) {
+
+                    wrong +=
+                        1;
+
+                }
+
             }
         );
 
 
     const total =
-        votes.right +
-        votes.wrong;
+        right +
+        wrong;
 
 
     const rightPercent =
         total > 0
             ? Math.round(
                 (
-                    votes.right /
+                    right /
                     total
                 ) * 100
             )
@@ -379,22 +831,6 @@ function updateDirectionTracker() {
     );
 
 
-    setText(
-        "pulseDirectionSummary",
-        total > 0
-            ? `${rightPercent}% right direction`
-            : "Awaiting responses"
-    );
-
-
-    setText(
-        "directionParticipation",
-        total > 0
-            ? `${total} response${total === 1 ? "" : "s"} recorded on this device.`
-            : "Awaiting responses."
-    );
-
-
     setFillWidth(
         "directionRightFill",
         rightPercent
@@ -407,10 +843,19 @@ function updateDirectionTracker() {
     );
 
 
-    restoreSelectedButtons(
-        "[data-direction-vote]",
-        "directionVote",
-        directionUserVoteKey
+    setText(
+        "directionParticipation",
+        total > 0
+            ? `${total} total response${total === 1 ? "" : "s"}.`
+            : "Awaiting responses."
+    );
+
+
+    setText(
+        "pulseDirectionSummary",
+        total > 0
+            ? `${rightPercent}% right direction`
+            : "Awaiting responses"
     );
 
 }
@@ -418,208 +863,29 @@ function updateDirectionTracker() {
 
 /*
 ==================================================
-GENERIC SINGLE-CHOICE VOTE
+DIRECTION BUTTON STATE
 ==================================================
 */
 
-function recordSingleChoiceVote(
-    storageKey,
-    userVoteKey,
-    vote,
-    allowedVotes
-) {
+function restoreDirectionSelection() {
 
-    if (
-        !allowedVotes.includes(
-            vote
-        )
-    ) {
-
-        return;
-
-    }
-
-
-    const defaults =
-        {};
-
-
-    allowedVotes.forEach(
-        value => {
-
-            defaults[value] =
-                0;
-
-        }
-    );
-
-
-    const totals =
-        getVoteTotals(
-            storageKey,
-            defaults
-        );
-
-
-    const previousVote =
+    const selectedVote =
         getStoredValue(
-            userVoteKey
-        );
-
-
-    if (
-        previousVote ===
-        vote
-    ) {
-
-        return;
-
-    }
-
-
-    if (
-        previousVote &&
-        Object.hasOwn(
-            totals,
-            previousVote
-        )
-    ) {
-
-        totals[previousVote] =
-            Math.max(
-                0,
-                totals[previousVote] - 1
-            );
-
-    }
-
-
-    totals[vote] +=
-        1;
-
-
-    setStoredValue(
-        storageKey,
-        JSON.stringify(
-            totals
-        )
-    );
-
-
-    setStoredValue(
-        userVoteKey,
-        vote
-    );
-
-}
-
-
-/*
-==================================================
-READ VOTE TOTALS
-==================================================
-*/
-
-function getVoteTotals(
-    storageKey,
-    defaults
-) {
-
-    const stored =
-        getStoredValue(
-            storageKey
-        );
-
-
-    if (!stored) {
-
-        return {
-            ...defaults
-        };
-
-    }
-
-
-    try {
-
-        const parsed =
-            JSON.parse(
-                stored
-            );
-
-
-        const normalized =
-            {};
-
-
-        Object.keys(
-            defaults
-        )
-        .forEach(
-            key => {
-
-                normalized[key] =
-                    Number(
-                        parsed[key]
-                    ) || 0;
-
-            }
-        );
-
-
-        return normalized;
-
-    } catch (error) {
-
-        console.warn(
-            "Civic Pulse vote data could not be read:",
-            error
-        );
-
-
-        return {
-            ...defaults
-        };
-
-    }
-
-}
-
-
-/*
-==================================================
-RESTORE SELECTED BUTTONS
-==================================================
-*/
-
-function restoreSelectedButtons(
-    selector,
-    datasetKey,
-    userVoteKey
-) {
-
-    const previousVote =
-        getStoredValue(
-            userVoteKey
+            directionSelectionStorageKey
         );
 
 
     document
         .querySelectorAll(
-            selector
+            "[data-direction-vote]"
         )
         .forEach(
             button => {
 
                 button.classList.toggle(
                     "is-selected",
-                    Boolean(
-                        previousVote &&
-                        button.dataset[
-                            datasetKey
-                        ] ===
-                        previousVote
-                    )
+                    button.dataset.directionVote ===
+                    selectedVote
                 );
 
             }
@@ -628,9 +894,29 @@ function restoreSelectedButtons(
 }
 
 
+function setDirectionButtonsDisabled(
+    disabled
+) {
+
+    document
+        .querySelectorAll(
+            "[data-direction-vote]"
+        )
+        .forEach(
+            button => {
+
+                button.disabled =
+                    disabled;
+
+            }
+        );
+
+}
+
+
 /*
 ==================================================
-CONFIDENCE SURVEY
+CONFIDENCE SURVEY INTERACTIONS
 ==================================================
 */
 
@@ -654,7 +940,9 @@ function initializeConfidenceVoting() {
 
 
                         if (!button) {
+
                             return;
+
                         }
 
 
@@ -704,16 +992,13 @@ function initializeConfidenceVoting() {
         );
 
 
-    const submitButton =
-        document.getElementById(
+    document
+        .getElementById(
             "confidenceSubmitButton"
-        );
-
-
-    submitButton
+        )
         ?.addEventListener(
             "click",
-            saveConfidenceRatings
+            submitConfidenceSurvey
         );
 
 }
@@ -721,17 +1006,17 @@ function initializeConfidenceVoting() {
 
 /*
 ==================================================
-SAVE CONFIDENCE RATINGS
+SUBMIT CONFIDENCE SURVEY
 ==================================================
 */
 
-function saveConfidenceRatings() {
+async function submitConfidenceSurvey() {
 
     const ratings =
         {};
 
 
-    let completedCount =
+    let completed =
         0;
 
 
@@ -749,7 +1034,9 @@ function saveConfidenceRatings() {
 
 
                 if (!selected) {
+
                     return;
+
                 }
 
 
@@ -761,7 +1048,7 @@ function saveConfidenceRatings() {
                     );
 
 
-                completedCount +=
+                completed +=
                     1;
 
             }
@@ -769,7 +1056,7 @@ function saveConfidenceRatings() {
 
 
     if (
-        completedCount !==
+        completed !==
         6
     ) {
 
@@ -784,162 +1071,434 @@ function saveConfidenceRatings() {
     }
 
 
-    setStoredValue(
-        confidenceStorageKey,
-        JSON.stringify(
-            ratings
-        )
-    );
+    const submitButton =
+        document.getElementById(
+            "confidenceSubmitButton"
+        );
+
+
+    if (submitButton) {
+
+        submitButton.disabled =
+            true;
+
+    }
 
 
     setText(
         "confidenceSurveyMessage",
-        "Your confidence ratings have been saved on this device."
+        "Saving your ratings..."
     );
 
 
-    initializeConfidenceState();
+    try {
+
+        await submitNationalConfidence(
+            ratings,
+            getParticipantId()
+        );
+
+
+        setStoredValue(
+            confidenceSelectionStorageKey,
+            JSON.stringify(
+                ratings
+            )
+        );
+
+
+        setText(
+            "confidenceSurveyMessage",
+            "Your confidence ratings have been recorded."
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Confidence ratings could not be saved:",
+            error
+        );
+
+
+        setText(
+            "confidenceSurveyMessage",
+            "Your ratings could not be saved. Please try again."
+        );
+
+    } finally {
+
+        if (submitButton) {
+
+            submitButton.disabled =
+                false;
+
+        }
+
+    }
 
 }
 
 
 /*
 ==================================================
-READ CONFIDENCE RATINGS
+LIVE CONFIDENCE RESULTS
 ==================================================
 */
 
-function getConfidenceRatings() {
+function renderConfidenceTracker() {
+
+    const categories = [
+
+        "government",
+        "congress",
+        "court",
+        "economy",
+        "media",
+        "democracy"
+
+    ];
+
+
+    const totals =
+        {
+
+            government: 0,
+            congress: 0,
+            court: 0,
+            economy: 0,
+            media: 0,
+            democracy: 0
+
+        };
+
+
+    const counts =
+        {
+
+            government: 0,
+            congress: 0,
+            court: 0,
+            economy: 0,
+            media: 0,
+            democracy: 0
+
+        };
+
+
+    pulseState.confidenceResponses
+        .forEach(
+            record => {
+
+                const ratings =
+                    record.ratings;
+
+
+                if (
+                    !ratings ||
+                    typeof ratings !==
+                    "object"
+                ) {
+
+                    return;
+
+                }
+
+
+                categories.forEach(
+                    category => {
+
+                        const value =
+                            Number(
+                                ratings[
+                                    category
+                                ]
+                            );
+
+
+                        if (
+                            value >
+                            0
+                        ) {
+
+                            totals[
+                                category
+                            ] +=
+                                value;
+
+
+                            counts[
+                                category
+                            ] +=
+                                1;
+
+                        }
+
+                    }
+                );
+
+            }
+        );
+
+
+    const averages =
+        {};
+
+
+    categories.forEach(
+        category => {
+
+            averages[
+                category
+            ] =
+                counts[
+                    category
+                ] > 0
+                    ? Math.round(
+                        totals[
+                            category
+                        ] /
+                        counts[
+                            category
+                        ]
+                    )
+                    : 0;
+
+        }
+    );
+
+
+    updateConfidenceMetric(
+        "confidenceGovernmentValue",
+        "confidenceGovernmentFill",
+        averages.government
+    );
+
+
+    updateConfidenceMetric(
+        "confidenceCongressValue",
+        "confidenceCongressFill",
+        averages.congress
+    );
+
+
+    updateConfidenceMetric(
+        "confidenceCourtValue",
+        "confidenceCourtFill",
+        averages.court
+    );
+
+
+    updateConfidenceMetric(
+        "confidenceEconomyValue",
+        "confidenceEconomyFill",
+        averages.economy
+    );
+
+
+    updateConfidenceMetric(
+        "confidenceMediaValue",
+        "confidenceMediaFill",
+        averages.media
+    );
+
+
+    updateConfidenceMetric(
+        "confidenceDemocracyValue",
+        "confidenceDemocracyFill",
+        averages.democracy
+    );
+
+
+    renderConfidenceSnapshot(
+        averages,
+        counts
+    );
+
+}
+
+
+/*
+==================================================
+CONFIDENCE SNAPSHOT
+==================================================
+*/
+
+function renderConfidenceSnapshot(
+    averages,
+    counts
+) {
+
+    if (
+        counts.economy >
+        0
+    ) {
+
+        setText(
+            "pulseEconomySummary",
+            `${averages.economy}% confidence`
+        );
+
+    } else {
+
+        setText(
+            "pulseEconomySummary",
+            "Awaiting responses"
+        );
+
+    }
+
+
+    const institutionCategories = [
+
+        "government",
+        "congress",
+        "court",
+        "media",
+        "democracy"
+
+    ];
+
+
+    const availableValues =
+        institutionCategories
+            .filter(
+                category =>
+                    counts[
+                        category
+                    ] > 0
+            )
+            .map(
+                category =>
+                    averages[
+                        category
+                    ]
+            );
+
+
+    if (
+        availableValues.length >
+        0
+    ) {
+
+        const average =
+            Math.round(
+                availableValues.reduce(
+                    (
+                        total,
+                        value
+                    ) =>
+                        total +
+                        value,
+                    0
+                ) /
+                availableValues.length
+            );
+
+
+        setText(
+            "pulseInstitutionSummary",
+            `${average}% average confidence`
+        );
+
+    } else {
+
+        setText(
+            "pulseInstitutionSummary",
+            "Awaiting responses"
+        );
+
+    }
+
+}
+
+
+/*
+==================================================
+CONFIDENCE DISPLAY HELPER
+==================================================
+*/
+
+function updateConfidenceMetric(
+    valueId,
+    fillId,
+    value
+) {
+
+    setText(
+        valueId,
+        value > 0
+            ? `${value}%`
+            : "—"
+    );
+
+
+    setFillWidth(
+        fillId,
+        value
+    );
+
+}
+
+
+/*
+==================================================
+RESTORE CONFIDENCE SELECTION
+==================================================
+*/
+
+function restoreConfidenceSelections() {
 
     const stored =
         getStoredValue(
-            confidenceStorageKey
+            confidenceSelectionStorageKey
         );
 
 
     if (!stored) {
 
-        return {};
+        return;
 
     }
+
+
+    let ratings;
 
 
     try {
 
-        return JSON.parse(
-            stored
-        );
+        ratings =
+            JSON.parse(
+                stored
+            );
 
     } catch (error) {
 
-        console.warn(
-            "Confidence ratings could not be read:",
-            error
-        );
-
-
-        return {};
+        return;
 
     }
 
-}
-
-
-/*
-==================================================
-RENDER CONFIDENCE STATE
-==================================================
-*/
-
-function initializeConfidenceState() {
-
-    const ratings =
-        getConfidenceRatings();
-
-
-    const metricMap = {
-
-        government: [
-            "confidenceGovernmentValue",
-            "confidenceGovernmentFill",
-            "confidenceGovernmentUserValue"
-        ],
-
-        congress: [
-            "confidenceCongressValue",
-            "confidenceCongressFill",
-            "confidenceCongressUserValue"
-        ],
-
-        court: [
-            "confidenceCourtValue",
-            "confidenceCourtFill",
-            "confidenceCourtUserValue"
-        ],
-
-        economy: [
-            "confidenceEconomyValue",
-            "confidenceEconomyFill",
-            "confidenceEconomyUserValue"
-        ],
-
-        media: [
-            "confidenceMediaValue",
-            "confidenceMediaFill",
-            "confidenceMediaUserValue"
-        ],
-
-        democracy: [
-            "confidenceDemocracyValue",
-            "confidenceDemocracyFill",
-            "confidenceDemocracyUserValue"
-        ]
-
-    };
-
 
     Object.entries(
-        metricMap
+        ratings
     )
     .forEach(
-        ([key, ids]) => {
-
-            const value =
-                Number(
-                    ratings[key]
-                ) || 0;
-
-
-            setText(
-                ids[0],
-                value > 0
-                    ? `${value}%`
-                    : "—"
-            );
-
-
-            setFillWidth(
-                ids[1],
-                value
-            );
-
-
-            setText(
-                ids[2],
-                value > 0
-                    ? getConfidenceLabel(value)
-                    : "Not rated"
-            );
-
+        ([category, value]) => {
 
             const group =
                 document.querySelector(
-                    `[data-confidence-group="${key}"]`
+                    `[data-confidence-group="${category}"]`
                 );
 
 
+            if (!group) {
+
+                return;
+
+            }
+
+
             group
-                ?.querySelectorAll(
+                .querySelectorAll(
                     "[data-confidence-value]"
                 )
                 .forEach(
@@ -949,18 +1508,28 @@ function initializeConfidenceState() {
                             "is-selected",
                             Number(
                                 button.dataset.confidenceValue
-                            ) === value
+                            ) ===
+                            Number(
+                                value
+                            )
                         );
 
                     }
                 );
 
+
+            setText(
+                getConfidenceUserValueId(
+                    category
+                ),
+                getConfidenceLabel(
+                    Number(
+                        value
+                    )
+                )
+            );
+
         }
-    );
-
-
-    updateConfidenceSummaries(
-        ratings
     );
 
 }
@@ -968,7 +1537,26 @@ function initializeConfidenceState() {
 
 /*
 ==================================================
-CONFIDENCE LABEL
+RESTORE ALL LOCAL SELECTIONS
+==================================================
+*/
+
+function restoreLocalSelections() {
+
+    restoreApprovalSelection();
+
+
+    restoreDirectionSelection();
+
+
+    restoreConfidenceSelections();
+
+}
+
+
+/*
+==================================================
+CONFIDENCE LABELS
 ==================================================
 */
 
@@ -978,17 +1566,28 @@ function getConfidenceLabel(
 
     const labels = {
 
-        20: "Very Low",
-        40: "Low",
-        60: "Moderate",
-        80: "High",
-        100: "Very High"
+        20:
+            "Very Low",
+
+        40:
+            "Low",
+
+        60:
+            "Moderate",
+
+        80:
+            "High",
+
+        100:
+            "Very High"
 
     };
 
 
     return (
-        labels[value] ||
+        labels[
+            value
+        ] ||
         "Not rated"
     );
 
@@ -997,7 +1596,7 @@ function getConfidenceLabel(
 
 /*
 ==================================================
-CONFIDENCE USER VALUE IDS
+CONFIDENCE USER LABEL IDS
 ==================================================
 */
 
@@ -1028,86 +1627,9 @@ function getConfidenceUserValueId(
     };
 
 
-    return ids[groupName];
-
-}
-
-
-/*
-==================================================
-CONFIDENCE SUMMARIES
-==================================================
-*/
-
-function updateConfidenceSummaries(
-    ratings
-) {
-
-    if (
-        Number(
-            ratings.economy
-        ) > 0
-    ) {
-
-        setText(
-            "pulseEconomySummary",
-            `${ratings.economy}% confidence`
-        );
-
-    } else {
-
-        setText(
-            "pulseEconomySummary",
-            "Awaiting responses"
-        );
-
-    }
-
-
-    const institutionValues =
-        [
-            ratings.government,
-            ratings.congress,
-            ratings.court,
-            ratings.media,
-            ratings.democracy
-        ]
-        .map(Number)
-        .filter(
-            value =>
-                value > 0
-        );
-
-
-    if (
-        institutionValues.length >
-        0
-    ) {
-
-        const average =
-            Math.round(
-                institutionValues.reduce(
-                    (total, value) =>
-                        total + value,
-                    0
-                ) /
-                institutionValues.length
-            );
-
-
-        setText(
-            "pulseInstitutionSummary",
-            `${average}% average confidence`
-        );
-
-    } else {
-
-        setText(
-            "pulseInstitutionSummary",
-            "Awaiting responses"
-        );
-
-    }
+    return ids[
+        groupName
+    ];
 
 }
 
@@ -1129,25 +1651,34 @@ function setFillWidth(
         );
 
 
-    if (element) {
+    if (!element) {
 
-        element.style.width =
-            `${Math.max(
-                0,
-                Math.min(
-                    100,
-                    percent
-                )
-            )}%`;
+        return;
 
     }
+
+
+    const normalized =
+        Math.max(
+            0,
+            Math.min(
+                100,
+                Number(
+                    percent
+                ) || 0
+            )
+        );
+
+
+    element.style.width =
+        `${normalized}%`;
 
 }
 
 
 /*
 ==================================================
-STORAGE
+LOCAL STORAGE
 ==================================================
 */
 
@@ -1165,7 +1696,7 @@ function getStoredValue(
     } catch (error) {
 
         console.warn(
-            "Civic Pulse data could not be read:",
+            "Local Civic Pulse data could not be read:",
             error
         );
 
@@ -1193,7 +1724,7 @@ function setStoredValue(
     } catch (error) {
 
         console.warn(
-            "Civic Pulse data could not be saved:",
+            "Local Civic Pulse data could not be saved:",
             error
         );
 
@@ -1245,7 +1776,9 @@ function initializeHeader() {
 
                 menuButton.setAttribute(
                     "aria-expanded",
-                    String(isOpen)
+                    String(
+                        isOpen
+                    )
                 );
 
 
@@ -1257,7 +1790,9 @@ function initializeHeader() {
                 );
 
 
-                if (!isOpen) {
+                if (
+                    !isOpen
+                ) {
 
                     closeDropdowns();
 
@@ -1285,8 +1820,12 @@ function initializeHeader() {
                         );
 
 
-                    if (!group) {
+                    if (
+                        !group
+                    ) {
+
                         return;
+
                     }
 
 
@@ -1299,7 +1838,9 @@ function initializeHeader() {
                     closeDropdowns();
 
 
-                    if (!isOpen) {
+                    if (
+                        !isOpen
+                    ) {
 
                         group.classList.add(
                             "open"
@@ -1366,7 +1907,9 @@ function closeDropdowns() {
                     );
 
 
-                if (button) {
+                if (
+                    button
+                ) {
 
                     button.setAttribute(
                         "aria-expanded",
@@ -1383,7 +1926,7 @@ function closeDropdowns() {
 
 /*
 ==================================================
-DOM
+DOM HELPER
 ==================================================
 */
 
@@ -1398,10 +1941,14 @@ function setText(
         );
 
 
-    if (element) {
+    if (
+        element
+    ) {
 
         element.textContent =
-            String(value);
+            String(
+                value
+            );
 
     }
 

@@ -9,6 +9,7 @@ import {
     database
 } from "../../../js/firebase.js";
 
+
 import {
     ref,
     onValue,
@@ -31,11 +32,13 @@ const prioritySubmissionsRef =
         "prioritySubmissions"
     );
 
+
 const communitySurveysRef =
     ref(
         database,
         "createdSurveys"
     );
+
 
 const communityVotesRef =
     ref(
@@ -43,10 +46,25 @@ const communityVotesRef =
         "votes"
     );
 
+
 const presidentialApprovalRef =
     ref(
         database,
         "civicPulse/presidentialApproval/responses"
+    );
+
+
+const countryDirectionRef =
+    ref(
+        database,
+        "civicPulse/countryDirection/responses"
+    );
+
+
+const nationalConfidenceRef =
+    ref(
+        database,
+        "civicPulse/nationalConfidence/responses"
     );
 
 
@@ -66,7 +84,9 @@ export function subscribeToPrioritySubmissions(
         snapshot => {
 
             callback(
-                snapshotToArray(snapshot)
+                snapshotToArray(
+                    snapshot
+                )
             );
 
         },
@@ -86,7 +106,9 @@ export function subscribeToCommunitySurveys(
         snapshot => {
 
             callback(
-                snapshotToArray(snapshot)
+                snapshotToArray(
+                    snapshot
+                )
             );
 
         },
@@ -106,7 +128,9 @@ export function subscribeToCommunityVotes(
         snapshot => {
 
             callback(
-                snapshotToArray(snapshot)
+                snapshotToArray(
+                    snapshot
+                )
             );
 
         },
@@ -115,6 +139,12 @@ export function subscribeToCommunityVotes(
 
 }
 
+
+/*
+==================================================
+PRESIDENTIAL APPROVAL SUBSCRIPTION
+==================================================
+*/
 
 export function subscribeToPresidentialApproval(
     callback,
@@ -126,7 +156,65 @@ export function subscribeToPresidentialApproval(
         snapshot => {
 
             callback(
-                snapshotToArray(snapshot)
+                snapshotToArray(
+                    snapshot
+                )
+            );
+
+        },
+        errorCallback
+    );
+
+}
+
+
+/*
+==================================================
+COUNTRY DIRECTION SUBSCRIPTION
+==================================================
+*/
+
+export function subscribeToCountryDirection(
+    callback,
+    errorCallback = console.error
+) {
+
+    return onValue(
+        countryDirectionRef,
+        snapshot => {
+
+            callback(
+                snapshotToArray(
+                    snapshot
+                )
+            );
+
+        },
+        errorCallback
+    );
+
+}
+
+
+/*
+==================================================
+NATIONAL CONFIDENCE SUBSCRIPTION
+==================================================
+*/
+
+export function subscribeToNationalConfidence(
+    callback,
+    errorCallback = console.error
+) {
+
+    return onValue(
+        nationalConfidenceRef,
+        snapshot => {
+
+            callback(
+                snapshotToArray(
+                    snapshot
+                )
             );
 
         },
@@ -375,7 +463,9 @@ function validateCommunitySurvey(
 
                 }
             )
-            .filter(Boolean);
+            .filter(
+                Boolean
+            );
 
 
     if (
@@ -512,7 +602,8 @@ PRESIDENTIAL APPROVAL SUBMISSION
 */
 
 export async function submitPresidentialApproval(
-    response
+    response,
+    participantId = ""
 ) {
 
     const validResponses = [
@@ -537,26 +628,93 @@ export async function submitPresidentialApproval(
     }
 
 
-    const responseReference =
-        push(
-            presidentialApprovalRef
-        );
+    const submittedAt =
+        new Date().toISOString();
 
 
     const responseData = {
 
         response,
 
-        submittedAt:
-            new Date().toISOString(),
+        submittedAt,
 
         tracker:
             "presidentialApproval",
 
         trackerVersion:
-            "1.0"
+            "2.0"
 
     };
+
+
+    const cleanedParticipantId =
+        validateParticipantId(
+            participantId
+        );
+
+
+    /*
+    ----------------------------------------------
+    CIVIC PULSE MODE
+
+    When a participant ID is supplied, their
+    response uses a stable Firebase location.
+
+    Changing the answer replaces their previous
+    answer instead of creating another vote.
+    ----------------------------------------------
+    */
+
+    if (
+        cleanedParticipantId
+    ) {
+
+        const participantReference =
+            ref(
+                database,
+                `civicPulse/presidentialApproval/responses/${cleanedParticipantId}`
+            );
+
+
+        await set(
+            participantReference,
+            {
+                ...responseData,
+                participantId:
+                    cleanedParticipantId
+            }
+        );
+
+
+        return {
+
+            id:
+                cleanedParticipantId,
+
+            participantId:
+                cleanedParticipantId,
+
+            ...responseData
+
+        };
+
+    }
+
+
+    /*
+    ----------------------------------------------
+    BACKWARD COMPATIBILITY
+
+    Existing parts of the site that call this
+    function without a participant ID continue
+    to create a normal pushed response.
+    ----------------------------------------------
+    */
+
+    const responseReference =
+        push(
+            presidentialApprovalRef
+        );
 
 
     await set(
@@ -573,6 +731,309 @@ export async function submitPresidentialApproval(
         ...responseData
 
     };
+
+}
+
+
+/*
+==================================================
+COUNTRY DIRECTION SUBMISSION
+==================================================
+*/
+
+export async function submitCountryDirection(
+    response,
+    participantId = ""
+) {
+
+    const validResponses = [
+        "Right Direction",
+        "Wrong Track"
+    ];
+
+
+    if (
+        !validResponses.includes(
+            response
+        )
+    ) {
+
+        throw new Error(
+            "Invalid country direction response."
+        );
+
+    }
+
+
+    const submittedAt =
+        new Date().toISOString();
+
+
+    const responseData = {
+
+        response,
+
+        submittedAt,
+
+        tracker:
+            "countryDirection",
+
+        trackerVersion:
+            "1.0"
+
+    };
+
+
+    const cleanedParticipantId =
+        validateParticipantId(
+            participantId
+        );
+
+
+    if (
+        cleanedParticipantId
+    ) {
+
+        const participantReference =
+            ref(
+                database,
+                `civicPulse/countryDirection/responses/${cleanedParticipantId}`
+            );
+
+
+        await set(
+            participantReference,
+            {
+                ...responseData,
+                participantId:
+                    cleanedParticipantId
+            }
+        );
+
+
+        return {
+
+            id:
+                cleanedParticipantId,
+
+            participantId:
+                cleanedParticipantId,
+
+            ...responseData
+
+        };
+
+    }
+
+
+    const responseReference =
+        push(
+            countryDirectionRef
+        );
+
+
+    await set(
+        responseReference,
+        responseData
+    );
+
+
+    return {
+
+        id:
+            responseReference.key,
+
+        ...responseData
+
+    };
+
+}
+
+
+/*
+==================================================
+NATIONAL CONFIDENCE SUBMISSION
+==================================================
+*/
+
+export async function submitNationalConfidence(
+    ratings,
+    participantId = ""
+) {
+
+    const validatedRatings =
+        validateConfidenceRatings(
+            ratings
+        );
+
+
+    const submittedAt =
+        new Date().toISOString();
+
+
+    const responseData = {
+
+        ratings:
+            validatedRatings,
+
+        submittedAt,
+
+        tracker:
+            "nationalConfidence",
+
+        trackerVersion:
+            "1.0"
+
+    };
+
+
+    const cleanedParticipantId =
+        validateParticipantId(
+            participantId
+        );
+
+
+    if (
+        cleanedParticipantId
+    ) {
+
+        const participantReference =
+            ref(
+                database,
+                `civicPulse/nationalConfidence/responses/${cleanedParticipantId}`
+            );
+
+
+        await set(
+            participantReference,
+            {
+                ...responseData,
+                participantId:
+                    cleanedParticipantId
+            }
+        );
+
+
+        return {
+
+            id:
+                cleanedParticipantId,
+
+            participantId:
+                cleanedParticipantId,
+
+            ...responseData
+
+        };
+
+    }
+
+
+    const responseReference =
+        push(
+            nationalConfidenceRef
+        );
+
+
+    await set(
+        responseReference,
+        responseData
+    );
+
+
+    return {
+
+        id:
+            responseReference.key,
+
+        ...responseData
+
+    };
+
+}
+
+
+/*
+==================================================
+CONFIDENCE VALIDATION
+==================================================
+*/
+
+function validateConfidenceRatings(
+    ratings
+) {
+
+    if (
+        !ratings ||
+        typeof ratings !== "object"
+    ) {
+
+        throw new Error(
+            "National confidence ratings are required."
+        );
+
+    }
+
+
+    const requiredCategories = [
+
+        "government",
+        "congress",
+        "court",
+        "economy",
+        "media",
+        "democracy"
+
+    ];
+
+
+    const validValues = [
+        20,
+        40,
+        60,
+        80,
+        100
+    ];
+
+
+    const cleanedRatings =
+        {};
+
+
+    requiredCategories.forEach(
+        category => {
+
+            const value =
+                Number(
+                    ratings[
+                        category
+                    ]
+                );
+
+
+            if (
+                !validValues.includes(
+                    value
+                )
+            ) {
+
+                throw new Error(
+                    `Invalid confidence rating for ${category}.`
+                );
+
+            }
+
+
+            cleanedRatings[
+                category
+            ] =
+                value;
+
+        }
+    );
+
+
+    return cleanedRatings;
 
 }
 
@@ -643,6 +1104,36 @@ export async function getPresidentialApprovalResponses() {
 }
 
 
+export async function getCountryDirectionResponses() {
+
+    const snapshot =
+        await get(
+            countryDirectionRef
+        );
+
+
+    return snapshotToArray(
+        snapshot
+    );
+
+}
+
+
+export async function getNationalConfidenceResponses() {
+
+    const snapshot =
+        await get(
+            nationalConfidenceRef
+        );
+
+
+    return snapshotToArray(
+        snapshot
+    );
+
+}
+
+
 /*
 ==================================================
 GENERAL DATABASE HELPERS
@@ -691,6 +1182,61 @@ export async function updateDatabasePath(
 
 /*
 ==================================================
+PARTICIPANT ID VALIDATION
+==================================================
+*/
+
+function validateParticipantId(
+    participantId
+) {
+
+    if (
+        !participantId
+    ) {
+
+        return "";
+    }
+
+
+    const cleaned =
+        String(
+            participantId
+        ).trim();
+
+
+    if (
+        !cleaned
+    ) {
+
+        return "";
+    }
+
+
+    /*
+    Firebase Realtime Database keys cannot contain:
+    .  #  $  [  ]  /
+    */
+
+    if (
+        /[.#$\[\]\/]/.test(
+            cleaned
+        )
+    ) {
+
+        throw new Error(
+            "Invalid Civic Pulse participant ID."
+        );
+
+    }
+
+
+    return cleaned;
+
+}
+
+
+/*
+==================================================
 UTILITY FUNCTIONS
 ==================================================
 */
@@ -699,7 +1245,8 @@ function snapshotToArray(
     snapshot
 ) {
 
-    const records = [];
+    const records =
+        [];
 
 
     if (
