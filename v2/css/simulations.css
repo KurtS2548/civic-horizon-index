@@ -1,0 +1,731 @@
+/* ==================================================
+   CIVIC HORIZON INDEX V2
+   CIVIC SIMULATIONS
+================================================== */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    background: #f7f9fb;
+    color: #243b53;
+    font-family: "Inter", sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+
+.simulations-page {
+    min-height: 65vh;
+}
+
+
+/* ==================================================
+   HERO
+================================================== */
+
+.simulations-hero {
+    padding: 78px 0;
+    background:
+        linear-gradient(
+            135deg,
+            #071d2f 0%,
+            #0b253d 58%,
+            #174f7f 100%
+        );
+    color: #ffffff;
+}
+
+.simulations-hero__container {
+    display: grid;
+    grid-template-columns:
+        minmax(0, 1.25fr)
+        minmax(280px, 0.75fr);
+    align-items: center;
+    gap: 64px;
+    width: min(1180px, calc(100% - 48px));
+    margin: 0 auto;
+}
+
+.simulations-hero__content {
+    max-width: 760px;
+}
+
+.simulations-hero__eyebrow,
+.simulations-section-eyebrow {
+    margin: 0 0 12px;
+    color: #efc75d;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.simulations-hero__content h1 {
+    margin: 0;
+    color: #ffffff;
+    font-family: "Merriweather", Georgia, serif;
+    font-size: clamp(2.7rem, 6vw, 4.6rem);
+    line-height: 1.06;
+    letter-spacing: -0.035em;
+}
+
+.simulations-hero__content > p:last-of-type {
+    max-width: 700px;
+    margin: 22px 0 0;
+    color: #d0e1ed;
+    font-size: 1.04rem;
+    line-height: 1.8;
+}
+
+.simulations-hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 28px;
+}
+
+.simulations-hero__values {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+    margin-top: 24px;
+}
+
+.simulations-hero__values span {
+    padding: 7px 10px;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.07);
+    color: #d5e4ef;
+    font-size: 0.68rem;
+    font-weight: 700;
+}
+
+
+/* ==================================================
+   BUTTONS
+================================================== */
+
+.simulation-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 46px;
+    padding: 11px 18px;
+    border-radius: 9px;
+    font-size: 0.82rem;
+    font-weight: 800;
+    text-decoration: none;
+    transition:
+        background-color 180ms ease,
+        border-color 180ms ease,
+        color 180ms ease,
+        transform 180ms ease,
+        box-shadow 180ms ease;
+}
+
+.simulation-button--primary {
+    border: 1px solid #1f5f99;
+    background: #1f5f99;
+    color: #ffffff;
+}
+
+.simulation-button--primary:hover,
+.simulation-button--primary:focus-visible {
+    background: #174f7f;
+    border-color: #174f7f;
+    box-shadow: 0 8px 18px rgba(31, 95, 153, 0.2);
+    outline: none;
+    transform: translateY(-1px);
+}
+
+.simulation-button--secondary {
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    background: rgba(255, 255, 255, 0.08);
+    color: #ffffff;
+}
+
+.simulation-button--secondary:hover,
+.simulation-button--secondary:focus-visible {
+    background: rgba(255, 255, 255, 0.14);
+    outline: none;
+}
+
+
+/* ==================================================
+   HERO CARD
+================================================== */
+
+.simulations-hero__card {
+    display: flex;
+    padding: 28px;
+    flex-direction: column;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 22px 55px rgba(0, 0, 0, 0.18);
+    backdrop-filter: blur(8px);
+}
+
+.simulations-hero__card > span {
+    color: #efc75d;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+}
+
+.simulations-hero__card strong {
+    margin-top: 12px;
+    color: #ffffff;
+    font-size: 2rem;
+    line-height: 1.1;
+}
+
+.simulations-hero__card small {
+    margin-top: 8px;
+    color: #b8cfdf;
+    font-size: 0.78rem;
+    line-height: 1.6;
+}
+
+
+/* ==================================================
+   SHARED SECTIONS
+================================================== */
+
+.simulations-section {
+    padding: 84px 0;
+}
+
+.simulations-section--white {
+    background: #ffffff;
+}
+
+.simulations-section--light {
+    background: #f7f9fb;
+}
+
+.simulations-section__container,
+.simulations-progress-section__container {
+    width: min(1180px, calc(100% - 48px));
+    margin: 0 auto;
+}
+
+.simulations-section__heading {
+    max-width: 760px;
+    margin-bottom: 38px;
+}
+
+.simulations-section__heading h2 {
+    margin: 0;
+    color: #102a43;
+    font-family: "Merriweather", Georgia, serif;
+    font-size: clamp(2rem, 4vw, 2.8rem);
+    line-height: 1.2;
+}
+
+.simulations-section__heading > p:last-child {
+    margin: 16px 0 0;
+    color: #627d98;
+    line-height: 1.75;
+}
+
+.simulations-section .simulations-section-eyebrow,
+.simulations-progress-section .simulations-section-eyebrow {
+    color: #1f5f99;
+}
+
+
+/* ==================================================
+   PROGRESS
+================================================== */
+
+.simulations-progress-section {
+    padding: 44px 0;
+    background: #ffffff;
+    border-bottom: 1px solid #e5ecf2;
+}
+
+.simulations-progress-card {
+    padding: 26px 28px;
+    border: 1px solid #d9e2ec;
+    border-radius: 14px;
+    background: #ffffff;
+    box-shadow: 0 10px 28px rgba(16, 42, 67, 0.06);
+}
+
+.simulations-progress-card__heading {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+}
+
+.simulations-progress-card__heading h2 {
+    margin: 0;
+    color: #102a43;
+    font-family: "Merriweather", Georgia, serif;
+    font-size: 1.5rem;
+}
+
+.simulations-progress-card__achievement {
+    text-align: right;
+}
+
+.simulations-progress-card__achievement span {
+    display: block;
+    color: #7b8fa3;
+    font-size: 0.68rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+}
+
+.simulations-progress-card__achievement strong {
+    display: block;
+    margin-top: 6px;
+    color: #102a43;
+    font-size: 0.92rem;
+}
+
+.simulations-progress-track {
+    height: 12px;
+    margin-top: 24px;
+    overflow: hidden;
+    border-radius: 999px;
+    background: #e4ebf2;
+}
+
+.simulations-progress-fill {
+    height: 100%;
+    border-radius: inherit;
+    background: #1f5f99;
+    transition: width 300ms ease;
+}
+
+.simulations-progress-details {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    margin-top: 12px;
+}
+
+.simulations-progress-details strong {
+    color: #102a43;
+    font-size: 1rem;
+}
+
+.simulations-progress-details span {
+    color: #627d98;
+    font-size: 0.76rem;
+}
+
+.simulations-progress-summary {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.simulations-progress-summary > div {
+    padding: 14px 16px;
+    border: 1px solid #e5ecf2;
+    border-radius: 10px;
+    background: #f8fafc;
+}
+
+.simulations-progress-summary span {
+    display: block;
+    color: #7b8fa3;
+    font-size: 0.66rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.simulations-progress-summary strong {
+    display: block;
+    margin-top: 5px;
+    color: #102a43;
+    font-size: 1rem;
+}
+
+
+/* ==================================================
+   ROLE CARDS
+================================================== */
+
+.simulations-role-grid {
+    display: grid;
+    gap: 16px;
+}
+
+.simulation-role-card {
+    overflow: hidden;
+    border: 1px solid #d9e2ec;
+    border-radius: 14px;
+    background: #ffffff;
+    box-shadow: 0 10px 24px rgba(16, 42, 67, 0.05);
+}
+
+.simulation-role-card__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 14px 20px;
+    border-bottom: 1px solid #e5ecf2;
+    background: #f8fafc;
+}
+
+.simulation-status-badge {
+    display: inline-flex;
+    align-items: center;
+    min-height: 25px;
+    padding: 5px 9px;
+    border-radius: 999px;
+    font-size: 0.64rem;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+.simulation-status-badge.available {
+    background: #e7f7eb;
+    color: #176b2c;
+}
+
+.simulation-status-badge.completed {
+    background: #eaf3fb;
+    color: #174f7f;
+}
+
+.simulation-status-badge.coming-soon {
+    background: #edf2f7;
+    color: #627d98;
+}
+
+.simulation-role-number {
+    color: #7b8fa3;
+    font-size: 0.72rem;
+    font-weight: 800;
+}
+
+.simulation-role-card__body {
+    display: grid;
+    grid-template-columns: 64px minmax(0, 1fr);
+    gap: 22px;
+    padding: 24px;
+}
+
+.simulation-role-index {
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: #eaf3fb;
+    color: #174f7f;
+    font-size: 0.78rem;
+    font-weight: 800;
+}
+
+.simulation-role-card__body h3 {
+    margin: 0;
+    color: #102a43;
+    font-family: "Merriweather", Georgia, serif;
+    font-size: 1.18rem;
+    line-height: 1.45;
+}
+
+.simulation-role-card__body p {
+    margin: 10px 0 0;
+    color: #627d98;
+    font-size: 0.82rem;
+    line-height: 1.7;
+}
+
+.simulation-role-details {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 14px;
+}
+
+.simulation-role-details span {
+    padding: 6px 9px;
+    border-radius: 999px;
+    background: #f2f6f9;
+    color: #627d98;
+    font-size: 0.68rem;
+    font-weight: 700;
+}
+
+.simulation-role-card .simulation-button,
+.simulation-locked-button {
+    margin-top: 18px;
+}
+
+.simulation-locked-button {
+    min-height: 44px;
+    padding: 10px 16px;
+    border: 1px solid #d9e2ec;
+    border-radius: 8px;
+    background: #edf2f7;
+    color: #829ab1;
+    font-family: "Inter", sans-serif;
+    font-size: 0.78rem;
+    font-weight: 800;
+    cursor: not-allowed;
+}
+
+.simulation-role-card.locked {
+    opacity: 0.92;
+}
+
+
+/* ==================================================
+   CONGRESS RECORD
+================================================== */
+
+.simulation-role-record {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    margin-top: 16px;
+}
+
+.simulation-role-record[hidden] {
+    display: none;
+}
+
+.simulation-role-record > div {
+    padding: 11px 12px;
+    border: 1px solid #dce7ef;
+    border-radius: 9px;
+    background: #f8fafc;
+}
+
+.simulation-role-record span {
+    display: block;
+    color: #7b8fa3;
+    font-size: 0.63rem;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+.simulation-role-record strong {
+    display: block;
+    margin-top: 4px;
+    color: #102a43;
+    font-size: 0.88rem;
+}
+
+
+/* ==================================================
+   PURPOSE
+================================================== */
+
+.simulations-purpose-grid {
+    display: grid;
+    grid-template-columns:
+        minmax(0, 1.15fr)
+        minmax(300px, 0.85fr);
+    gap: 34px;
+    align-items: start;
+}
+
+.simulations-purpose-copy h2 {
+    margin: 0;
+    color: #102a43;
+    font-family: "Merriweather", Georgia, serif;
+    font-size: clamp(2rem, 4vw, 2.7rem);
+    line-height: 1.25;
+}
+
+.simulations-purpose-copy p:not(.simulations-section-eyebrow) {
+    margin: 16px 0 0;
+    color: #627d98;
+    line-height: 1.75;
+}
+
+.simulations-purpose-skills {
+    padding: 26px;
+    border: 1px solid #d9e2ec;
+    border-radius: 14px;
+    background: #f8fafc;
+}
+
+.simulations-purpose-skills__label {
+    margin: 0;
+    color: #1f5f99;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.simulations-purpose-skills ul {
+    margin: 18px 0 0;
+    padding-left: 20px;
+}
+
+.simulations-purpose-skills li {
+    color: #486581;
+    line-height: 1.65;
+}
+
+.simulations-purpose-skills li + li {
+    margin-top: 10px;
+}
+
+
+/* ==================================================
+   ACADEMY CONNECTION
+================================================== */
+
+.simulations-academy-card {
+    display: grid;
+    grid-template-columns:
+        minmax(0, 1fr)
+        minmax(320px, 0.7fr);
+    gap: 34px;
+    padding: 32px;
+    border: 1px solid #d9e2ec;
+    border-radius: 16px;
+    background: #ffffff;
+    box-shadow: 0 14px 36px rgba(16, 42, 67, 0.07);
+}
+
+.simulations-academy-card__copy h2 {
+    margin: 0;
+    color: #102a43;
+    font-family: "Merriweather", Georgia, serif;
+    font-size: clamp(2rem, 4vw, 2.6rem);
+}
+
+.simulations-academy-card__copy > p:last-of-type {
+    margin: 16px 0 0;
+    color: #627d98;
+    line-height: 1.75;
+}
+
+.simulations-academy-card__copy .simulation-button {
+    margin-top: 22px;
+}
+
+.simulations-academy-preview {
+    padding: 24px;
+    border: 1px solid #d9e2ec;
+    border-radius: 12px;
+    background: #f8fafc;
+}
+
+.simulations-academy-preview > p {
+    margin: 0 0 12px;
+    color: #1f5f99;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.simulations-academy-preview__item {
+    padding: 12px 14px;
+    border: 1px solid #d9e2ec;
+    border-radius: 9px;
+    background: #ffffff;
+    color: #486581;
+    font-size: 0.78rem;
+    font-weight: 700;
+}
+
+.simulations-academy-preview__item + .simulations-academy-preview__item {
+    margin-top: 9px;
+}
+
+
+/* ==================================================
+   RESPONSIVE
+================================================== */
+
+@media (max-width: 980px) {
+
+    .simulations-hero__container,
+    .simulations-purpose-grid,
+    .simulations-academy-card {
+        grid-template-columns: 1fr;
+    }
+
+    .simulations-hero__card {
+        max-width: 620px;
+    }
+
+}
+
+
+@media (max-width: 760px) {
+
+    .simulations-progress-card__heading {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .simulations-progress-card__achievement {
+        text-align: left;
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .simulations-hero {
+        padding: 62px 0;
+    }
+
+    .simulations-hero__container,
+    .simulations-section__container,
+    .simulations-progress-section__container {
+        width: min(1180px, calc(100% - 32px));
+    }
+
+    .simulations-hero__content h1 {
+        font-size: clamp(2.35rem, 12vw, 3.6rem);
+    }
+
+    .simulations-section {
+        padding: 64px 0;
+    }
+
+    .simulations-progress-card,
+    .simulations-academy-card {
+        padding: 22px 18px;
+    }
+
+    .simulation-role-card__body {
+        grid-template-columns: 1fr;
+        padding: 20px 18px;
+    }
+
+    .simulations-progress-details {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .simulations-progress-summary,
+    .simulation-role-record {
+        grid-template-columns: 1fr;
+    }
+
+}
