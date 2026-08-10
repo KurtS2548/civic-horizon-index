@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="Civic Academy Lesson 5: The Presidency."
+    >
+
+    <title>
+        The Presidency | Civic Academy
+    </title>
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Merriweather:wght@700&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="css/header.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="css/footer.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="css/academy-lesson.css"
+    >
+
+</head>
+
+<body>
+
+    <div id="headerContainer"></div>
+
+
+    <main class="academy-lesson-page">
+
+        <section class="academy-lesson-hero">
+
+            <div class="academy-lesson-hero__container">
+
+                <div>
+
+                    <p class="academy-lesson-eyebrow">
+                        Civic Academy · Lesson 5
+                    </p>
+
+                    <h1>
+                        The Presidency
+                    </h1>
+
+                    <p>
+                        Explore the president's constitutional powers,
+                        responsibilities, limits, and relationship with
+                        Congress through a series of decision scenarios.
+                    </p>
+
+                </div>
+
+
+                <aside class="academy-lesson-hero__card">
+
+                    <span>
+                        Lesson Format
+                    </span>
+
+                    <strong>
+                        Decision simulation
+                    </strong>
+
+                    <small>
+                        About 8 minutes
+                    </small>
+
+                </aside>
+
+            </div>
+
+        </section>
+
+
+        <section class="academy-lesson-section">
+
+            <div class="academy-lesson-section__container">
+
+                <div
+                    class="academy-lesson-card"
+                    id="presidencyGameCard"
+                >
+
+                    <div class="academy-lesson-progress">
+
+                        <div>
+
+                            <span id="presidencyQuestionNumber">
+                                Scenario 1
+                            </span>
+
+                            <strong id="presidencyProgressPercent">
+                                0%
+                            </strong>
+
+                        </div>
+
+
+                        <div class="academy-lesson-progress__track">
+
+                            <div
+                                class="academy-lesson-progress__fill"
+                                id="presidencyProgressFill"
+                                style="width: 0%;"
+                            ></div>
+
+                        </div>
+
+
+                        <span
+                            class="academy-lesson-score"
+                            id="presidencyScorePreview"
+                        >
+                            Score: 0 correct
+                        </span>
+
+                    </div>
+
+
+                    <div class="academy-lesson-question">
+
+                        <p
+                            class="academy-lesson-category"
+                            id="presidencyCategory"
+                        >
+                            Executive Power
+                        </p>
+
+                        <h2 id="presidencyScenarioTitle">
+                            Loading scenario...
+                        </h2>
+
+                        <p
+                            id="presidencyScenarioText"
+                            style="
+                                margin: 14px 0 0;
+                                color: #627d98;
+                                line-height: 1.7;
+                            "
+                        >
+                            Loading decision...
+                        </p>
+
+                    </div>
+
+
+                    <div
+                        class="academy-lesson-answers"
+                        id="presidencyAnswerOptions"
+                    ></div>
+
+
+                    <div
+                        class="lesson-feedback"
+                        id="presidencyFeedback"
+                        hidden
+                    >
+
+                        <div
+                            class="lesson-feedback__icon"
+                            id="presidencyFeedbackIcon"
+                        ></div>
+
+                        <div>
+
+                            <strong id="presidencyFeedbackTitle"></strong>
+
+                            <p id="presidencyFeedbackText"></p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="academy-lesson-card__footer">
+
+                        <a
+                            href="academy.html"
+                            class="academy-lesson-button academy-lesson-button--secondary"
+                        >
+                            Back to Civic Academy
+                        </a>
+
+                        <button
+                            type="button"
+                            id="presidencyNextButton"
+                            class="academy-lesson-button academy-lesson-button--primary"
+                            hidden
+                        >
+                            Continue
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    class="academy-lesson-card academy-lesson-results"
+                    id="presidencyResultsCard"
+                    hidden
+                >
+
+                    <p class="academy-lesson-eyebrow">
+                        Lesson Complete
+                    </p>
+
+                    <h2>
+                        The Presidency
+                    </h2>
+
+
+                    <div class="academy-lesson-results__score">
+
+                        <strong id="presidencyFinalScore">
+                            0 / 8
+                        </strong>
+
+                        <span id="presidencyFinalPercent">
+                            0%
+                        </span>
+
+                    </div>
+
+
+                    <p id="presidencyResultMessage">
+                        You completed the Presidency lesson.
+                    </p>
+
+
+                    <div class="academy-lesson-results__actions">
+
+                        <a
+                            href="academy.html"
+                            class="academy-lesson-button academy-lesson-button--primary"
+                        >
+                            Return to Civic Academy
+                        </a>
+
+                        <button
+                            type="button"
+                            id="presidencyRestartButton"
+                            class="academy-lesson-button academy-lesson-button--secondary"
+                        >
+                            Try Again
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <aside class="academy-lesson-note">
+
+                    <strong>
+                        Why this lesson matters
+                    </strong>
+
+                    <p>
+                        The presidency is powerful, but it is not unlimited.
+                        Understanding what the president can do alone,
+                        what requires Congress, and what can be reviewed
+                        by the courts helps clarify how executive power
+                        actually works.
+                    </p>
+
+                </aside>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <div id="footerContainer"></div>
+
+
+    <script
+        type="module"
+        src="js/academy-presidency.js"
+    ></script>
+
+</body>
+
+</html>
