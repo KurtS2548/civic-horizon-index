@@ -2,7 +2,7 @@
 ==================================================
 CIVIC HORIZON INDEX V2
 CIVIC PULSE
-LIVE FIREBASE CONTROLLER
+LIVE FIREBASE + HISTORY CONTROLLER
 ==================================================
 */
 
@@ -10,23 +10,24 @@ LIVE FIREBASE CONTROLLER
 import {
 
     subscribeToPresidentialApproval,
-
     subscribeToCountryDirection,
-
     subscribeToNationalConfidence,
 
     submitPresidentialApproval,
-
     submitCountryDirection,
-
     submitNationalConfidence
 
 } from "./services/firebase-service.js";
 
 
+import {
+    subscribeToCivicPulseHistory
+} from "./services/civic-pulse-history-service.js";
+
+
 /*
 ==================================================
-LOCAL PARTICIPANT KEYS
+LOCAL STORAGE KEYS
 ==================================================
 */
 
@@ -48,7 +49,7 @@ const confidenceSelectionStorageKey =
 
 /*
 ==================================================
-LIVE DATA STATE
+STATE
 ==================================================
 */
 
@@ -58,14 +59,16 @@ const pulseState = {
 
     directionResponses: [],
 
-    confidenceResponses: []
+    confidenceResponses: [],
+
+    history: []
 
 };
 
 
 /*
 ==================================================
-PAGE INITIALIZATION
+INITIALIZE
 ==================================================
 */
 
@@ -102,6 +105,9 @@ async function initializeCivicPulsePage() {
 
 
     initializeLiveSubscriptions();
+
+
+    initializeHistorySubscription();
 
 }
 
@@ -181,7 +187,11 @@ function initializeLiveSubscriptions() {
         responses => {
 
             pulseState.approvalResponses =
-                responses;
+                Array.isArray(
+                    responses
+                )
+                    ? responses
+                    : [];
 
 
             renderApprovalTracker();
@@ -211,7 +221,11 @@ function initializeLiveSubscriptions() {
         responses => {
 
             pulseState.directionResponses =
-                responses;
+                Array.isArray(
+                    responses
+                )
+                    ? responses
+                    : [];
 
 
             renderDirectionTracker();
@@ -241,7 +255,11 @@ function initializeLiveSubscriptions() {
         responses => {
 
             pulseState.confidenceResponses =
-                responses;
+                Array.isArray(
+                    responses
+                )
+                    ? responses
+                    : [];
 
 
             renderConfidenceTracker();
@@ -260,6 +278,47 @@ function initializeLiveSubscriptions() {
                 "confidenceSurveyMessage",
                 "Live confidence results are temporarily unavailable."
             );
+
+        }
+
+    );
+
+}
+
+
+/*
+==================================================
+HISTORY SUBSCRIPTION
+==================================================
+*/
+
+function initializeHistorySubscription() {
+
+    subscribeToCivicPulseHistory(
+
+        history => {
+
+            pulseState.history =
+                Array.isArray(
+                    history
+                )
+                    ? history
+                    : [];
+
+
+            renderCivicPulseHistory();
+
+        },
+
+        error => {
+
+            console.error(
+                "Civic Pulse history could not be loaded:",
+                error
+            );
+
+
+            renderHistoryUnavailable();
 
         }
 
@@ -426,7 +485,7 @@ function initializeApprovalVoting() {
 
 /*
 ==================================================
-PRESIDENTIAL APPROVAL RESULTS
+APPROVAL RESULTS
 ==================================================
 */
 
@@ -450,33 +509,28 @@ function renderApprovalTracker() {
 
                 const response =
                     String(
-                        record.response || ""
+                        record?.response || ""
                     );
 
 
                 if (
-                    response ===
-                    "Approve" ||
-                    response ===
-                    "Strongly Approve"
+                    response === "Approve" ||
+                    response === "Strongly Approve"
                 ) {
 
                     approve +=
                         1;
 
                 } else if (
-                    response ===
-                    "Disapprove" ||
-                    response ===
-                    "Strongly Disapprove"
+                    response === "Disapprove" ||
+                    response === "Strongly Disapprove"
                 ) {
 
                     disapprove +=
                         1;
 
                 } else if (
-                    response ===
-                    "Neutral"
+                    response === "Neutral"
                 ) {
 
                     neutral +=
@@ -544,6 +598,14 @@ function renderApprovalTracker() {
     );
 
 
+    setText(
+        "pulseApprovalSummary",
+        decisiveResponses > 0
+            ? `${approvePercent}% approve`
+            : "Awaiting responses"
+    );
+
+
     if (
         totalResponses >
         0
@@ -551,7 +613,7 @@ function renderApprovalTracker() {
 
         const neutralText =
             neutral > 0
-                ? ` ${neutral} neutral response${neutral === 1 ? "" : "s"} are not included in the approve/disapprove percentage.`
+                ? ` ${neutral} neutral response${neutral === 1 ? "" : "s"} not included in the two-way percentage.`
                 : "";
 
 
@@ -560,25 +622,11 @@ function renderApprovalTracker() {
             `${totalResponses} total response${totalResponses === 1 ? "" : "s"}.${neutralText}`
         );
 
-
-        setText(
-            "pulseApprovalSummary",
-            decisiveResponses > 0
-                ? `${approvePercent}% approve`
-                : "Awaiting approve/disapprove responses"
-        );
-
     } else {
 
         setText(
             "pulseApprovalParticipation",
             "Awaiting responses."
-        );
-
-
-        setText(
-            "pulseApprovalSummary",
-            "Awaiting responses"
         );
 
     }
@@ -763,7 +811,7 @@ function renderDirectionTracker() {
 
                 const response =
                     String(
-                        record.response || ""
+                        record?.response || ""
                     );
 
 
@@ -916,7 +964,7 @@ function setDirectionButtonsDisabled(
 
 /*
 ==================================================
-CONFIDENCE SURVEY INTERACTIONS
+CONFIDENCE SURVEY
 ==================================================
 */
 
@@ -966,7 +1014,7 @@ function initializeConfidenceVoting() {
                         );
 
 
-                        const groupName =
+                        const category =
                             group.dataset.confidenceGroup;
 
 
@@ -978,7 +1026,7 @@ function initializeConfidenceVoting() {
 
                         setText(
                             getConfidenceUserValueId(
-                                groupName
+                                category
                             ),
                             getConfidenceLabel(
                                 value
@@ -1006,7 +1054,7 @@ function initializeConfidenceVoting() {
 
 /*
 ==================================================
-SUBMIT CONFIDENCE SURVEY
+SAVE CONFIDENCE
 ==================================================
 */
 
@@ -1141,7 +1189,7 @@ async function submitConfidenceSurvey() {
 
 /*
 ==================================================
-LIVE CONFIDENCE RESULTS
+CONFIDENCE RESULTS
 ==================================================
 */
 
@@ -1159,30 +1207,28 @@ function renderConfidenceTracker() {
     ];
 
 
-    const totals =
-        {
+    const totals = {
 
-            government: 0,
-            congress: 0,
-            court: 0,
-            economy: 0,
-            media: 0,
-            democracy: 0
+        government: 0,
+        congress: 0,
+        court: 0,
+        economy: 0,
+        media: 0,
+        democracy: 0
 
-        };
+    };
 
 
-    const counts =
-        {
+    const counts = {
 
-            government: 0,
-            congress: 0,
-            court: 0,
-            economy: 0,
-            media: 0,
-            democracy: 0
+        government: 0,
+        congress: 0,
+        court: 0,
+        economy: 0,
+        media: 0,
+        democracy: 0
 
-        };
+    };
 
 
     pulseState.confidenceResponses
@@ -1190,7 +1236,7 @@ function renderConfidenceTracker() {
             record => {
 
                 const ratings =
-                    record.ratings;
+                    record?.ratings;
 
 
                 if (
@@ -1216,8 +1262,10 @@ function renderConfidenceTracker() {
 
 
                         if (
-                            value >
-                            0
+                            Number.isFinite(
+                                value
+                            ) &&
+                            value > 0
                         ) {
 
                             totals[
@@ -1359,7 +1407,7 @@ function renderConfidenceSnapshot(
     ];
 
 
-    const availableValues =
+    const values =
         institutionCategories
             .filter(
                 category =>
@@ -1376,13 +1424,13 @@ function renderConfidenceSnapshot(
 
 
     if (
-        availableValues.length >
+        values.length >
         0
     ) {
 
         const average =
             Math.round(
-                availableValues.reduce(
+                values.reduce(
                     (
                         total,
                         value
@@ -1391,7 +1439,7 @@ function renderConfidenceSnapshot(
                         value,
                     0
                 ) /
-                availableValues.length
+                values.length
             );
 
 
@@ -1414,7 +1462,7 @@ function renderConfidenceSnapshot(
 
 /*
 ==================================================
-CONFIDENCE DISPLAY HELPER
+CONFIDENCE HELPERS
 ==================================================
 */
 
@@ -1439,12 +1487,6 @@ function updateConfidenceMetric(
 
 }
 
-
-/*
-==================================================
-RESTORE CONFIDENCE SELECTION
-==================================================
-*/
 
 function restoreConfidenceSelections() {
 
@@ -1535,31 +1577,6 @@ function restoreConfidenceSelections() {
 }
 
 
-/*
-==================================================
-RESTORE ALL LOCAL SELECTIONS
-==================================================
-*/
-
-function restoreLocalSelections() {
-
-    restoreApprovalSelection();
-
-
-    restoreDirectionSelection();
-
-
-    restoreConfidenceSelections();
-
-}
-
-
-/*
-==================================================
-CONFIDENCE LABELS
-==================================================
-*/
-
 function getConfidenceLabel(
     value
 ) {
@@ -1594,14 +1611,8 @@ function getConfidenceLabel(
 }
 
 
-/*
-==================================================
-CONFIDENCE USER LABEL IDS
-==================================================
-*/
-
 function getConfidenceUserValueId(
-    groupName
+    category
 ) {
 
     const ids = {
@@ -1628,7 +1639,7 @@ function getConfidenceUserValueId(
 
 
     return ids[
-        groupName
+        category
     ];
 
 }
@@ -1636,7 +1647,374 @@ function getConfidenceUserValueId(
 
 /*
 ==================================================
-FILL WIDTH
+RESTORE LOCAL SELECTIONS
+==================================================
+*/
+
+function restoreLocalSelections() {
+
+    restoreApprovalSelection();
+
+
+    restoreDirectionSelection();
+
+
+    restoreConfidenceSelections();
+
+}
+
+
+/*
+==================================================
+PUBLIC HISTORY DISPLAY
+==================================================
+*/
+
+function renderCivicPulseHistory() {
+
+    const history =
+        pulseState.history;
+
+
+    const trendCards =
+        document.querySelectorAll(
+            ".civic-pulse-trend-card"
+        );
+
+
+    const approvalContainer =
+        trendCards[
+            0
+        ]
+            ?.querySelector(
+                ".civic-pulse-trend-placeholder"
+            );
+
+
+    const confidenceContainer =
+        trendCards[
+            1
+        ]
+            ?.querySelector(
+                ".civic-pulse-trend-placeholder"
+            );
+
+
+    if (
+        history.length ===
+        0
+    ) {
+
+        if (
+            approvalContainer
+        ) {
+
+            approvalContainer.innerHTML = `
+                <div class="civic-pulse-history-empty">
+
+                    <strong>
+                        Building the trend
+                    </strong>
+
+                    <p>
+                        Presidential Approval history will appear as daily
+                        Civic Pulse snapshots are collected.
+                    </p>
+
+                </div>
+            `;
+
+        }
+
+
+        if (
+            confidenceContainer
+        ) {
+
+            confidenceContainer.innerHTML = `
+                <div class="civic-pulse-history-empty">
+
+                    <strong>
+                        Building the trend
+                    </strong>
+
+                    <p>
+                        National Confidence history will appear as daily
+                        Civic Pulse snapshots are collected.
+                    </p>
+
+                </div>
+            `;
+
+        }
+
+
+        return;
+
+    }
+
+
+    renderApprovalHistory(
+        approvalContainer,
+        history
+    );
+
+
+    renderConfidenceHistory(
+        confidenceContainer,
+        history
+    );
+
+}
+
+
+/*
+==================================================
+APPROVAL HISTORY
+==================================================
+*/
+
+function renderApprovalHistory(
+    container,
+    history
+) {
+
+    if (!container) {
+
+        return;
+
+    }
+
+
+    const recentHistory =
+        history.slice(
+            -14
+        );
+
+
+    container.innerHTML =
+        recentHistory
+            .map(
+                record => {
+
+                    const value =
+                        clampPercent(
+                            record.presidentialApproval
+                        );
+
+
+                    return `
+                        <div class="civic-pulse-history-row">
+
+                            <span class="civic-pulse-history-date">
+                                ${escapeHtml(
+                                    formatHistoryDate(
+                                        record.date
+                                    )
+                                )}
+                            </span>
+
+                            <div class="civic-pulse-history-track">
+
+                                <div
+                                    class="civic-pulse-history-fill"
+                                    style="width: ${value}%;"
+                                ></div>
+
+                            </div>
+
+                            <strong>
+                                ${value}%
+                            </strong>
+
+                        </div>
+                    `;
+
+                }
+            )
+            .join("");
+
+}
+
+
+/*
+==================================================
+CONFIDENCE HISTORY
+==================================================
+*/
+
+function renderConfidenceHistory(
+    container,
+    history
+) {
+
+    if (!container) {
+
+        return;
+
+    }
+
+
+    const recentHistory =
+        history.slice(
+            -14
+        );
+
+
+    container.innerHTML =
+        recentHistory
+            .map(
+                record => {
+
+                    const value =
+                        clampPercent(
+                            record.institutionalConfidence
+                        );
+
+
+                    return `
+                        <div class="civic-pulse-history-row">
+
+                            <span class="civic-pulse-history-date">
+                                ${escapeHtml(
+                                    formatHistoryDate(
+                                        record.date
+                                    )
+                                )}
+                            </span>
+
+                            <div class="civic-pulse-history-track">
+
+                                <div
+                                    class="civic-pulse-history-fill"
+                                    style="width: ${value}%;"
+                                ></div>
+
+                            </div>
+
+                            <strong>
+                                ${value}%
+                            </strong>
+
+                        </div>
+                    `;
+
+                }
+            )
+            .join("");
+
+}
+
+
+/*
+==================================================
+HISTORY ERROR
+==================================================
+*/
+
+function renderHistoryUnavailable() {
+
+    document
+        .querySelectorAll(
+            ".civic-pulse-trend-placeholder"
+        )
+        .forEach(
+            element => {
+
+                element.innerHTML = `
+                    <div class="civic-pulse-history-empty">
+
+                        <strong>
+                            History unavailable
+                        </strong>
+
+                        <p>
+                            Civic Pulse trend history could not be loaded
+                            right now.
+                        </p>
+
+                    </div>
+                `;
+
+            }
+        );
+
+}
+
+
+/*
+==================================================
+HISTORY HELPERS
+==================================================
+*/
+
+function formatHistoryDate(
+    value
+) {
+
+    if (!value) {
+
+        return "Unknown";
+
+    }
+
+
+    const date =
+        new Date(
+            `${value}T00:00:00`
+        );
+
+
+    if (
+        Number.isNaN(
+            date.getTime()
+        )
+    ) {
+
+        return String(
+            value
+        );
+
+    }
+
+
+    return date
+        .toLocaleDateString(
+            undefined,
+            {
+                month:
+                    "short",
+
+                day:
+                    "numeric"
+            }
+        );
+
+}
+
+
+function clampPercent(
+    value
+) {
+
+    return Math.max(
+        0,
+        Math.min(
+            100,
+            Math.round(
+                Number(
+                    value
+                ) || 0
+            )
+        )
+    );
+
+}
+
+
+/*
+==================================================
+BAR WIDTH
 ==================================================
 */
 
@@ -1658,20 +2036,10 @@ function setFillWidth(
     }
 
 
-    const normalized =
-        Math.max(
-            0,
-            Math.min(
-                100,
-                Number(
-                    percent
-                ) || 0
-            )
-        );
-
-
     element.style.width =
-        `${normalized}%`;
+        `${clampPercent(
+            percent
+        )}%`;
 
 }
 
@@ -1820,9 +2188,7 @@ function initializeHeader() {
                         );
 
 
-                    if (
-                        !group
-                    ) {
+                    if (!group) {
 
                         return;
 
@@ -1907,9 +2273,7 @@ function closeDropdowns() {
                     );
 
 
-                if (
-                    button
-                ) {
+                if (button) {
 
                     button.setAttribute(
                         "aria-expanded",
@@ -1926,7 +2290,7 @@ function closeDropdowns() {
 
 /*
 ==================================================
-DOM HELPER
+DOM
 ==================================================
 */
 
@@ -1941,9 +2305,7 @@ function setText(
         );
 
 
-    if (
-        element
-    ) {
+    if (element) {
 
         element.textContent =
             String(
@@ -1951,6 +2313,43 @@ function setText(
             );
 
     }
+
+}
+
+
+/*
+==================================================
+ESCAPE HTML
+==================================================
+*/
+
+function escapeHtml(
+    value
+) {
+
+    return String(
+        value
+    )
+        .replaceAll(
+            "&",
+            "&amp;"
+        )
+        .replaceAll(
+            "<",
+            "&lt;"
+        )
+        .replaceAll(
+            ">",
+            "&gt;"
+        )
+        .replaceAll(
+            '"',
+            "&quot;"
+        )
+        .replaceAll(
+            "'",
+            "&#039;"
+        );
 
 }
 

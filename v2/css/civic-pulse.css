@@ -432,20 +432,9 @@ body {
 }
 
 .civic-pulse-confidence-survey {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 24px;
     margin-top: 18px;
 }
 
-.civic-pulse-confidence-survey p:not(.civic-pulse-card-label) {
-    max-width: 720px;
-    margin: 10px 0 0;
-    color: #627d98;
-    font-size: 0.8rem;
-    line-height: 1.65;
-}
 
 /* ==================================================
    CONFIDENCE SURVEY
@@ -508,11 +497,6 @@ body {
     font-size: 0.7rem;
     font-weight: 800;
     cursor: pointer;
-    transition:
-        border-color 160ms ease,
-        background-color 160ms ease,
-        color 160ms ease,
-        transform 160ms ease;
 }
 
 .civic-confidence-options button:hover,
@@ -536,24 +520,7 @@ body {
     margin-top: 24px;
 }
 
-.civic-confidence-submit-row .civic-pulse-button {
-    margin: 0;
-    cursor: pointer;
-}
 
-@media (max-width: 760px) {
-
-    .civic-confidence-options {
-        grid-template-columns: 1fr;
-    }
-
-    .civic-confidence-question__heading,
-    .civic-confidence-submit-row {
-        align-items: flex-start;
-        flex-direction: column;
-    }
-
-}
 /* ==================================================
    BUTTON
 ================================================== */
@@ -571,6 +538,7 @@ body {
     font-size: 0.78rem;
     font-weight: 800;
     text-decoration: none;
+    cursor: pointer;
 }
 
 .civic-pulse-button:hover,
@@ -624,16 +592,78 @@ body {
 }
 
 .civic-pulse-trend-placeholder {
-    display: grid;
-    place-items: center;
+    display: block;
     min-height: 150px;
     margin-top: 18px;
-    border: 1px dashed #bcccdc;
+    padding: 14px 16px;
+    border: 1px solid #e1e8ef;
     border-radius: 10px;
     background: #f8fafc;
-    color: #829ab1;
-    font-size: 0.75rem;
+}
+
+
+/* ==================================================
+   HISTORY
+================================================== */
+
+.civic-pulse-history-row {
+    display: grid;
+    grid-template-columns: 74px minmax(0, 1fr) 44px;
+    gap: 12px;
+    align-items: center;
+    padding: 11px 0;
+    border-bottom: 1px solid #e9eff5;
+}
+
+.civic-pulse-history-row:last-child {
+    border-bottom: 0;
+}
+
+.civic-pulse-history-date {
+    color: #627d98;
+    font-size: 0.7rem;
+    font-weight: 700;
+}
+
+.civic-pulse-history-row > strong {
+    color: #102a43;
+    font-size: 0.76rem;
+    text-align: right;
+}
+
+.civic-pulse-history-track {
+    height: 8px;
+    overflow: hidden;
+    border-radius: 999px;
+    background: #e4ebf2;
+}
+
+.civic-pulse-history-fill {
+    height: 100%;
+    border-radius: inherit;
+    background: #1f5f99;
+}
+
+.civic-pulse-history-empty {
+    display: flex;
+    min-height: 120px;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
     text-align: center;
+}
+
+.civic-pulse-history-empty strong {
+    color: #102a43;
+    font-size: 0.82rem;
+}
+
+.civic-pulse-history-empty p {
+    max-width: 360px;
+    margin: 8px 0 0;
+    color: #7b8fa3;
+    font-size: 0.72rem;
+    line-height: 1.6;
 }
 
 
@@ -714,17 +744,27 @@ body {
 }
 
 
+@media (max-width: 760px) {
+
+    .civic-confidence-options {
+        grid-template-columns: 1fr;
+    }
+
+    .civic-confidence-question__heading,
+    .civic-confidence-submit-row {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+}
+
+
 @media (max-width: 700px) {
 
     .civic-pulse-snapshot-grid,
     .civic-pulse-confidence-grid,
     .civic-pulse-trend-grid {
         grid-template-columns: 1fr;
-    }
-
-    .civic-pulse-confidence-survey {
-        align-items: flex-start;
-        flex-direction: column;
     }
 
 }
@@ -769,6 +809,11 @@ body {
     .civic-pulse-hero__links {
         align-items: flex-start;
         flex-direction: column;
+    }
+
+    .civic-pulse-history-row {
+        grid-template-columns: 58px minmax(0, 1fr) 40px;
+        gap: 8px;
     }
 
 }
