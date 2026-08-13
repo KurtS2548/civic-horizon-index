@@ -5,7 +5,9 @@ SHARED FIREBASE SERVICE
 ==================================================
 */
 
+
 import {
+    auth,
     database
 } from "../../../js/firebase.js";
 
@@ -251,11 +253,8 @@ export async function submitPrioritySubmission(
     ----------------------------------------------
     ANONYMOUS AGE GROUP
 
-    Only the approved age-group value is copied
-    into the public submission.
-
-    No UID, email, birthday, name, or ZIP is stored
-    here.
+    No UID, email, birthday, name, or ZIP is
+    stored in the public submission.
     ----------------------------------------------
     */
 
@@ -460,12 +459,14 @@ function validateCommunitySurvey(
 
     const question =
         String(
-            surveyData.question || ""
+            surveyData.question ||
+            ""
         ).trim();
 
 
     if (
-        question.length < 5
+        question.length <
+        5
     ) {
 
         throw new Error(
@@ -489,7 +490,8 @@ function validateCommunitySurvey(
                 choice => {
 
                     return String(
-                        choice || ""
+                        choice ||
+                        ""
                     ).trim();
 
                 }
@@ -500,7 +502,8 @@ function validateCommunitySurvey(
 
 
     if (
-        cleanedChoices.length < 2
+        cleanedChoices.length <
+        2
     ) {
 
         throw new Error(
@@ -628,6 +631,121 @@ export async function submitCommunityVote(
 
 /*
 ==================================================
+PRIVATE CIVIC PULSE HISTORY
+==================================================
+*/
+
+async function savePrivateCivicPulseHistory(
+    tracker,
+    responseData
+) {
+
+    const user =
+        auth.currentUser;
+
+
+    /*
+    ----------------------------------------------
+    VERIFIED ACCOUNT REQUIRED
+    ----------------------------------------------
+    */
+
+    if (
+        !user ||
+        !user.emailVerified
+    ) {
+
+        return null;
+
+    }
+
+
+    const allowedTrackers = [
+
+        "presidentialApproval",
+
+        "countryDirection",
+
+        "nationalConfidence"
+
+    ];
+
+
+    if (
+        !allowedTrackers.includes(
+            tracker
+        )
+    ) {
+
+        throw new Error(
+            "Invalid Civic Pulse history tracker."
+        );
+
+    }
+
+
+    if (
+        !responseData ||
+        typeof responseData !==
+            "object"
+    ) {
+
+        throw new Error(
+            "Civic Pulse history data is required."
+        );
+
+    }
+
+
+    /*
+    ----------------------------------------------
+    PRIVATE ACCOUNT HISTORY
+
+    Firebase UID is used ONLY inside the private
+    userActivity tree.
+
+    It is never copied into the public Civic Pulse
+    response.
+    ----------------------------------------------
+    */
+
+    const historyReference =
+        ref(
+            database,
+            `userActivity/${user.uid}/civicPulse/${tracker}`
+        );
+
+
+    const submissionReference =
+        push(
+            historyReference
+        );
+
+
+    await set(
+        submissionReference,
+        {
+
+            ...responseData
+
+        }
+    );
+
+
+    return {
+
+        id:
+            submissionReference.key,
+
+        ...responseData
+
+    };
+
+}
+
+
+/*
+==================================================
 PRESIDENTIAL APPROVAL SUBMISSION
 ==================================================
 */
@@ -638,11 +756,17 @@ export async function submitPresidentialApproval(
 ) {
 
     const validResponses = [
+
         "Strongly Approve",
+
         "Approve",
+
         "Neutral",
+
         "Disapprove",
+
         "Strongly Disapprove"
+
     ];
 
 
@@ -673,7 +797,7 @@ export async function submitPresidentialApproval(
             "presidentialApproval",
 
         trackerVersion:
-            "2.0"
+            "2.1"
 
     };
 
@@ -686,13 +810,13 @@ export async function submitPresidentialApproval(
 
     /*
     ----------------------------------------------
-    CIVIC PULSE MODE
+    CURRENT PUBLIC CIVIC PULSE RESPONSE
 
-    When a participant ID is supplied, their
-    response uses a stable Firebase location.
+    The public tracker uses the random browser
+    participant ID.
 
-    Changing the answer replaces their previous
-    answer instead of creating another vote.
+    Updating an answer replaces that participant's
+    current public response.
     ----------------------------------------------
     */
 
@@ -710,10 +834,25 @@ export async function submitPresidentialApproval(
         await set(
             participantReference,
             {
+
                 ...responseData,
+
                 participantId:
                     cleanedParticipantId
+
             }
+        );
+
+
+        /*
+        ------------------------------------------
+        PRIVATE ACCOUNT HISTORY
+        ------------------------------------------
+        */
+
+        await safelySavePrivateCivicPulseHistory(
+            "presidentialApproval",
+            responseData
         );
 
 
@@ -735,10 +874,6 @@ export async function submitPresidentialApproval(
     /*
     ----------------------------------------------
     BACKWARD COMPATIBILITY
-
-    Existing parts of the site that call this
-    function without a participant ID continue
-    to create a normal pushed response.
     ----------------------------------------------
     */
 
@@ -750,6 +885,18 @@ export async function submitPresidentialApproval(
 
     await set(
         responseReference,
+        responseData
+    );
+
+
+    /*
+    A verified account can still receive private
+    history even if an older caller does not pass
+    the browser participant ID.
+    */
+
+    await safelySavePrivateCivicPulseHistory(
+        "presidentialApproval",
         responseData
     );
 
@@ -778,8 +925,11 @@ export async function submitCountryDirection(
 ) {
 
     const validResponses = [
+
         "Right Direction",
+
         "Wrong Track"
+
     ];
 
 
@@ -810,7 +960,7 @@ export async function submitCountryDirection(
             "countryDirection",
 
         trackerVersion:
-            "1.0"
+            "1.1"
 
     };
 
@@ -835,10 +985,19 @@ export async function submitCountryDirection(
         await set(
             participantReference,
             {
+
                 ...responseData,
+
                 participantId:
                     cleanedParticipantId
+
             }
+        );
+
+
+        await safelySavePrivateCivicPulseHistory(
+            "countryDirection",
+            responseData
         );
 
 
@@ -865,6 +1024,12 @@ export async function submitCountryDirection(
 
     await set(
         responseReference,
+        responseData
+    );
+
+
+    await safelySavePrivateCivicPulseHistory(
+        "countryDirection",
         responseData
     );
 
@@ -913,7 +1078,7 @@ export async function submitNationalConfidence(
             "nationalConfidence",
 
         trackerVersion:
-            "1.0"
+            "1.1"
 
     };
 
@@ -938,10 +1103,19 @@ export async function submitNationalConfidence(
         await set(
             participantReference,
             {
+
                 ...responseData,
+
                 participantId:
                     cleanedParticipantId
+
             }
+        );
+
+
+        await safelySavePrivateCivicPulseHistory(
+            "nationalConfidence",
+            responseData
         );
 
 
@@ -972,6 +1146,12 @@ export async function submitNationalConfidence(
     );
 
 
+    await safelySavePrivateCivicPulseHistory(
+        "nationalConfidence",
+        responseData
+    );
+
+
     return {
 
         id:
@@ -980,6 +1160,52 @@ export async function submitNationalConfidence(
         ...responseData
 
     };
+
+}
+
+
+/*
+==================================================
+SAFE PRIVATE HISTORY WRITE
+==================================================
+*/
+
+async function safelySavePrivateCivicPulseHistory(
+    tracker,
+    responseData
+) {
+
+    try {
+
+        return await savePrivateCivicPulseHistory(
+            tracker,
+            responseData
+        );
+
+    } catch (error) {
+
+        /*
+        ----------------------------------------------
+        IMPORTANT
+
+        The public/current Civic Pulse response has
+        already succeeded.
+
+        A private-history problem must not make the
+        participant believe their public response
+        failed and cause them to submit it again.
+        ----------------------------------------------
+        */
+
+        console.error(
+            `Private ${tracker} history could not be saved:`,
+            error
+        );
+
+
+        return null;
+
+    }
 
 }
 
@@ -1009,21 +1235,32 @@ function validateConfidenceRatings(
     const requiredCategories = [
 
         "government",
+
         "congress",
+
         "court",
+
         "economy",
+
         "media",
+
         "democracy"
 
     ];
 
 
     const validValues = [
+
         20,
+
         40,
+
         60,
+
         80,
+
         100
+
     ];
 
 
@@ -1226,6 +1463,7 @@ function validateParticipantId(
     ) {
 
         return "";
+
     }
 
 
@@ -1240,6 +1478,7 @@ function validateParticipantId(
     ) {
 
         return "";
+
     }
 
 

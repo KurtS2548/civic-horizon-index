@@ -30,7 +30,9 @@ import {
 
 import {
 
-    getMyNationalPriorityHistory
+    getMyNationalPriorityHistory,
+
+    getMyCivicPulseHistory
 
 } from "./services/profile-service.js";
 
@@ -72,6 +74,18 @@ let priorityHistory =
 
 
 let publicPrioritySubmissions =
+    [];
+
+
+let presidentialApprovalHistory =
+    [];
+
+
+let countryDirectionHistory =
+    [];
+
+
+let nationalConfidenceHistory =
     [];
 
 
@@ -221,12 +235,6 @@ function initializeAuthState() {
                     refreshedUser;
 
 
-                /*
-                ------------------------------------------
-                VERIFIED EMAIL REQUIRED
-                ------------------------------------------
-                */
-
                 if (
                     !refreshedUser.emailVerified
                 ) {
@@ -290,12 +298,6 @@ async function renderDashboard() {
     }
 
 
-    /*
-    ----------------------------------------------
-    LOAD DASHBOARD DATA TOGETHER
-    ----------------------------------------------
-    */
-
     const results =
         await Promise.allSettled([
 
@@ -305,7 +307,9 @@ async function renderDashboard() {
 
             getCurrentUserVotingEligibility(),
 
-            getPrioritySubmissions()
+            getPrioritySubmissions(),
+
+            getMyCivicPulseHistory()
 
         ]);
 
@@ -314,7 +318,7 @@ async function renderDashboard() {
         results[0];
 
 
-    const historyResult =
+    const priorityHistoryResult =
         results[1];
 
 
@@ -326,9 +330,13 @@ async function renderDashboard() {
         results[3];
 
 
+    const civicPulseResult =
+        results[4];
+
+
     /*
     ----------------------------------------------
-    PRIVATE PARTICIPANT PROFILE
+    PROFILE
     ----------------------------------------------
     */
 
@@ -356,20 +364,20 @@ async function renderDashboard() {
 
     /*
     ----------------------------------------------
-    PRIVATE NATIONAL PRIORITIES HISTORY
+    PRIVATE PRIORITY HISTORY
     ----------------------------------------------
     */
 
     if (
-        historyResult.status ===
+        priorityHistoryResult.status ===
         "fulfilled"
     ) {
 
         priorityHistory =
             Array.isArray(
-                historyResult.value
+                priorityHistoryResult.value
             )
-                ? historyResult.value
+                ? priorityHistoryResult.value
                 : [];
 
     } else {
@@ -380,7 +388,7 @@ async function renderDashboard() {
 
         console.error(
             "Priority history load failed:",
-            historyResult.reason
+            priorityHistoryResult.reason
         );
 
     }
@@ -388,7 +396,7 @@ async function renderDashboard() {
 
     /*
     ----------------------------------------------
-    PUBLIC NATIONAL PRIORITY DATA
+    PUBLIC PRIORITY DATA
     ----------------------------------------------
     */
 
@@ -411,7 +419,7 @@ async function renderDashboard() {
 
 
         console.error(
-            "Public National Priority results could not be loaded:",
+            "Public National Priority data could not be loaded:",
             publicPriorityResult.reason
         );
 
@@ -420,7 +428,68 @@ async function renderDashboard() {
 
     /*
     ----------------------------------------------
-    ACCOUNT SNAPSHOT
+    PRIVATE CIVIC PULSE HISTORY
+    ----------------------------------------------
+    */
+
+    if (
+        civicPulseResult.status ===
+        "fulfilled"
+    ) {
+
+        const history =
+            civicPulseResult.value ||
+            {};
+
+
+        presidentialApprovalHistory =
+            Array.isArray(
+                history.presidentialApproval
+            )
+                ? history.presidentialApproval
+                : [];
+
+
+        countryDirectionHistory =
+            Array.isArray(
+                history.countryDirection
+            )
+                ? history.countryDirection
+                : [];
+
+
+        nationalConfidenceHistory =
+            Array.isArray(
+                history.nationalConfidence
+            )
+                ? history.nationalConfidence
+                : [];
+
+    } else {
+
+        presidentialApprovalHistory =
+            [];
+
+
+        countryDirectionHistory =
+            [];
+
+
+        nationalConfidenceHistory =
+            [];
+
+
+        console.error(
+            "Civic Pulse history could not be loaded:",
+            civicPulseResult.reason
+        );
+
+    }
+
+
+    /*
+    ----------------------------------------------
+    ACCOUNT INFORMATION
     ----------------------------------------------
     */
 
@@ -429,7 +498,7 @@ async function renderDashboard() {
 
     /*
     ----------------------------------------------
-    PARTICIPATION STATUS
+    VOTING STATUS
     ----------------------------------------------
     */
 
@@ -454,7 +523,7 @@ async function renderDashboard() {
 
     /*
     ----------------------------------------------
-    DASHBOARD SECTIONS
+    DASHBOARD
     ----------------------------------------------
     */
 
@@ -466,7 +535,9 @@ async function renderDashboard() {
 
     renderPriorityComparison();
 
-    renderRecentPriorityActivity();
+    renderCivicPulseHistory();
+
+    renderRecentActivity();
 
 
     setText(
@@ -485,12 +556,6 @@ ACCOUNT INFORMATION
 
 function renderAccountInformation() {
 
-    /*
-    ----------------------------------------------
-    NAME
-    ----------------------------------------------
-    */
-
     setText(
         "profileName",
         currentProfile?.displayName ||
@@ -499,24 +564,12 @@ function renderAccountInformation() {
     );
 
 
-    /*
-    ----------------------------------------------
-    EMAIL
-    ----------------------------------------------
-    */
-
     setText(
         "profileEmail",
         currentUser?.email ||
         ""
     );
 
-
-    /*
-    ----------------------------------------------
-    EMAIL STATUS
-    ----------------------------------------------
-    */
 
     setText(
         "profileVerificationStatus",
@@ -525,12 +578,6 @@ function renderAccountInformation() {
             : "Not Verified"
     );
 
-
-    /*
-    ----------------------------------------------
-    INCOMPLETE PROFILE
-    ----------------------------------------------
-    */
 
     if (!currentProfile) {
 
@@ -557,12 +604,6 @@ function renderAccountInformation() {
     }
 
 
-    /*
-    ----------------------------------------------
-    PARTICIPANT TYPE
-    ----------------------------------------------
-    */
-
     setText(
         "profileParticipantType",
         formatParticipantType(
@@ -570,12 +611,6 @@ function renderAccountInformation() {
         )
     );
 
-
-    /*
-    ----------------------------------------------
-    ZIP CODE
-    ----------------------------------------------
-    */
 
     const zipCode =
         String(
@@ -608,12 +643,6 @@ function renderAccountInformation() {
     }
 
 
-    /*
-    ----------------------------------------------
-    BIRTHDAY
-    ----------------------------------------------
-    */
-
     setText(
         "profileBirthday",
         formatBirthday(
@@ -642,23 +671,22 @@ function renderPrioritySubmissionCount() {
 
 /*
 ==================================================
-RECENT ACTIVITY COUNT
+TOTAL RECENT ACTIVITY COUNT
 ==================================================
 */
 
 function renderRecentActivityCount() {
 
-    /*
-    For now National Priorities is the first
-    personal-history activity type.
+    const total =
+        priorityHistory.length +
+        presidentialApprovalHistory.length +
+        countryDirectionHistory.length +
+        nationalConfidenceHistory.length;
 
-    Civic Pulse and community poll history will
-    be added to this count later.
-    */
 
     setText(
         "profileRecentActivityCount",
-        priorityHistory.length
+        total
     );
 
 }
@@ -700,12 +728,6 @@ function renderPriorityTrendChart() {
 
     }
 
-
-    /*
-    ----------------------------------------------
-    NEED TWO RESPONSES FOR A TREND
-    ----------------------------------------------
-    */
 
     if (
         priorityHistory.length <
@@ -967,15 +989,13 @@ function renderPriorityTrendChart() {
 
 /*
 ==================================================
-DESTROY PRIORITY TREND CHART
+DESTROY PRIORITY CHART
 ==================================================
 */
 
 function destroyPriorityTrendChart() {
 
-    if (
-        !priorityTrendChart
-    ) {
+    if (!priorityTrendChart) {
 
         return;
 
@@ -1016,12 +1036,6 @@ function renderPriorityComparison() {
         "";
 
 
-    /*
-    ----------------------------------------------
-    NEED PERSONAL HISTORY
-    ----------------------------------------------
-    */
-
     if (
         priorityHistory.length ===
         0
@@ -1038,12 +1052,6 @@ function renderPriorityComparison() {
     }
 
 
-    /*
-    ----------------------------------------------
-    LATEST PERSONAL RESPONSE
-    ----------------------------------------------
-    */
-
     const latestSubmission =
         priorityHistory[
             priorityHistory.length - 1
@@ -1058,33 +1066,15 @@ function renderPriorityComparison() {
             : {};
 
 
-    /*
-    ----------------------------------------------
-    PARTICIPANT AGE GROUP
-    ----------------------------------------------
-    */
-
     const ageGroup =
         getProfileAgeGroup();
 
-
-    /*
-    ----------------------------------------------
-    NATIONAL RESULTS
-    ----------------------------------------------
-    */
 
     const nationalRankings =
         calculatePriorityRankings(
             publicPrioritySubmissions
         );
 
-
-    /*
-    ----------------------------------------------
-    AGE GROUP RESULTS
-    ----------------------------------------------
-    */
 
     const ageGroupRankings =
         ageGroup
@@ -1110,12 +1100,6 @@ function renderPriorityComparison() {
     const issues =
         getNationalIssues();
 
-
-    /*
-    ----------------------------------------------
-    BUILD COMPARISON CARDS
-    ----------------------------------------------
-    */
 
     issues.forEach(
         issue => {
@@ -1150,10 +1134,6 @@ function renderPriorityComparison() {
                 "profile-comparison-card";
 
 
-            /*
-            ISSUE NAME
-            */
-
             const issueName =
                 document.createElement(
                     "div"
@@ -1173,10 +1153,6 @@ function renderPriorityComparison() {
             );
 
 
-            /*
-            YOU
-            */
-
             card.appendChild(
                 createComparisonValue(
                     "You",
@@ -1188,10 +1164,6 @@ function renderPriorityComparison() {
                 )
             );
 
-
-            /*
-            AGE GROUP
-            */
 
             card.appendChild(
                 createComparisonValue(
@@ -1205,10 +1177,6 @@ function renderPriorityComparison() {
             );
 
 
-            /*
-            NATIONAL
-            */
-
             card.appendChild(
                 createComparisonValue(
                     "National",
@@ -1221,6 +1189,781 @@ function renderPriorityComparison() {
 
             container.appendChild(
                 card
+            );
+
+        }
+    );
+
+}
+
+
+/*
+==================================================
+CIVIC PULSE HISTORY
+==================================================
+*/
+
+function renderCivicPulseHistory() {
+
+    const container =
+        document.getElementById(
+            "profileCivicPulseHistory"
+        );
+
+
+    if (!container) {
+
+        return;
+
+    }
+
+
+    container.innerHTML =
+        "";
+
+
+    const totalResponses =
+        presidentialApprovalHistory.length +
+        countryDirectionHistory.length +
+        nationalConfidenceHistory.length;
+
+
+    if (
+        totalResponses ===
+        0
+    ) {
+
+        container.innerHTML = `
+            <div class="profile-empty-state">
+                Civic Pulse personal history will appear here after you participate in the trackers.
+            </div>
+        `;
+
+
+        return;
+
+    }
+
+
+    const grid =
+        document.createElement(
+            "div"
+        );
+
+
+    grid.className =
+        "profile-pulse-grid";
+
+
+    grid.appendChild(
+        createApprovalHistoryCard()
+    );
+
+
+    grid.appendChild(
+        createDirectionHistoryCard()
+    );
+
+
+    grid.appendChild(
+        createConfidenceHistoryCard()
+    );
+
+
+    container.appendChild(
+        grid
+    );
+
+}
+
+
+/*
+==================================================
+APPROVAL HISTORY CARD
+==================================================
+*/
+
+function createApprovalHistoryCard() {
+
+    const latest =
+        getLatestRecord(
+            presidentialApprovalHistory
+        );
+
+
+    const card =
+        createPulseCard(
+            "Presidential Approval",
+            latest?.response ||
+            "No response yet",
+            presidentialApprovalHistory.length
+        );
+
+
+    const historyList =
+        createPulseHistoryList(
+            presidentialApprovalHistory,
+            record => record.response
+        );
+
+
+    card.appendChild(
+        historyList
+    );
+
+
+    return card;
+
+}
+
+
+/*
+==================================================
+COUNTRY DIRECTION HISTORY CARD
+==================================================
+*/
+
+function createDirectionHistoryCard() {
+
+    const latest =
+        getLatestRecord(
+            countryDirectionHistory
+        );
+
+
+    const card =
+        createPulseCard(
+            "Country Direction",
+            latest?.response ||
+            "No response yet",
+            countryDirectionHistory.length
+        );
+
+
+    const historyList =
+        createPulseHistoryList(
+            countryDirectionHistory,
+            record => record.response
+        );
+
+
+    card.appendChild(
+        historyList
+    );
+
+
+    return card;
+
+}
+
+
+/*
+==================================================
+CONFIDENCE HISTORY CARD
+==================================================
+*/
+
+function createConfidenceHistoryCard() {
+
+    const latest =
+        getLatestRecord(
+            nationalConfidenceHistory
+        );
+
+
+    const latestAverage =
+        latest
+            ? calculateConfidenceAverage(
+                latest.ratings
+            )
+            : null;
+
+
+    const card =
+        createPulseCard(
+            "National Confidence",
+            Number.isFinite(
+                latestAverage
+            )
+                ? `${latestAverage}% average`
+                : "No response yet",
+            nationalConfidenceHistory.length
+        );
+
+
+    const historyList =
+        createPulseHistoryList(
+            nationalConfidenceHistory,
+            record => {
+
+                const average =
+                    calculateConfidenceAverage(
+                        record.ratings
+                    );
+
+
+                return Number.isFinite(
+                    average
+                )
+                    ? `${average}% average confidence`
+                    : "Confidence submitted";
+
+            }
+        );
+
+
+    card.appendChild(
+        historyList
+    );
+
+
+    return card;
+
+}
+
+
+/*
+==================================================
+CREATE CIVIC PULSE CARD
+==================================================
+*/
+
+function createPulseCard(
+    title,
+    latestValue,
+    count
+) {
+
+    const card =
+        document.createElement(
+            "article"
+        );
+
+
+    card.className =
+        "profile-pulse-card";
+
+
+    const heading =
+        document.createElement(
+            "div"
+        );
+
+
+    heading.className =
+        "profile-pulse-card__heading";
+
+
+    const titleElement =
+        document.createElement(
+            "h3"
+        );
+
+
+    titleElement.textContent =
+        title;
+
+
+    const countElement =
+        document.createElement(
+            "span"
+        );
+
+
+    countElement.textContent =
+        `${count} ${count === 1 ? "response" : "responses"}`;
+
+
+    heading.append(
+        titleElement,
+        countElement
+    );
+
+
+    const latestLabel =
+        document.createElement(
+            "span"
+        );
+
+
+    latestLabel.className =
+        "profile-pulse-card__label";
+
+
+    latestLabel.textContent =
+        "Latest";
+
+
+    const latest =
+        document.createElement(
+            "strong"
+        );
+
+
+    latest.className =
+        "profile-pulse-card__latest";
+
+
+    latest.textContent =
+        latestValue;
+
+
+    card.append(
+        heading,
+        latestLabel,
+        latest
+    );
+
+
+    return card;
+
+}
+
+
+/*
+==================================================
+PULSE HISTORY LIST
+==================================================
+*/
+
+function createPulseHistoryList(
+    history,
+    valueFormatter
+) {
+
+    const list =
+        document.createElement(
+            "div"
+        );
+
+
+    list.className =
+        "profile-pulse-history-list";
+
+
+    if (
+        !Array.isArray(
+            history
+        ) ||
+        history.length ===
+            0
+    ) {
+
+        const empty =
+            document.createElement(
+                "p"
+            );
+
+
+        empty.className =
+            "profile-pulse-history-empty";
+
+
+        empty.textContent =
+            "No history yet.";
+
+
+        list.appendChild(
+            empty
+        );
+
+
+        return list;
+
+    }
+
+
+    const recent =
+        [...history]
+            .reverse()
+            .slice(
+                0,
+                5
+            );
+
+
+    recent.forEach(
+        record => {
+
+            const row =
+                document.createElement(
+                    "div"
+                );
+
+
+            row.className =
+                "profile-pulse-history-row";
+
+
+            const value =
+                document.createElement(
+                    "strong"
+                );
+
+
+            value.textContent =
+                valueFormatter(
+                    record
+                );
+
+
+            const date =
+                document.createElement(
+                    "span"
+                );
+
+
+            date.textContent =
+                formatActivityDate(
+                    record.submittedAt
+                );
+
+
+            row.append(
+                value,
+                date
+            );
+
+
+            list.appendChild(
+                row
+            );
+
+        }
+    );
+
+
+    return list;
+
+}
+
+
+/*
+==================================================
+CONFIDENCE AVERAGE
+==================================================
+*/
+
+function calculateConfidenceAverage(
+    ratings
+) {
+
+    if (
+        !ratings ||
+        typeof ratings !==
+            "object"
+    ) {
+
+        return null;
+
+    }
+
+
+    const categories = [
+
+        "government",
+
+        "congress",
+
+        "court",
+
+        "economy",
+
+        "media",
+
+        "democracy"
+
+    ];
+
+
+    const values =
+        categories
+            .map(
+                category =>
+                    Number(
+                        ratings[
+                            category
+                        ]
+                    )
+            )
+            .filter(
+                value =>
+                    Number.isFinite(
+                        value
+                    )
+            );
+
+
+    if (
+        values.length ===
+        0
+    ) {
+
+        return null;
+
+    }
+
+
+    const total =
+        values.reduce(
+            (
+                sum,
+                value
+            ) => {
+
+                return (
+                    sum +
+                    value
+                );
+
+            },
+            0
+        );
+
+
+    return Math.round(
+        total /
+        values.length
+    );
+
+}
+
+
+/*
+==================================================
+RECENT ACTIVITY
+==================================================
+*/
+
+function renderRecentActivity() {
+
+    const container =
+        document.getElementById(
+            "profileRecentActivity"
+        );
+
+
+    if (!container) {
+
+        return;
+
+    }
+
+
+    container.innerHTML =
+        "";
+
+
+    const activity =
+        [];
+
+
+    priorityHistory.forEach(
+        submission => {
+
+            activity.push({
+
+                title:
+                    "National Priorities Survey",
+
+                description:
+                    "Priority ratings submitted",
+
+                submittedAt:
+                    submission.submittedAt
+
+            });
+
+        }
+    );
+
+
+    presidentialApprovalHistory.forEach(
+        submission => {
+
+            activity.push({
+
+                title:
+                    "Presidential Approval",
+
+                description:
+                    submission.response,
+
+                submittedAt:
+                    submission.submittedAt
+
+            });
+
+        }
+    );
+
+
+    countryDirectionHistory.forEach(
+        submission => {
+
+            activity.push({
+
+                title:
+                    "Country Direction",
+
+                description:
+                    submission.response,
+
+                submittedAt:
+                    submission.submittedAt
+
+            });
+
+        }
+    );
+
+
+    nationalConfidenceHistory.forEach(
+        submission => {
+
+            const average =
+                calculateConfidenceAverage(
+                    submission.ratings
+                );
+
+
+            activity.push({
+
+                title:
+                    "National Confidence",
+
+                description:
+                    Number.isFinite(
+                        average
+                    )
+                        ? `${average}% average confidence`
+                        : "Confidence ratings submitted",
+
+                submittedAt:
+                    submission.submittedAt
+
+            });
+
+        }
+    );
+
+
+    activity.sort(
+        (
+            a,
+            b
+        ) => {
+
+            return (
+                getTimestamp(
+                    b.submittedAt
+                ) -
+                getTimestamp(
+                    a.submittedAt
+                )
+            );
+
+        }
+    );
+
+
+    const recent =
+        activity.slice(
+            0,
+            8
+        );
+
+
+    if (
+        recent.length ===
+        0
+    ) {
+
+        container.innerHTML = `
+            <div class="profile-empty-state">
+                Your recent polls and surveys will appear here.
+            </div>
+        `;
+
+
+        return;
+
+    }
+
+
+    recent.forEach(
+        record => {
+
+            const item =
+                document.createElement(
+                    "article"
+                );
+
+
+            item.className =
+                "profile-activity-item";
+
+
+            const main =
+                document.createElement(
+                    "div"
+                );
+
+
+            main.className =
+                "profile-activity-item__main";
+
+
+            const title =
+                document.createElement(
+                    "strong"
+                );
+
+
+            title.textContent =
+                record.title;
+
+
+            const description =
+                document.createElement(
+                    "span"
+                );
+
+
+            description.textContent =
+                record.description;
+
+
+            main.append(
+                title,
+                description
+            );
+
+
+            const date =
+                document.createElement(
+                    "span"
+                );
+
+
+            date.className =
+                "profile-activity-item__date";
+
+
+            date.textContent =
+                formatActivityDate(
+                    record.submittedAt
+                );
+
+
+            item.append(
+                main,
+                date
+            );
+
+
+            container.appendChild(
+                item
             );
 
         }
@@ -1256,11 +1999,6 @@ function getProfileAgeGroup() {
 
     }
 
-
-    /*
-    Compatibility with profiles that only
-    contain participantType.
-    */
 
     if (
         currentProfile?.participantType ===
@@ -1487,132 +2225,30 @@ function renderComparisonEmptyState(
 
 /*
 ==================================================
-RECENT PRIORITY ACTIVITY
+LATEST RECORD
 ==================================================
 */
 
-function renderRecentPriorityActivity() {
-
-    const container =
-        document.getElementById(
-            "profileRecentActivity"
-        );
-
-
-    if (!container) {
-
-        return;
-
-    }
-
-
-    container.innerHTML =
-        "";
-
+function getLatestRecord(
+    history
+) {
 
     if (
-        priorityHistory.length ===
-        0
+        !Array.isArray(
+            history
+        ) ||
+        history.length ===
+            0
     ) {
 
-        container.innerHTML = `
-            <div class="profile-empty-state">
-                Your recent polls and surveys will appear here.
-            </div>
-        `;
-
-
-        return;
+        return null;
 
     }
 
 
-    const recentHistory =
-        [...priorityHistory]
-            .reverse()
-            .slice(
-                0,
-                5
-            );
-
-
-    recentHistory.forEach(
-        submission => {
-
-            const item =
-                document.createElement(
-                    "article"
-                );
-
-
-            item.className =
-                "profile-activity-item";
-
-
-            const main =
-                document.createElement(
-                    "div"
-                );
-
-
-            main.className =
-                "profile-activity-item__main";
-
-
-            const title =
-                document.createElement(
-                    "strong"
-                );
-
-
-            title.textContent =
-                "National Priorities Survey";
-
-
-            const description =
-                document.createElement(
-                    "span"
-                );
-
-
-            description.textContent =
-                "Priority ratings submitted";
-
-
-            main.append(
-                title,
-                description
-            );
-
-
-            const date =
-                document.createElement(
-                    "span"
-                );
-
-
-            date.className =
-                "profile-activity-item__date";
-
-
-            date.textContent =
-                formatActivityDate(
-                    submission.submittedAt
-                );
-
-
-            item.append(
-                main,
-                date
-            );
-
-
-            container.appendChild(
-                item
-            );
-
-        }
-    );
+    return history[
+        history.length - 1
+    ];
 
 }
 
@@ -1953,6 +2589,31 @@ function formatActivityDate(
 
         }
     );
+
+}
+
+
+/*
+==================================================
+TIMESTAMP
+==================================================
+*/
+
+function getTimestamp(
+    submittedAt
+) {
+
+    const time =
+        new Date(
+            submittedAt
+        ).getTime();
+
+
+    return Number.isFinite(
+        time
+    )
+        ? time
+        : 0;
 
 }
 
