@@ -625,3 +625,29 @@
     }
 
 }
+/* ==================================================
+   NATIONAL CONFIDENCE TREND
+================================================== */
+
+.profile-confidence-trend {
+    margin-top: 16px;
+}
+
+.profile-confidence-trend__heading {
+    margin-bottom: 16px;
+}
+
+.profile-confidence-trend__heading h3 {
+    margin: 0;
+    color: #102a43;
+    font-family: "Merriweather", Georgia, serif;
+    font-size: 1rem;
+}
+
+.profile-confidence-trend__heading p:last-child {
+    max-width: 720px;
+    margin: 6px 0 0;
+    color: #627d98;
+    font-size: 0.7rem;
+    line-height: 1.5;
+}

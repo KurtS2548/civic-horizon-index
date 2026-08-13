@@ -93,6 +93,18 @@ let priorityTrendChart =
     null;
 
 
+let confidenceTrendChart =
+    null;
+
+
+let approvalTrendChart =
+    null;
+
+
+let directionTrendChart =
+    null;
+
+
 /*
 ==================================================
 INITIALIZE
@@ -489,7 +501,7 @@ async function renderDashboard() {
 
     /*
     ----------------------------------------------
-    ACCOUNT INFORMATION
+    ACCOUNT
     ----------------------------------------------
     */
 
@@ -536,6 +548,14 @@ async function renderDashboard() {
     renderPriorityComparison();
 
     renderCivicPulseHistory();
+
+    renderCivicPulseTrendSection();
+
+    renderApprovalTrendChart();
+
+    renderDirectionTrendChart();
+
+    renderConfidenceTrendChart();
 
     renderRecentActivity();
 
@@ -671,7 +691,7 @@ function renderPrioritySubmissionCount() {
 
 /*
 ==================================================
-TOTAL RECENT ACTIVITY COUNT
+RECENT ACTIVITY COUNT
 ==================================================
 */
 
@@ -910,20 +930,6 @@ function renderPriorityTrendChart() {
 
                             }
 
-                        },
-
-                        x: {
-
-                            title: {
-
-                                display:
-                                    true,
-
-                                text:
-                                    "Submission"
-
-                            }
-
                         }
 
                     },
@@ -933,47 +939,7 @@ function renderPriorityTrendChart() {
                         legend: {
 
                             position:
-                                "bottom",
-
-                            labels: {
-
-                                usePointStyle:
-                                    true,
-
-                                boxWidth:
-                                    8,
-
-                                padding:
-                                    14
-
-                            }
-
-                        },
-
-                        tooltip: {
-
-                            callbacks: {
-
-                                label:
-                                    context => {
-
-                                        const label =
-                                            context.dataset
-                                                .label ||
-                                            "Priority";
-
-
-                                        const value =
-                                            context.parsed.y;
-
-
-                                        return (
-                                            `${label}: ${value}/10`
-                                        );
-
-                                    }
-
-                            }
+                                "bottom"
 
                         }
 
@@ -1097,102 +1063,91 @@ function renderPriorityComparison() {
         );
 
 
-    const issues =
-        getNationalIssues();
+    getNationalIssues()
+        .forEach(
+            issue => {
+
+                const personalValue =
+                    Number(
+                        personalRatings[
+                            issue.id
+                        ]
+                    );
 
 
-    issues.forEach(
-        issue => {
+                const card =
+                    document.createElement(
+                        "article"
+                    );
 
-            const personalValue =
-                Number(
-                    personalRatings[
-                        issue.id
-                    ]
+
+                card.className =
+                    "profile-comparison-card";
+
+
+                const issueName =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                issueName.className =
+                    "profile-comparison-card__issue";
+
+
+                issueName.textContent =
+                    issue.name;
+
+
+                card.appendChild(
+                    issueName
                 );
 
 
-            const ageGroupResult =
-                ageGroupMap.get(
-                    issue.id
-                );
-
-
-            const nationalResult =
-                nationalMap.get(
-                    issue.id
-                );
-
-
-            const card =
-                document.createElement(
-                    "article"
-                );
-
-
-            card.className =
-                "profile-comparison-card";
-
-
-            const issueName =
-                document.createElement(
-                    "div"
-                );
-
-
-            issueName.className =
-                "profile-comparison-card__issue";
-
-
-            issueName.textContent =
-                issue.name;
-
-
-            card.appendChild(
-                issueName
-            );
-
-
-            card.appendChild(
-                createComparisonValue(
-                    "You",
-                    Number.isFinite(
-                        personalValue
+                card.appendChild(
+                    createComparisonValue(
+                        "You",
+                        Number.isFinite(
+                            personalValue
+                        )
+                            ? `${personalValue.toFixed(1)} / 10`
+                            : "—"
                     )
-                        ? `${personalValue.toFixed(1)} / 10`
-                        : "—"
-                )
-            );
+                );
 
 
-            card.appendChild(
-                createComparisonValue(
-                    getAgeGroupLabel(
-                        ageGroup
-                    ),
-                    formatComparisonAverage(
-                        ageGroupResult
+                card.appendChild(
+                    createComparisonValue(
+                        getAgeGroupLabel(
+                            ageGroup
+                        ),
+                        formatComparisonAverage(
+                            ageGroupMap.get(
+                                issue.id
+                            )
+                        )
                     )
-                )
-            );
+                );
 
 
-            card.appendChild(
-                createComparisonValue(
-                    "National",
-                    formatComparisonAverage(
-                        nationalResult
+                card.appendChild(
+                    createComparisonValue(
+                        "National",
+                        formatComparisonAverage(
+                            nationalMap.get(
+                                issue.id
+                            )
+                        )
                     )
-                )
-            );
+                );
 
 
-            container.appendChild(
-                card
-            );
+                container.appendChild(
+                    card
+                );
 
-        }
-    );
+            }
+        );
 
 }
 
@@ -1279,7 +1234,7 @@ function renderCivicPulseHistory() {
 
 /*
 ==================================================
-APPROVAL HISTORY CARD
+APPROVAL HISTORY
 ==================================================
 */
 
@@ -1300,15 +1255,12 @@ function createApprovalHistoryCard() {
         );
 
 
-    const historyList =
+    card.appendChild(
         createPulseHistoryList(
             presidentialApprovalHistory,
-            record => record.response
-        );
-
-
-    card.appendChild(
-        historyList
+            record =>
+                record.response
+        )
     );
 
 
@@ -1319,7 +1271,7 @@ function createApprovalHistoryCard() {
 
 /*
 ==================================================
-COUNTRY DIRECTION HISTORY CARD
+COUNTRY DIRECTION HISTORY
 ==================================================
 */
 
@@ -1340,15 +1292,12 @@ function createDirectionHistoryCard() {
         );
 
 
-    const historyList =
+    card.appendChild(
         createPulseHistoryList(
             countryDirectionHistory,
-            record => record.response
-        );
-
-
-    card.appendChild(
-        historyList
+            record =>
+                record.response
+        )
     );
 
 
@@ -1359,7 +1308,7 @@ function createDirectionHistoryCard() {
 
 /*
 ==================================================
-CONFIDENCE HISTORY CARD
+CONFIDENCE HISTORY
 ==================================================
 */
 
@@ -1371,7 +1320,7 @@ function createConfidenceHistoryCard() {
         );
 
 
-    const latestAverage =
+    const average =
         latest
             ? calculateConfidenceAverage(
                 latest.ratings
@@ -1383,37 +1332,33 @@ function createConfidenceHistoryCard() {
         createPulseCard(
             "National Confidence",
             Number.isFinite(
-                latestAverage
+                average
             )
-                ? `${latestAverage}% average`
+                ? `${average}% average`
                 : "No response yet",
             nationalConfidenceHistory.length
         );
 
 
-    const historyList =
+    card.appendChild(
         createPulseHistoryList(
             nationalConfidenceHistory,
             record => {
 
-                const average =
+                const result =
                     calculateConfidenceAverage(
                         record.ratings
                     );
 
 
                 return Number.isFinite(
-                    average
+                    result
                 )
-                    ? `${average}% average confidence`
+                    ? `${result}% average confidence`
                     : "Confidence submitted";
 
             }
-        );
-
-
-    card.appendChild(
-        historyList
+        )
     );
 
 
@@ -1424,7 +1369,7 @@ function createConfidenceHistoryCard() {
 
 /*
 ==================================================
-CREATE CIVIC PULSE CARD
+CREATE PULSE CARD
 ==================================================
 */
 
@@ -1480,17 +1425,17 @@ function createPulseCard(
     );
 
 
-    const latestLabel =
+    const label =
         document.createElement(
             "span"
         );
 
 
-    latestLabel.className =
+    label.className =
         "profile-pulse-card__label";
 
 
-    latestLabel.textContent =
+    label.textContent =
         "Latest";
 
 
@@ -1510,7 +1455,7 @@ function createPulseCard(
 
     card.append(
         heading,
-        latestLabel,
+        label,
         latest
     );
 
@@ -1573,67 +1518,855 @@ function createPulseHistoryList(
     }
 
 
-    const recent =
-        [...history]
-            .reverse()
-            .slice(
-                0,
-                5
-            );
+    [...history]
+        .reverse()
+        .slice(
+            0,
+            5
+        )
+        .forEach(
+            record => {
+
+                const row =
+                    document.createElement(
+                        "div"
+                    );
 
 
-    recent.forEach(
-        record => {
+                row.className =
+                    "profile-pulse-history-row";
 
-            const row =
-                document.createElement(
-                    "div"
+
+                const value =
+                    document.createElement(
+                        "strong"
+                    );
+
+
+                value.textContent =
+                    valueFormatter(
+                        record
+                    );
+
+
+                const date =
+                    document.createElement(
+                        "span"
+                    );
+
+
+                date.textContent =
+                    formatActivityDate(
+                        record.submittedAt
+                    );
+
+
+                row.append(
+                    value,
+                    date
                 );
 
 
-            row.className =
-                "profile-pulse-history-row";
-
-
-            const value =
-                document.createElement(
-                    "strong"
+                list.appendChild(
+                    row
                 );
 
-
-            value.textContent =
-                valueFormatter(
-                    record
-                );
-
-
-            const date =
-                document.createElement(
-                    "span"
-                );
-
-
-            date.textContent =
-                formatActivityDate(
-                    record.submittedAt
-                );
-
-
-            row.append(
-                value,
-                date
-            );
-
-
-            list.appendChild(
-                row
-            );
-
-        }
-    );
+            }
+        );
 
 
     return list;
+
+}
+
+
+/*
+==================================================
+BUILD CIVIC PULSE TREND SECTION
+==================================================
+*/
+
+function renderCivicPulseTrendSection() {
+
+    const historyContainer =
+        document.getElementById(
+            "profileCivicPulseHistory"
+        );
+
+
+    if (!historyContainer) {
+
+        return;
+
+    }
+
+
+    let trendSection =
+        document.getElementById(
+            "profileCivicPulseTrendSection"
+        );
+
+
+    if (!trendSection) {
+
+        trendSection =
+            document.createElement(
+                "div"
+            );
+
+
+        trendSection.id =
+            "profileCivicPulseTrendSection";
+
+
+        trendSection.className =
+            "profile-civic-pulse-trends";
+
+
+        historyContainer.insertAdjacentElement(
+            "afterend",
+            trendSection
+        );
+
+    }
+
+
+    trendSection.innerHTML =
+        "";
+
+
+    /*
+    ----------------------------------------------
+    PRESIDENTIAL APPROVAL TREND
+    ----------------------------------------------
+    */
+
+    if (
+        presidentialApprovalHistory.length >=
+        2
+    ) {
+
+        trendSection.appendChild(
+            createTrendCard(
+                "profileApprovalTrendChart",
+                "Presidential Approval Trend",
+                "How your presidential approval view has changed over time."
+            )
+        );
+
+    }
+
+
+    /*
+    ----------------------------------------------
+    COUNTRY DIRECTION TREND
+    ----------------------------------------------
+    */
+
+    if (
+        countryDirectionHistory.length >=
+        2
+    ) {
+
+        trendSection.appendChild(
+            createTrendCard(
+                "profileDirectionTrendChart",
+                "Country Direction Trend",
+                "How your view of the country's direction has changed over time."
+            )
+        );
+
+    }
+
+}
+
+
+/*
+==================================================
+CREATE TREND CARD
+==================================================
+*/
+
+function createTrendCard(
+    canvasId,
+    title,
+    description
+) {
+
+    const card =
+        document.createElement(
+            "section"
+        );
+
+
+    card.className =
+        "profile-chart-card profile-confidence-trend";
+
+
+    const heading =
+        document.createElement(
+            "div"
+        );
+
+
+    heading.className =
+        "profile-confidence-trend__heading";
+
+
+    const eyebrow =
+        document.createElement(
+            "p"
+        );
+
+
+    eyebrow.className =
+        "profile-dashboard__eyebrow";
+
+
+    eyebrow.textContent =
+        "Personal Civic Pulse Trend";
+
+
+    const titleElement =
+        document.createElement(
+            "h3"
+        );
+
+
+    titleElement.textContent =
+        title;
+
+
+    const descriptionElement =
+        document.createElement(
+            "p"
+        );
+
+
+    descriptionElement.textContent =
+        description;
+
+
+    heading.append(
+        eyebrow,
+        titleElement,
+        descriptionElement
+    );
+
+
+    const chartContainer =
+        document.createElement(
+            "div"
+        );
+
+
+    chartContainer.className =
+        "profile-chart-container";
+
+
+    const canvas =
+        document.createElement(
+            "canvas"
+        );
+
+
+    canvas.id =
+        canvasId;
+
+
+    chartContainer.appendChild(
+        canvas
+    );
+
+
+    card.append(
+        heading,
+        chartContainer
+    );
+
+
+    return card;
+
+}
+
+
+/*
+==================================================
+PRESIDENTIAL APPROVAL TREND
+==================================================
+*/
+
+function renderApprovalTrendChart() {
+
+    const canvas =
+        document.getElementById(
+            "profileApprovalTrendChart"
+        );
+
+
+    if (
+        !canvas ||
+        presidentialApprovalHistory.length <
+            2
+    ) {
+
+        destroyApprovalTrendChart();
+
+
+        return;
+
+    }
+
+
+    if (
+        typeof window.Chart !==
+        "function"
+    ) {
+
+        return;
+
+    }
+
+
+    const points =
+        presidentialApprovalHistory
+            .map(
+                (
+                    record,
+                    index
+                ) => {
+
+                    const value =
+                        mapApprovalResponseToScore(
+                            record.response
+                        );
+
+
+                    if (
+                        !Number.isFinite(
+                            value
+                        )
+                    ) {
+
+                        return null;
+
+                    }
+
+
+                    return {
+
+                        label:
+                            formatSubmissionLabel(
+                                record.submittedAt,
+                                index
+                            ),
+
+                        value
+
+                    };
+
+                }
+            )
+            .filter(
+                Boolean
+            );
+
+
+    if (
+        points.length <
+        2
+    ) {
+
+        return;
+
+    }
+
+
+    destroyApprovalTrendChart();
+
+
+    approvalTrendChart =
+        new window.Chart(
+            canvas,
+            {
+
+                type:
+                    "line",
+
+                data: {
+
+                    labels:
+                        points.map(
+                            point =>
+                                point.label
+                        ),
+
+                    datasets: [
+
+                        {
+
+                            label:
+                                "Your Presidential Approval",
+
+                            data:
+                                points.map(
+                                    point =>
+                                        point.value
+                                ),
+
+                            tension:
+                                0.25,
+
+                            fill:
+                                false
+
+                        }
+
+                    ]
+
+                },
+
+                options: {
+
+                    responsive:
+                        true,
+
+                    maintainAspectRatio:
+                        false,
+
+                    interaction: {
+
+                        mode:
+                            "index",
+
+                        intersect:
+                            false
+
+                    },
+
+                    scales: {
+
+                        y: {
+
+                            min:
+                                1,
+
+                            max:
+                                5,
+
+                            ticks: {
+
+                                stepSize:
+                                    1,
+
+                                callback:
+                                    value =>
+                                        getApprovalScoreLabel(
+                                            value
+                                        )
+
+                            }
+
+                        }
+
+                    },
+
+                    plugins: {
+
+                        legend: {
+
+                            display:
+                                false
+
+                        },
+
+                        tooltip: {
+
+                            callbacks: {
+
+                                label:
+                                    context =>
+                                        getApprovalScoreLabel(
+                                            context.parsed.y
+                                        )
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            }
+        );
+
+}
+
+
+/*
+==================================================
+APPROVAL RESPONSE SCORE
+==================================================
+*/
+
+function mapApprovalResponseToScore(
+    response
+) {
+
+    const scores = {
+
+        "Strongly Disapprove":
+            1,
+
+        "Disapprove":
+            2,
+
+        "Neutral":
+            3,
+
+        "Approve":
+            4,
+
+        "Strongly Approve":
+            5
+
+    };
+
+
+    return scores[
+        response
+    ] ??
+    null;
+
+}
+
+
+/*
+==================================================
+APPROVAL SCORE LABEL
+==================================================
+*/
+
+function getApprovalScoreLabel(
+    value
+) {
+
+    const labels = {
+
+        1:
+            "Strongly Disapprove",
+
+        2:
+            "Disapprove",
+
+        3:
+            "Neutral",
+
+        4:
+            "Approve",
+
+        5:
+            "Strongly Approve"
+
+    };
+
+
+    return labels[
+        Math.round(
+            value
+        )
+    ] ||
+    "";
+
+}
+
+
+/*
+==================================================
+DESTROY APPROVAL TREND
+==================================================
+*/
+
+function destroyApprovalTrendChart() {
+
+    if (!approvalTrendChart) {
+
+        return;
+
+    }
+
+
+    approvalTrendChart.destroy();
+
+
+    approvalTrendChart =
+        null;
+
+}
+
+
+/*
+==================================================
+COUNTRY DIRECTION TREND
+==================================================
+*/
+
+function renderDirectionTrendChart() {
+
+    const canvas =
+        document.getElementById(
+            "profileDirectionTrendChart"
+        );
+
+
+    if (
+        !canvas ||
+        countryDirectionHistory.length <
+            2
+    ) {
+
+        destroyDirectionTrendChart();
+
+
+        return;
+
+    }
+
+
+    if (
+        typeof window.Chart !==
+        "function"
+    ) {
+
+        return;
+
+    }
+
+
+    const points =
+        countryDirectionHistory
+            .map(
+                (
+                    record,
+                    index
+                ) => {
+
+                    const value =
+                        mapDirectionResponseToScore(
+                            record.response
+                        );
+
+
+                    if (
+                        !Number.isFinite(
+                            value
+                        )
+                    ) {
+
+                        return null;
+
+                    }
+
+
+                    return {
+
+                        label:
+                            formatSubmissionLabel(
+                                record.submittedAt,
+                                index
+                            ),
+
+                        value
+
+                    };
+
+                }
+            )
+            .filter(
+                Boolean
+            );
+
+
+    if (
+        points.length <
+        2
+    ) {
+
+        return;
+
+    }
+
+
+    destroyDirectionTrendChart();
+
+
+    directionTrendChart =
+        new window.Chart(
+            canvas,
+            {
+
+                type:
+                    "line",
+
+                data: {
+
+                    labels:
+                        points.map(
+                            point =>
+                                point.label
+                        ),
+
+                    datasets: [
+
+                        {
+
+                            label:
+                                "Your Country Direction",
+
+                            data:
+                                points.map(
+                                    point =>
+                                        point.value
+                                ),
+
+                            tension:
+                                0.2,
+
+                            fill:
+                                false
+
+                        }
+
+                    ]
+
+                },
+
+                options: {
+
+                    responsive:
+                        true,
+
+                    maintainAspectRatio:
+                        false,
+
+                    scales: {
+
+                        y: {
+
+                            min:
+                                0,
+
+                            max:
+                                1,
+
+                            ticks: {
+
+                                stepSize:
+                                    1,
+
+                                callback:
+                                    value =>
+                                        value ===
+                                            1
+                                            ? "Right Direction"
+                                            : "Wrong Track"
+
+                            }
+
+                        }
+
+                    },
+
+                    plugins: {
+
+                        legend: {
+
+                            display:
+                                false
+
+                        },
+
+                        tooltip: {
+
+                            callbacks: {
+
+                                label:
+                                    context =>
+                                        context.parsed.y ===
+                                            1
+                                            ? "Right Direction"
+                                            : "Wrong Track"
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            }
+        );
+
+}
+
+
+/*
+==================================================
+DIRECTION RESPONSE SCORE
+==================================================
+*/
+
+function mapDirectionResponseToScore(
+    response
+) {
+
+    if (
+        response ===
+        "Right Direction"
+    ) {
+
+        return 1;
+
+    }
+
+
+    if (
+        response ===
+        "Wrong Track"
+    ) {
+
+        return 0;
+
+    }
+
+
+    return null;
+
+}
+
+
+/*
+==================================================
+DESTROY DIRECTION TREND
+==================================================
+*/
+
+function destroyDirectionTrendChart() {
+
+    if (!directionTrendChart) {
+
+        return;
+
+    }
+
+
+    directionTrendChart.destroy();
+
+
+    directionTrendChart =
+        null;
 
 }
 
@@ -1687,10 +2420,7 @@ function calculateConfidenceAverage(
                     )
             )
             .filter(
-                value =>
-                    Number.isFinite(
-                        value
-                    )
+                Number.isFinite
             );
 
 
@@ -1709,14 +2439,9 @@ function calculateConfidenceAverage(
             (
                 sum,
                 value
-            ) => {
-
-                return (
-                    sum +
-                    value
-                );
-
-            },
+            ) =>
+                sum +
+                value,
             0
         );
 
@@ -1725,6 +2450,235 @@ function calculateConfidenceAverage(
         total /
         values.length
     );
+
+}
+
+
+/*
+==================================================
+NATIONAL CONFIDENCE TREND
+==================================================
+*/
+
+function renderConfidenceTrendChart() {
+
+    const card =
+        document.getElementById(
+            "profileConfidenceTrendCard"
+        );
+
+
+    const canvas =
+        document.getElementById(
+            "profileConfidenceTrendChart"
+        );
+
+
+    if (
+        !card ||
+        !canvas
+    ) {
+
+        return;
+
+    }
+
+
+    if (
+        nationalConfidenceHistory.length <
+        2
+    ) {
+
+        card.hidden =
+            true;
+
+
+        destroyConfidenceTrendChart();
+
+
+        return;
+
+    }
+
+
+    const points =
+        nationalConfidenceHistory
+            .map(
+                (
+                    submission,
+                    index
+                ) => {
+
+                    const average =
+                        calculateConfidenceAverage(
+                            submission.ratings
+                        );
+
+
+                    if (
+                        !Number.isFinite(
+                            average
+                        )
+                    ) {
+
+                        return null;
+
+                    }
+
+
+                    return {
+
+                        label:
+                            formatSubmissionLabel(
+                                submission.submittedAt,
+                                index
+                            ),
+
+                        value:
+                            average
+
+                    };
+
+                }
+            )
+            .filter(
+                Boolean
+            );
+
+
+    if (
+        points.length <
+        2 ||
+        typeof window.Chart !==
+            "function"
+    ) {
+
+        card.hidden =
+            true;
+
+
+        return;
+
+    }
+
+
+    card.hidden =
+        false;
+
+
+    destroyConfidenceTrendChart();
+
+
+    confidenceTrendChart =
+        new window.Chart(
+            canvas,
+            {
+
+                type:
+                    "line",
+
+                data: {
+
+                    labels:
+                        points.map(
+                            point =>
+                                point.label
+                        ),
+
+                    datasets: [
+
+                        {
+
+                            label:
+                                "Your National Confidence",
+
+                            data:
+                                points.map(
+                                    point =>
+                                        point.value
+                                ),
+
+                            tension:
+                                0.3,
+
+                            fill:
+                                false
+
+                        }
+
+                    ]
+
+                },
+
+                options: {
+
+                    responsive:
+                        true,
+
+                    maintainAspectRatio:
+                        false,
+
+                    scales: {
+
+                        y: {
+
+                            min:
+                                0,
+
+                            max:
+                                100,
+
+                            ticks: {
+
+                                callback:
+                                    value =>
+                                        `${value}%`
+
+                            }
+
+                        }
+
+                    },
+
+                    plugins: {
+
+                        legend: {
+
+                            display:
+                                false
+
+                        }
+
+                    }
+
+                }
+
+            }
+        );
+
+}
+
+
+/*
+==================================================
+DESTROY CONFIDENCE TREND
+==================================================
+*/
+
+function destroyConfidenceTrendChart() {
+
+    if (!confidenceTrendChart) {
+
+        return;
+
+    }
+
+
+    confidenceTrendChart.destroy();
+
+
+    confidenceTrendChart =
+        null;
 
 }
 
@@ -1852,18 +2806,13 @@ function renderRecentActivity() {
         (
             a,
             b
-        ) => {
-
-            return (
-                getTimestamp(
-                    b.submittedAt
-                ) -
-                getTimestamp(
-                    a.submittedAt
-                )
-            );
-
-        }
+        ) =>
+            getTimestamp(
+                b.submittedAt
+            ) -
+            getTimestamp(
+                a.submittedAt
+            )
     );
 
 
@@ -2184,9 +3133,7 @@ function formatComparisonAverage(
     }
 
 
-    return (
-        `${ranking.average.toFixed(1)} / 10`
-    );
+    return `${ranking.average.toFixed(1)} / 10`;
 
 }
 
@@ -2202,22 +3149,22 @@ function renderComparisonEmptyState(
     message
 ) {
 
-    const emptyState =
+    const empty =
         document.createElement(
             "div"
         );
 
 
-    emptyState.className =
+    empty.className =
         "profile-empty-state";
 
 
-    emptyState.textContent =
+    empty.textContent =
         message;
 
 
     container.appendChild(
-        emptyState
+        empty
     );
 
 }
@@ -2524,9 +3471,7 @@ function formatSubmissionLabel(
         )
     ) {
 
-        return (
-            `Response ${index + 1}`
-        );
+        return `Response ${index + 1}`;
 
     }
 
@@ -2764,12 +3709,6 @@ async function handleZipUpdate(
     );
 
 
-    setText(
-        "profileMessage",
-        "Updating ZIP code..."
-    );
-
-
     try {
 
         await updateCurrentUserZipCode(
@@ -2858,12 +3797,6 @@ async function handleSignOut() {
 
         button.textContent =
             "Sign Out";
-
-
-        setText(
-            "profileMessage",
-            "Sign out could not be completed."
-        );
 
     }
 

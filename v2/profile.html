@@ -379,18 +379,58 @@
 
 
                 <div
-                    id="profileCivicPulseHistory"
-                    class="profile-history-card"
-                >
+    id="profileCivicPulseHistory"
+    class="profile-history-card"
+>
 
-                    <div class="profile-empty-state">
+    <div class="profile-empty-state">
 
-                        Civic Pulse personal history will appear here
-                        after you participate in the trackers.
+        Civic Pulse personal history will appear here
+        after you participate in the trackers.
 
-                    </div>
+    </div>
 
-                </div>
+</div>
+
+
+<div
+    id="profileConfidenceTrendCard"
+    class="profile-chart-card profile-confidence-trend"
+    hidden
+>
+
+    <div class="profile-confidence-trend__heading">
+
+        <div>
+
+            <p class="profile-dashboard__eyebrow">
+                National Confidence Trend
+            </p>
+
+            <h3>
+                How your confidence has changed
+            </h3>
+
+            <p>
+                Your average confidence across government,
+                Congress, courts, the economy, media, and
+                democracy.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="profile-chart-container">
+
+        <canvas
+            id="profileConfidenceTrendChart"
+        ></canvas>
+
+    </div>
+
+</div>
 
             </div>
 
