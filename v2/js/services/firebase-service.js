@@ -247,6 +247,37 @@ export async function submitPrioritySubmission(
     }
 
 
+    /*
+    ----------------------------------------------
+    ANONYMOUS AGE GROUP
+
+    Only the approved age-group value is copied
+    into the public submission.
+
+    No UID, email, birthday, name, or ZIP is stored
+    here.
+    ----------------------------------------------
+    */
+
+    const ageGroup =
+        additionalData?.ageGroup ===
+            "youth"
+            ? "youth"
+            : additionalData?.ageGroup ===
+                "adult"
+                ? "adult"
+                : null;
+
+
+    if (!ageGroup) {
+
+        throw new Error(
+            "A valid participant age group is required."
+        );
+
+    }
+
+
     const submissionReference =
         push(
             prioritySubmissionsRef
@@ -257,6 +288,8 @@ export async function submitPrioritySubmission(
 
         ratings,
 
+        ageGroup,
+
         submittedAt:
             new Date().toISOString(),
 
@@ -264,9 +297,7 @@ export async function submitPrioritySubmission(
             "nationalPriorities",
 
         surveyVersion:
-            "2.0",
-
-        ...additionalData
+            "2.1"
 
     };
 

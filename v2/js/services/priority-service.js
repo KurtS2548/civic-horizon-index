@@ -18,7 +18,6 @@ import {
 import {
 
     auth,
-
     database
 
 } from "../../../js/firebase.js";
@@ -27,9 +26,8 @@ import {
 import {
 
     ref,
-
+    get,
     push,
-
     set
 
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
@@ -153,8 +151,7 @@ SUBMISSION
 */
 
 export async function submitNationalPriorityRatings(
-    ratings,
-    additionalData = {}
+    ratings
 ) {
 
     const validatedRatings =
@@ -162,12 +159,6 @@ export async function submitNationalPriorityRatings(
             ratings
         );
 
-
-    /*
-    ----------------------------------------------
-    REQUIRE AUTHENTICATED VERIFIED USER
-    ----------------------------------------------
-    */
 
     const user =
         auth.currentUser;
@@ -195,27 +186,62 @@ export async function submitNationalPriorityRatings(
 
     /*
     ----------------------------------------------
+    LOAD PRIVATE PROFILE
+
+    This is the authoritative source for ageGroup.
+    ----------------------------------------------
+    */
+
+    const profile =
+        await getParticipantProfile(
+            user.uid
+        );
+
+
+    if (!profile) {
+
+        throw new Error(
+            "Your participant profile could not be found."
+        );
+
+    }
+
+
+    const ageGroup =
+        normalizeAgeGroup(
+            profile.ageGroup
+        );
+
+
+    if (!ageGroup) {
+
+        throw new Error(
+            "Your participant age group could not be confirmed."
+        );
+
+    }
+
+
+    /*
+    ----------------------------------------------
     PUBLIC AGGREGATE SUBMISSION
 
-    This preserves the existing Civic Horizon
-    National Priorities system.
+    Only the anonymous ageGroup is passed through.
     ----------------------------------------------
     */
 
     const publicSubmission =
         await submitPrioritySubmission(
             validatedRatings,
-            additionalData
+            {
+                ageGroup
+            }
         );
 
 
     /*
     ----------------------------------------------
-    PRIVATE PARTICIPANT HISTORY
-
-    Failure here does NOT create another public
-    submission or cause the participant to retry
-    a vote that already succeeded.
+    PRIVATE PERSONAL HISTORY
     ----------------------------------------------
     */
 
@@ -237,6 +263,85 @@ export async function submitNationalPriorityRatings(
 
 
     return publicSubmission;
+
+}
+
+
+/*
+==================================================
+PRIVATE PROFILE
+==================================================
+*/
+
+async function getParticipantProfile(
+    uid
+) {
+
+    if (!uid) {
+
+        return null;
+
+    }
+
+
+    const profileReference =
+        ref(
+            database,
+            `userProfiles/${uid}`
+        );
+
+
+    const snapshot =
+        await get(
+            profileReference
+        );
+
+
+    if (
+        !snapshot.exists()
+    ) {
+
+        return null;
+
+    }
+
+
+    return snapshot.val();
+
+}
+
+
+/*
+==================================================
+NORMALIZE AGE GROUP
+==================================================
+*/
+
+function normalizeAgeGroup(
+    ageGroup
+) {
+
+    if (
+        ageGroup ===
+        "youth"
+    ) {
+
+        return "youth";
+
+    }
+
+
+    if (
+        ageGroup ===
+        "adult"
+    ) {
+
+        return "adult";
+
+    }
+
+
+    return null;
 
 }
 
@@ -528,7 +633,55 @@ export function calculatePriorityRankings(
 
 /*
 ==================================================
-SUMMARY HELPERS
+AGE-GROUP RANKINGS
+==================================================
+*/
+
+export function calculatePriorityRankingsByAgeGroup(
+    submissions,
+    ageGroup
+) {
+
+    const normalizedAgeGroup =
+        normalizeAgeGroup(
+            ageGroup
+        );
+
+
+    if (!normalizedAgeGroup) {
+
+        return [];
+
+    }
+
+
+    const filtered =
+        Array.isArray(
+            submissions
+        )
+            ? submissions.filter(
+                submission => {
+
+                    return (
+                        submission?.ageGroup ===
+                        normalizedAgeGroup
+                    );
+
+                }
+            )
+            : [];
+
+
+    return calculatePriorityRankings(
+        filtered
+    );
+
+}
+
+
+/*
+==================================================
+TOP ISSUE
 ==================================================
 */
 
