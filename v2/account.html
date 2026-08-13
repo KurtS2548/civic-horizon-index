@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="Sign in or create your Civic Horizon Index account."
+    >
+
+    <title>
+        Account | Civic Horizon Index
+    </title>
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Merriweather:wght@700&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="css/header.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="css/footer.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="css/account.css"
+    >
+
+</head>
+
+<body>
+
+    <div id="headerContainer"></div>
+
+
+    <main class="account-page">
+
+        <section class="account-compact">
+
+            <div class="account-compact__container">
+
+                <div class="account-compact__intro">
+
+                    <p class="account-eyebrow">
+                        Civic Horizon Account
+                    </p>
+
+                    <h1>
+                        Sign in to participate
+                    </h1>
+
+                    <p>
+                        Create a verified account in just a few steps.
+                    </p>
+
+                </div>
+
+
+                <div class="account-switcher">
+
+                    <button
+                        type="button"
+                        id="showSignInButton"
+                        class="account-switcher__button is-active"
+                    >
+                        Sign In
+                    </button>
+
+                    <button
+                        type="button"
+                        id="showCreateAccountButton"
+                        class="account-switcher__button"
+                    >
+                        Create Account
+                    </button>
+
+                </div>
+
+
+                <!-- ==================================================
+                     SIGN IN
+                ================================================== -->
+
+                <section
+                    id="signInPanel"
+                    class="account-panel"
+                >
+
+                    <div class="account-panel__heading">
+
+                        <h2>
+                            Welcome back
+                        </h2>
+
+                        <p>
+                            Sign in and continue where you left off.
+                        </p>
+
+                    </div>
+
+
+                    <form
+                        id="signInForm"
+                        class="account-form"
+                        novalidate
+                    >
+
+                        <label>
+
+                            <span>
+                                Email
+                            </span>
+
+                            <input
+                                type="email"
+                                id="signInEmail"
+                                autocomplete="email"
+                                required
+                            >
+
+                        </label>
+
+
+                        <label>
+
+                            <span>
+                                Password
+                            </span>
+
+                            <input
+                                type="password"
+                                id="signInPassword"
+                                autocomplete="current-password"
+                                required
+                            >
+
+                        </label>
+
+
+                        <button
+                            type="submit"
+                            id="signInButton"
+                            class="account-button account-button--primary"
+                        >
+                            Sign In
+                        </button>
+
+
+                        <button
+                            type="button"
+                            id="forgotPasswordButton"
+                            class="account-text-button"
+                        >
+                            Forgot password?
+                        </button>
+
+
+                        <p
+                            id="signInMessage"
+                            class="account-message"
+                            aria-live="polite"
+                        ></p>
+
+                    </form>
+
+                </section>
+
+
+                <!-- ==================================================
+                     CREATE ACCOUNT
+                ================================================== -->
+
+                <section
+                    id="createAccountPanel"
+                    class="account-panel"
+                    hidden
+                >
+
+                    <div class="account-panel__heading">
+
+                        <h2>
+                            Create your account
+                        </h2>
+
+                        <p>
+                            Quick setup. Email verification is required
+                            before protected participation.
+                        </p>
+
+                    </div>
+
+
+                    <form
+                        id="createAccountForm"
+                        class="account-form"
+                        novalidate
+                    >
+
+                        <div class="account-form__row">
+
+                            <label>
+
+                                <span>
+                                    Name
+                                </span>
+
+                                <input
+                                    type="text"
+                                    id="createDisplayName"
+                                    autocomplete="name"
+                                    maxlength="60"
+                                    required
+                                >
+
+                            </label>
+
+
+                            <label>
+
+                                <span>
+                                    ZIP Code
+                                </span>
+
+                                <input
+                                    type="text"
+                                    id="createZipCode"
+                                    inputmode="numeric"
+                                    autocomplete="postal-code"
+                                    maxlength="5"
+                                    pattern="[0-9]{5}"
+                                    placeholder="12345"
+                                    required
+                                >
+
+                            </label>
+
+                        </div>
+
+
+                        <div class="account-form__row">
+
+                            <label>
+
+                                <span>
+                                    Birthday
+                                </span>
+
+                                <input
+                                    type="date"
+                                    id="createBirthday"
+                                    autocomplete="bday"
+                                    required
+                                >
+
+                            </label>
+
+
+                            <label>
+
+                                <span>
+                                    Email
+                                </span>
+
+                                <input
+                                    type="email"
+                                    id="createEmail"
+                                    autocomplete="email"
+                                    required
+                                >
+
+                            </label>
+
+                        </div>
+
+
+                        <div class="account-form__row">
+
+                            <label>
+
+                                <span>
+                                    Password
+                                </span>
+
+                                <input
+                                    type="password"
+                                    id="createPassword"
+                                    autocomplete="new-password"
+                                    required
+                                >
+
+                            </label>
+
+
+                            <label>
+
+                                <span>
+                                    Confirm Password
+                                </span>
+
+                                <input
+                                    type="password"
+                                    id="createPasswordConfirm"
+                                    autocomplete="new-password"
+                                    required
+                                >
+
+                            </label>
+
+                        </div>
+
+
+                        <p class="account-form__hint">
+                            Password: at least 10 characters with an uppercase
+                            letter, lowercase letter, and number.
+                        </p>
+
+
+                        <p class="account-form__hint">
+                            Birthday is private and is used to determine
+                            participant age category automatically.
+                        </p>
+
+
+                        <label class="account-consent">
+
+                            <input
+                                type="checkbox"
+                                id="createAgreement"
+                                required
+                            >
+
+                            <span>
+                                I agree to the Terms and Privacy Policy and
+                                will maintain only one Civic Horizon account.
+                            </span>
+
+                        </label>
+
+
+                        <button
+                            type="submit"
+                            id="createAccountButton"
+                            class="account-button account-button--primary"
+                        >
+                            Create Account
+                        </button>
+
+
+                        <p
+                            id="createAccountMessage"
+                            class="account-message"
+                            aria-live="polite"
+                        ></p>
+
+                    </form>
+
+                </section>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <div id="footerContainer"></div>
+
+
+    <script
+        type="module"
+        src="js/account.js"
+    ></script>
+
+</body>
+
+</html>

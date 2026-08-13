@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="Verify your Civic Horizon Index account."
+    >
+
+    <title>
+        Verify Account | Civic Horizon Index
+    </title>
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Merriweather:wght@700&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="css/header.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="css/footer.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="css/account.css"
+    >
+
+</head>
+
+<body>
+
+    
+
+
+    <main class="account-page account-page--compact">
+
+        <section class="account-compact">
+
+            <div class="account-compact__container">
+
+                <section class="account-panel account-panel--verification">
+
+                    <div class="account-panel__heading">
+
+                        <p class="account-eyebrow">
+                            Account Verification
+                        </p>
+
+                        <h1>
+                            Verify your email
+                        </h1>
+
+                        <p>
+                            Check your inbox and click the verification link
+                            we sent you. Then return here and confirm your
+                            verification.
+                        </p>
+
+                    </div>
+
+
+                    <div class="account-verification-status">
+
+                        <span>
+                            Email Status
+                        </span>
+
+                        <strong id="verificationStatus">
+                            Checking...
+                        </strong>
+
+                        <p id="verificationStatusMessage">
+                            Checking your Civic Horizon account.
+                        </p>
+
+                    </div>
+
+
+                    <div class="account-verification-actions">
+
+                        <button
+                            type="button"
+                            id="refreshVerificationButton"
+                            class="account-button account-button--primary"
+                        >
+                            I've Verified My Email
+                        </button>
+
+
+                        <button
+                            type="button"
+                            id="resendVerificationButton"
+                            class="account-button account-button--secondary"
+                        >
+                            Resend Verification Email
+                        </button>
+
+
+                        <button
+                            type="button"
+                            id="verificationSignOutButton"
+                            class="account-text-button"
+                        >
+                            Sign Out
+                        </button>
+
+                    </div>
+
+
+                    <p
+                        id="verificationMessage"
+                        class="account-message"
+                        aria-live="polite"
+                    ></p>
+
+                </section>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <div id="footerContainer"></div>
+
+
+    <script
+        type="module"
+        src="js/verify-account.js"
+    ></script>
+
+</body>
+
+</html>

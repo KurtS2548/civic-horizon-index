@@ -14,7 +14,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 28px;
+    gap: 20px;
     width: min(1180px, calc(100% - 48px));
     min-height: 72px;
     margin: 0 auto;
@@ -66,6 +66,68 @@
 
 
 /* ==================================================
+   ACCOUNT CONTROLS
+================================================== */
+
+.site-header__account {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    flex-shrink: 0;
+}
+
+.site-header__profile,
+.site-header__logout {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 34px;
+    padding: 7px 10px;
+    border-radius: 7px;
+    font-family: "Inter", sans-serif;
+    font-size: 0.7rem;
+    font-weight: 800;
+    line-height: 1;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.site-header__profile {
+    border: 1px solid #d9e2ec;
+    background: #ffffff;
+    color: #486581;
+    text-decoration: none;
+}
+
+.site-header__profile:hover,
+.site-header__profile:focus-visible {
+    border-color: #9fb3c8;
+    background: #f5f9fc;
+    color: #1f5f99;
+    outline: none;
+}
+
+.site-header__logout {
+    border: 1px solid #d9e2ec;
+    background: #f8fafc;
+    color: #486581;
+}
+
+.site-header__logout:hover,
+.site-header__logout:focus-visible {
+    border-color: #bcccdc;
+    background: #edf2f7;
+    color: #243b53;
+    outline: none;
+}
+
+.site-header__logout:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+
+/* ==================================================
    PRIMARY NAVIGATION
 ================================================== */
 
@@ -74,6 +136,7 @@
     align-items: center;
     justify-content: flex-end;
     gap: 3px;
+    margin-left: auto;
 }
 
 .primary-navigation__link {
@@ -208,7 +271,7 @@
 
 
 /* ==================================================
-   HEADER ACTION
+   VOTE NOW ACTION
 ================================================== */
 
 .site-header__action {
@@ -218,23 +281,27 @@
     min-height: 40px;
     margin-left: 6px;
     padding: 9px 15px;
+    border: 1px solid #d4aa37;
     border-radius: 8px;
-    background: #1f5f99;
-    color: #ffffff;
+    background: #efc75d;
+    color: #102a43;
     font-size: 0.82rem;
     font-weight: 800;
     line-height: 1;
     text-decoration: none;
     white-space: nowrap;
-    box-shadow: 0 7px 17px rgba(31, 95, 153, 0.18);
+    box-shadow: 0 7px 17px rgba(212, 170, 55, 0.22);
     transition:
         background-color 180ms ease,
+        border-color 180ms ease,
         transform 180ms ease;
 }
 
 .site-header__action:hover,
 .site-header__action:focus-visible {
-    background: #2d73ad;
+    border-color: #c89d2f;
+    background: #e4b947;
+    color: #102a43;
     outline: none;
     transform: translateY(-1px);
 }
@@ -286,7 +353,11 @@ span:nth-child(3) {
    RESPONSIVE
 ================================================== */
 
-@media (max-width: 1140px) {
+@media (max-width: 1180px) {
+
+    .site-header__container {
+        gap: 14px;
+    }
 
     .site-brand__text small {
         display: none;
@@ -305,6 +376,12 @@ span:nth-child(3) {
         padding-inline: 13px;
     }
 
+    .site-header__profile,
+    .site-header__logout {
+        padding-inline: 8px;
+        font-size: 0.66rem;
+    }
+
 }
 
 
@@ -312,6 +389,10 @@ span:nth-child(3) {
 
     .site-header__container {
         min-height: 68px;
+    }
+
+    .site-header__account {
+        margin-left: auto;
     }
 
     .mobile-menu-button {
@@ -388,7 +469,16 @@ span:nth-child(3) {
     .site-header__action {
         justify-content: center;
         margin-top: 10px;
-        color: #ffffff;
+        color: #102a43;
+    }
+
+}
+
+
+@media (max-width: 700px) {
+
+    .site-header__profile {
+        display: none;
     }
 
 }
@@ -398,6 +488,7 @@ span:nth-child(3) {
 
     .site-header__container {
         width: min(1180px, calc(100% - 32px));
+        gap: 10px;
     }
 
     .site-brand__logo {
@@ -409,8 +500,25 @@ span:nth-child(3) {
         font-size: 0.88rem;
     }
 
+    .site-header__logout {
+        min-height: 32px;
+        padding: 6px 8px;
+        font-size: 0.63rem;
+    }
+
     .primary-navigation {
         padding-inline: 16px;
     }
 
+}
+/* ==================================================
+   AUTH ACCESS GATE
+================================================== */
+
+html.auth-access-pending body {
+    visibility: hidden;
+}
+
+html.auth-access-granted body {
+    visibility: visible;
 }

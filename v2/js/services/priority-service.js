@@ -5,10 +5,34 @@ NATIONAL PRIORITIES SERVICE
 ==================================================
 */
 
+
 import {
+
     subscribeToPrioritySubmissions,
+
     submitPrioritySubmission
+
 } from "./firebase-service.js";
+
+
+import {
+
+    auth,
+
+    database
+
+} from "../../../js/firebase.js";
+
+
+import {
+
+    ref,
+
+    push,
+
+    set
+
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 
 /*
@@ -18,46 +42,57 @@ NATIONAL ISSUE DEFINITIONS
 */
 
 const nationalIssues = [
+
     {
         id: "economy",
         name: "Economy & Cost of Living"
     },
+
     {
         id: "healthcare",
         name: "Healthcare"
     },
+
     {
         id: "education",
         name: "Education"
     },
+
     {
         id: "housing",
         name: "Housing"
     },
+
     {
         id: "immigration",
         name: "Immigration"
     },
+
     {
         id: "publicSafety",
         name: "Public Safety"
     },
+
     {
         id: "nationalSecurity",
         name: "National Security"
     },
+
     {
         id: "environment",
         name: "Environment"
     },
+
     {
         id: "governmentAccountability",
         name: "Government Accountability"
     },
+
     {
         id: "childrenFamilies",
         name: "Children & Families"
     }
+
 ];
 
 
@@ -73,6 +108,7 @@ export function subscribeToNationalPrioritySummary(
 ) {
 
     return subscribeToPrioritySubmissions(
+
         submissions => {
 
             const rankings =
@@ -80,22 +116,31 @@ export function subscribeToNationalPrioritySummary(
                     submissions
                 );
 
+
             const topIssue =
                 getTopIssue(
                     rankings,
                     submissions.length
                 );
 
+
             callback({
+
                 submissions,
+
                 rankings,
+
                 topIssue,
+
                 participantCount:
                     submissions.length
+
             });
 
         },
+
         errorCallback
+
     );
 
 }
@@ -118,10 +163,143 @@ export async function submitNationalPriorityRatings(
         );
 
 
-    return submitPrioritySubmission(
-        validatedRatings,
-        additionalData
+    /*
+    ----------------------------------------------
+    REQUIRE AUTHENTICATED VERIFIED USER
+    ----------------------------------------------
+    */
+
+    const user =
+        auth.currentUser;
+
+
+    if (!user) {
+
+        throw new Error(
+            "You must be signed in to submit National Priorities."
+        );
+
+    }
+
+
+    if (
+        !user.emailVerified
+    ) {
+
+        throw new Error(
+            "Your email must be verified before submitting National Priorities."
+        );
+
+    }
+
+
+    /*
+    ----------------------------------------------
+    PUBLIC AGGREGATE SUBMISSION
+
+    This preserves the existing Civic Horizon
+    National Priorities system.
+    ----------------------------------------------
+    */
+
+    const publicSubmission =
+        await submitPrioritySubmission(
+            validatedRatings,
+            additionalData
+        );
+
+
+    /*
+    ----------------------------------------------
+    PRIVATE PARTICIPANT HISTORY
+
+    Failure here does NOT create another public
+    submission or cause the participant to retry
+    a vote that already succeeded.
+    ----------------------------------------------
+    */
+
+    try {
+
+        await savePrivatePriorityHistory(
+            user.uid,
+            validatedRatings
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Private National Priority history could not be saved:",
+            error
+        );
+
+    }
+
+
+    return publicSubmission;
+
+}
+
+
+/*
+==================================================
+PRIVATE PRIORITY HISTORY
+==================================================
+*/
+
+async function savePrivatePriorityHistory(
+    uid,
+    ratings
+) {
+
+    if (!uid) {
+
+        throw new Error(
+            "Participant UID is required."
+        );
+
+    }
+
+
+    const historyReference =
+        ref(
+            database,
+            `userActivity/${uid}/nationalPriorities`
+        );
+
+
+    const submissionReference =
+        push(
+            historyReference
+        );
+
+
+    const submittedAt =
+        new Date().toISOString();
+
+
+    await set(
+        submissionReference,
+        {
+
+            submittedAt,
+
+            ratings: {
+                ...ratings
+            }
+
+        }
     );
+
+
+    return {
+
+        id:
+            submissionReference.key,
+
+        submittedAt
+
+    };
 
 }
 
@@ -151,32 +329,39 @@ export function validatePriorityRatings(
     const validatedRatings = {};
 
 
-    nationalIssues.forEach(issue => {
+    nationalIssues.forEach(
+        issue => {
 
-        const rating =
-            Number(
-                ratings[issue.id]
-            );
+            const rating =
+                Number(
+                    ratings[
+                        issue.id
+                    ]
+                );
 
 
-        if (
-            !Number.isFinite(rating) ||
-            rating < 1 ||
-            rating > 10
-        ) {
+            if (
+                !Number.isFinite(
+                    rating
+                ) ||
+                rating < 1 ||
+                rating > 10
+            ) {
 
-            throw new Error(
-                `A valid rating from 1 to 10 is required for ${issue.name}.`
-            );
+                throw new Error(
+                    `A valid rating from 1 to 10 is required for ${issue.name}.`
+                );
+
+            }
+
+
+            validatedRatings[
+                issue.id
+            ] =
+                rating;
 
         }
-
-
-        validatedRatings[
-            issue.id
-        ] = rating;
-
-    });
+    );
 
 
     return validatedRatings;
@@ -195,94 +380,148 @@ export function calculatePriorityRankings(
 ) {
 
     const safeSubmissions =
-        Array.isArray(submissions)
+        Array.isArray(
+            submissions
+        )
             ? submissions
             : [];
 
+
     const totals = {};
+
     const counts = {};
 
 
-    nationalIssues.forEach(issue => {
+    nationalIssues.forEach(
+        issue => {
 
-        totals[issue.id] = 0;
-        counts[issue.id] = 0;
+            totals[
+                issue.id
+            ] =
+                0;
 
-    });
+
+            counts[
+                issue.id
+            ] =
+                0;
+
+        }
+    );
 
 
-    safeSubmissions.forEach(submission => {
+    safeSubmissions.forEach(
+        submission => {
 
-        const ratings =
-            submission &&
-            typeof submission.ratings === "object"
-                ? submission.ratings
-                : {};
+            const ratings =
+                submission &&
+                typeof submission.ratings ===
+                    "object"
+                    ? submission.ratings
+                    : {};
 
-        nationalIssues.forEach(issue => {
 
-            const rating =
-                Number(
-                    ratings[issue.id]
-                );
+            nationalIssues.forEach(
+                issue => {
 
-            if (
-                Number.isFinite(rating) &&
-                rating >= 1 &&
-                rating <= 10
-            ) {
+                    const rating =
+                        Number(
+                            ratings[
+                                issue.id
+                            ]
+                        );
 
-                totals[issue.id] += rating;
-                counts[issue.id] += 1;
 
-            }
+                    if (
+                        Number.isFinite(
+                            rating
+                        ) &&
+                        rating >= 1 &&
+                        rating <= 10
+                    ) {
 
-        });
+                        totals[
+                            issue.id
+                        ] +=
+                            rating;
 
-    });
+
+                        counts[
+                            issue.id
+                        ] +=
+                            1;
+
+                    }
+
+                }
+            );
+
+        }
+    );
 
 
     return nationalIssues
-        .map(issue => {
+        .map(
+            issue => {
 
-            const responseCount =
-                counts[issue.id];
+                const responseCount =
+                    counts[
+                        issue.id
+                    ];
 
-            const average =
-                responseCount > 0
-                    ? totals[issue.id] /
-                        responseCount
-                    : 0;
 
-            return {
-                id: issue.id,
-                name: issue.name,
-                average,
-                responseCount
-            };
+                const average =
+                    responseCount > 0
+                        ? totals[
+                            issue.id
+                        ] /
+                            responseCount
+                        : 0;
 
-        })
-        .sort((issueA, issueB) => {
 
-            if (
-                issueB.average !==
-                issueA.average
-            ) {
+                return {
+
+                    id:
+                        issue.id,
+
+                    name:
+                        issue.name,
+
+                    average,
+
+                    responseCount
+
+                };
+
+            }
+        )
+        .sort(
+            (
+                issueA,
+                issueB
+            ) => {
+
+                if (
+                    issueB.average !==
+                    issueA.average
+                ) {
+
+                    return (
+                        issueB.average -
+                        issueA.average
+                    );
+
+                }
+
 
                 return (
-                    issueB.average -
-                    issueA.average
+                    issueA.name.localeCompare(
+                        issueB.name
+                    )
                 );
 
             }
-
-            return (
-                issueA.name.localeCompare(
-                    issueB.name
-                )
-            );
-
-        });
+        );
 
 }
 
@@ -299,9 +538,13 @@ export function getTopIssue(
 ) {
 
     if (
-        !Array.isArray(rankings) ||
-        rankings.length === 0 ||
-        participantCount === 0
+        !Array.isArray(
+            rankings
+        ) ||
+        rankings.length ===
+            0 ||
+        participantCount ===
+            0
     ) {
 
         return null;
@@ -310,12 +553,15 @@ export function getTopIssue(
 
 
     const topIssue =
-        rankings[0];
+        rankings[
+            0
+        ];
 
 
     if (
         !topIssue ||
-        topIssue.responseCount === 0
+        topIssue.responseCount ===
+            0
     ) {
 
         return null;
@@ -328,33 +574,57 @@ export function getTopIssue(
 }
 
 
+/*
+==================================================
+NATIONAL AVERAGE
+==================================================
+*/
+
 export function getNationalAverage(
     rankings
 ) {
 
-    if (!Array.isArray(rankings)) {
+    if (
+        !Array.isArray(
+            rankings
+        )
+    ) {
+
         return 0;
+
     }
 
 
     const ratedIssues =
-        rankings.filter(issue => {
+        rankings.filter(
+            issue => {
 
-            return (
-                issue.responseCount > 0
-            );
+                return (
+                    issue.responseCount >
+                    0
+                );
 
-        });
+            }
+        );
 
 
-    if (ratedIssues.length === 0) {
+    if (
+        ratedIssues.length ===
+        0
+    ) {
+
         return 0;
+
     }
 
 
     const total =
         ratedIssues.reduce(
-            (sum, issue) => {
+
+            (
+                sum,
+                issue
+            ) => {
 
                 return (
                     sum +
@@ -362,23 +632,36 @@ export function getNationalAverage(
                 );
 
             },
+
             0
+
         );
 
 
-    return total / ratedIssues.length;
+    return (
+        total /
+        ratedIssues.length
+    );
 
 }
 
 
+/*
+==================================================
+ISSUE DEFINITIONS
+==================================================
+*/
+
 export function getNationalIssues() {
 
-    return nationalIssues.map(issue => {
+    return nationalIssues.map(
+        issue => {
 
-        return {
-            ...issue
-        };
+            return {
+                ...issue
+            };
 
-    });
+        }
+    );
 
 }

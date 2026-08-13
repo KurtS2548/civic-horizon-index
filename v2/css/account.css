@@ -1,0 +1,382 @@
+/* ==================================================
+   CIVIC HORIZON INDEX V2
+   COMPACT ACCOUNT EXPERIENCE
+================================================== */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    background: #f5f8fb;
+    color: #243b53;
+    font-family: "Inter", sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+
+.account-page {
+    min-height: 68vh;
+}
+
+
+/* ==================================================
+   MAIN LAYOUT
+================================================== */
+
+.account-compact {
+    padding: 28px 0 40px;
+}
+
+.account-compact__container {
+    width: min(680px, calc(100% - 32px));
+    margin: 0 auto;
+}
+
+.account-compact__intro {
+    margin-bottom: 16px;
+    text-align: center;
+}
+
+.account-eyebrow {
+    margin: 0 0 6px;
+    color: #1f5f99;
+    font-size: 0.64rem;
+    font-weight: 800;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+}
+
+.account-compact__intro h1 {
+    margin: 0;
+    color: #102a43;
+    font-family: "Merriweather", Georgia, serif;
+    font-size: clamp(1.75rem, 4vw, 2.35rem);
+    line-height: 1.15;
+}
+
+.account-compact__intro p:last-child {
+    margin: 8px 0 0;
+    color: #627d98;
+    font-size: 0.76rem;
+    line-height: 1.5;
+}
+
+
+/* ==================================================
+   SWITCHER
+================================================== */
+
+.account-switcher {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 5px;
+    max-width: 400px;
+    margin: 0 auto 12px;
+    padding: 4px;
+    border: 1px solid #d9e2ec;
+    border-radius: 10px;
+    background: #ffffff;
+}
+
+.account-switcher__button {
+    min-height: 38px;
+    border: 0;
+    border-radius: 7px;
+    background: transparent;
+    color: #627d98;
+    font-family: "Inter", sans-serif;
+    font-size: 0.75rem;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.account-switcher__button:hover,
+.account-switcher__button:focus-visible {
+    background: #f1f5f9;
+    color: #174f7f;
+    outline: none;
+}
+
+.account-switcher__button.is-active {
+    background: #1f5f99;
+    color: #ffffff;
+}
+
+
+/* ==================================================
+   PANEL
+================================================== */
+
+.account-panel {
+    padding: 20px;
+    border: 1px solid #d9e2ec;
+    border-radius: 14px;
+    background: #ffffff;
+    box-shadow: 0 10px 26px rgba(16, 42, 67, 0.06);
+}
+
+.account-panel[hidden] {
+    display: none;
+}
+
+.account-panel__heading {
+    margin-bottom: 14px;
+}
+
+.account-panel__heading h2,
+.account-panel__heading h1 {
+    margin: 0;
+    color: #102a43;
+    font-family: "Merriweather", Georgia, serif;
+    font-size: 1.25rem;
+}
+
+.account-panel__heading p {
+    margin: 6px 0 0;
+    color: #627d98;
+    font-size: 0.72rem;
+    line-height: 1.5;
+}
+
+
+/* ==================================================
+   FORM
+================================================== */
+
+.account-form {
+    display: grid;
+    gap: 11px;
+}
+
+.account-form__row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+}
+
+.account-form label {
+    display: grid;
+    gap: 5px;
+}
+
+.account-form label > span {
+    color: #334e68;
+    font-size: 0.7rem;
+    font-weight: 800;
+}
+
+.account-form input,
+.account-form select {
+    width: 100%;
+    min-height: 40px;
+    padding: 8px 10px;
+    border: 1px solid #bcccdc;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #102a43;
+    font-family: "Inter", sans-serif;
+    font-size: 0.78rem;
+}
+
+.account-form input:focus,
+.account-form select:focus {
+    border-color: #1f5f99;
+    outline: 3px solid rgba(31, 95, 153, 0.1);
+}
+
+.account-form__hint {
+    margin: -1px 0 0;
+    color: #829ab1;
+    font-size: 0.64rem;
+    line-height: 1.4;
+}
+
+
+/* ==================================================
+   CONSENT
+================================================== */
+
+.account-consent {
+    display: grid !important;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 9px !important;
+    align-items: start;
+    padding: 10px 11px;
+    border: 1px solid #e1e8ef;
+    border-radius: 9px;
+    background: #f8fafc;
+    cursor: pointer;
+}
+
+.account-consent input {
+    width: 16px;
+    min-height: 16px;
+    height: 16px;
+    margin: 2px 0 0;
+}
+
+.account-consent span {
+    color: #627d98 !important;
+    font-size: 0.67rem !important;
+    font-weight: 500 !important;
+    line-height: 1.45;
+}
+
+
+/* ==================================================
+   BUTTONS
+================================================== */
+
+.account-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 40px;
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-family: "Inter", sans-serif;
+    font-size: 0.75rem;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.account-button:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.account-button--primary {
+    border: 1px solid #1f5f99;
+    background: #1f5f99;
+    color: #ffffff;
+}
+
+.account-button--primary:hover:not(:disabled),
+.account-button--primary:focus-visible:not(:disabled) {
+    border-color: #174f7f;
+    background: #174f7f;
+    outline: none;
+}
+
+.account-button--secondary {
+    border: 1px solid #bcccdc;
+    background: #ffffff;
+    color: #334e68;
+}
+
+.account-button--secondary:hover:not(:disabled),
+.account-button--secondary:focus-visible:not(:disabled) {
+    border-color: #1f5f99;
+    background: #eef6fc;
+    color: #174f7f;
+    outline: none;
+}
+
+.account-text-button {
+    justify-self: start;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: #1f5f99;
+    font-family: "Inter", sans-serif;
+    font-size: 0.68rem;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.account-text-button:hover,
+.account-text-button:focus-visible {
+    text-decoration: underline;
+    outline: none;
+}
+
+
+/* ==================================================
+   MESSAGE
+================================================== */
+
+.account-message {
+    min-height: 16px;
+    margin: 0;
+    color: #627d98;
+    font-size: 0.69rem;
+    line-height: 1.4;
+}
+
+
+/* ==================================================
+   VERIFICATION PAGE SUPPORT
+================================================== */
+
+.account-panel--verification {
+    max-width: 540px;
+    margin: 0 auto;
+}
+
+.account-verification-status {
+    padding: 14px;
+    border: 1px solid #e1e8ef;
+    border-radius: 10px;
+    background: #f8fafc;
+}
+
+.account-verification-status > span {
+    display: block;
+    color: #7b8fa3;
+    font-size: 0.62rem;
+    font-weight: 800;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+}
+
+.account-verification-status > strong {
+    display: block;
+    margin-top: 5px;
+    color: #102a43;
+    font-size: 1rem;
+}
+
+.account-verification-status > p {
+    margin: 5px 0 0;
+    color: #627d98;
+    font-size: 0.69rem;
+    line-height: 1.45;
+}
+
+.account-verification-actions {
+    display: grid;
+    gap: 8px;
+    margin-top: 14px;
+}
+
+
+/* ==================================================
+   RESPONSIVE
+================================================== */
+
+@media (max-width: 620px) {
+
+    .account-compact {
+        padding: 22px 0 32px;
+    }
+
+    .account-compact__container {
+        width: min(680px, calc(100% - 24px));
+    }
+
+    .account-form__row {
+        grid-template-columns: 1fr;
+    }
+
+    .account-panel {
+        padding: 17px;
+    }
+
+}

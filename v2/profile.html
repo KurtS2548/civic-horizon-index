@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html
+    lang="en"
+    class="auth-access-pending"
+>
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="View your Civic Horizon Index personal civic dashboard and participation trends."
+    >
+
+    <title>
+        My Civic Dashboard | Civic Horizon Index
+    </title>
+
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Merriweather:wght@700&display=swap"
+        rel="stylesheet"
+    >
+
+
+    <link
+        rel="stylesheet"
+        href="css/header.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="css/footer.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="css/account.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="css/profile.css"
+    >
+
+</head>
+
+
+<body>
+
+
+    <div id="headerContainer"></div>
+
+
+    <main class="profile-dashboard">
+
+
+        <!-- ==================================================
+             HERO
+        ================================================== -->
+
+        <section class="profile-dashboard__hero">
+
+            <div class="profile-dashboard__container">
+
+                <div>
+
+                    <p class="profile-dashboard__eyebrow">
+                        My Civic Dashboard
+                    </p>
+
+                    <h1 id="profileName">
+                        Your Civic Profile
+                    </h1>
+
+                    <p>
+                        See how your priorities and civic views change
+                        over time.
+                    </p>
+
+                </div>
+
+
+                <a
+                    href="polls.html"
+                    class="profile-dashboard__primary-action"
+                >
+                    Participate
+                </a>
+
+            </div>
+
+        </section>
+
+
+        <!-- ==================================================
+             CIVIC SNAPSHOT
+        ================================================== -->
+
+        <section class="profile-dashboard__section">
+
+            <div class="profile-dashboard__container">
+
+                <div class="profile-section-heading">
+
+                    <div>
+
+                        <p class="profile-dashboard__eyebrow">
+                            Your Civic Snapshot
+                        </p>
+
+                        <h2>
+                            Your account at a glance
+                        </h2>
+
+                    </div>
+
+                </div>
+
+
+                <div class="profile-snapshot-grid">
+
+                    <article class="profile-snapshot-card">
+
+                        <span>
+                            Email
+                        </span>
+
+                        <strong id="profileVerificationStatus">
+                            Checking...
+                        </strong>
+
+                    </article>
+
+
+                    <article class="profile-snapshot-card">
+
+                        <span>
+                            Participant
+                        </span>
+
+                        <strong id="profileParticipantType">
+                            Checking...
+                        </strong>
+
+                    </article>
+
+
+                    <article class="profile-snapshot-card">
+
+                        <span>
+                            ZIP Code
+                        </span>
+
+                        <strong id="profileZipCode">
+                            —
+                        </strong>
+
+                    </article>
+
+
+                    <article class="profile-snapshot-card">
+
+                        <span>
+                            Participation Status
+                        </span>
+
+                        <strong id="profileVotingStatus">
+                            Checking...
+                        </strong>
+
+                    </article>
+
+
+                    <article class="profile-snapshot-card">
+
+                        <span>
+                            National Priority Surveys
+                        </span>
+
+                        <strong id="profilePrioritySubmissionCount">
+                            0
+                        </strong>
+
+                    </article>
+
+
+                    <article class="profile-snapshot-card">
+
+                        <span>
+                            Recent Activity
+                        </span>
+
+                        <strong id="profileRecentActivityCount">
+                            0
+                        </strong>
+
+                    </article>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ==================================================
+             PRIORITY TRENDS
+        ================================================== -->
+
+        <section class="profile-dashboard__section profile-dashboard__section--alternate">
+
+            <div class="profile-dashboard__container">
+
+                <div class="profile-section-heading">
+
+                    <div>
+
+                        <p class="profile-dashboard__eyebrow">
+                            Your Priority Trends
+                        </p>
+
+                        <h2>
+                            How your priorities are changing
+                        </h2>
+
+                        <p>
+                            Your National Priorities responses over time.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="profile-chart-card">
+
+                    <div
+                        id="profilePriorityTrendEmpty"
+                        class="profile-empty-state"
+                    >
+                        Complete the National Priorities Survey more than
+                        once to begin building your personal trend history.
+                    </div>
+
+
+                    <div
+                        id="profilePriorityTrendContainer"
+                        class="profile-chart-container"
+                        hidden
+                    >
+
+                        <canvas
+                            id="profilePriorityTrendChart"
+                        ></canvas>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ==================================================
+             PERSONAL COMPARISON
+        ================================================== -->
+
+        <section class="profile-dashboard__section">
+
+            <div class="profile-dashboard__container">
+
+                <div class="profile-section-heading">
+
+                    <div>
+
+                        <p class="profile-dashboard__eyebrow">
+                            Your Civic Comparison
+                        </p>
+
+                        <h2>
+                            You, your age group, and the nation
+                        </h2>
+
+                        <p>
+                            Compare your latest National Priorities ratings
+                            with participants in your age group and with
+                            national Civic Horizon results.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="profile-comparison-legend">
+
+                    <span>
+                        <strong>You</strong>
+                    </span>
+
+                    <span>
+                        <strong>Your Age Group</strong>
+                    </span>
+
+                    <span>
+                        <strong>National</strong>
+                    </span>
+
+                </div>
+
+
+                <div
+                    id="profileComparisonGrid"
+                    class="profile-comparison-grid"
+                >
+
+                    <div class="profile-empty-state">
+
+                        Your comparison will appear after you complete
+                        the National Priorities Survey.
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ==================================================
+             CIVIC PULSE HISTORY
+        ================================================== -->
+
+        <section class="profile-dashboard__section profile-dashboard__section--alternate">
+
+            <div class="profile-dashboard__container">
+
+                <div class="profile-section-heading">
+
+                    <div>
+
+                        <p class="profile-dashboard__eyebrow">
+                            Your Civic Pulse
+                        </p>
+
+                        <h2>
+                            Your sentiment history
+                        </h2>
+
+                        <p>
+                            Your presidential approval, country direction,
+                            and national confidence responses will appear
+                            here as your history develops.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    id="profileCivicPulseHistory"
+                    class="profile-history-card"
+                >
+
+                    <div class="profile-empty-state">
+
+                        Civic Pulse personal history will appear here
+                        after you participate in the trackers.
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ==================================================
+             RECENT PARTICIPATION
+        ================================================== -->
+
+        <section class="profile-dashboard__section">
+
+            <div class="profile-dashboard__container">
+
+                <div class="profile-section-heading">
+
+                    <div>
+
+                        <p class="profile-dashboard__eyebrow">
+                            Recent Participation
+                        </p>
+
+                        <h2>
+                            Your recent civic activity
+                        </h2>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    id="profileRecentActivity"
+                    class="profile-activity-list"
+                >
+
+                    <div class="profile-empty-state">
+
+                        Your recent polls and surveys will appear here.
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ==================================================
+             ACCOUNT SETTINGS
+        ================================================== -->
+
+        <section class="profile-dashboard__section profile-dashboard__section--settings">
+
+            <div class="profile-dashboard__container">
+
+                <div class="profile-section-heading">
+
+                    <div>
+
+                        <p class="profile-dashboard__eyebrow">
+                            Account Settings
+                        </p>
+
+                        <h2>
+                            Participant information
+                        </h2>
+
+                    </div>
+
+                </div>
+
+
+                <div class="profile-settings-card">
+
+
+                    <div class="profile-account-details">
+
+                        <div>
+
+                            <span>
+                                Account Email
+                            </span>
+
+                            <strong id="profileEmail">
+                                Checking your account...
+                            </strong>
+
+                        </div>
+
+
+                        <div>
+
+                            <span>
+                                Birthday
+                            </span>
+
+                            <strong id="profileBirthday">
+                                Private
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="profile-update-section">
+
+                        <div>
+
+                            <h3>
+                                Update ZIP Code
+                            </h3>
+
+                            <p>
+                                Your ZIP helps Civic Horizon connect your
+                                participation with the correct geographic
+                                results and future state, county, and
+                                local polls.
+                            </p>
+
+                        </div>
+
+
+                        <form
+                            id="updateZipForm"
+                            class="profile-zip-form"
+                            novalidate
+                        >
+
+                            <input
+                                type="text"
+                                id="profileZipInput"
+                                inputmode="numeric"
+                                autocomplete="postal-code"
+                                maxlength="5"
+                                pattern="[0-9]{5}"
+                                aria-label="ZIP Code"
+                                placeholder="ZIP Code"
+                                required
+                            >
+
+
+                            <button
+                                type="submit"
+                                id="updateZipButton"
+                                class="account-button account-button--secondary"
+                            >
+                                Update
+                            </button>
+
+                        </form>
+
+                    </div>
+
+
+                    <p
+                        id="profileMessage"
+                        class="account-message"
+                        aria-live="polite"
+                    ></p>
+
+
+                    <div class="profile-actions">
+
+                        <a
+                            href="polls.html"
+                            class="account-button account-button--primary"
+                        >
+                            Go to Polls
+                        </a>
+
+
+                        <button
+                            type="button"
+                            id="profileSignOutButton"
+                            class="account-text-button"
+                        >
+                            Sign Out
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+
+    <div id="footerContainer"></div>
+
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/chart.js"
+    ></script>
+
+
+    <script
+        type="module"
+        src="js/profile.js"
+    ></script>
+
+
+    <script
+        type="module"
+        src="js/site-auth.js"
+    ></script>
+
+
+</body>
+
+</html>
