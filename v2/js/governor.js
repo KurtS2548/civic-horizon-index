@@ -1,8 +1,8 @@
-﻿/*
+/*
 ==================================================
 CIVIC HORIZON INDEX V2
-PRESIDENT SIMULATION
-BRANCHING EXECUTIVE LEADERSHIP ENGINE
+GOVERNOR SIMULATION
+BRANCHING STATE LEADERSHIP ENGINE
 ==================================================
 */
 
@@ -13,53 +13,53 @@ FOUNDATION SCENARIOS
 ==================================================
 */
 
-const presidentScenarios = [
+const governorScenarios = [
 
     /*
     ==================================================
-    1. LEGISLATION
+    1. STATE BUDGET
     ==================================================
     */
 
     {
         id:
-            "infrastructureBill",
+            "stateBudget",
 
         category:
-            "Legislation",
+            "State Budget",
 
         title:
-            "Congress sends you a major infrastructure bill.",
+            "Your administration inherits a projected budget shortfall.",
 
         text:
-            "The bill contains most of your priorities but also includes spending you oppose. What do you do?",
+            "The legislature wants a balanced budget, agencies are requesting more funding, and residents oppose major service cuts. How do you begin?",
 
         stage:
-            "Legislative Review",
+            "Budget Planning",
 
         choices: [
 
             {
                 text:
-                    "Veto the bill immediately and refuse further talks",
+                    "Order across-the-board cuts without reviewing which programs are most essential",
 
                 outcomeTitle:
-                    "Negotiations harden",
+                    "The budget closes quickly",
 
                 outcomeText:
-                    "You protect your position, but relations with Congress deteriorate and the legislation stalls.",
+                    "The shortfall shrinks, but important services and local programs are disrupted because the reductions were not prioritized.",
 
                 approval:
-                    -2,
+                    -4,
 
-                congress:
-                    -9,
+                legislature:
+                    -2,
 
                 trust:
-                    -2,
+                    -5,
 
                 stability:
-                    -2,
+                    -6,
 
                 billsSigned:
                     0,
@@ -67,46 +67,275 @@ const presidentScenarios = [
                 majorActions:
                     1,
 
-                constitutionalRestraint:
-                    0,
+                fiscalDiscipline:
+                    1,
 
                 legislativeSkill:
-                    -2,
+                    -1,
 
                 crisisLeadership:
                     0,
 
-                diplomaticCredibility:
-                    0,
+                localPartnership:
+                    -2,
 
                 accountability:
-                    0,
+                    -1,
 
-                legislativeResult:
-                    "vetoed",
+                budgetResult:
+                    "bluntCuts",
 
                 headline:
-                    "President vetoes infrastructure package as congressional tensions rise."
+                    "Governor orders broad state spending reductions to close budget gap."
             },
 
             {
                 text:
-                    "Sign the bill while publicly explaining the compromises",
+                    "Review spending, identify priorities, and negotiate a balanced package with legislative leaders",
 
                 outcomeTitle:
-                    "The bill becomes law",
+                    "A workable budget strategy develops",
 
                 outcomeText:
-                    "You secure a major legislative accomplishment while acknowledging the parts you would have preferred to change.",
+                    "The process takes longer, but lawmakers gain confidence that the administration is balancing fiscal limits with service needs.",
+
+                approval:
+                    4,
+
+                legislature:
+                    8,
+
+                trust:
+                    7,
+
+                stability:
+                    6,
+
+                billsSigned:
+                    1,
+
+                majorActions:
+                    1,
+
+                fiscalDiscipline:
+                    4,
+
+                legislativeSkill:
+                    4,
+
+                crisisLeadership:
+                    0,
+
+                localPartnership:
+                    1,
+
+                accountability:
+                    2,
+
+                budgetResult:
+                    "balanced",
+
+                headline:
+                    "Governor and lawmakers begin bipartisan budget negotiations."
+            },
+
+            {
+                text:
+                    "Promise every agency the funding it requested and deal with the deficit later",
+
+                outcomeTitle:
+                    "The immediate conflict fades",
+
+                outcomeText:
+                    "Agencies are pleased, but the state’s fiscal position worsens and lawmakers question whether the plan is sustainable.",
+
+                approval:
+                    2,
+
+                legislature:
+                    -4,
+
+                trust:
+                    -6,
+
+                stability:
+                    -4,
+
+                billsSigned:
+                    0,
+
+                majorActions:
+                    0,
+
+                fiscalDiscipline:
+                    -4,
+
+                legislativeSkill:
+                    -1,
+
+                crisisLeadership:
+                    0,
+
+                localPartnership:
+                    1,
+
+                accountability:
+                    -2,
+
+                budgetResult:
+                    "overspending",
+
+                headline:
+                    "State budget plan draws criticism over unresolved deficit."
+            },
+
+            {
+                text:
+                    "Refuse to release a budget proposal until the legislature acts first",
+
+                outcomeTitle:
+                    "The budget process stalls",
+
+                outcomeText:
+                    "The legislature retains its role, but the governor is expected to provide executive leadership and a workable fiscal proposal.",
+
+                approval:
+                    -5,
+
+                legislature:
+                    -5,
+
+                trust:
+                    -5,
+
+                stability:
+                    -5,
+
+                billsSigned:
+                    0,
+
+                majorActions:
+                    0,
+
+                fiscalDiscipline:
+                    0,
+
+                legislativeSkill:
+                    -3,
+
+                crisisLeadership:
+                    -1,
+
+                localPartnership:
+                    0,
+
+                accountability:
+                    -2,
+
+                budgetResult:
+                    "stalled",
+
+                headline:
+                    "State budget negotiations stall amid disagreement over executive leadership."
+            }
+
+        ]
+
+    },
+
+
+    /*
+    ==================================================
+    2. EDUCATION FUNDING
+    ==================================================
+    */
+
+    {
+        id:
+            "educationFunding",
+
+        category:
+            "Education",
+
+        title:
+            "School districts across the state report major funding disparities.",
+
+        text:
+            "Urban, suburban, and rural districts all argue that the current system is unfair. What approach do you take?",
+
+        stage:
+            "Education Policy",
+
+        choices: [
+
+            {
+                text:
+                    "Send the same dollar increase to every district regardless of need or existing resources",
+
+                outcomeTitle:
+                    "The formula is simple",
+
+                outcomeText:
+                    "Every district receives more money, but large disparities remain because communities began from very different positions.",
+
+                approval:
+                    1,
+
+                legislature:
+                    1,
+
+                trust:
+                    -2,
+
+                stability:
+                    0,
+
+                billsSigned:
+                    1,
+
+                majorActions:
+                    1,
+
+                fiscalDiscipline:
+                    -1,
+
+                legislativeSkill:
+                    1,
+
+                crisisLeadership:
+                    0,
+
+                localPartnership:
+                    1,
+
+                accountability:
+                    0,
+
+                educationResult:
+                    "equalIncrease",
+
+                headline:
+                    "Governor proposes uniform statewide increase in school funding."
+            },
+
+            {
+                text:
+                    "Use a needs-based formula while giving districts predictable funding rules",
+
+                outcomeTitle:
+                    "The formula targets disparities",
+
+                outcomeText:
+                    "The plan is more complex, but it directs greater support to districts with higher needs while giving local leaders clearer expectations.",
 
                 approval:
                     5,
 
-                congress:
-                    6,
+                legislature:
+                    5,
 
                 trust:
-                    5,
+                    7,
 
                 stability:
                     4,
@@ -117,8 +346,8 @@ const presidentScenarios = [
                 majorActions:
                     1,
 
-                constitutionalRestraint:
-                    1,
+                fiscalDiscipline:
+                    2,
 
                 legislativeSkill:
                     3,
@@ -126,117 +355,117 @@ const presidentScenarios = [
                 crisisLeadership:
                     0,
 
-                diplomaticCredibility:
-                    0,
+                localPartnership:
+                    4,
 
                 accountability:
-                    1,
+                    2,
 
-                legislativeResult:
-                    "signed",
+                educationResult:
+                    "needsBased",
 
                 headline:
-                    "President signs bipartisan infrastructure legislation."
+                    "Governor proposes needs-based school funding formula."
             },
 
             {
                 text:
-                    "Demand that Congress completely rewrite the bill",
+                    "Take complete control of every local school budget from the governor's office",
 
                 outcomeTitle:
-                    "The process slows",
+                    "Local authority becomes strained",
 
                 outcomeText:
-                    "Some changes may be possible, but the all-or-nothing approach risks losing the coalition behind the bill.",
+                    "The administration gains more control, but local officials and lawmakers object to the loss of local decision-making.",
 
                 approval:
-                    -1,
-
-                congress:
-                    -5,
-
-                trust:
-                    -1,
-
-                stability:
-                    -2,
-
-                billsSigned:
-                    0,
-
-                majorActions:
-                    0,
-
-                constitutionalRestraint:
-                    1,
-
-                legislativeSkill:
-                    -1,
-
-                crisisLeadership:
-                    0,
-
-                diplomaticCredibility:
-                    0,
-
-                accountability:
-                    0,
-
-                legislativeResult:
-                    "stalled",
-
-                headline:
-                    "White House seeks major rewrite of infrastructure agreement."
-            },
-
-            {
-                text:
-                    "Ignore the bill until Congress gives up",
-
-                outcomeTitle:
-                    "Leadership questions grow",
-
-                outcomeText:
-                    "The lack of engagement creates uncertainty and frustrates lawmakers from both parties.",
-
-                approval:
-                    -7,
-
-                congress:
-                    -7,
-
-                trust:
-                    -8,
-
-                stability:
-                    -4,
-
-                billsSigned:
-                    0,
-
-                majorActions:
-                    0,
-
-                constitutionalRestraint:
-                    0,
-
-                legislativeSkill:
                     -3,
 
+                legislature:
+                    -6,
+
+                trust:
+                    -5,
+
+                stability:
+                    -3,
+
+                billsSigned:
+                    0,
+
+                majorActions:
+                    1,
+
+                fiscalDiscipline:
+                    0,
+
+                legislativeSkill:
+                    -2,
+
                 crisisLeadership:
                     0,
 
-                diplomaticCredibility:
+                localPartnership:
+                    -5,
+
+                accountability:
+                    -1,
+
+                educationResult:
+                    "centralized",
+
+                headline:
+                    "Local leaders resist governor's plan for centralized school budget control."
+            },
+
+            {
+                text:
+                    "Avoid changing the funding system because every option will upset someone",
+
+                outcomeTitle:
+                    "The disparities remain",
+
+                outcomeText:
+                    "The administration avoids immediate conflict, but districts continue pressing for a more equitable statewide solution.",
+
+                approval:
+                    -4,
+
+                legislature:
+                    -1,
+
+                trust:
+                    -5,
+
+                stability:
+                    -2,
+
+                billsSigned:
                     0,
+
+                majorActions:
+                    0,
+
+                fiscalDiscipline:
+                    0,
+
+                legislativeSkill:
+                    -1,
+
+                crisisLeadership:
+                    0,
+
+                localPartnership:
+                    -2,
 
                 accountability:
                     -2,
 
-                legislativeResult:
-                    "ignored",
+                educationResult:
+                    "unchanged",
 
                 headline:
-                    "Lawmakers criticize White House silence on infrastructure bill."
+                    "Governor declines major school funding changes despite statewide disparities."
             }
 
         ]
@@ -246,322 +475,43 @@ const presidentScenarios = [
 
     /*
     ==================================================
-    2. SUPREME COURT APPOINTMENT
+    3. NATURAL DISASTER
     ==================================================
     */
 
     {
         id:
-            "courtAppointment",
+            "stateEmergency",
 
         category:
-            "Appointments",
+            "Emergency Management",
 
         title:
-            "A vacancy opens on the Supreme Court.",
+            "Severe flooding affects several counties across the state.",
 
         text:
-            "You must nominate a justice who can survive Senate confirmation. How do you proceed?",
+            "Local responders are overwhelmed, transportation routes are damaged, and federal assistance may be available. What do you do?",
 
         stage:
-            "Judicial Appointment",
+            "State Emergency",
 
         choices: [
 
             {
                 text:
-                    "Choose a close political ally with limited legal experience",
+                    "Activate state emergency resources and coordinate with counties and federal agencies",
 
                 outcomeTitle:
-                    "The nomination faces immediate criticism",
+                    "The response becomes coordinated",
 
                 outcomeText:
-                    "Supporters rally around the choice, but questions about qualifications damage institutional confidence.",
+                    "State agencies, counties, and federal partners combine resources while keeping responsibilities clearly defined.",
 
                 approval:
-                    0,
-
-                congress:
-                    -5,
-
-                trust:
-                    -10,
-
-                stability:
-                    -3,
-
-                billsSigned:
-                    0,
-
-                majorActions:
-                    1,
-
-                constitutionalRestraint:
-                    -1,
-
-                legislativeSkill:
-                    -1,
-
-                crisisLeadership:
-                    0,
-
-                diplomaticCredibility:
-                    0,
-
-                accountability:
-                    -1,
-
-                appointmentResult:
-                    "controversial",
-
-                headline:
-                    "Supreme Court nomination draws questions over qualifications."
-            },
-
-            {
-                text:
-                    "Refuse to nominate anyone for the remainder of your term",
-
-                outcomeTitle:
-                    "The vacancy remains open",
-
-                outcomeText:
-                    "You avoid a confirmation fight, but the prolonged vacancy creates institutional uncertainty.",
-
-                approval:
-                    -4,
-
-                congress:
-                    -3,
-
-                trust:
-                    -6,
-
-                stability:
-                    -5,
-
-                billsSigned:
-                    0,
-
-                majorActions:
-                    0,
-
-                constitutionalRestraint:
-                    0,
-
-                legislativeSkill:
-                    -1,
-
-                crisisLeadership:
-                    0,
-
-                diplomaticCredibility:
-                    0,
-
-                accountability:
-                    -1,
-
-                appointmentResult:
-                    "vacant",
-
-                headline:
-                    "White House leaves Supreme Court vacancy unresolved."
-            },
-
-            {
-                text:
-                    "Nominate a qualified candidate and consult senators before announcing",
-
-                outcomeTitle:
-                    "The nomination starts with broad credibility",
-
-                outcomeText:
-                    "Consultation does not guarantee confirmation, but it improves communication and reduces unnecessary surprises.",
-
-                approval:
-                    3,
-
-                congress:
                     7,
 
-                trust:
-                    7,
-
-                stability:
-                    3,
-
-                billsSigned:
-                    0,
-
-                majorActions:
-                    1,
-
-                constitutionalRestraint:
+                legislature:
                     2,
-
-                legislativeSkill:
-                    2,
-
-                crisisLeadership:
-                    0,
-
-                diplomaticCredibility:
-                    0,
-
-                accountability:
-                    1,
-
-                appointmentResult:
-                    "credible",
-
-                headline:
-                    "White House begins Senate consultations on Supreme Court nominee."
-            },
-
-            {
-                text:
-                    "Demand that the Senate promise confirmation before you name anyone",
-
-                outcomeTitle:
-                    "The Senate resists the demand",
-
-                outcomeText:
-                    "The president nominates, but the Senate retains its constitutional role in confirmation.",
-
-                approval:
-                    -2,
-
-                congress:
-                    -8,
-
-                trust:
-                    -5,
-
-                stability:
-                    -2,
-
-                billsSigned:
-                    0,
-
-                majorActions:
-                    0,
-
-                constitutionalRestraint:
-                    -2,
-
-                legislativeSkill:
-                    -2,
-
-                crisisLeadership:
-                    0,
-
-                diplomaticCredibility:
-                    0,
-
-                accountability:
-                    -1,
-
-                appointmentResult:
-                    "conflict",
-
-                headline:
-                    "Confirmation dispute escalates before nominee is announced."
-            }
-
-        ]
-
-    },
-
-
-    /*
-    ==================================================
-    3. HURRICANE
-    ==================================================
-    */
-
-    {
-        id:
-            "hurricane",
-
-        category:
-            "Emergency Response",
-
-        title:
-            "A major hurricane strikes several states.",
-
-        text:
-            "Governors request federal assistance while local responders are overwhelmed. What is your approach?",
-
-        stage:
-            "National Emergency",
-
-        choices: [
-
-            {
-                text:
-                    "Focus first on assigning blame for preparedness failures",
-
-                outcomeTitle:
-                    "The response becomes politicized",
-
-                outcomeText:
-                    "Accountability may matter later, but the immediate public need is coordination and emergency assistance.",
-
-                approval:
-                    -6,
-
-                congress:
-                    -2,
-
-                trust:
-                    -7,
-
-                stability:
-                    -9,
-
-                billsSigned:
-                    0,
-
-                majorActions:
-                    1,
-
-                constitutionalRestraint:
-                    0,
-
-                legislativeSkill:
-                    0,
-
-                crisisLeadership:
-                    -3,
-
-                diplomaticCredibility:
-                    0,
-
-                accountability:
-                    -1,
-
-                emergencyResult:
-                    "poor",
-
-                headline:
-                    "Political conflict overshadows early hurricane response."
-            },
-
-            {
-                text:
-                    "Coordinate federal agencies with governors and local officials",
-
-                outcomeTitle:
-                    "The response becomes more organized",
-
-                outcomeText:
-                    "Federal, state, and local governments combine resources while maintaining their separate responsibilities.",
-
-                approval:
-                    7,
-
-                congress:
-                    3,
 
                 trust:
                     8,
@@ -575,43 +525,43 @@ const presidentScenarios = [
                 majorActions:
                     1,
 
-                constitutionalRestraint:
-                    2,
+                fiscalDiscipline:
+                    0,
 
                 legislativeSkill:
                     0,
 
                 crisisLeadership:
-                    4,
+                    5,
 
-                diplomaticCredibility:
-                    0,
+                localPartnership:
+                    5,
 
                 accountability:
                     1,
 
                 emergencyResult:
-                    "strong",
+                    "coordinated",
 
                 headline:
-                    "Federal and state officials coordinate major hurricane response."
+                    "Governor mobilizes statewide flood response with county and federal partners."
             },
 
             {
                 text:
-                    "Tell states they must handle the emergency entirely alone",
+                    "Tell counties the disaster is entirely their responsibility",
 
                 outcomeTitle:
-                    "Resources become strained",
+                    "Local resources become overwhelmed",
 
                 outcomeText:
-                    "States lead many emergency operations, but major disasters can require federal support.",
+                    "Counties lead many emergency operations, but the state has major coordination and assistance responsibilities during large disasters.",
 
                 approval:
                     -8,
 
-                congress:
-                    -4,
+                legislature:
+                    -2,
 
                 trust:
                     -8,
@@ -625,46 +575,46 @@ const presidentScenarios = [
                 majorActions:
                     0,
 
-                constitutionalRestraint:
+                fiscalDiscipline:
                     0,
 
                 legislativeSkill:
                     0,
 
                 crisisLeadership:
-                    -4,
+                    -5,
 
-                diplomaticCredibility:
-                    0,
+                localPartnership:
+                    -5,
 
                 accountability:
-                    -1,
+                    -2,
 
                 emergencyResult:
-                    "weak",
+                    "abandonedLocals",
 
                 headline:
-                    "Governors criticize limited federal disaster assistance."
+                    "County officials criticize limited state response to widespread flooding."
             },
 
             {
                 text:
-                    "Take direct control of every local emergency department",
+                    "Take direct command of every municipal emergency service",
 
                 outcomeTitle:
                     "Authority becomes confused",
 
                 outcomeText:
-                    "The federal government can provide major assistance, but local and state governments retain important emergency responsibilities.",
+                    "The state can coordinate and support the response, but local emergency departments still retain important operational roles.",
 
                 approval:
-                    -3,
+                    -2,
 
-                congress:
-                    -3,
+                legislature:
+                    -2,
 
                 trust:
-                    -5,
+                    -4,
 
                 stability:
                     -5,
@@ -675,8 +625,8 @@ const presidentScenarios = [
                 majorActions:
                     1,
 
-                constitutionalRestraint:
-                    -2,
+                fiscalDiscipline:
+                    0,
 
                 legislativeSkill:
                     0,
@@ -684,17 +634,67 @@ const presidentScenarios = [
                 crisisLeadership:
                     -1,
 
-                diplomaticCredibility:
-                    0,
+                localPartnership:
+                    -4,
 
                 accountability:
                     0,
 
                 emergencyResult:
-                    "overreach",
+                    "overcentralized",
 
                 headline:
-                    "Questions arise over federal role in local disaster operations."
+                    "Questions arise over state control of local flood response."
+            },
+
+            {
+                text:
+                    "Focus first on blaming previous administrations for infrastructure failures",
+
+                outcomeTitle:
+                    "The emergency becomes politicized",
+
+                outcomeText:
+                    "Accountability may matter later, but residents need immediate coordination, rescue, transportation, and recovery support.",
+
+                approval:
+                    -5,
+
+                legislature:
+                    -3,
+
+                trust:
+                    -7,
+
+                stability:
+                    -8,
+
+                billsSigned:
+                    0,
+
+                majorActions:
+                    1,
+
+                fiscalDiscipline:
+                    0,
+
+                legislativeSkill:
+                    -1,
+
+                crisisLeadership:
+                    -4,
+
+                localPartnership:
+                    -2,
+
+                accountability:
+                    -2,
+
+                emergencyResult:
+                    "politicized",
+
+                headline:
+                    "Political disputes overshadow early state flood response."
             }
 
         ]
@@ -704,49 +704,49 @@ const presidentScenarios = [
 
     /*
     ==================================================
-    4. EXECUTIVE AUTHORITY
+    4. INFRASTRUCTURE
     ==================================================
     */
 
     {
         id:
-            "executiveAuthority",
+            "infrastructure",
 
         category:
-            "Executive Authority",
+            "Infrastructure",
 
         title:
-            "Congress has not passed one of your major policy proposals.",
+            "Several major roads and bridges need repair, but the state cannot fund every project immediately.",
 
         text:
-            "Advisers suggest using executive authority instead. What do you do?",
+            "Regional leaders are competing for limited capital funding. How do you set priorities?",
 
         stage:
-            "Executive Action",
+            "Capital Planning",
 
         choices: [
 
             {
                 text:
-                    "Declare that executive orders can replace Congress on any issue",
+                    "Fund projects based primarily on which regions supported you in the election",
 
                 outcomeTitle:
-                    "Constitutional concerns grow",
+                    "The plan appears politically motivated",
 
                 outcomeText:
-                    "Executive orders cannot simply replace Congress's lawmaking role.",
+                    "Some communities benefit, but trust declines as residents question whether infrastructure decisions are being made fairly.",
 
                 approval:
+                    -2,
+
+                legislature:
                     -3,
 
-                congress:
-                    -10,
-
                 trust:
-                    -12,
+                    -8,
 
                 stability:
-                    -7,
+                    -3,
 
                 billsSigned:
                     0,
@@ -754,8 +754,8 @@ const presidentScenarios = [
                 majorActions:
                     1,
 
-                constitutionalRestraint:
-                    -4,
+                fiscalDiscipline:
+                    -2,
 
                 legislativeSkill:
                     -1,
@@ -763,140 +763,90 @@ const presidentScenarios = [
                 crisisLeadership:
                     0,
 
-                diplomaticCredibility:
-                    0,
+                localPartnership:
+                    -3,
 
                 accountability:
-                    -2,
-
-                executivePowerResult:
-                    "overreach",
-
-                headline:
-                    "Legal scholars question sweeping presidential claim of authority."
-            },
-
-            {
-                text:
-                    "Refuse to use any executive authority under any circumstances",
-
-                outcomeTitle:
-                    "The administration becomes less effective",
-
-                outcomeText:
-                    "Presidents do have lawful executive powers and responsibilities that do not require new legislation each time.",
-
-                approval:
                     -4,
 
-                congress:
-                    1,
-
-                trust:
-                    -2,
-
-                stability:
-                    -3,
-
-                billsSigned:
-                    0,
-
-                majorActions:
-                    0,
-
-                constitutionalRestraint:
-                    1,
-
-                legislativeSkill:
-                    -1,
-
-                crisisLeadership:
-                    0,
-
-                diplomaticCredibility:
-                    0,
-
-                accountability:
-                    0,
-
-                executivePowerResult:
-                    "underuse",
+                infrastructureResult:
+                    "political",
 
                 headline:
-                    "White House declines executive action despite existing authority."
+                    "Governor faces criticism over politically targeted infrastructure spending."
             },
 
             {
                 text:
-                    "Order federal agencies to ignore laws you dislike",
+                    "Rank projects using safety, traffic, economic importance, and readiness criteria",
 
                 outcomeTitle:
-                    "Institutional conflict intensifies",
+                    "The state adopts transparent priorities",
 
                 outcomeText:
-                    "The executive branch is responsible for faithfully executing federal law, not disregarding statutes at will.",
+                    "Not every region gets its first choice, but the process is easier to defend because the criteria are public and consistent.",
 
                 approval:
-                    -5,
+                    4,
 
-                congress:
-                    -10,
+                legislature:
+                    4,
 
                 trust:
-                    -14,
+                    8,
 
                 stability:
-                    -9,
+                    6,
 
                 billsSigned:
-                    0,
+                    1,
 
                 majorActions:
                     1,
 
-                constitutionalRestraint:
-                    -5,
+                fiscalDiscipline:
+                    4,
 
                 legislativeSkill:
-                    -2,
+                    2,
 
                 crisisLeadership:
                     0,
 
-                diplomaticCredibility:
-                    0,
-
-                accountability:
-                    -3,
-
-                executivePowerResult:
-                    "illegal",
-
-                headline:
-                    "Administration faces legal challenge over refusal to enforce federal law."
-            },
-
-            {
-                text:
-                    "Use an executive order only where existing law gives the executive branch authority",
-
-                outcomeTitle:
-                    "You act within defined executive power",
-
-                outcomeText:
-                    "The action may still face political or legal challenges, but it is tied to existing statutory and constitutional authority.",
-
-                approval:
+                localPartnership:
                     3,
 
-                congress:
-                    -1,
+                accountability:
+                    4,
+
+                infrastructureResult:
+                    "criteriaBased",
+
+                headline:
+                    "State releases transparent ranking system for major infrastructure projects."
+            },
+
+            {
+                text:
+                    "Promise every region that all requested projects will begin immediately",
+
+                outcomeTitle:
+                    "The commitments exceed available resources",
+
+                outcomeText:
+                    "The announcement is popular initially, but costs rise and the administration cannot deliver every promised project.",
+
+                approval:
+                    1,
+
+                legislature:
+                    -3,
 
                 trust:
-                    7,
+                    -6,
 
                 stability:
-                    4,
+                    -3,
 
                 billsSigned:
                     0,
@@ -904,26 +854,76 @@ const presidentScenarios = [
                 majorActions:
                     1,
 
-                constitutionalRestraint:
-                    4,
+                fiscalDiscipline:
+                    -5,
 
                 legislativeSkill:
-                    1,
+                    -1,
 
                 crisisLeadership:
                     0,
 
-                diplomaticCredibility:
-                    0,
-
-                accountability:
+                localPartnership:
                     1,
 
-                executivePowerResult:
-                    "lawful",
+                accountability:
+                    -3,
+
+                infrastructureResult:
+                    "overpromised",
 
                 headline:
-                    "President issues targeted executive order under existing authority."
+                    "Questions grow over cost of governor's statewide infrastructure promises."
+            },
+
+            {
+                text:
+                    "Delay all major repairs until the next administration",
+
+                outcomeTitle:
+                    "The immediate budget pressure falls",
+
+                outcomeText:
+                    "The state avoids current spending, but infrastructure conditions worsen and local leaders lose confidence in the administration.",
+
+                approval:
+                    -6,
+
+                legislature:
+                    -2,
+
+                trust:
+                    -6,
+
+                stability:
+                    -5,
+
+                billsSigned:
+                    0,
+
+                majorActions:
+                    0,
+
+                fiscalDiscipline:
+                    1,
+
+                legislativeSkill:
+                    -1,
+
+                crisisLeadership:
+                    -1,
+
+                localPartnership:
+                    -4,
+
+                accountability:
+                    -2,
+
+                infrastructureResult:
+                    "deferred",
+
+                headline:
+                    "Governor delays major transportation repairs amid budget concerns."
             }
 
         ]
@@ -935,23 +935,23 @@ const presidentScenarios = [
 
 /*
 ==================================================
-GAME STATE
+STATE LEADERSHIP STATE
 ==================================================
 */
 
 const gameState = {
 
     approval:
-        62,
+        64,
 
-    congress:
-        55,
+    legislature:
+        58,
 
     trust:
         68,
 
     stability:
-        70,
+        72,
 
     billsSigned:
         0,
@@ -962,11 +962,11 @@ const gameState = {
 
     /*
     ----------------------------------------------
-    HIDDEN LEADERSHIP METRICS
+    HIDDEN GOVERNING METRICS
     ----------------------------------------------
     */
 
-    constitutionalRestraint:
+    fiscalDiscipline:
         0,
 
     legislativeSkill:
@@ -975,7 +975,7 @@ const gameState = {
     crisisLeadership:
         0,
 
-    diplomaticCredibility:
+    localPartnership:
         0,
 
     accountability:
@@ -988,51 +988,48 @@ const gameState = {
     ----------------------------------------------
     */
 
-    legislativeResult:
+    budgetResult:
         "pending",
 
-    appointmentResult:
+    educationResult:
         "pending",
 
     emergencyResult:
         "pending",
 
-    executivePowerResult:
+    infrastructureResult:
         "pending",
 
-    foreignPolicyResult:
+    legislatureResult:
         "pending",
 
-    budgetResult:
+    federalismResult:
         "pending",
 
-    oversightResult:
-        "pending",
-
-    constitutionalCrisis:
+    stateCrisis:
         false,
 
     administrationOutcome:
-        "Your presidency is still unfolding."
+        "Your term is still unfolding."
 
 };
 
 
 /*
 ==================================================
-INITIAL SIMULATION FLOW
+INITIAL FLOW
 ==================================================
 */
 
 let simulationFlow = [
 
-    presidentScenarios[0],
+    governorScenarios[0],
 
-    presidentScenarios[1],
+    governorScenarios[1],
 
-    presidentScenarios[2],
+    governorScenarios[2],
 
-    presidentScenarios[3]
+    governorScenarios[3]
 
 ];
 
@@ -1053,604 +1050,144 @@ DOM REFERENCES
 
 const startScreen =
     document.getElementById(
-        "presidentStartScreen"
+        "governorStartScreen"
     );
 
 
 const gameScreen =
     document.getElementById(
-        "presidentGameScreen"
+        "governorGameScreen"
     );
 
 
 const resultsScreen =
     document.getElementById(
-        "presidentResultsScreen"
+        "governorResultsScreen"
     );
 
 
 const startButton =
     document.getElementById(
-        "presidentStartButton"
+        "governorStartButton"
     );
 
 
 const restartButton =
     document.getElementById(
-        "presidentRestartButton"
+        "governorRestartButton"
     );
 
 
 const continueButton =
     document.getElementById(
-        "presidentContinueButton"
+        "governorContinueButton"
     );
 
 
 const scenarioCategory =
     document.getElementById(
-        "presidentScenarioCategory"
+        "governorScenarioCategory"
     );
 
 
 const scenarioProgress =
     document.getElementById(
-        "presidentScenarioProgress"
+        "governorScenarioProgress"
     );
 
 
 const scenarioTitle =
     document.getElementById(
-        "presidentScenarioTitle"
+        "governorScenarioTitle"
     );
 
 
 const scenarioText =
     document.getElementById(
-        "presidentScenarioText"
+        "governorScenarioText"
     );
 
 
 const choiceContainer =
     document.getElementById(
-        "presidentChoiceContainer"
+        "governorChoiceContainer"
     );
 
 
 const outcome =
     document.getElementById(
-        "presidentOutcome"
+        "governorOutcome"
     );
 
 
 const outcomeIcon =
     document.getElementById(
-        "presidentOutcomeIcon"
+        "governorOutcomeIcon"
     );
 
 
 const outcomeTitle =
     document.getElementById(
-        "presidentOutcomeTitle"
+        "governorOutcomeTitle"
     );
 
 
 const outcomeText =
     document.getElementById(
-        "presidentOutcomeText"
+        "governorOutcomeText"
     );
 
 
 const newsFeed =
     document.getElementById(
-        "presidentNewsFeed"
+        "governorNewsFeed"
     );
     /*
 ==================================================
-FOREIGN POLICY — STABLE ADMINISTRATION
+LEGISLATURE — COOPERATIVE PATH
 ==================================================
 */
 
-const foreignPolicyStableScenario = {
+const legislatureCooperativeScenario = {
 
     id:
-        "foreignPolicyStable",
+        "legislatureCooperative",
 
     category:
-        "Foreign Policy",
+        "Legislative Relations",
 
     title:
-        "A close ally faces a sudden international crisis.",
+        "Your administration has a workable relationship with the state legislature.",
 
     text:
-        "Your administration has maintained reasonable stability at home. How do you respond abroad?",
+        "Lawmakers send you a major public-services bill that includes several provisions you support and several you oppose. What do you do?",
 
     stage:
-        "Foreign Affairs",
+        "Legislative Negotiation",
 
     choices: [
 
         {
             text:
-                "Review intelligence, consult advisers, and coordinate with allies",
+                "Meet with legislative leaders and negotiate targeted changes",
 
             outcomeTitle:
-                "The administration develops a coordinated response",
+                "The compromise improves the bill",
 
             outcomeText:
-                "Careful consultation helps clarify objectives, risks, legal authorities, and allied commitments.",
+                "The final package keeps most of the public-service funding while removing several provisions your administration considered unworkable.",
 
             approval:
-                5,
+                4,
 
-            congress:
-                2,
-
-            trust:
-                7,
-
-            stability:
+            legislature:
                 8,
-
-            billsSigned:
-                0,
-
-            majorActions:
-                1,
-
-            constitutionalRestraint:
-                2,
-
-            legislativeSkill:
-                0,
-
-            crisisLeadership:
-                2,
-
-            diplomaticCredibility:
-                4,
-
-            accountability:
-                1,
-
-            foreignPolicyResult:
-                "coordinated",
-
-            headline:
-                "White House coordinates allied response to international crisis."
-        },
-
-        {
-            text:
-                "Announce military action before consulting national security officials",
-
-            outcomeTitle:
-                "Uncertainty increases",
-
-            outcomeText:
-                "Rapid action may appear decisive, but major security decisions benefit from reliable intelligence and legal review.",
-
-            approval:
-                -3,
-
-            congress:
-                -5,
-
-            trust:
-                -6,
-
-            stability:
-                -8,
-
-            billsSigned:
-                0,
-
-            majorActions:
-                1,
-
-            constitutionalRestraint:
-                -2,
-
-            legislativeSkill:
-                0,
-
-            crisisLeadership:
-                -2,
-
-            diplomaticCredibility:
-                -3,
-
-            accountability:
-                -1,
-
-            foreignPolicyResult:
-                "reckless",
-
-            headline:
-                "Questions grow over rapid White House military announcement."
-        },
-
-        {
-            text:
-                "Ignore the crisis because it is outside the United States",
-
-            outcomeTitle:
-                "Allied confidence falls",
-
-            outcomeText:
-                "Not every crisis requires U.S. intervention, but refusing even to assess its implications damages allied confidence.",
-
-            approval:
-                -4,
-
-            congress:
-                -1,
-
-            trust:
-                -4,
-
-            stability:
-                -6,
-
-            billsSigned:
-                0,
-
-            majorActions:
-                0,
-
-            constitutionalRestraint:
-                0,
-
-            legislativeSkill:
-                0,
-
-            crisisLeadership:
-                -2,
-
-            diplomaticCredibility:
-                -4,
-
-            accountability:
-                -1,
-
-            foreignPolicyResult:
-                "withdrawn",
-
-            headline:
-                "Allies seek clarity after limited U.S. response to crisis."
-        },
-
-        {
-            text:
-                "Promise every requested action without considering consequences",
-
-            outcomeTitle:
-                "Commitments expand quickly",
-
-            outcomeText:
-                "The broad promises reassure some allies but create uncertainty over resources, legal authority, and long-term obligations.",
-
-            approval:
-                0,
-
-            congress:
-                -4,
-
-            trust:
-                -3,
-
-            stability:
-                -5,
-
-            billsSigned:
-                0,
-
-            majorActions:
-                1,
-
-            constitutionalRestraint:
-                -1,
-
-            legislativeSkill:
-                0,
-
-            crisisLeadership:
-                -1,
-
-            diplomaticCredibility:
-                -2,
-
-            accountability:
-                -1,
-
-            foreignPolicyResult:
-                "overcommitted",
-
-            headline:
-                "Administration faces questions over sweeping international commitments."
-        }
-
-    ]
-
-};
-
-
-/*
-==================================================
-FOREIGN POLICY — FRAGILE ADMINISTRATION
-==================================================
-*/
-
-const foreignPolicyFragileScenario = {
-
-    id:
-        "foreignPolicyFragile",
-
-    category:
-        "Foreign Policy Crisis",
-
-    title:
-        "An international crisis erupts while confidence in your administration is already strained.",
-
-    text:
-        "Your advisers warn that a poorly handled foreign-policy decision could deepen instability at home. What do you do?",
-
-    stage:
-        "Foreign Affairs Under Pressure",
-
-    choices: [
-
-        {
-            text:
-                "Slow the process down and require intelligence, legal, and allied review",
-
-            outcomeTitle:
-                "The deliberate process steadies the administration",
-
-            outcomeText:
-                "The slower response draws some criticism, but the disciplined process reduces the risk of a larger mistake.",
-
-            approval:
-                1,
-
-            congress:
-                2,
-
-            trust:
-                7,
-
-            stability:
-                7,
-
-            billsSigned:
-                0,
-
-            majorActions:
-                1,
-
-            constitutionalRestraint:
-                3,
-
-            legislativeSkill:
-                0,
-
-            crisisLeadership:
-                3,
-
-            diplomaticCredibility:
-                3,
-
-            accountability:
-                2,
-
-            foreignPolicyResult:
-                "stabilized",
-
-            headline:
-                "White House adopts deliberate international crisis process amid domestic pressure."
-        },
-
-        {
-            text:
-                "Take dramatic unilateral action to project strength",
-
-            outcomeTitle:
-                "The gamble deepens uncertainty",
-
-            outcomeText:
-                "The move dominates the news, but weak consultation and unclear legal footing further damage confidence.",
-
-            approval:
-                -2,
-
-            congress:
-                -7,
-
-            trust:
-                -9,
-
-            stability:
-                -10,
-
-            billsSigned:
-                0,
-
-            majorActions:
-                1,
-
-            constitutionalRestraint:
-                -3,
-
-            legislativeSkill:
-                0,
-
-            crisisLeadership:
-                -3,
-
-            diplomaticCredibility:
-                -3,
-
-            accountability:
-                -2,
-
-            foreignPolicyResult:
-                "escalated",
-
-            headline:
-                "Unilateral foreign-policy move intensifies concern over White House decision-making."
-        },
-
-        {
-            text:
-                "Ask Congress for formal support before taking major action",
-
-            outcomeTitle:
-                "The process becomes slower but more legitimate",
-
-            outcomeText:
-                "Debate takes time, but broader institutional participation improves legitimacy and political durability.",
-
-            approval:
-                0,
-
-            congress:
-                7,
-
-            trust:
-                8,
-
-            stability:
-                5,
-
-            billsSigned:
-                0,
-
-            majorActions:
-                1,
-
-            constitutionalRestraint:
-                4,
-
-            legislativeSkill:
-                2,
-
-            crisisLeadership:
-                1,
-
-            diplomaticCredibility:
-                2,
-
-            accountability:
-                2,
-
-            foreignPolicyResult:
-                "sharedAuthority",
-
-            headline:
-                "President seeks congressional backing for major international response."
-        },
-
-        {
-            text:
-                "Avoid making any decision and hope the crisis resolves itself",
-
-            outcomeTitle:
-                "The vacuum creates more instability",
-
-            outcomeText:
-                "Delay without a process leaves allies, Congress, and the public uncertain about U.S. intentions.",
-
-            approval:
-                -6,
-
-            congress:
-                -2,
-
-            trust:
-                -6,
-
-            stability:
-                -8,
-
-            billsSigned:
-                0,
-
-            majorActions:
-                0,
-
-            constitutionalRestraint:
-                0,
-
-            legislativeSkill:
-                -1,
-
-            crisisLeadership:
-                -4,
-
-            diplomaticCredibility:
-                -4,
-
-            accountability:
-                -2,
-
-            foreignPolicyResult:
-                "paralyzed",
-
-            headline:
-                "Allies and lawmakers question White House inaction during international crisis."
-        }
-
-    ]
-
-};
-
-
-/*
-==================================================
-BUDGET — COOPERATIVE PATH
-==================================================
-*/
-
-const budgetCooperativeScenario = {
-
-    id:
-        "budgetCooperative",
-
-    category:
-        "Budget Negotiation",
-
-    title:
-        "Congress and the White House are approaching a major budget deadline.",
-
-    text:
-        "Your relationship with Congress remains workable. How do you use that advantage?",
-
-    stage:
-        "Budget Negotiation",
-
-    choices: [
-
-        {
-            text:
-                "Meet with congressional leaders and negotiate a workable compromise",
-
-            outcomeTitle:
-                "A budget agreement becomes possible",
-
-            outcomeText:
-                "Neither side gets everything it wants, but negotiations reduce the risk of disruption.",
-
-            approval:
-                4,
-
-            congress:
-                9,
 
             trust:
                 6,
 
             stability:
-                8,
+                5,
 
             billsSigned:
                 1,
@@ -1658,46 +1195,146 @@ const budgetCooperativeScenario = {
             majorActions:
                 1,
 
-            constitutionalRestraint:
+            fiscalDiscipline:
                 2,
 
             legislativeSkill:
-                4,
+                5,
 
             crisisLeadership:
-                1,
-
-            diplomaticCredibility:
                 0,
 
-            accountability:
+            localPartnership:
                 1,
 
-            budgetResult:
+            accountability:
+                2,
+
+            legislatureResult:
                 "agreement",
 
             headline:
-                "White House and congressional leaders reach budget framework."
+                "Governor and legislative leaders reach compromise on major public-services bill."
         },
 
         {
             text:
-                "Use the deadline to demand every major administration priority",
+                "Sign the bill without reviewing the disputed provisions",
 
             outcomeTitle:
-                "The cooperative atmosphere deteriorates",
+                "The bill becomes law quickly",
 
             outcomeText:
-                "The strategy may produce some concessions, but lawmakers begin to question whether negotiations are being conducted in good faith.",
+                "The rapid signature avoids conflict, but several poorly reviewed provisions create implementation problems later.",
 
             approval:
-                -1,
+                2,
 
-            congress:
-                -6,
+            legislature:
+                4,
 
             trust:
+                -3,
+
+            stability:
+                -2,
+
+            billsSigned:
+                1,
+
+            majorActions:
+                1,
+
+            fiscalDiscipline:
+                -2,
+
+            legislativeSkill:
+                0,
+
+            crisisLeadership:
+                0,
+
+            localPartnership:
+                0,
+
+            accountability:
+                -2,
+
+            legislatureResult:
+                "rushed",
+
+            headline:
+                "Governor signs major services bill amid questions over implementation."
+        },
+
+        {
+            text:
+                "Veto the entire bill and refuse further negotiations",
+
+            outcomeTitle:
+                "The relationship deteriorates",
+
+            outcomeText:
+                "You protect your objections, but lawmakers who were willing to compromise become less cooperative.",
+
+            approval:
+                -2,
+
+            legislature:
+                -9,
+
+            trust:
+                -2,
+
+            stability:
+                -3,
+
+            billsSigned:
+                0,
+
+            majorActions:
+                1,
+
+            fiscalDiscipline:
+                1,
+
+            legislativeSkill:
                 -4,
+
+            crisisLeadership:
+                0,
+
+            localPartnership:
+                0,
+
+            accountability:
+                -1,
+
+            legislatureResult:
+                "vetoConflict",
+
+            headline:
+                "Governor vetoes public-services bill as legislative tensions rise."
+        },
+
+        {
+            text:
+                "Threaten to punish lawmakers' districts if they oppose your position",
+
+            outcomeTitle:
+                "The dispute becomes personal",
+
+            outcomeText:
+                "The pressure tactic may influence some votes, but it damages trust with lawmakers and local communities.",
+
+            approval:
+                -5,
+
+            legislature:
+                -12,
+
+            trust:
+                -9,
 
             stability:
                 -5,
@@ -1706,128 +1343,28 @@ const budgetCooperativeScenario = {
                 0,
 
             majorActions:
-                0,
+                1,
 
-            constitutionalRestraint:
+            fiscalDiscipline:
                 0,
 
             legislativeSkill:
-                -2,
+                -5,
 
             crisisLeadership:
                 -1,
 
-            diplomaticCredibility:
-                0,
+            localPartnership:
+                -5,
 
             accountability:
-                -1,
-
-            budgetResult:
-                "stalled",
-
-            headline:
-                "Budget talks weaken as White House presses broad last-minute demands."
-        },
-
-        {
-            text:
-                "Accept a temporary funding measure while negotiations continue",
-
-            outcomeTitle:
-                "You avoid immediate disruption",
-
-            outcomeText:
-                "The short-term agreement does not solve every dispute, but it creates more time for a durable budget deal.",
-
-            approval:
-                2,
-
-            congress:
-                5,
-
-            trust:
-                4,
-
-            stability:
-                6,
-
-            billsSigned:
-                1,
-
-            majorActions:
-                1,
-
-            constitutionalRestraint:
-                2,
-
-            legislativeSkill:
-                3,
-
-            crisisLeadership:
-                1,
-
-            diplomaticCredibility:
-                0,
-
-            accountability:
-                1,
-
-            budgetResult:
-                "temporary",
-
-            headline:
-                "President signs temporary funding measure as budget negotiations continue."
-        },
-
-        {
-            text:
-                "Refuse to negotiate and allow the deadline to pass",
-
-            outcomeTitle:
-                "The funding breakdown begins",
-
-            outcomeText:
-                "The decision turns a manageable disagreement into a broader governance crisis.",
-
-            approval:
-                -6,
-
-            congress:
-                -9,
-
-            trust:
-                -8,
-
-            stability:
-                -10,
-
-            billsSigned:
-                0,
-
-            majorActions:
-                0,
-
-            constitutionalRestraint:
-                0,
-
-            legislativeSkill:
                 -4,
 
-            crisisLeadership:
-                -3,
-
-            diplomaticCredibility:
-                0,
-
-            accountability:
-                -2,
-
-            budgetResult:
-                "shutdown",
+            legislatureResult:
+                "retaliatory",
 
             headline:
-                "Federal funding lapses after White House and Congress fail to reach agreement."
+                "Governor faces criticism over threats toward lawmakers' districts."
         }
 
     ]
@@ -1837,26 +1374,26 @@ const budgetCooperativeScenario = {
 
 /*
 ==================================================
-BUDGET — HOSTILE PATH
+LEGISLATURE — HOSTILE PATH
 ==================================================
 */
 
-const budgetHostileScenario = {
+const legislatureHostileScenario = {
 
     id:
-        "budgetHostile",
+        "legislatureHostile",
 
     category:
-        "Budget Crisis",
+        "Legislative Conflict",
 
     title:
-        "Budget negotiations begin with relations between the White House and Congress already badly damaged.",
+        "Relations between your administration and the legislature have become badly strained.",
 
     text:
-        "A funding deadline is approaching quickly. What do you do?",
+        "A major deadline is approaching and neither side trusts the other. What do you do?",
 
     stage:
-        "Budget Crisis",
+        "Capitol Conflict",
 
     choices: [
 
@@ -1868,13 +1405,13 @@ const budgetHostileScenario = {
                 "Communication reopens",
 
             outcomeText:
-                "The meeting does not erase earlier conflict, but it creates a realistic path toward avoiding a shutdown.",
+                "The meeting does not erase earlier conflict, but it creates a path toward a limited agreement.",
 
             approval:
                 2,
 
-            congress:
-                8,
+            legislature:
+                9,
 
             trust:
                 6,
@@ -1888,7 +1425,110 @@ const budgetHostileScenario = {
             majorActions:
                 1,
 
-            constitutionalRestraint:
+            fiscalDiscipline:
+                1,
+
+            legislativeSkill:
+                5,
+
+            crisisLeadership:
+                2,
+
+            localPartnership:
+                1,
+
+            accountability:
+                2,
+
+            legislatureResult:
+                "recovery",
+
+            headline:
+                "Governor reopens bipartisan negotiations after months of legislative conflict."
+        },
+
+        {
+            text:
+                "Bypass the legislature on matters that require legislative approval",
+
+            outcomeTitle:
+                "A state constitutional dispute develops",
+
+            outcomeText:
+                "The governor has significant executive authority, but some major actions still require legislative approval or appropriation.",
+
+            approval:
+                -4,
+
+            legislature:
+                -14,
+
+            trust:
+                -12,
+
+            stability:
+                -10,
+
+            billsSigned:
+                0,
+
+            majorActions:
+                1,
+
+            fiscalDiscipline:
+                -1,
+
+            legislativeSkill:
+                -5,
+
+            crisisLeadership:
+                -3,
+
+            localPartnership:
+                -1,
+
+            accountability:
+                -4,
+
+            legislatureResult:
+                "constitutionalConflict",
+
+            stateCrisis:
+                true,
+
+            headline:
+                "Governor faces legal challenge over attempt to bypass state legislature."
+        },
+
+        {
+            text:
+                "Support a narrow compromise on the most urgent issue",
+
+            outcomeTitle:
+                "The immediate crisis eases",
+
+            outcomeText:
+                "The broader relationship remains difficult, but both sides prove they can still govern when necessary.",
+
+            approval:
+                1,
+
+            legislature:
+                6,
+
+            trust:
+                5,
+
+            stability:
+                7,
+
+            billsSigned:
+                1,
+
+            majorActions:
+                1,
+
+            fiscalDiscipline:
                 2,
 
             legislativeSkill:
@@ -1897,37 +1537,217 @@ const budgetHostileScenario = {
             crisisLeadership:
                 2,
 
-            diplomaticCredibility:
+            localPartnership:
                 0,
 
             accountability:
-                2,
+                1,
 
-            budgetResult:
-                "recovery",
+            legislatureResult:
+                "limitedDeal",
 
             headline:
-                "White House reopens bipartisan budget talks ahead of funding deadline."
+                "Governor and lawmakers reach narrow agreement despite strained relations."
         },
 
         {
             text:
-                "Declare that Congress alone will be responsible for any shutdown",
+                "Use public appearances only to blame the legislature",
 
             outcomeTitle:
-                "The blame strategy hardens positions",
+                "The conflict deepens",
 
             outcomeText:
-                "Public messaging intensifies, but substantive negotiations become even more difficult.",
+                "The messaging energizes some supporters but leaves the underlying governing problem unresolved.",
 
             approval:
                 -1,
 
-            congress:
-                -8,
+            legislature:
+                -9,
 
             trust:
+                -6,
+
+            stability:
+                -6,
+
+            billsSigned:
+                0,
+
+            majorActions:
+                0,
+
+            fiscalDiscipline:
+                0,
+
+            legislativeSkill:
+                -4,
+
+            crisisLeadership:
+                -2,
+
+            localPartnership:
+                -1,
+
+            accountability:
+                -4,
+
+            legislatureResult:
+                "blame",
+
+            headline:
+                "Capitol dispute intensifies as governor and lawmakers trade blame."
+        }
+
+    ]
+
+};
+
+
+/*
+==================================================
+FEDERAL-STATE RELATIONS — STABLE PATH
+==================================================
+*/
+
+const federalRelationsStableScenario = {
+
+    id:
+        "federalRelationsStable",
+
+    category:
+        "Federal-State Relations",
+
+    title:
+        "The federal government offers major infrastructure and recovery funding with detailed conditions.",
+
+    text:
+        "State agencies support accepting the money, but several lawmakers argue the requirements are too restrictive. What do you do?",
+
+    stage:
+        "Federal Partnership",
+
+    choices: [
+
+        {
+            text:
+                "Review the conditions carefully and accept funding that fits state law and priorities",
+
+            outcomeTitle:
+                "The state secures useful federal support",
+
+            outcomeText:
+                "The administration gains resources while clearly identifying the conditions the state is agreeing to follow.",
+
+            approval:
+                4,
+
+            legislature:
+                3,
+
+            trust:
+                6,
+
+            stability:
+                7,
+
+            billsSigned:
+                0,
+
+            majorActions:
+                1,
+
+            fiscalDiscipline:
+                4,
+
+            legislativeSkill:
+                1,
+
+            crisisLeadership:
+                1,
+
+            localPartnership:
+                3,
+
+            accountability:
+                3,
+
+            federalismResult:
+                "cooperative",
+
+            headline:
+                "Governor accepts targeted federal funding after state review."
+        },
+
+        {
+            text:
+                "Accept every federal condition without reviewing state obligations",
+
+            outcomeTitle:
+                "The state gains funding but loses clarity",
+
+            outcomeText:
+                "The money arrives quickly, but lawmakers and agencies later question whether the administration understood all of the commitments.",
+
+            approval:
+                1,
+
+            legislature:
+                -3,
+
+            trust:
+                -4,
+
+            stability:
+                1,
+
+            billsSigned:
+                0,
+
+            majorActions:
+                1,
+
+            fiscalDiscipline:
+                1,
+
+            legislativeSkill:
+                -1,
+
+            crisisLeadership:
+                0,
+
+            localPartnership:
+                1,
+
+            accountability:
+                -3,
+
+            federalismResult:
+                "unreviewed",
+
+            headline:
+                "Questions emerge over state commitments tied to federal funding."
+        },
+
+        {
+            text:
+                "Reject all federal cooperation on principle",
+
+            outcomeTitle:
+                "The state loses major resources",
+
+            outcomeText:
+                "The decision preserves complete distance from the federal program, but communities lose funding that could have supported recovery and infrastructure.",
+
+            approval:
                 -5,
+
+            legislature:
+                -1,
+
+            trust:
+                -4,
 
             stability:
                 -7,
@@ -1938,46 +1758,371 @@ const budgetHostileScenario = {
             majorActions:
                 0,
 
-            constitutionalRestraint:
-                0,
-
-            legislativeSkill:
-                -3,
-
-            crisisLeadership:
+            fiscalDiscipline:
                 -2,
 
-            diplomaticCredibility:
+            legislativeSkill:
                 0,
 
-            accountability:
-                -3,
+            crisisLeadership:
+                -1,
 
-            budgetResult:
-                "stalled",
+            localPartnership:
+                -4,
+
+            accountability:
+                -1,
+
+            federalismResult:
+                "rejected",
 
             headline:
-                "White House and Congress trade blame as shutdown deadline approaches."
+                "State rejects major federal infrastructure and recovery funding."
         },
 
         {
             text:
-                "Support a narrow temporary funding bill",
+                "Accept the money but announce that the state will ignore the attached legal conditions",
 
             outcomeTitle:
-                "You prevent immediate disruption",
+                "A federal-state legal conflict begins",
 
             outcomeText:
-                "The underlying conflict remains, but federal operations continue while negotiations resume.",
+                "The state cannot generally accept conditional funding while simply disregarding lawful conditions attached to it.",
 
             approval:
+                -4,
+
+            legislature:
+                -4,
+
+            trust:
+                -10,
+
+            stability:
+                -8,
+
+            billsSigned:
+                0,
+
+            majorActions:
                 1,
 
-            congress:
+            fiscalDiscipline:
+                -2,
+
+            legislativeSkill:
+                -2,
+
+            crisisLeadership:
+                -3,
+
+            localPartnership:
+                -1,
+
+            accountability:
+                -5,
+
+            federalismResult:
+                "legalConflict",
+
+            stateCrisis:
+                true,
+
+            headline:
+                "Federal-state dispute erupts over conditions attached to major grant."
+        }
+
+    ]
+
+};
+
+
+/*
+==================================================
+FEDERAL-STATE RELATIONS — CRISIS PATH
+==================================================
+*/
+
+const federalRelationsCrisisScenario = {
+
+    id:
+        "federalRelationsCrisis",
+
+    category:
+        "Federalism Crisis",
+
+    title:
+        "Your administration enters a major dispute with the federal government while state confidence is already weakened.",
+
+    text:
+        "The disagreement affects funding, emergency planning, and several state agencies. How do you proceed?",
+
+    stage:
+        "Federalism Crisis",
+
+    choices: [
+
+        {
+            text:
+                "Challenge the disputed federal requirement through legal and administrative channels while maintaining other cooperation",
+
+            outcomeTitle:
+                "The conflict stays within institutional channels",
+
+            outcomeText:
+                "The state preserves its objections without disrupting unrelated federal partnerships or services.",
+
+            approval:
+                2,
+
+            legislature:
                 4,
 
             trust:
-                5,
+                8,
+
+            stability:
+                7,
+
+            billsSigned:
+                0,
+
+            majorActions:
+                1,
+
+            fiscalDiscipline:
+                2,
+
+            legislativeSkill:
+                2,
+
+            crisisLeadership:
+                3,
+
+            localPartnership:
+                2,
+
+            accountability:
+                4,
+
+            federalismResult:
+                "managed",
+
+            stateCrisis:
+                false,
+
+            headline:
+                "State challenges federal requirement while maintaining broader cooperation."
+        },
+
+        {
+            text:
+                "Order state agencies to ignore every federal rule",
+
+            outcomeTitle:
+                "The confrontation expands dramatically",
+
+            outcomeText:
+                "The blanket directive creates conflicts far beyond the original dispute and increases legal uncertainty.",
+
+            approval:
+                -6,
+
+            legislature:
+                -8,
+
+            trust:
+                -12,
+
+            stability:
+                -12,
+
+            billsSigned:
+                0,
+
+            majorActions:
+                1,
+
+            fiscalDiscipline:
+                -2,
+
+            legislativeSkill:
+                -4,
+
+            crisisLeadership:
+                -4,
+
+            localPartnership:
+                -2,
+
+            accountability:
+                -5,
+
+            federalismResult:
+                "defiance",
+
+            stateCrisis:
+                true,
+
+            headline:
+                "Governor orders broad state defiance of federal rules."
+        },
+
+        {
+            text:
+                "Negotiate a temporary compliance agreement while courts review the dispute",
+
+            outcomeTitle:
+                "The state preserves stability",
+
+            outcomeText:
+                "Neither side gives up its legal position, but agencies continue operating while the dispute is reviewed.",
+
+            approval:
+                2,
+
+            legislature:
+                3,
+
+            trust:
+                7,
+
+            stability:
+                8,
+
+            billsSigned:
+                0,
+
+            majorActions:
+                1,
+
+            fiscalDiscipline:
+                2,
+
+            legislativeSkill:
+                2,
+
+            crisisLeadership:
+                4,
+
+            localPartnership:
+                2,
+
+            accountability:
+                3,
+
+            federalismResult:
+                "temporaryAgreement",
+
+            stateCrisis:
+                false,
+
+            headline:
+                "State and federal officials reach temporary agreement during legal dispute."
+        },
+
+        {
+            text:
+                "Use the dispute mainly as a political campaign issue",
+
+            outcomeTitle:
+                "The underlying problem remains unresolved",
+
+            outcomeText:
+                "Public attention rises, but agencies still lack clear direction about funding and legal obligations.",
+
+            approval:
+                0,
+
+            legislature:
+                -2,
+
+            trust:
+                -6,
+
+            stability:
+                -7,
+
+            billsSigned:
+                0,
+
+            majorActions:
+                0,
+
+            fiscalDiscipline:
+                -1,
+
+            legislativeSkill:
+                -2,
+
+            crisisLeadership:
+                -3,
+
+            localPartnership:
+                -2,
+
+            accountability:
+                -4,
+
+            federalismResult:
+                "politicized",
+
+            stateCrisis:
+                true,
+
+            headline:
+                "Federal-state dispute becomes major political battle as agencies await guidance."
+        }
+
+    ]
+
+};
+
+
+/*
+==================================================
+FISCAL STRESS — STABLE PATH
+==================================================
+*/
+
+const fiscalStableScenario = {
+
+    id:
+        "fiscalStable",
+
+    category:
+        "Fiscal Management",
+
+    title:
+        "State revenues fall unexpectedly midway through your term.",
+
+    text:
+        "Your earlier fiscal choices left the state with some flexibility, but a new budget gap is emerging. What do you do?",
+
+    stage:
+        "Midterm Fiscal Review",
+
+    choices: [
+
+        {
+            text:
+                "Use part of the reserve fund while making targeted spending adjustments",
+
+            outcomeTitle:
+                "The state absorbs the shock",
+
+            outcomeText:
+                "The reserve cushions the downturn while targeted adjustments preserve the most important services.",
+
+            approval:
+                3,
+
+            legislature:
+                4,
+
+            trust:
+                6,
 
             stability:
                 7,
@@ -1988,49 +2133,49 @@ const budgetHostileScenario = {
             majorActions:
                 1,
 
-            constitutionalRestraint:
-                2,
+            fiscalDiscipline:
+                4,
 
             legislativeSkill:
-                3,
+                2,
 
             crisisLeadership:
                 2,
 
-            diplomaticCredibility:
-                0,
-
-            accountability:
+            localPartnership:
                 1,
 
-            budgetResult:
-                "temporary",
+            accountability:
+                2,
+
+            fiscalResult:
+                "managed",
 
             headline:
-                "Temporary spending bill prevents shutdown despite strained White House relations."
+                "Governor uses reserves and targeted reductions to manage revenue decline."
         },
 
         {
             text:
-                "Claim the president can spend federal money without congressional appropriations",
+                "Spend the entire reserve fund immediately",
 
             outcomeTitle:
-                "A constitutional dispute erupts",
+                "The immediate gap closes",
 
             outcomeText:
-                "Congress controls appropriations, and the claim creates a serious institutional confrontation.",
+                "The state avoids near-term cuts but loses most of its protection against another emergency or downturn.",
 
             approval:
-                -5,
+                2,
 
-            congress:
-                -14,
+            legislature:
+                -1,
 
             trust:
-                -12,
+                -3,
 
             stability:
-                -10,
+                -2,
 
             billsSigned:
                 0,
@@ -2038,29 +2183,129 @@ const budgetHostileScenario = {
             majorActions:
                 1,
 
-            constitutionalRestraint:
+            fiscalDiscipline:
+                -3,
+
+            legislativeSkill:
+                0,
+
+            crisisLeadership:
+                0,
+
+            localPartnership:
+                0,
+
+            accountability:
+                -1,
+
+            fiscalResult:
+                "reserveDepleted",
+
+            headline:
+                "State drains reserve fund to cover unexpected budget shortfall."
+        },
+
+        {
+            text:
+                "Borrow heavily without a repayment plan",
+
+            outcomeTitle:
+                "The problem shifts into the future",
+
+            outcomeText:
+                "Programs continue in the short term, but the state takes on new obligations without a clear long-term strategy.",
+
+            approval:
+                1,
+
+            legislature:
+                -4,
+
+            trust:
+                -6,
+
+            stability:
+                -4,
+
+            billsSigned:
+                0,
+
+            majorActions:
+                1,
+
+            fiscalDiscipline:
                 -5,
 
             legislativeSkill:
-                -3,
+                -1,
 
             crisisLeadership:
-                -3,
+                -1,
 
-            diplomaticCredibility:
+            localPartnership:
                 0,
 
             accountability:
                 -3,
 
-            budgetResult:
-                "constitutionalConflict",
+            fiscalResult:
+                "unsustainableDebt",
 
-            constitutionalCrisis:
+            headline:
+                "State borrowing plan raises concerns about long-term fiscal stability."
+        },
+
+        {
+            text:
+                "Hide the revised revenue forecast until after the next election",
+
+            outcomeTitle:
+                "A transparency scandal develops",
+
+            outcomeText:
+                "The delayed disclosure damages confidence in the administration and makes the eventual fiscal adjustment more difficult.",
+
+            approval:
+                -8,
+
+            legislature:
+                -7,
+
+            trust:
+                -14,
+
+            stability:
+                -8,
+
+            billsSigned:
+                0,
+
+            majorActions:
+                0,
+
+            fiscalDiscipline:
+                -4,
+
+            legislativeSkill:
+                -3,
+
+            crisisLeadership:
+                -2,
+
+            localPartnership:
+                -1,
+
+            accountability:
+                -6,
+
+            fiscalResult:
+                "concealed",
+
+            stateCrisis:
                 true,
 
             headline:
-                "Budget dispute becomes constitutional confrontation over presidential spending authority."
+                "Governor faces criticism after delayed disclosure of state revenue shortfall."
         }
 
     ]
@@ -2070,389 +2315,209 @@ const budgetHostileScenario = {
 
 /*
 ==================================================
-OVERSIGHT — NORMAL PATH
+FISCAL CRISIS — WEAK PATH
 ==================================================
 */
 
-const oversightNormalScenario = {
+const fiscalCrisisScenario = {
 
     id:
-        "oversightNormal",
+        "fiscalCrisis",
 
     category:
-        "Congressional Oversight",
+        "Fiscal Crisis",
 
     title:
-        "A congressional committee requests records from an executive agency.",
+        "The state enters a serious fiscal crisis after earlier budget decisions reduced its flexibility.",
 
     text:
-        "Your advisers disagree over how cooperative the administration should be. What do you do?",
+        "Agencies are warning about service disruptions and lawmakers are demanding a plan. What do you do?",
 
     stage:
-        "Oversight",
+        "Fiscal Emergency",
 
     choices: [
 
         {
             text:
-                "Provide responsive information while reviewing legitimate confidentiality concerns",
+                "Present a transparent recovery plan combining targeted cuts, revenue review, and legislative negotiation",
 
             outcomeTitle:
-                "Oversight proceeds with negotiation",
+                "The state begins stabilizing",
 
             outcomeText:
-                "The administration protects appropriate interests while recognizing Congress's oversight role.",
+                "The plan is politically difficult, but it gives lawmakers and residents a credible path out of the crisis.",
 
             approval:
-                3,
+                0,
 
-            congress:
+            legislature:
                 7,
 
             trust:
                 9,
 
             stability:
-                4,
+                8,
 
             billsSigned:
-                0,
+                1,
 
             majorActions:
                 1,
 
-            constitutionalRestraint:
-                4,
+            fiscalDiscipline:
+                5,
 
             legislativeSkill:
-                2,
-
-            crisisLeadership:
-                0,
-
-            diplomaticCredibility:
-                0,
-
-            accountability:
                 4,
 
-            oversightResult:
-                "cooperative",
+            crisisLeadership:
+                4,
+
+            localPartnership:
+                1,
+
+            accountability:
+                5,
+
+            fiscalResult:
+                "recovery",
+
+            stateCrisis:
+                false,
 
             headline:
-                "White House and congressional committee negotiate oversight request."
+                "Governor unveils comprehensive state fiscal recovery plan."
         },
 
         {
             text:
-                "Refuse every request and declare Congress has no oversight authority",
+                "Make another round of broad cuts without public explanation",
 
             outcomeTitle:
-                "The conflict escalates",
+                "Services deteriorate further",
 
             outcomeText:
-                "Congress has significant oversight responsibilities, though legitimate executive confidentiality interests can also arise.",
+                "The budget gap narrows somewhat, but residents and local governments receive little guidance about which services will remain available.",
 
             approval:
-                -4,
+                -5,
 
-            congress:
-                -12,
-
-            trust:
-                -10,
-
-            stability:
-                -6,
-
-            billsSigned:
-                0,
-
-            majorActions:
-                1,
-
-            constitutionalRestraint:
-                -4,
-
-            legislativeSkill:
-                -2,
-
-            crisisLeadership:
-                -1,
-
-            diplomaticCredibility:
-                0,
-
-            accountability:
-                -4,
-
-            oversightResult:
-                "defiant",
-
-            headline:
-                "Oversight dispute deepens between Congress and White House."
-        },
-
-        {
-            text:
-                "Release every sensitive record publicly without review",
-
-            outcomeTitle:
-                "Transparency creates new risks",
-
-            outcomeText:
-                "Oversight cooperation matters, but lawful confidentiality and national-security concerns may require careful handling.",
-
-            approval:
-                -1,
-
-            congress:
-                2,
-
-            trust:
-                -4,
-
-            stability:
-                -6,
-
-            billsSigned:
-                0,
-
-            majorActions:
-                1,
-
-            constitutionalRestraint:
-                -1,
-
-            legislativeSkill:
-                0,
-
-            crisisLeadership:
-                -1,
-
-            diplomaticCredibility:
-                -1,
-
-            accountability:
-                1,
-
-            oversightResult:
-                "recklessDisclosure",
-
-            headline:
-                "Sensitive records release raises new security and privacy concerns."
-        },
-
-        {
-            text:
-                "Destroy the requested records",
-
-            outcomeTitle:
-                "A serious institutional crisis develops",
-
-            outcomeText:
-                "Destroying records to frustrate lawful oversight creates severe legal and public-trust consequences.",
-
-            approval:
-                -12,
-
-            congress:
-                -15,
-
-            trust:
-                -18,
-
-            stability:
-                -12,
-
-            billsSigned:
-                0,
-
-            majorActions:
-                1,
-
-            constitutionalRestraint:
-                -6,
-
-            legislativeSkill:
+            legislature:
                 -3,
 
-            crisisLeadership:
+            trust:
+                -8,
+
+            stability:
+                -8,
+
+            billsSigned:
+                0,
+
+            majorActions:
+                1,
+
+            fiscalDiscipline:
+                0,
+
+            legislativeSkill:
                 -2,
 
-            diplomaticCredibility:
-                -1,
+            crisisLeadership:
+                -3,
+
+            localPartnership:
+                -4,
 
             accountability:
-                -6,
+                -4,
 
-            oversightResult:
-                "recordsDestroyed",
+            fiscalResult:
+                "serviceCuts",
 
-            constitutionalCrisis:
+            stateCrisis:
                 true,
 
             headline:
-                "Administration faces major controversy over missing federal records."
-        }
-
-    ]
-
-};
-
-
-/*
-==================================================
-OVERSIGHT — CRISIS PATH
-==================================================
-*/
-
-const oversightCrisisScenario = {
-
-    id:
-        "oversightCrisis",
-
-    category:
-        "Constitutional Crisis",
-
-    title:
-        "Congress launches an aggressive oversight investigation after repeated conflicts with your administration.",
-
-    text:
-        "Public trust is already strained. How do you respond?",
-
-    stage:
-        "Institutional Confrontation",
-
-    choices: [
-
-        {
-            text:
-                "Negotiate document access and allow lawful testimony",
-
-            outcomeTitle:
-                "The confrontation begins to cool",
-
-            outcomeText:
-                "The investigation continues, but cooperation reduces the risk of a deeper constitutional breakdown.",
-
-            approval:
-                1,
-
-            congress:
-                8,
-
-            trust:
-                10,
-
-            stability:
-                8,
-
-            billsSigned:
-                0,
-
-            majorActions:
-                1,
-
-            constitutionalRestraint:
-                5,
-
-            legislativeSkill:
-                2,
-
-            crisisLeadership:
-                3,
-
-            diplomaticCredibility:
-                0,
-
-            accountability:
-                5,
-
-            oversightResult:
-                "crisisManaged",
-
-            constitutionalCrisis:
-                false,
-
-            headline:
-                "White House and Congress reach oversight accommodation amid constitutional tensions."
+                "State agencies face widespread cuts amid unresolved fiscal crisis."
         },
 
         {
             text:
-                "Challenge disputed demands in court while complying with others",
+                "Insist there is no fiscal problem despite agency reports",
 
             outcomeTitle:
-                "The dispute moves into constitutional channels",
+                "Confidence collapses",
 
             outcomeText:
-                "The conflict remains serious, but the administration uses legal review rather than simply rejecting institutional limits.",
+                "The denial delays corrective action and damages the administration's credibility with lawmakers, agencies, and residents.",
 
             approval:
-                0,
+                -8,
 
-            congress:
-                2,
-
-            trust:
-                6,
-
-            stability:
-                5,
-
-            billsSigned:
-                0,
-
-            majorActions:
-                1,
-
-            constitutionalRestraint:
-                4,
-
-            legislativeSkill:
-                1,
-
-            crisisLeadership:
-                2,
-
-            diplomaticCredibility:
-                0,
-
-            accountability:
-                3,
-
-            oversightResult:
-                "judicialReview",
-
-            constitutionalCrisis:
-                false,
-
-            headline:
-                "White House seeks judicial review of disputed congressional oversight demands."
-        },
-
-        {
-            text:
-                "Order the executive branch to ignore all congressional subpoenas",
-
-            outcomeTitle:
-                "The constitutional crisis deepens",
-
-            outcomeText:
-                "The blanket refusal intensifies conflict over separation of powers and accountability.",
-
-            approval:
-                -6,
-
-            congress:
-                -15,
+            legislature:
+                -8,
 
             trust:
                 -14,
 
             stability:
-                -12,
+                -10,
+
+            billsSigned:
+                0,
+
+            majorActions:
+                0,
+
+            fiscalDiscipline:
+                -5,
+
+            legislativeSkill:
+                -3,
+
+            crisisLeadership:
+                -4,
+
+            localPartnership:
+                -2,
+
+            accountability:
+                -6,
+
+            fiscalResult:
+                "denial",
+
+            stateCrisis:
+                true,
+
+            headline:
+                "Lawmakers challenge governor's denial of worsening state fiscal crisis."
+        },
+
+        {
+            text:
+                "Ask independent fiscal analysts to review the budget and publish recommendations",
+
+            outcomeTitle:
+                "The state gains a clearer picture",
+
+            outcomeText:
+                "The review does not solve the deficit by itself, but transparent analysis creates a stronger basis for legislative action.",
+
+            approval:
+                1,
+
+            legislature:
+                5,
+
+            trust:
+                8,
+
+            stability:
+                4,
 
             billsSigned:
                 0,
@@ -2460,82 +2525,26 @@ const oversightCrisisScenario = {
             majorActions:
                 1,
 
-            constitutionalRestraint:
-                -6,
+            fiscalDiscipline:
+                3,
 
             legislativeSkill:
-                -4,
+                2,
 
             crisisLeadership:
-                -4,
+                2,
 
-            diplomaticCredibility:
-                -1,
-
-            accountability:
-                -6,
-
-            oversightResult:
-                "crisisDeepened",
-
-            constitutionalCrisis:
-                true,
-
-            headline:
-                "White House blanket subpoena refusal intensifies constitutional confrontation."
-        },
-
-        {
-            text:
-                "Attack investigators personally and refuse to discuss the underlying issues",
-
-            outcomeTitle:
-                "Institutional confidence falls further",
-
-            outcomeText:
-                "The strategy shifts attention away from the legal dispute but does little to resolve it.",
-
-            approval:
-                -4,
-
-            congress:
-                -10,
-
-            trust:
-                -11,
-
-            stability:
-                -9,
-
-            billsSigned:
-                0,
-
-            majorActions:
-                0,
-
-            constitutionalRestraint:
-                -3,
-
-            legislativeSkill:
-                -3,
-
-            crisisLeadership:
-                -3,
-
-            diplomaticCredibility:
+            localPartnership:
                 0,
 
             accountability:
-                -5,
+                5,
 
-            oversightResult:
-                "politicized",
-
-            constitutionalCrisis:
-                true,
+            fiscalResult:
+                "independentReview",
 
             headline:
-                "Personal attacks dominate escalating White House oversight dispute."
+                "Independent analysts begin public review of state fiscal crisis."
         }
 
     ]
@@ -2549,10 +2558,10 @@ ACCOUNTABILITY — STABLE TERM
 ==================================================
 */
 
-const accountabilityStableScenario = {
+const governorAccountabilityStableScenario = {
 
     id:
-        "accountabilityStable",
+        "governorAccountabilityStable",
 
     category:
         "Public Accountability",
@@ -2561,7 +2570,7 @@ const accountabilityStableScenario = {
         "Your term is nearing its end.",
 
     text:
-        "The public wants an accounting of your administration's achievements, compromises, and mistakes. How do you respond?",
+        "Residents want to know what your administration accomplished, what remains unfinished, and how state resources were used. How do you close the term?",
 
     stage:
         "End of Term",
@@ -2570,18 +2579,18 @@ const accountabilityStableScenario = {
 
         {
             text:
-                "Deliver a detailed public address covering successes and setbacks",
+                "Publish a detailed statewide report and hold public forums in several regions",
 
             outcomeTitle:
                 "The administration closes with transparency",
 
             outcomeText:
-                "Acknowledging both accomplishments and limitations strengthens the credibility of the final public record.",
+                "Residents receive a clear account of spending, major decisions, accomplishments, and unfinished work.",
 
             approval:
                 5,
 
-            congress:
+            legislature:
                 2,
 
             trust:
@@ -2596,7 +2605,7 @@ const accountabilityStableScenario = {
             majorActions:
                 0,
 
-            constitutionalRestraint:
+            fiscalDiscipline:
                 1,
 
             legislativeSkill:
@@ -2605,37 +2614,37 @@ const accountabilityStableScenario = {
             crisisLeadership:
                 0,
 
-            diplomaticCredibility:
-                0,
+            localPartnership:
+                4,
 
             accountability:
-                5,
+                6,
 
             headline:
-                "President delivers detailed end-of-term public report."
+                "Governor releases detailed end-of-term statewide performance report."
         },
 
         {
             text:
-                "Take credit for every success and blame others for every failure",
+                "Take credit for every success and blame the legislature for every failure",
 
             outcomeTitle:
-                "The message energizes supporters but divides the public",
+                "The final message becomes partisan",
 
             outcomeText:
-                "The approach avoids admitting mistakes, but it weakens the credibility of the final record.",
+                "Supporters respond positively, but lawmakers and residents question whether the administration is presenting a fair record.",
 
             approval:
                 0,
 
-            congress:
-                -3,
+            legislature:
+                -5,
 
             trust:
                 -7,
 
             stability:
-                -4,
+                -3,
 
             billsSigned:
                 0,
@@ -2643,43 +2652,43 @@ const accountabilityStableScenario = {
             majorActions:
                 0,
 
-            constitutionalRestraint:
+            fiscalDiscipline:
                 0,
 
             legislativeSkill:
-                0,
+                -1,
 
             crisisLeadership:
                 0,
 
-            diplomaticCredibility:
-                0,
+            localPartnership:
+                -2,
 
             accountability:
-                -4,
+                -5,
 
             headline:
-                "End-of-term presidential address draws criticism over accountability."
+                "End-of-term governor address draws criticism over blame and credit claims."
         },
 
         {
             text:
-                "Release a written administration report and hold a press conference",
+                "Release agency performance data and invite independent review",
 
             outcomeTitle:
-                "The record receives sustained scrutiny",
+                "The record receives outside scrutiny",
 
             outcomeText:
-                "The administration gives the public and institutions a detailed record that can be examined beyond a single speech.",
+                "The review may reveal weaknesses, but it strengthens confidence that the administration is willing to be evaluated.",
 
             approval:
                 3,
 
-            congress:
-                2,
+            legislature:
+                3,
 
             trust:
-                9,
+                11,
 
             stability:
                 4,
@@ -2690,8 +2699,8 @@ const accountabilityStableScenario = {
             majorActions:
                 0,
 
-            constitutionalRestraint:
-                1,
+            fiscalDiscipline:
+                2,
 
             legislativeSkill:
                 0,
@@ -2699,37 +2708,37 @@ const accountabilityStableScenario = {
             crisisLeadership:
                 0,
 
-            diplomaticCredibility:
-                0,
+            localPartnership:
+                2,
 
             accountability:
-                5,
+                7,
 
             headline:
-                "White House releases comprehensive end-of-term administration report."
+                "Governor opens agency performance record to independent review."
         },
 
         {
             text:
-                "Avoid questions and communicate only through campaign advertising",
+                "Avoid public questions and communicate only through political advertising",
 
             outcomeTitle:
-                "Public trust weakens",
+                "Trust declines",
 
             outcomeText:
-                "The strategy may reinforce supporters, but it provides little accountability for the administration's record.",
+                "The administration controls its message, but residents receive little direct accountability for the state's record.",
 
             approval:
                 -5,
 
-            congress:
+            legislature:
                 -1,
 
             trust:
                 -10,
 
             stability:
-                -3,
+                -2,
 
             billsSigned:
                 0,
@@ -2737,7 +2746,7 @@ const accountabilityStableScenario = {
             majorActions:
                 0,
 
-            constitutionalRestraint:
+            fiscalDiscipline:
                 0,
 
             legislativeSkill:
@@ -2746,14 +2755,14 @@ const accountabilityStableScenario = {
             crisisLeadership:
                 0,
 
-            diplomaticCredibility:
-                0,
+            localPartnership:
+                -2,
 
             accountability:
-                -5,
+                -6,
 
             headline:
-                "Critics question limited presidential access at end of term."
+                "Governor faces criticism for limited public access at end of term."
         }
 
     ]
@@ -2767,140 +2776,46 @@ ACCOUNTABILITY — CRISIS TERM
 ==================================================
 */
 
-const accountabilityCrisisScenario = {
+const governorAccountabilityCrisisScenario = {
 
     id:
-        "accountabilityCrisis",
+        "governorAccountabilityCrisis",
 
     category:
         "Public Accountability",
 
     title:
-        "Your term ends after a period of serious institutional conflict.",
+        "Your term ends after a period of serious fiscal or institutional strain.",
 
     text:
-        "Public confidence has been tested. How do you account for the administration's record?",
+        "Residents, lawmakers, and local officials want an explanation of what went wrong and what the state should do next. How do you respond?",
 
     stage:
-        "End-of-Term Reckoning",
+        "Statewide Reckoning",
 
     choices: [
 
         {
             text:
-                "Acknowledge mistakes and explain what constitutional limits required",
+                "Acknowledge mistakes and publish a detailed recovery and transition report",
 
             outcomeTitle:
-                "The admission begins rebuilding trust",
+                "The administration begins rebuilding confidence",
 
             outcomeText:
-                "The administration cannot erase the conflict, but accepting responsibility improves the credibility of the final record.",
+                "The report cannot erase the problems of the term, but it gives the state a clearer path forward.",
 
             approval:
                 1,
 
-            congress:
-                3,
-
-            trust:
-                10,
-
-            stability:
-                7,
-
-            billsSigned:
-                0,
-
-            majorActions:
-                0,
-
-            constitutionalRestraint:
-                3,
-
-            legislativeSkill:
-                0,
-
-            crisisLeadership:
-                2,
-
-            diplomaticCredibility:
-                0,
-
-            accountability:
-                6,
-
-            headline:
-                "President acknowledges mistakes in end-of-term constitutional review."
-        },
-
-        {
-            text:
-                "Defend every administration action without qualification",
-
-            outcomeTitle:
-                "The conflict remains unresolved",
-
-            outcomeText:
-                "The uncompromising defense satisfies some supporters but leaves institutional concerns largely unanswered.",
-
-            approval:
-                -1,
-
-            congress:
-                -6,
-
-            trust:
-                -8,
-
-            stability:
-                -6,
-
-            billsSigned:
-                0,
-
-            majorActions:
-                0,
-
-            constitutionalRestraint:
-                -2,
-
-            legislativeSkill:
-                0,
-
-            crisisLeadership:
-                -2,
-
-            diplomaticCredibility:
-                0,
-
-            accountability:
-                -5,
-
-            headline:
-                "President rejects criticism in final address after institutional conflict."
-        },
-
-        {
-            text:
-                "Publish a full record and permit independent review",
-
-            outcomeTitle:
-                "Transparency improves the historical record",
-
-            outcomeText:
-                "The review may expose mistakes, but it strengthens accountability and institutional confidence.",
-
-            approval:
-                2,
-
-            congress:
+            legislature:
                 4,
 
             trust:
                 11,
 
             stability:
-                6,
+                7,
 
             billsSigned:
                 0,
@@ -2908,43 +2823,46 @@ const accountabilityCrisisScenario = {
             majorActions:
                 0,
 
-            constitutionalRestraint:
+            fiscalDiscipline:
                 3,
 
             legislativeSkill:
-                0,
-
-            crisisLeadership:
                 1,
 
-            diplomaticCredibility:
-                0,
+            crisisLeadership:
+                3,
+
+            localPartnership:
+                3,
 
             accountability:
                 7,
 
+            stateCrisis:
+                false,
+
             headline:
-                "White House opens administration record to independent end-of-term review."
+                "Governor acknowledges mistakes and releases statewide recovery report."
         },
 
         {
             text:
-                "Refuse to discuss the administration's record",
+                "Defend every administration decision and reject all criticism",
 
             outcomeTitle:
-                "Questions remain unanswered",
+                "The crisis remains unresolved",
 
             outcomeText:
-                "The lack of explanation leaves the public and other institutions with less clarity about major decisions.",
+                "The response reassures some supporters but does little to rebuild confidence among institutions or communities.",
 
             approval:
-                -7,
+                -1,
 
-            congress:
-                -3,
+            legislature:
+                -6,
 
             trust:
-                -12,
+                -9,
 
             stability:
                 -6,
@@ -2955,23 +2873,126 @@ const accountabilityCrisisScenario = {
             majorActions:
                 0,
 
-            constitutionalRestraint:
+            fiscalDiscipline:
                 -1,
 
             legislativeSkill:
-                0,
+                -2,
 
             crisisLeadership:
                 -2,
 
-            diplomaticCredibility:
-                0,
+            localPartnership:
+                -3,
 
             accountability:
                 -6,
 
+            stateCrisis:
+                true,
+
             headline:
-                "White House declines end-of-term review after constitutional disputes."
+                "Governor rejects criticism as state crisis continues."
+        },
+
+        {
+            text:
+                "Invite independent auditors and policy experts to review the administration's record",
+
+            outcomeTitle:
+                "Outside review strengthens the transition",
+
+            outcomeText:
+                "The state receives an independent assessment of the fiscal, operational, and institutional problems that developed during the term.",
+
+            approval:
+                2,
+
+            legislature:
+                5,
+
+            trust:
+                12,
+
+            stability:
+                6,
+
+            billsSigned:
+                0,
+
+            majorActions:
+                0,
+
+            fiscalDiscipline:
+                3,
+
+            legislativeSkill:
+                1,
+
+            crisisLeadership:
+                2,
+
+            localPartnership:
+                2,
+
+            accountability:
+                8,
+
+            stateCrisis:
+                false,
+
+            headline:
+                "Independent review begins after difficult gubernatorial term."
+        },
+
+        {
+            text:
+                "Refuse to discuss the state's problems before leaving office",
+
+            outcomeTitle:
+                "The state receives little closure",
+
+            outcomeText:
+                "Major questions about the budget, administration, and institutional conflict remain unanswered.",
+
+            approval:
+                -7,
+
+            legislature:
+                -4,
+
+            trust:
+                -12,
+
+            stability:
+                -7,
+
+            billsSigned:
+                0,
+
+            majorActions:
+                0,
+
+            fiscalDiscipline:
+                -2,
+
+            legislativeSkill:
+                -1,
+
+            crisisLeadership:
+                -3,
+
+            localPartnership:
+                -3,
+
+            accountability:
+                -7,
+
+            stateCrisis:
+                true,
+
+            headline:
+                "Governor declines end-of-term review despite unresolved state problems."
         }
 
     ]
@@ -2994,9 +3015,7 @@ async function loadComponent(
         );
 
 
-    if (
-        !container
-    ) {
+    if (!container) {
 
         return false;
 
@@ -3130,13 +3149,13 @@ function resetSimulationFlow() {
     simulationFlow =
         [
 
-            presidentScenarios[0],
+            governorScenarios[0],
 
-            presidentScenarios[1],
+            governorScenarios[1],
 
-            presidentScenarios[2],
+            governorScenarios[2],
 
-            presidentScenarios[3]
+            governorScenarios[3]
 
         ];
 
@@ -3145,7 +3164,7 @@ function resetSimulationFlow() {
 
 /*
 ==================================================
-ESTIMATED TERM LENGTH
+EXPECTED TERM LENGTH
 ==================================================
 */
 
@@ -3170,9 +3189,9 @@ function updateDashboard() {
         );
 
 
-    gameState.congress =
+    gameState.legislature =
         clamp(
-            gameState.congress
+            gameState.legislature
         );
 
 
@@ -3189,101 +3208,101 @@ function updateDashboard() {
 
 
     setText(
-        "presidentApproval",
+        "governorApproval",
         `${gameState.approval}%`
     );
 
 
     setText(
-        "presidentCongress",
-        `${gameState.congress}%`
+        "governorLegislature",
+        `${gameState.legislature}%`
     );
 
 
     setText(
-        "presidentTrust",
+        "governorTrust",
         `${gameState.trust}%`
     );
 
 
     setText(
-        "presidentStability",
+        "governorStability",
         `${gameState.stability}%`
     );
 
 
     setText(
-        "presidentBillsSigned",
+        "governorBillsSigned",
         gameState.billsSigned
     );
 
 
     setText(
-        "presidentMajorActions",
+        "governorMajorActions",
         gameState.majorActions
     );
 
 
     setText(
-        "executiveApproval",
+        "executiveGovernorApproval",
         `${gameState.approval}%`
     );
 
 
     setText(
-        "executiveCongress",
-        `${gameState.congress}%`
+        "executiveGovernorLegislature",
+        `${gameState.legislature}%`
     );
 
 
     setText(
-        "executiveTrust",
+        "executiveGovernorTrust",
         `${gameState.trust}%`
     );
 
 
     setText(
-        "executiveStability",
+        "executiveGovernorStability",
         `${gameState.stability}%`
     );
 
 
     setText(
-        "sidePresidentBillsSigned",
+        "sideGovernorBillsSigned",
         gameState.billsSigned
     );
 
 
     setText(
-        "sidePresidentMajorActions",
+        "sideGovernorMajorActions",
         gameState.majorActions
     );
 
 
     updateMetric(
-        "sidePresidentApproval",
-        "sidePresidentApprovalBar",
+        "sideGovernorApproval",
+        "sideGovernorApprovalBar",
         gameState.approval
     );
 
 
     updateMetric(
-        "sidePresidentCongress",
-        "sidePresidentCongressBar",
-        gameState.congress
+        "sideGovernorLegislature",
+        "sideGovernorLegislatureBar",
+        gameState.legislature
     );
 
 
     updateMetric(
-        "sidePresidentTrust",
-        "sidePresidentTrustBar",
+        "sideGovernorTrust",
+        "sideGovernorTrustBar",
         gameState.trust
     );
 
 
     updateMetric(
-        "sidePresidentStability",
-        "sidePresidentStabilityBar",
+        "sideGovernorStability",
+        "sideGovernorStabilityBar",
         gameState.stability
     );
 
@@ -3301,7 +3320,7 @@ function updateDashboard() {
 
 
     setText(
-        "presidentTermProgress",
+        "governorTermProgress",
         `${progress}%`
     );
 
@@ -3310,54 +3329,14 @@ function updateDashboard() {
 
 /*
 ==================================================
-SELECT FOREIGN POLICY PATH
+SELECT LEGISLATURE PATH
 ==================================================
 */
 
-function determineForeignPolicyScenario() {
-
-    const administrationStrength =
-        (
-            gameState.trust +
-            gameState.stability
-        ) / 2;
-
-
-    const leadershipStrength =
-        (
-            gameState.crisisLeadership * 3
-        ) +
-        (
-            gameState.constitutionalRestraint * 2
-        );
-
-
-    if (
-        administrationStrength +
-        leadershipStrength >=
-        68
-    ) {
-
-        return foreignPolicyStableScenario;
-
-    }
-
-
-    return foreignPolicyFragileScenario;
-
-}
-
-
-/*
-==================================================
-SELECT BUDGET PATH
-==================================================
-*/
-
-function determineBudgetScenario() {
+function determineLegislatureScenario() {
 
     const cooperationScore =
-        gameState.congress +
+        gameState.legislature +
         (
             gameState.legislativeSkill * 4
         );
@@ -3365,50 +3344,76 @@ function determineBudgetScenario() {
 
     if (
         cooperationScore >=
-        62
+        64
     ) {
 
-        return budgetCooperativeScenario;
+        return legislatureCooperativeScenario;
 
     }
 
 
-    return budgetHostileScenario;
+    return legislatureHostileScenario;
 
 }
 
 
 /*
 ==================================================
-SELECT OVERSIGHT PATH
+SELECT FEDERAL-STATE PATH
 ==================================================
 */
 
-function determineOversightScenario() {
+function determineFederalRelationsScenario() {
 
     const institutionalRisk =
-        (
-            gameState.trust <
-            45
-        ) ||
-        (
-            gameState.constitutionalRestraint <=
-            -4
-        ) ||
-        gameState.constitutionalCrisis ===
-            true;
+        gameState.stateCrisis ||
+        gameState.trust <
+            48 ||
+        gameState.localPartnership <=
+            -4;
 
 
     if (
         institutionalRisk
     ) {
 
-        return oversightCrisisScenario;
+        return federalRelationsCrisisScenario;
 
     }
 
 
-    return oversightNormalScenario;
+    return federalRelationsStableScenario;
+
+}
+
+
+/*
+==================================================
+SELECT FISCAL PATH
+==================================================
+*/
+
+function determineFiscalScenario() {
+
+    const fiscalStrength =
+        (
+            gameState.fiscalDiscipline * 4
+        ) +
+        gameState.trust +
+        gameState.stability;
+
+
+    if (
+        fiscalStrength >=
+        135
+    ) {
+
+        return fiscalStableScenario;
+
+    }
+
+
+    return fiscalCrisisScenario;
 
 }
 
@@ -3419,22 +3424,22 @@ SELECT ACCOUNTABILITY PATH
 ==================================================
 */
 
-function determineAccountabilityScenario() {
+function determineGovernorAccountabilityScenario() {
 
     if (
-        gameState.constitutionalCrisis ||
+        gameState.stateCrisis ||
         gameState.trust <
             45 ||
         gameState.accountability <=
-            -4
+            -5
     ) {
 
-        return accountabilityCrisisScenario;
+        return governorAccountabilityCrisisScenario;
 
     }
 
 
-    return accountabilityStableScenario;
+    return governorAccountabilityStableScenario;
 
 }
 
@@ -3529,13 +3534,13 @@ function renderScenario() {
 
 
     setText(
-        "presidentTurnLabel",
+        "governorTurnLabel",
         `Month ${1 + currentScenarioIndex * 6}`
     );
 
 
     setText(
-        "presidentCurrentStage",
+        "governorCurrentStage",
         scenario.stage
     );
 
@@ -3560,7 +3565,7 @@ function renderScenario() {
                     return `
                         <button
                             type="button"
-                            class="president-choice-button"
+                            class="governor-choice-button"
                             data-choice-index="${index}"
                         >
 
@@ -3591,7 +3596,7 @@ function renderScenario() {
 
 /*
 ==================================================
-CHOICE PROCESSING
+HANDLE CHOICE
 ==================================================
 */
 
@@ -3601,7 +3606,7 @@ function handleChoice(
 
     const selectedButton =
         event.target.closest(
-            ".president-choice-button"
+            ".governor-choice-button"
         );
 
 
@@ -3657,7 +3662,7 @@ function handleChoice(
 
     choiceContainer
         ?.querySelectorAll(
-            ".president-choice-button"
+            ".governor-choice-button"
         )
         .forEach(
             button => {
@@ -3670,7 +3675,7 @@ function handleChoice(
 
 
     selectedButton.classList.add(
-        "president-choice-selected"
+        "governor-choice-selected"
     );
 
 
@@ -3699,8 +3704,7 @@ function handleChoice(
 
 
     prepareNextBranch(
-        scenario,
-        choice
+        scenario
     );
 
 
@@ -3724,7 +3728,7 @@ function handleChoice(
 
 /*
 ==================================================
-APPLY EFFECTS
+APPLY CHOICE EFFECTS
 ==================================================
 */
 
@@ -3739,9 +3743,9 @@ function applyChoiceEffects(
         );
 
 
-    gameState.congress +=
+    gameState.legislature +=
         Number(
-            choice.congress ||
+            choice.legislature ||
             0
         );
 
@@ -3774,9 +3778,9 @@ function applyChoiceEffects(
         );
 
 
-    gameState.constitutionalRestraint +=
+    gameState.fiscalDiscipline +=
         Number(
-            choice.constitutionalRestraint ||
+            choice.fiscalDiscipline ||
             0
         );
 
@@ -3795,9 +3799,9 @@ function applyChoiceEffects(
         );
 
 
-    gameState.diplomaticCredibility +=
+    gameState.localPartnership +=
         Number(
-            choice.diplomaticCredibility ||
+            choice.localPartnership ||
             0
         );
 
@@ -3813,7 +3817,7 @@ function applyChoiceEffects(
 
 /*
 ==================================================
-STATE FLAGS
+UPDATE STATE FLAGS
 ==================================================
 */
 
@@ -3823,19 +3827,19 @@ function updateStateFromChoice(
 
     const stateProperties = [
 
-        "legislativeResult",
+        "budgetResult",
 
-        "appointmentResult",
+        "educationResult",
 
         "emergencyResult",
 
-        "executivePowerResult",
+        "infrastructureResult",
 
-        "foreignPolicyResult",
+        "legislatureResult",
 
-        "budgetResult",
+        "federalismResult",
 
-        "oversightResult"
+        "fiscalResult"
 
     ];
 
@@ -3863,12 +3867,12 @@ function updateStateFromChoice(
 
 
     if (
-        typeof choice.constitutionalCrisis ===
+        typeof choice.stateCrisis ===
         "boolean"
     ) {
 
-        gameState.constitutionalCrisis =
-            choice.constitutionalCrisis;
+        gameState.stateCrisis =
+            choice.stateCrisis;
 
     }
 
@@ -3891,7 +3895,7 @@ function renderChoiceOutcome(
             0
         ) +
         Number(
-            choice.congress ||
+            choice.legislature ||
             0
         ) +
         Number(
@@ -3976,13 +3980,19 @@ function prepareNextBranch(
     scenario
 ) {
 
+    /*
+    ----------------------------------------------
+    AFTER FOUNDATION DECISIONS
+    ----------------------------------------------
+    */
+
     if (
         scenario.id ===
-        "executiveAuthority"
+        "infrastructure"
     ) {
 
         appendScenarioIfMissing(
-            determineForeignPolicyScenario()
+            determineLegislatureScenario()
         );
 
 
@@ -3991,15 +4001,21 @@ function prepareNextBranch(
     }
 
 
+    /*
+    ----------------------------------------------
+    AFTER LEGISLATURE
+    ----------------------------------------------
+    */
+
     if (
         scenario.id ===
-            "foreignPolicyStable" ||
+            "legislatureCooperative" ||
         scenario.id ===
-            "foreignPolicyFragile"
+            "legislatureHostile"
     ) {
 
         appendScenarioIfMissing(
-            determineBudgetScenario()
+            determineFederalRelationsScenario()
         );
 
 
@@ -4008,15 +4024,21 @@ function prepareNextBranch(
     }
 
 
+    /*
+    ----------------------------------------------
+    AFTER FEDERAL RELATIONS
+    ----------------------------------------------
+    */
+
     if (
         scenario.id ===
-            "budgetCooperative" ||
+            "federalRelationsStable" ||
         scenario.id ===
-            "budgetHostile"
+            "federalRelationsCrisis"
     ) {
 
         appendScenarioIfMissing(
-            determineOversightScenario()
+            determineFiscalScenario()
         );
 
 
@@ -4025,15 +4047,21 @@ function prepareNextBranch(
     }
 
 
+    /*
+    ----------------------------------------------
+    AFTER FISCAL DECISION
+    ----------------------------------------------
+    */
+
     if (
         scenario.id ===
-            "oversightNormal" ||
+            "fiscalStable" ||
         scenario.id ===
-            "oversightCrisis"
+            "fiscalCrisis"
     ) {
 
         appendScenarioIfMissing(
-            determineAccountabilityScenario()
+            determineGovernorAccountabilityScenario()
         );
 
     }
@@ -4060,7 +4088,7 @@ function appendScenarioIfMissing(
     }
 
 
-    const alreadyExists =
+    const exists =
         simulationFlow.some(
             item =>
                 item.id ===
@@ -4069,7 +4097,7 @@ function appendScenarioIfMissing(
 
 
     if (
-        alreadyExists
+        exists
     ) {
 
         return;
@@ -4109,9 +4137,9 @@ function isFinalScenario() {
 
     return (
         scenario.id ===
-            "accountabilityStable" ||
+            "governorAccountabilityStable" ||
         scenario.id ===
-            "accountabilityCrisis"
+            "governorAccountabilityCrisis"
     );
 
 }
@@ -4119,7 +4147,7 @@ function isFinalScenario() {
 
 /*
 ==================================================
-NEWS
+STATE NEWS
 ==================================================
 */
 
@@ -4137,14 +4165,14 @@ function addHeadline(
     }
 
 
-    const newsItem =
+    const item =
         document.createElement(
             "div"
         );
 
 
-    newsItem.className =
-        "president-news-item";
+    item.className =
+        "governor-news-item";
 
 
     const categoryElement =
@@ -4156,7 +4184,7 @@ function addHeadline(
     categoryElement.textContent =
         String(
             category ||
-            "White House"
+            "State Capitol"
         );
 
 
@@ -4173,20 +4201,20 @@ function addHeadline(
         );
 
 
-    newsItem.append(
+    item.append(
         categoryElement,
         headlineElement
     );
 
 
     newsFeed.prepend(
-        newsItem
+        item
     );
 
 
     const newsItems =
         newsFeed.querySelectorAll(
-            ".president-news-item"
+            ".governor-news-item"
         );
 
 
@@ -4242,7 +4270,7 @@ function continueSimulation() {
 
     document
         .getElementById(
-            "presidentScenarioCard"
+            "governorScenarioCard"
         )
         ?.scrollIntoView(
             {
@@ -4266,11 +4294,11 @@ FINAL ADMINISTRATION OUTCOME
 function finalizeAdministrationOutcome() {
 
     if (
-        gameState.constitutionalCrisis
+        gameState.stateCrisis
     ) {
 
         gameState.administrationOutcome =
-            "Your term ended with unresolved constitutional conflict and weakened institutional confidence.";
+            "Your term ended with unresolved fiscal or institutional strain that weakened confidence in state government.";
 
         return;
 
@@ -4280,11 +4308,11 @@ function finalizeAdministrationOutcome() {
     if (
         gameState.trust >= 75 &&
         gameState.stability >= 75 &&
-        gameState.congress >= 65
+        gameState.legislature >= 65
     ) {
 
         gameState.administrationOutcome =
-            "Your administration completed the term with strong institutional trust, workable congressional relationships, and national stability.";
+            "Your administration completed the term with strong public trust, workable legislative relationships, and a stable state government.";
 
         return;
 
@@ -4297,7 +4325,7 @@ function finalizeAdministrationOutcome() {
     ) {
 
         gameState.administrationOutcome =
-            "Your administration completed the term with generally stable institutions, though several decisions created political or governing tradeoffs.";
+            "Your administration completed the term with generally stable state government, though several decisions created difficult fiscal and political tradeoffs.";
 
         return;
 
@@ -4310,7 +4338,7 @@ function finalizeAdministrationOutcome() {
     ) {
 
         gameState.administrationOutcome =
-            "Your term ended with significant strain on public trust or national stability.";
+            "Your term ended with significant strain on public confidence or state stability.";
 
         return;
 
@@ -4318,7 +4346,7 @@ function finalizeAdministrationOutcome() {
 
 
     gameState.administrationOutcome =
-        "Your presidency produced a mixed record of accomplishments, conflict, and institutional consequences.";
+        "Your governorship produced a mixed record of accomplishments, compromise, fiscal pressure, and institutional consequences.";
 
 }
 
@@ -4334,7 +4362,7 @@ function calculateGrade() {
     const performanceAverage =
         (
             gameState.approval +
-            gameState.congress +
+            gameState.legislature +
             gameState.trust +
             gameState.stability
         ) / 4;
@@ -4362,40 +4390,36 @@ function calculateGrade() {
 
     /*
     ----------------------------------------------
-    LEADERSHIP QUALITY BONUS
-
-    A president should not receive a high grade
-    merely for taking many actions if those
-    actions damaged constitutional governance.
+    GOVERNING QUALITY
     ----------------------------------------------
     */
 
-    const leadershipTotal =
-        gameState.constitutionalRestraint +
+    const governingQuality =
+        gameState.fiscalDiscipline +
         gameState.legislativeSkill +
         gameState.crisisLeadership +
-        gameState.diplomaticCredibility +
+        gameState.localPartnership +
         gameState.accountability;
 
 
-    const leadershipBonus =
+    const governingBonus =
         Math.max(
             -10,
             Math.min(
                 10,
-                leadershipTotal
+                governingQuality
             )
         );
 
 
     /*
     ----------------------------------------------
-    CONSTITUTIONAL CRISIS PENALTY
+    STATE CRISIS PENALTY
     ----------------------------------------------
     */
 
     const crisisPenalty =
-        gameState.constitutionalCrisis
+        gameState.stateCrisis
             ? 12
             : 0;
 
@@ -4403,13 +4427,12 @@ function calculateGrade() {
     const finalScore =
         performanceAverage +
         accomplishmentBonus +
-        leadershipBonus -
+        governingBonus -
         crisisPenalty;
 
 
     if (
-        finalScore >=
-        94
+        finalScore >= 94
     ) {
 
         return "A+";
@@ -4418,8 +4441,7 @@ function calculateGrade() {
 
 
     if (
-        finalScore >=
-        88
+        finalScore >= 88
     ) {
 
         return "A";
@@ -4428,8 +4450,7 @@ function calculateGrade() {
 
 
     if (
-        finalScore >=
-        82
+        finalScore >= 82
     ) {
 
         return "A−";
@@ -4438,8 +4459,7 @@ function calculateGrade() {
 
 
     if (
-        finalScore >=
-        76
+        finalScore >= 76
     ) {
 
         return "B+";
@@ -4448,8 +4468,7 @@ function calculateGrade() {
 
 
     if (
-        finalScore >=
-        70
+        finalScore >= 70
     ) {
 
         return "B";
@@ -4458,8 +4477,7 @@ function calculateGrade() {
 
 
     if (
-        finalScore >=
-        64
+        finalScore >= 64
     ) {
 
         return "B−";
@@ -4468,8 +4486,7 @@ function calculateGrade() {
 
 
     if (
-        finalScore >=
-        58
+        finalScore >= 58
     ) {
 
         return "C+";
@@ -4478,8 +4495,7 @@ function calculateGrade() {
 
 
     if (
-        finalScore >=
-        52
+        finalScore >= 52
     ) {
 
         return "C";
@@ -4512,7 +4528,7 @@ function getFinalPerformanceMessage(
     ) {
 
         return (
-            `Outstanding term. You combined effective executive leadership with strong respect for institutions, constitutional limits, and public accountability. ${outcome}`
+            `Outstanding term. You balanced fiscal responsibility, legislative cooperation, emergency leadership, local partnerships, and public accountability with strong results. ${outcome}`
         );
 
     }
@@ -4524,7 +4540,7 @@ function getFinalPerformanceMessage(
     ) {
 
         return (
-            `Strong term. You handled major presidential responsibilities while maintaining credible relationships, stability, and institutional trust. ${outcome}`
+            `Strong term. You managed major state responsibilities while maintaining generally effective relationships and institutional stability. ${outcome}`
         );
 
     }
@@ -4536,7 +4552,7 @@ function getFinalPerformanceMessage(
     ) {
 
         return (
-            `Solid term. You achieved meaningful results, though some decisions reduced cooperation, trust, or long-term stability. ${outcome}`
+            `Solid term. You achieved meaningful results, though some decisions reduced fiscal flexibility, legislative cooperation, or public confidence. ${outcome}`
         );
 
     }
@@ -4548,14 +4564,14 @@ function getFinalPerformanceMessage(
     ) {
 
         return (
-            `Mixed term. Stronger constitutional restraint, congressional cooperation, crisis management, and accountability would improve a future presidency. ${outcome}`
+            `Mixed term. Stronger fiscal planning, legislative negotiation, emergency coordination, local partnership, and accountability would improve a future administration. ${outcome}`
         );
 
     }
 
 
     return (
-        `A difficult term. Review how executive power, congressional relationships, transparency, constitutional limits, and crisis decisions affected your presidency. ${outcome}`
+        `A difficult term. Review how budgeting, legislative relationships, crisis decisions, local government cooperation, federal-state relations, and accountability affected your governorship. ${outcome}`
     );
 
 }
@@ -4597,50 +4613,50 @@ function showFinalResults() {
 
 
     setText(
-        "finalPresidentApproval",
+        "finalGovernorApproval",
         `${gameState.approval}%`
     );
 
 
     setText(
-        "finalPresidentCongress",
-        `${gameState.congress}%`
+        "finalGovernorLegislature",
+        `${gameState.legislature}%`
     );
 
 
     setText(
-        "finalPresidentTrust",
+        "finalGovernorTrust",
         `${gameState.trust}%`
     );
 
 
     setText(
-        "finalPresidentStability",
+        "finalGovernorStability",
         `${gameState.stability}%`
     );
 
 
     setText(
-        "finalPresidentBillsSigned",
+        "finalGovernorBillsSigned",
         gameState.billsSigned
     );
 
 
     setText(
-        "finalPresidentMajorActions",
+        "finalGovernorMajorActions",
         gameState.majorActions
     );
 
 
     setText(
-        "presidentFinalGrade",
+        "governorFinalGrade",
         grade
     );
 
 
     const finalMessage =
         document.getElementById(
-            "presidentFinalMessage"
+            "governorFinalMessage"
         );
 
 
@@ -4662,7 +4678,7 @@ function showFinalResults() {
 
 
     setText(
-        "presidentTermProgress",
+        "governorTermProgress",
         "100%"
     );
 
@@ -4685,7 +4701,7 @@ function showFinalResults() {
 
 /*
 ==================================================
-SAVE RECORD
+SAVE SIMULATION RECORD
 ==================================================
 */
 
@@ -4697,20 +4713,18 @@ function saveSimulationRecord(
 
         /*
         ----------------------------------------------
-        EXISTING SIMULATION CENTER KEYS
-
-        Keep these unchanged.
+        SIMULATION CENTER COMPATIBILITY
         ----------------------------------------------
         */
 
         window.localStorage.setItem(
-            "civicPresidentSimulationCompleted",
+            "civicGovernorSimulationCompleted",
             "true"
         );
 
 
         window.localStorage.setItem(
-            "civicPresidentSimulationLastGrade",
+            "civicGovernorSimulationLastGrade",
             grade
         );
 
@@ -4718,14 +4732,14 @@ function saveSimulationRecord(
         const previousRuns =
             Number(
                 window.localStorage.getItem(
-                    "civicPresidentSimulationRuns"
+                    "civicGovernorSimulationRuns"
                 ) ||
                 0
             );
 
 
         window.localStorage.setItem(
-            "civicPresidentSimulationRuns",
+            "civicGovernorSimulationRuns",
             String(
                 previousRuns +
                 1
@@ -4735,18 +4749,18 @@ function saveSimulationRecord(
 
         /*
         ----------------------------------------------
-        PRESIDENT 2.0 RECORD
+        GOVERNOR RECORD
         ----------------------------------------------
         */
 
         window.localStorage.setItem(
-            "civicPresidentSimulationLastOutcome",
+            "civicGovernorSimulationLastOutcome",
             gameState.administrationOutcome
         );
 
 
         window.localStorage.setItem(
-            "civicPresidentSimulationLastApproval",
+            "civicGovernorSimulationLastApproval",
             String(
                 gameState.approval
             )
@@ -4754,15 +4768,15 @@ function saveSimulationRecord(
 
 
         window.localStorage.setItem(
-            "civicPresidentSimulationLastCongress",
+            "civicGovernorSimulationLastLegislature",
             String(
-                gameState.congress
+                gameState.legislature
             )
         );
 
 
         window.localStorage.setItem(
-            "civicPresidentSimulationLastTrust",
+            "civicGovernorSimulationLastTrust",
             String(
                 gameState.trust
             )
@@ -4770,7 +4784,7 @@ function saveSimulationRecord(
 
 
         window.localStorage.setItem(
-            "civicPresidentSimulationLastStability",
+            "civicGovernorSimulationLastStability",
             String(
                 gameState.stability
             )
@@ -4778,16 +4792,16 @@ function saveSimulationRecord(
 
 
         window.localStorage.setItem(
-            "civicPresidentSimulationLastConstitutionalCrisis",
+            "civicGovernorSimulationLastStateCrisis",
             String(
-                gameState.constitutionalCrisis
+                gameState.stateCrisis
             )
         );
 
     } catch (error) {
 
         console.warn(
-            "President simulation record could not be saved:",
+            "Governor simulation record could not be saved:",
             error
         );
 
@@ -4805,11 +4819,11 @@ RESET GAME STATE
 function resetGameState() {
 
     gameState.approval =
-        62;
+        64;
 
 
-    gameState.congress =
-        55;
+    gameState.legislature =
+        58;
 
 
     gameState.trust =
@@ -4817,7 +4831,7 @@ function resetGameState() {
 
 
     gameState.stability =
-        70;
+        72;
 
 
     gameState.billsSigned =
@@ -4828,7 +4842,7 @@ function resetGameState() {
         0;
 
 
-    gameState.constitutionalRestraint =
+    gameState.fiscalDiscipline =
         0;
 
 
@@ -4840,7 +4854,7 @@ function resetGameState() {
         0;
 
 
-    gameState.diplomaticCredibility =
+    gameState.localPartnership =
         0;
 
 
@@ -4848,11 +4862,11 @@ function resetGameState() {
         0;
 
 
-    gameState.legislativeResult =
+    gameState.budgetResult =
         "pending";
 
 
-    gameState.appointmentResult =
+    gameState.educationResult =
         "pending";
 
 
@@ -4860,35 +4874,35 @@ function resetGameState() {
         "pending";
 
 
-    gameState.executivePowerResult =
+    gameState.infrastructureResult =
         "pending";
 
 
-    gameState.foreignPolicyResult =
+    gameState.legislatureResult =
         "pending";
 
 
-    gameState.budgetResult =
+    gameState.federalismResult =
         "pending";
 
 
-    gameState.oversightResult =
+    gameState.fiscalResult =
         "pending";
 
 
-    gameState.constitutionalCrisis =
+    gameState.stateCrisis =
         false;
 
 
     gameState.administrationOutcome =
-        "Your presidency is still unfolding.";
+        "Your term is still unfolding.";
 
 }
 
 
 /*
 ==================================================
-RESET NEWS FEED
+RESET STATE NEWS
 ==================================================
 */
 
@@ -4910,14 +4924,14 @@ function resetNewsFeed(
         "";
 
 
-    const newsItem =
+    const item =
         document.createElement(
             "div"
         );
 
 
-    newsItem.className =
-        "president-news-item";
+    item.className =
+        "governor-news-item";
 
 
     const label =
@@ -4927,7 +4941,7 @@ function resetNewsFeed(
 
 
     label.textContent =
-        "White House";
+        "State Capitol";
 
 
     const headline =
@@ -4938,18 +4952,18 @@ function resetNewsFeed(
 
     headline.textContent =
         anotherTerm
-            ? "President begins another term."
-            : "New administration begins first term.";
+            ? "Governor begins another term in office."
+            : "New governor begins first term.";
 
 
-    newsItem.append(
+    item.append(
         label,
         headline
     );
 
 
     newsFeed.appendChild(
-        newsItem
+        item
     );
 
 }
@@ -5284,22 +5298,16 @@ function initializeHeader() {
                 );
 
 
-                if (
-                    menuButton
-                ) {
-
-                    menuButton.setAttribute(
-                        "aria-expanded",
-                        "false"
-                    );
+                menuButton?.setAttribute(
+                    "aria-expanded",
+                    "false"
+                );
 
 
-                    menuButton.setAttribute(
-                        "aria-label",
-                        "Open navigation menu"
-                    );
-
-                }
+                menuButton?.setAttribute(
+                    "aria-label",
+                    "Open navigation menu"
+                );
 
             }
 
@@ -5429,7 +5437,7 @@ INITIALIZE PAGE
 ==================================================
 */
 
-async function initializePresidentPage() {
+async function initializeGovernorPage() {
 
     await Promise.all([
 
@@ -5462,4 +5470,4 @@ START
 ==================================================
 */
 
-initializePresidentPage();
+initializeGovernorPage();

@@ -15,39 +15,195 @@ SIMULATION DEFINITIONS
 const simulations = [
 
     {
-        id: "congress",
+        id:
+            "congress",
+
         completedKey:
-            "civicCongressSimulationCompleted"
+            "civicCongressSimulationCompleted",
+
+        gradeKey:
+            "civicCongressSimulationLastGrade",
+
+        runsKey:
+            "civicCongressSimulationRuns",
+
+        recordId:
+            "congressSimulationRecord",
+
+        gradeId:
+            "congressCardGrade",
+
+        runsId:
+            "congressCardRuns",
+
+        buttonId:
+            "congressSimulationButton",
+
+        defaultButtonText:
+            "Enter Congress",
+
+        completedButtonText:
+            "Serve Another Term"
     },
 
     {
-        id: "president",
+        id:
+            "president",
+
         completedKey:
-            "civicPresidentSimulationCompleted"
+            "civicPresidentSimulationCompleted",
+
+        gradeKey:
+            "civicPresidentSimulationLastGrade",
+
+        runsKey:
+            "civicPresidentSimulationRuns",
+
+        recordId:
+            "presidentSimulationRecord",
+
+        gradeId:
+            "presidentCardGrade",
+
+        runsId:
+            "presidentCardRuns",
+
+        buttonId:
+            "presidentSimulationButton",
+
+        defaultButtonText:
+            "Enter the White House",
+
+        completedButtonText:
+            "Serve Another Term"
     },
 
     {
-        id: "court",
+        id:
+            "court",
+
         completedKey:
-            "civicCourtSimulationCompleted"
+            "civicCourtSimulationCompleted",
+
+        gradeKey:
+            "civicCourtSimulationLastGrade",
+
+        runsKey:
+            "civicCourtSimulationRuns",
+
+        recordId:
+            "courtSimulationRecord",
+
+        gradeId:
+            "courtCardGrade",
+
+        runsId:
+            "courtCardRuns",
+
+        buttonId:
+            "courtSimulationButton",
+
+        defaultButtonText:
+            "Join the Court",
+
+        completedButtonText:
+            "Hear Another Docket"
     },
 
     {
-        id: "governor",
+        id:
+            "governor",
+
         completedKey:
-            "civicGovernorSimulationCompleted"
+            "civicGovernorSimulationCompleted",
+
+        gradeKey:
+            "civicGovernorSimulationLastGrade",
+
+        runsKey:
+            "civicGovernorSimulationRuns",
+
+        recordId:
+            "governorSimulationRecord",
+
+        gradeId:
+            "governorCardGrade",
+
+        runsId:
+            "governorCardRuns",
+
+        buttonId:
+            "governorSimulationButton",
+
+        defaultButtonText:
+            "Lead the State",
+
+        completedButtonText:
+            "Serve Another Term"
     },
 
     {
-        id: "mayor",
+        id:
+            "mayor",
+
         completedKey:
-            "civicMayorSimulationCompleted"
+            "civicMayorSimulationCompleted",
+
+        gradeKey:
+            "civicMayorSimulationLastGrade",
+
+        runsKey:
+            "civicMayorSimulationRuns",
+
+        recordId:
+            "mayorSimulationRecord",
+
+        gradeId:
+            "mayorCardGrade",
+
+        runsId:
+            "mayorCardRuns",
+
+        buttonId:
+            "mayorSimulationButton",
+
+        defaultButtonText:
+            "Lead the City",
+
+        completedButtonText:
+            "Serve Another Term"
     },
 
     {
-        id: "campaign",
+        id:
+            "campaign",
+
         completedKey:
-            "civicCampaignSimulationCompleted"
+            "civicCampaignSimulationCompleted",
+
+        gradeKey:
+            "civicCampaignSimulationLastGrade",
+
+        runsKey:
+            "civicCampaignSimulationRuns",
+
+        recordId:
+            "campaignSimulationRecord",
+
+        gradeId:
+            "campaignCardGrade",
+
+        runsId:
+            "campaignCardRuns",
+
+        buttonId:
+            "campaignSimulationButton",
+
+        defaultButtonText:
+            "Begin Campaign",
+
+        completedButtonText:
+            "Run Another Campaign"
     }
 
 ];
@@ -70,11 +226,14 @@ async function loadComponent(
         );
 
 
-    if (!container) {
+    if (
+        !container
+    ) {
 
         console.error(
             `Container not found: ${containerId}`
         );
+
 
         return false;
 
@@ -89,7 +248,9 @@ async function loadComponent(
             );
 
 
-        if (!response.ok) {
+        if (
+            !response.ok
+        ) {
 
             throw new Error(
                 `Component request failed: ${response.status}`
@@ -216,12 +377,15 @@ function updateSimulationProgress() {
 
 
     const progressPercent =
-        Math.round(
-            (
-                completedCount /
-                totalSimulations
-            ) * 100
-        );
+        totalSimulations > 0
+            ? Math.round(
+                (
+                    completedCount /
+                    totalSimulations
+                ) *
+                100
+            )
+            : 0;
 
 
     setText(
@@ -250,7 +414,9 @@ function updateSimulationProgress() {
         );
 
 
-    if (progressFill) {
+    if (
+        progressFill
+    ) {
 
         progressFill.style.width =
             `${progressPercent}%`;
@@ -258,9 +424,236 @@ function updateSimulationProgress() {
     }
 
 
-    updateCongressRecord();
-    updatePresidentRecord();
+    updateOverviewRecord();
 
+    updateAllSimulationRecords();
+
+}
+
+
+/*
+==================================================
+OVERVIEW RECORD
+==================================================
+*/
+
+function updateOverviewRecord() {
+
+    const completedRecords =
+        simulations
+            .map(
+                simulation => {
+
+                    const runs =
+                        getSimulationRuns(
+                            simulation
+                        );
+
+
+                    return {
+
+                        simulation,
+
+                        runs,
+
+                        grade:
+                            getStoredValue(
+                                simulation.gradeKey
+                            ) ||
+                            "—"
+
+                    };
+
+                }
+            )
+            .filter(
+                record =>
+                    record.runs > 0
+            );
+
+
+    const totalRuns =
+        completedRecords.reduce(
+            (
+                total,
+                record
+            ) => {
+
+                return (
+                    total +
+                    record.runs
+                );
+
+            },
+            0
+        );
+
+
+    setText(
+        "simulationTermsServed",
+        totalRuns
+    );
+
+
+    /*
+    The overview uses the most recently listed
+    completed simulation record available in
+    local storage. Individual role cards always
+    retain their own latest grades.
+    */
+
+    const latestRecord =
+        completedRecords[
+            completedRecords.length - 1
+        ];
+
+
+    setText(
+        "simulationLatestGrade",
+        latestRecord
+            ? latestRecord.grade
+            : "—"
+    );
+
+}
+
+
+/*
+==================================================
+ALL ROLE RECORDS
+==================================================
+*/
+
+function updateAllSimulationRecords() {
+
+    simulations.forEach(
+        simulation => {
+
+            updateSimulationRecord(
+                simulation
+            );
+
+        }
+    );
+
+}
+
+
+/*
+==================================================
+INDIVIDUAL ROLE RECORD
+==================================================
+*/
+
+function updateSimulationRecord(
+    simulation
+) {
+
+    const completed =
+        getStoredValue(
+            simulation.completedKey
+        ) ===
+        "true";
+
+
+    const grade =
+        getStoredValue(
+            simulation.gradeKey
+        ) ||
+        "—";
+
+
+    const runs =
+        getSimulationRuns(
+            simulation
+        );
+
+
+    setText(
+        simulation.gradeId,
+        runs > 0
+            ? grade
+            : "—"
+    );
+
+
+    setText(
+        simulation.runsId,
+        runs
+    );
+
+
+    const record =
+        document.getElementById(
+            simulation.recordId
+        );
+
+
+    if (
+        record
+    ) {
+
+        record.hidden =
+            runs ===
+            0;
+
+    }
+
+
+    const button =
+        document.getElementById(
+            simulation.buttonId
+        );
+
+
+    if (
+        button
+    ) {
+
+        button.textContent =
+            completed
+                ? simulation.completedButtonText
+                : simulation.defaultButtonText;
+
+    }
+
+}
+
+
+/*
+==================================================
+RUN COUNT
+==================================================
+*/
+
+function getSimulationRuns(
+    simulation
+) {
+
+    const runs =
+        Number(
+            getStoredValue(
+                simulation.runsKey
+            ) ||
+            0
+        );
+
+
+    if (
+        !Number.isFinite(
+            runs
+        )
+    ) {
+
+        return 0;
+
+    }
+
+
+    return Math.max(
+        0,
+        runs
+    );
 
 }
 
@@ -277,183 +670,36 @@ function getSimulationAchievement(
 
     const achievements = {
 
-        0: "New Public Servant",
-        1: "Civic Decision Maker",
-        2: "Public Leadership Explorer",
-        3: "Government Strategist",
-        4: "Experienced Public Servant",
-        5: "Civic Leadership Scholar",
-        6: "Civic Simulation Graduate"
+        0:
+            "New Public Servant",
+
+        1:
+            "Civic Decision Maker",
+
+        2:
+            "Public Leadership Explorer",
+
+        3:
+            "Government Strategist",
+
+        4:
+            "Experienced Public Servant",
+
+        5:
+            "Civic Leadership Scholar",
+
+        6:
+            "Civic Simulation Graduate"
 
     };
 
 
     return (
-        achievements[completedCount] ||
+        achievements[
+            completedCount
+        ] ||
         "New Public Servant"
     );
-
-}
-
-
-/*
-==================================================
-CONGRESS SIMULATION RECORD
-==================================================
-*/
-
-function updateCongressRecord() {
-
-    const completed =
-        getStoredValue(
-            "civicCongressSimulationCompleted"
-        ) === "true";
-
-
-    const grade =
-        getStoredValue(
-            "civicCongressSimulationLastGrade"
-        ) || "—";
-
-
-    const runs =
-        Number(
-            getStoredValue(
-                "civicCongressSimulationRuns"
-            ) || 0
-        );
-
-
-    setText(
-        "simulationTermsServed",
-        runs
-    );
-
-
-    setText(
-        "simulationLatestGrade",
-        runs > 0
-            ? grade
-            : "—"
-    );
-
-
-    setText(
-        "congressCardGrade",
-        runs > 0
-            ? grade
-            : "—"
-    );
-
-
-    setText(
-        "congressCardRuns",
-        runs
-    );
-
-
-    const record =
-        document.getElementById(
-            "congressSimulationRecord"
-        );
-
-
-    if (
-        record &&
-        runs > 0
-    ) {
-
-        record.hidden =
-            false;
-
-    }
-
-
-    const simulationButton =
-        document.getElementById(
-            "congressSimulationButton"
-        );
-
-
-    if (
-        simulationButton &&
-        completed
-    ) {
-
-        simulationButton.textContent =
-            "Serve Another Term";
-
-    }
-
-}
-function updatePresidentRecord() {
-
-    const completed =
-        getStoredValue(
-            "civicPresidentSimulationCompleted"
-        ) === "true";
-
-
-    const grade =
-        getStoredValue(
-            "civicPresidentSimulationLastGrade"
-        ) || "—";
-
-
-    const runs =
-        Number(
-            getStoredValue(
-                "civicPresidentSimulationRuns"
-            ) || 0
-        );
-
-
-    setText(
-        "presidentCardGrade",
-        runs > 0
-            ? grade
-            : "—"
-    );
-
-
-    setText(
-        "presidentCardRuns",
-        runs
-    );
-
-
-    const record =
-        document.getElementById(
-            "presidentSimulationRecord"
-        );
-
-
-    if (
-        record &&
-        runs > 0
-    ) {
-
-        record.hidden =
-            false;
-
-    }
-
-
-    const simulationButton =
-        document.getElementById(
-            "presidentSimulationButton"
-        );
-
-
-    if (
-        simulationButton &&
-        completed
-    ) {
-
-        simulationButton.textContent =
-            "Serve Another Term";
-
-    }
 
 }
 
@@ -533,7 +779,9 @@ function initializeHeader() {
 
                 menuButton.setAttribute(
                     "aria-expanded",
-                    String(isOpen)
+                    String(
+                        isOpen
+                    )
                 );
 
 
@@ -545,7 +793,9 @@ function initializeHeader() {
                 );
 
 
-                if (!isOpen) {
+                if (
+                    !isOpen
+                ) {
 
                     closeDropdowns();
 
@@ -573,8 +823,12 @@ function initializeHeader() {
                         );
 
 
-                    if (!group) {
+                    if (
+                        !group
+                    ) {
+
                         return;
+
                     }
 
 
@@ -587,7 +841,9 @@ function initializeHeader() {
                     closeDropdowns();
 
 
-                    if (!isOpen) {
+                    if (
+                        !isOpen
+                    ) {
 
                         group.classList.add(
                             "open"
@@ -655,7 +911,9 @@ function initializeHeader() {
                 );
 
 
-                if (menuButton) {
+                if (
+                    menuButton
+                ) {
 
                     menuButton.setAttribute(
                         "aria-expanded",
@@ -704,7 +962,9 @@ function closeDropdowns() {
                     );
 
 
-                if (button) {
+                if (
+                    button
+                ) {
 
                     button.setAttribute(
                         "aria-expanded",
@@ -736,10 +996,14 @@ function setText(
         );
 
 
-    if (element) {
+    if (
+        element
+    ) {
 
         element.textContent =
-            String(value);
+            String(
+                value
+            );
 
     }
 
@@ -748,7 +1012,7 @@ function setText(
 
 /*
 ==================================================
-REFRESH RECORD AFTER RETURNING
+REFRESH AFTER RETURNING
 ==================================================
 */
 

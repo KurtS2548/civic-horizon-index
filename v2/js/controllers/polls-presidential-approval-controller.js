@@ -1,16 +1,29 @@
 /*
 ==================================================
 CIVIC HORIZON INDEX V2
-POLLS PRESIDENTIAL APPROVAL CONTROLLER
+PRESIDENTIAL APPROVAL POLL CONTROLLER
 ==================================================
 */
 
+
 import {
+
     subscribeToPresidentialApprovalSummary,
+
     submitPresidentialApprovalResponse,
+
     hasSubmittedPresidentialApproval,
+
     markPresidentialApprovalSubmitted
+
 } from "../services/pulse-service.js";
+
+
+import {
+
+    getCurrentUserVotingEligibility
+
+} from "../services/auth-service.js";
 
 
 /*
@@ -19,9 +32,12 @@ CONTROLLER STATE
 ==================================================
 */
 
-let controllerInitialized = false;
+let controllerInitialized =
+    false;
 
-let unsubscribePulseSummary = null;
+
+let unsubscribePulseSummary =
+    null;
 
 
 /*
@@ -32,14 +48,113 @@ PUBLIC INITIALIZATION
 
 export function initializePollsPresidentialApprovalController() {
 
-    if (controllerInitialized) {
+    if (
+        controllerInitialized
+    ) {
+
         return;
+
     }
 
-    controllerInitialized = true;
+
+    controllerInitialized =
+        true;
+
 
     initializeForm();
+
+    initializeVotingAccess();
+
     subscribeToLiveResults();
+
+}
+
+
+/*
+==================================================
+INITIAL VOTING ACCESS
+==================================================
+*/
+
+async function initializeVotingAccess() {
+
+    const form =
+        document.getElementById(
+            "pollsPresidentialApprovalForm"
+        );
+
+
+    if (!form) {
+
+        return;
+
+    }
+
+
+    /*
+    ----------------------------------------------
+    DEVICE RESPONSE LOCK
+    ----------------------------------------------
+    */
+
+    if (
+        hasSubmittedPresidentialApproval()
+    ) {
+
+        lockForm(
+            "You have already responded to this tracker on this device."
+        );
+
+
+        return;
+
+    }
+
+
+    try {
+
+        const eligibility =
+            await getCurrentUserVotingEligibility();
+
+
+        if (
+            eligibility?.eligible
+        ) {
+
+            enableForm(
+                form
+            );
+
+
+            return;
+
+        }
+
+
+        blockIneligibleVoting(
+            form,
+            eligibility
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Presidential approval eligibility check failed:",
+            error
+        );
+
+
+        disableForm(
+            form
+        );
+
+
+        showMessage(
+            "Voting access could not be confirmed. Please sign in again.",
+            "error"
+        );
+
+    }
 
 }
 
@@ -57,8 +172,11 @@ function initializeForm() {
             "pollsPresidentialApprovalForm"
         );
 
+
     if (!form) {
+
         return;
+
     }
 
 
@@ -66,17 +184,6 @@ function initializeForm() {
         "submit",
         handleFormSubmit
     );
-
-
-    if (
-        hasSubmittedPresidentialApproval()
-    ) {
-
-        lockForm(
-            "You have already responded to this tracker on this device."
-        );
-
-    }
 
 }
 
@@ -110,6 +217,12 @@ async function handleFormSubmit(
         );
 
 
+    /*
+    ----------------------------------------------
+    DEVICE RESPONSE LOCK
+    ----------------------------------------------
+    */
+
     if (
         hasSubmittedPresidentialApproval()
     ) {
@@ -118,17 +231,69 @@ async function handleFormSubmit(
             "You have already responded to this tracker on this device."
         );
 
+
         return;
 
     }
 
 
-    if (!selectedInput) {
+    /*
+    ----------------------------------------------
+    FULL ACCOUNT ELIGIBILITY CHECK
+
+    Re-check at submit time so stale page state
+    cannot bypass voting requirements.
+    ----------------------------------------------
+    */
+
+    try {
+
+        const eligibility =
+            await getCurrentUserVotingEligibility();
+
+
+        if (
+            !eligibility?.eligible
+        ) {
+
+            blockIneligibleVoting(
+                form,
+                eligibility
+            );
+
+
+            return;
+
+        }
+
+    } catch (error) {
+
+        console.error(
+            "Presidential approval submit eligibility check failed:",
+            error
+        );
+
+
+        showMessage(
+            "Voting access could not be confirmed. Please sign in again.",
+            "error"
+        );
+
+
+        return;
+
+    }
+
+
+    if (
+        !selectedInput
+    ) {
 
         showMessage(
             "Please select one response.",
             "error"
         );
+
 
         return;
 
@@ -176,9 +341,152 @@ async function handleFormSubmit(
 
 
         showMessage(
+            error?.message ||
             "Your response could not be submitted. Please try again.",
             "error"
         );
+
+    }
+
+}
+
+
+/*
+==================================================
+BLOCK INELIGIBLE VOTING
+==================================================
+*/
+
+function blockIneligibleVoting(
+    form,
+    eligibility
+) {
+
+    disableForm(
+        form
+    );
+
+
+    const submitButton =
+        form?.querySelector(
+            ".approval-poll__submit"
+        );
+
+
+    if (
+        submitButton
+    ) {
+
+        submitButton.disabled =
+            true;
+
+
+        submitButton.textContent =
+            getBlockedButtonText(
+                eligibility?.reason
+            );
+
+    }
+
+
+    showMessage(
+        getEligibilityMessage(
+            eligibility?.reason
+        ),
+        "error"
+    );
+
+}
+
+
+/*
+==================================================
+ELIGIBILITY MESSAGE
+==================================================
+*/
+
+function getEligibilityMessage(
+    reason
+) {
+
+    switch (
+        reason
+    ) {
+
+        case "signedOut":
+
+            return "Sign in to participate in Presidential Approval.";
+
+        case "emailNotVerified":
+
+            return "Verify your email before participating.";
+
+        case "zipMissing":
+
+            return "Add a valid ZIP code to your profile before participating.";
+
+        case "birthdayMissing":
+
+            return "Your birthday is required before participating.";
+
+        case "underMinimumAge":
+
+            return "This account is not eligible to participate.";
+
+        case "agreementMissing":
+
+            return "The participation agreement must be accepted before voting.";
+
+        case "verificationSyncPending":
+
+            return "Your account verification is still being finalized. Please try again.";
+
+        case "profileMissing":
+
+            return "Your participant profile could not be loaded.";
+
+        default:
+
+            return "Your account is not currently eligible to participate.";
+
+    }
+
+}
+
+
+/*
+==================================================
+BLOCKED BUTTON TEXT
+==================================================
+*/
+
+function getBlockedButtonText(
+    reason
+) {
+
+    switch (
+        reason
+    ) {
+
+        case "signedOut":
+
+            return "Sign In Required";
+
+        case "emailNotVerified":
+
+            return "Verification Required";
+
+        case "zipMissing":
+
+            return "ZIP Code Required";
+
+        case "birthdayMissing":
+
+            return "Birthday Required";
+
+        default:
+
+            return "Participation Unavailable";
 
     }
 
@@ -195,11 +503,15 @@ function subscribeToLiveResults() {
 
     unsubscribePulseSummary =
         subscribeToPresidentialApprovalSummary(
+
             summary => {
 
-                renderLiveResults(summary);
+                renderLiveResults(
+                    summary
+                );
 
             },
+
             error => {
 
                 console.error(
@@ -207,13 +519,21 @@ function subscribeToLiveResults() {
                     error
                 );
 
+
                 renderLiveResultsError();
 
             }
+
         );
 
 }
 
+
+/*
+==================================================
+RENDER LIVE RESULTS
+==================================================
+*/
 
 function renderLiveResults(
     summary
@@ -222,22 +542,29 @@ function renderLiveResults(
     const totalResponses =
         Number(
             summary?.totalResponses
-        ) || 0;
+        ) ||
+        0;
+
 
     const approvalPercentage =
         Number(
             summary?.approvalPercentage
-        ) || 0;
+        ) ||
+        0;
+
 
     const disapprovalPercentage =
         Number(
             summary?.disapprovalPercentage
-        ) || 0;
+        ) ||
+        0;
+
 
     const neutralPercentage =
         Number(
             summary?.neutralPercentage
-        ) || 0;
+        ) ||
+        0;
 
 
     setText(
@@ -247,6 +574,7 @@ function renderLiveResults(
         )
     );
 
+
     setText(
         "pollsDisapprovalHeadline",
         formatPercentage(
@@ -254,12 +582,14 @@ function renderLiveResults(
         )
     );
 
+
     setText(
         "pollsNeutralHeadline",
         formatPercentage(
             neutralPercentage
         )
     );
+
 
     setText(
         "pollsApprovalResponseCount",
@@ -282,8 +612,12 @@ function setSubmittingState(
     isSubmitting
 ) {
 
-    if (!submitButton) {
+    if (
+        !submitButton
+    ) {
+
         return;
+
     }
 
 
@@ -299,6 +633,98 @@ function setSubmittingState(
 }
 
 
+/*
+==================================================
+ENABLE FORM
+==================================================
+*/
+
+function enableForm(
+    form
+) {
+
+    if (!form) {
+
+        return;
+
+    }
+
+
+    form
+        .querySelectorAll(
+            'input[name="presidentialApproval"]'
+        )
+        .forEach(
+            input => {
+
+                input.disabled =
+                    false;
+
+            }
+        );
+
+
+    const submitButton =
+        form.querySelector(
+            ".approval-poll__submit"
+        );
+
+
+    if (
+        submitButton
+    ) {
+
+        submitButton.disabled =
+            false;
+
+
+        submitButton.textContent =
+            "Submit Response";
+
+    }
+
+}
+
+
+/*
+==================================================
+DISABLE FORM
+==================================================
+*/
+
+function disableForm(
+    form
+) {
+
+    if (!form) {
+
+        return;
+
+    }
+
+
+    form
+        .querySelectorAll(
+            'input[name="presidentialApproval"]'
+        )
+        .forEach(
+            input => {
+
+                input.disabled =
+                    true;
+
+            }
+        );
+
+}
+
+
+/*
+==================================================
+LOCK FORM AFTER RESPONSE
+==================================================
+*/
+
 function lockForm(
     message
 ) {
@@ -310,19 +736,15 @@ function lockForm(
 
 
     if (!form) {
+
         return;
+
     }
 
 
-    form
-        .querySelectorAll(
-            'input[name="presidentialApproval"]'
-        )
-        .forEach(input => {
-
-            input.disabled = true;
-
-        });
+    disableForm(
+        form
+    );
 
 
     const submitButton =
@@ -331,9 +753,13 @@ function lockForm(
         );
 
 
-    if (submitButton) {
+    if (
+        submitButton
+    ) {
 
-        submitButton.disabled = true;
+        submitButton.disabled =
+            true;
+
 
         submitButton.textContent =
             "Response Submitted";
@@ -366,13 +792,18 @@ function showMessage(
         );
 
 
-    if (!messageElement) {
+    if (
+        !messageElement
+    ) {
+
         return;
+
     }
 
 
     messageElement.textContent =
         message;
+
 
     messageElement.dataset.messageType =
         type;
@@ -393,15 +824,18 @@ function renderLiveResultsError() {
         "—"
     );
 
+
     setText(
         "pollsDisapprovalHeadline",
         "—"
     );
 
+
     setText(
         "pollsNeutralHeadline",
         "—"
     );
+
 
     setText(
         "pollsApprovalResponseCount",
@@ -428,13 +862,19 @@ function setText(
         );
 
 
-    if (!element) {
+    if (
+        !element
+    ) {
+
         return;
+
     }
 
 
     element.textContent =
-        String(value);
+        String(
+            value
+        );
 
 }
 
@@ -450,11 +890,19 @@ function formatNumber(
 ) {
 
     const number =
-        Number(value);
+        Number(
+            value
+        );
 
 
-    if (!Number.isFinite(number)) {
+    if (
+        !Number.isFinite(
+            number
+        )
+    ) {
+
         return "0";
+
     }
 
 
@@ -468,11 +916,19 @@ function formatPercentage(
 ) {
 
     const percentage =
-        Number(value);
+        Number(
+            value
+        );
 
 
-    if (!Number.isFinite(percentage)) {
+    if (
+        !Number.isFinite(
+            percentage
+        )
+    ) {
+
         return "0.0%";
+
     }
 
 
@@ -495,7 +951,9 @@ export function destroyPollsPresidentialApprovalController() {
         );
 
 
-    if (form) {
+    if (
+        form
+    ) {
 
         form.removeEventListener(
             "submit",
@@ -515,8 +973,11 @@ export function destroyPollsPresidentialApprovalController() {
     }
 
 
-    unsubscribePulseSummary = null;
+    unsubscribePulseSummary =
+        null;
 
-    controllerInitialized = false;
+
+    controllerInitialized =
+        false;
 
 }

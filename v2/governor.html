@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html
+    lang="en"
+    class="auth-access-pending"
+>
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="Civic Horizon Index Governor simulation."
+    >
+
+    <title>
+        Governor Simulation | Civic Horizon Index
+    </title>
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Merriweather:wght@700&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="css/header.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="css/footer.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="css/governor.css"
+    >
+
+</head>
+
+<body>
+
+    <div id="headerContainer"></div>
+
+
+    <main class="governor-page">
+
+
+        <!-- ==================================================
+             HERO
+        ================================================== -->
+
+        <section class="governor-hero">
+
+            <div class="governor-hero__container">
+
+                <div class="governor-hero__copy">
+
+                    <p class="governor-eyebrow">
+                        Civic Simulation
+                    </p>
+
+                    <h1>
+                        You Are the Governor
+                    </h1>
+
+                    <p>
+                        Lead a state through budget negotiations, emergencies,
+                        education policy, infrastructure needs, legislative
+                        conflict, and difficult state-federal decisions.
+                    </p>
+
+
+                    <div class="governor-hero__meta">
+
+                        <span>
+                            State leadership
+                        </span>
+
+                        <span>
+                            About 15 minutes
+                        </span>
+
+                        <span>
+                            Multiple outcomes
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <aside class="governor-hero__dashboard">
+
+                    <p class="governor-eyebrow">
+                        Governor Dashboard
+                    </p>
+
+                    <div class="governor-dashboard-grid">
+
+                        <div>
+                            <span>Approval</span>
+                            <strong id="governorApproval">64%</strong>
+                        </div>
+
+                        <div>
+                            <span>Legislative Relations</span>
+                            <strong id="governorLegislature">58%</strong>
+                        </div>
+
+                        <div>
+                            <span>Public Trust</span>
+                            <strong id="governorTrust">68%</strong>
+                        </div>
+
+                        <div>
+                            <span>State Stability</span>
+                            <strong id="governorStability">72%</strong>
+                        </div>
+
+                        <div>
+                            <span>Bills Signed</span>
+                            <strong id="governorBillsSigned">0</strong>
+                        </div>
+
+                        <div>
+                            <span>Major Actions</span>
+                            <strong id="governorMajorActions">0</strong>
+                        </div>
+
+                    </div>
+
+                </aside>
+
+            </div>
+
+        </section>
+
+
+        <!-- ==================================================
+             CONTENT
+        ================================================== -->
+
+        <section class="governor-content">
+
+            <div class="governor-content__container">
+
+
+                <!-- ==================================================
+                     START SCREEN
+                ================================================== -->
+
+                <section
+                    id="governorStartScreen"
+                    class="governor-start-card"
+                >
+
+                    <a
+                        href="simulator.html"
+                        class="governor-back-link"
+                    >
+                        ← Back to Civic Simulations
+                    </a>
+
+
+                    <p class="governor-eyebrow">
+                        Inauguration Day
+                    </p>
+
+
+                    <h2>
+                        Begin Your Term
+                    </h2>
+
+
+                    <p>
+                        You have been sworn in as governor and now lead
+                        the executive branch of your state government.
+                    </p>
+
+
+                    <p>
+                        Your administration will face competing regional
+                        interests, budget limits, legislative negotiations,
+                        emergencies, public pressure, and responsibilities
+                        shared with local and federal governments.
+                    </p>
+
+
+                    <div class="governor-preview-grid">
+
+                        <div>
+                            <span>Starting Approval</span>
+                            <strong>64%</strong>
+                        </div>
+
+                        <div>
+                            <span>Legislative Relations</span>
+                            <strong>58%</strong>
+                        </div>
+
+                        <div>
+                            <span>Public Trust</span>
+                            <strong>68%</strong>
+                        </div>
+
+                        <div>
+                            <span>State Stability</span>
+                            <strong>72%</strong>
+                        </div>
+
+                    </div>
+
+
+                    <button
+                        type="button"
+                        id="governorStartButton"
+                        class="governor-button governor-button--primary"
+                    >
+                        Begin Your Term
+                    </button>
+
+                </section>
+
+
+                <!-- ==================================================
+                     GAME SCREEN
+                ================================================== -->
+
+                <section
+                    id="governorGameScreen"
+                    class="governor-game-layout"
+                    hidden
+                >
+
+                    <div class="governor-main-column">
+
+
+                        <!-- ADMINISTRATION -->
+
+                        <section class="governor-panel">
+
+                            <div class="governor-panel__heading">
+
+                                <div>
+
+                                    <p class="governor-eyebrow">
+                                        State Executive
+                                    </p>
+
+                                    <h2>
+                                        Governor's Office
+                                    </h2>
+
+                                </div>
+
+
+                                <span id="governorTurnLabel">
+                                    Month 1
+                                </span>
+
+                            </div>
+
+
+                            <div class="governor-profile-grid">
+
+                                <div>
+                                    <span>Current Approval</span>
+                                    <strong id="executiveGovernorApproval">64%</strong>
+                                </div>
+
+                                <div>
+                                    <span>Legislative Relations</span>
+                                    <strong id="executiveGovernorLegislature">58%</strong>
+                                </div>
+
+                                <div>
+                                    <span>Public Trust</span>
+                                    <strong id="executiveGovernorTrust">68%</strong>
+                                </div>
+
+                                <div>
+                                    <span>State Stability</span>
+                                    <strong id="executiveGovernorStability">72%</strong>
+                                </div>
+
+                            </div>
+
+
+                            <div class="governor-priorities">
+
+                                <h3>
+                                    Governor Responsibilities
+                                </h3>
+
+                                <div>
+                                    State Budget
+                                </div>
+
+                                <div>
+                                    Work with Legislature
+                                </div>
+
+                                <div>
+                                    Emergency Management
+                                </div>
+
+                                <div>
+                                    State Administration
+                                </div>
+
+                            </div>
+
+                        </section>
+
+
+                        <!-- SCENARIO -->
+
+                        <section
+                            id="governorScenarioCard"
+                            class="governor-panel governor-scenario-card"
+                        >
+
+                            <div class="governor-scenario-top">
+
+                                <p
+                                    class="governor-eyebrow"
+                                    id="governorScenarioCategory"
+                                >
+                                    State Budget
+                                </p>
+
+                                <span id="governorScenarioProgress">
+                                    Decision 1 of 8
+                                </span>
+
+                            </div>
+
+
+                            <h2 id="governorScenarioTitle">
+                                Loading scenario...
+                            </h2>
+
+
+                            <p id="governorScenarioText">
+                                Your first challenge is being prepared.
+                            </p>
+
+
+                            <div
+                                id="governorChoiceContainer"
+                                class="governor-choice-grid"
+                            ></div>
+
+
+                            <div
+                                id="governorOutcome"
+                                class="governor-outcome"
+                                hidden
+                            >
+
+                                <div
+                                    id="governorOutcomeIcon"
+                                    class="governor-outcome-icon"
+                                >
+                                    •
+                                </div>
+
+                                <div>
+
+                                    <h3 id="governorOutcomeTitle">
+                                        Decision Recorded
+                                    </h3>
+
+                                    <p id="governorOutcomeText"></p>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="governor-action-row">
+
+                                <button
+                                    type="button"
+                                    id="governorContinueButton"
+                                    class="governor-button governor-button--primary"
+                                    hidden
+                                >
+                                    Continue
+                                </button>
+
+                            </div>
+
+                        </section>
+
+
+                        <!-- STATE NEWS -->
+
+                        <section class="governor-panel">
+
+                            <div class="governor-panel__heading">
+
+                                <div>
+
+                                    <p class="governor-eyebrow">
+                                        State News
+                                    </p>
+
+                                    <h2>
+                                        Latest Headlines
+                                    </h2>
+
+                                </div>
+
+                            </div>
+
+
+                            <div id="governorNewsFeed">
+
+                                <div class="governor-news-item">
+
+                                    <span>
+                                        State Capitol
+                                    </span>
+
+                                    <p>
+                                        New governor begins first term.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                        </section>
+
+                    </div>
+
+
+                    <!-- ==================================================
+                         SIDE COLUMN
+                    ================================================== -->
+
+                    <aside class="governor-side-column">
+
+
+                        <!-- METRICS -->
+
+                        <section class="governor-panel">
+
+                            <p class="governor-eyebrow">
+                                Live Performance
+                            </p>
+
+                            <h2>
+                                State Leadership Metrics
+                            </h2>
+
+
+                            <div class="governor-metric-list">
+
+
+                                <div class="governor-metric-row">
+
+                                    <div>
+                                        <span>Approval Rating</span>
+                                        <strong id="sideGovernorApproval">64%</strong>
+                                    </div>
+
+                                    <div class="governor-metric-track">
+                                        <div
+                                            id="sideGovernorApprovalBar"
+                                            class="governor-metric-fill"
+                                            style="width: 64%;"
+                                        ></div>
+                                    </div>
+
+                                </div>
+
+
+                                <div class="governor-metric-row">
+
+                                    <div>
+                                        <span>Legislative Relations</span>
+                                        <strong id="sideGovernorLegislature">58%</strong>
+                                    </div>
+
+                                    <div class="governor-metric-track">
+                                        <div
+                                            id="sideGovernorLegislatureBar"
+                                            class="governor-metric-fill"
+                                            style="width: 58%;"
+                                        ></div>
+                                    </div>
+
+                                </div>
+
+
+                                <div class="governor-metric-row">
+
+                                    <div>
+                                        <span>Public Trust</span>
+                                        <strong id="sideGovernorTrust">68%</strong>
+                                    </div>
+
+                                    <div class="governor-metric-track">
+                                        <div
+                                            id="sideGovernorTrustBar"
+                                            class="governor-metric-fill"
+                                            style="width: 68%;"
+                                        ></div>
+                                    </div>
+
+                                </div>
+
+
+                                <div class="governor-metric-row">
+
+                                    <div>
+                                        <span>State Stability</span>
+                                        <strong id="sideGovernorStability">72%</strong>
+                                    </div>
+
+                                    <div class="governor-metric-track">
+                                        <div
+                                            id="sideGovernorStabilityBar"
+                                            class="governor-metric-fill"
+                                            style="width: 72%;"
+                                        ></div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </section>
+
+
+                        <!-- RECORD -->
+
+                        <section class="governor-panel">
+
+                            <p class="governor-eyebrow">
+                                Governor Record
+                            </p>
+
+                            <h2>
+                                Your Term
+                            </h2>
+
+
+                            <div class="governor-activity-list">
+
+                                <div>
+                                    <span>Bills Signed</span>
+                                    <strong id="sideGovernorBillsSigned">0</strong>
+                                </div>
+
+                                <div>
+                                    <span>Major Actions</span>
+                                    <strong id="sideGovernorMajorActions">0</strong>
+                                </div>
+
+                                <div>
+                                    <span>Current Stage</span>
+                                    <strong id="governorCurrentStage">
+                                        First 100 Days
+                                    </strong>
+                                </div>
+
+                                <div>
+                                    <span>Term Progress</span>
+                                    <strong id="governorTermProgress">
+                                        0%
+                                    </strong>
+                                </div>
+
+                            </div>
+
+                        </section>
+
+
+                        <!-- OBJECTIVE -->
+
+                        <section class="governor-objective-card">
+
+                            <p class="governor-eyebrow">
+                                Your Objective
+                            </p>
+
+                            <h3>
+                                Lead the State Responsibly
+                            </h3>
+
+                            <p>
+                                Balance statewide needs, fiscal limits,
+                                legislative relationships, emergency powers,
+                                local autonomy, and the responsibilities of
+                                state government.
+                            </p>
+
+                        </section>
+
+                    </aside>
+
+                </section>
+
+
+                <!-- ==================================================
+                     FINAL REPORT
+                ================================================== -->
+
+                <section
+                    id="governorResultsScreen"
+                    class="governor-results-card"
+                    hidden
+                >
+
+                    <p class="governor-eyebrow">
+                        Term Complete
+                    </p>
+
+
+                    <h2>
+                        Governor Report Card
+                    </h2>
+
+
+                    <p>
+                        Your decisions shaped public confidence,
+                        legislative cooperation, state stability,
+                        and the effectiveness of your administration.
+                    </p>
+
+
+                    <div class="governor-report-grid">
+
+                        <div>
+                            <span>Final Approval</span>
+                            <strong id="finalGovernorApproval">0%</strong>
+                        </div>
+
+                        <div>
+                            <span>Legislative Relations</span>
+                            <strong id="finalGovernorLegislature">0%</strong>
+                        </div>
+
+                        <div>
+                            <span>Public Trust</span>
+                            <strong id="finalGovernorTrust">0%</strong>
+                        </div>
+
+                        <div>
+                            <span>State Stability</span>
+                            <strong id="finalGovernorStability">0%</strong>
+                        </div>
+
+                        <div>
+                            <span>Bills Signed</span>
+                            <strong id="finalGovernorBillsSigned">0</strong>
+                        </div>
+
+                        <div>
+                            <span>Major Actions</span>
+                            <strong id="finalGovernorMajorActions">0</strong>
+                        </div>
+
+                    </div>
+
+
+                    <div class="governor-final-grade">
+
+                        <span>
+                            Overall Grade
+                        </span>
+
+                        <strong id="governorFinalGrade">
+                            B
+                        </strong>
+
+                    </div>
+
+
+                    <div
+                        id="governorFinalMessage"
+                        class="governor-final-message"
+                    >
+                        Your term has concluded.
+                    </div>
+
+
+                    <div class="governor-results-actions">
+
+                        <a
+                            href="simulator.html"
+                            class="governor-button governor-button--primary"
+                        >
+                            Return to Simulations
+                        </a>
+
+                        <button
+                            type="button"
+                            id="governorRestartButton"
+                            class="governor-button governor-button--secondary"
+                        >
+                            Serve Another Term
+                        </button>
+
+                    </div>
+
+                </section>
+
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <div id="footerContainer"></div>
+
+
+    <script
+        type="module"
+        src="js/governor.js"
+    ></script>
+
+    <script
+        type="module"
+        src="js/site-auth.js"
+    ></script>
+
+</body>
+
+</html>

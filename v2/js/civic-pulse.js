@@ -21,8 +21,17 @@ import {
 
 
 import {
+
     subscribeToCivicPulseHistory
+
 } from "./services/civic-pulse-history-service.js";
+
+
+import {
+
+    getCurrentUserVotingEligibility
+
+} from "./services/auth-service.js";
 
 
 /*
@@ -66,6 +75,14 @@ const pulseState = {
 };
 
 
+let civicPulseVotingAccessConfirmed =
+    false;
+
+
+let civicPulseEligibilityCheckId =
+    0;
+
+
 /*
 ==================================================
 INITIALIZE
@@ -92,6 +109,16 @@ async function initializeCivicPulsePage() {
     initializeHeader();
 
 
+    /*
+    Keep all voting controls protected until
+    account eligibility has been confirmed.
+    */
+
+    setAllCivicPulseVotingDisabled(
+        true
+    );
+
+
     initializeApprovalVoting();
 
 
@@ -108,6 +135,9 @@ async function initializeCivicPulsePage() {
 
 
     initializeHistorySubscription();
+
+
+    await initializeCivicPulseVotingAccess();
 
 }
 
@@ -354,7 +384,7 @@ function getParticipantId() {
     if (
         window.crypto &&
         typeof window.crypto.randomUUID ===
-        "function"
+            "function"
     ) {
 
         participantId =
@@ -377,6 +407,402 @@ function getParticipantId() {
 
 
     return participantId;
+
+}
+
+
+/*
+==================================================
+CIVIC PULSE VOTING ACCESS
+==================================================
+*/
+
+async function initializeCivicPulseVotingAccess() {
+
+    const checkId =
+        ++civicPulseEligibilityCheckId;
+
+
+    civicPulseVotingAccessConfirmed =
+        false;
+
+
+    setAllCivicPulseVotingDisabled(
+        true
+    );
+
+
+    setText(
+        "pulseApprovalMessage",
+        "Checking voting access..."
+    );
+
+
+    setText(
+        "directionVoteMessage",
+        "Checking voting access..."
+    );
+
+
+    setText(
+        "confidenceSurveyMessage",
+        "Checking voting access..."
+    );
+
+
+    try {
+
+        const eligibility =
+            await getCurrentUserVotingEligibility();
+
+
+        if (
+            checkId !==
+            civicPulseEligibilityCheckId
+        ) {
+
+            return;
+
+        }
+
+
+        if (
+            eligibility?.eligible
+        ) {
+
+            civicPulseVotingAccessConfirmed =
+                true;
+
+
+            setAllCivicPulseVotingDisabled(
+                false
+            );
+
+
+            clearCivicPulseAccessMessages();
+
+
+            return;
+
+        }
+
+
+        civicPulseVotingAccessConfirmed =
+            false;
+
+
+        setAllCivicPulseVotingDisabled(
+            true
+        );
+
+
+        showCivicPulseEligibilityMessages(
+            eligibility?.reason
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Civic Pulse eligibility check failed:",
+            error
+        );
+
+
+        if (
+            checkId !==
+            civicPulseEligibilityCheckId
+        ) {
+
+            return;
+
+        }
+
+
+        civicPulseVotingAccessConfirmed =
+            false;
+
+
+        setAllCivicPulseVotingDisabled(
+            true
+        );
+
+
+        showCivicPulseAccessError();
+
+    }
+
+}
+
+
+/*
+==================================================
+SUBMIT-TIME ELIGIBILITY CHECK
+==================================================
+*/
+
+async function confirmCivicPulseVotingEligibility(
+    messageElementId
+) {
+
+    try {
+
+        const eligibility =
+            await getCurrentUserVotingEligibility();
+
+
+        if (
+            eligibility?.eligible
+        ) {
+
+            civicPulseVotingAccessConfirmed =
+                true;
+
+
+            return true;
+
+        }
+
+
+        civicPulseVotingAccessConfirmed =
+            false;
+
+
+        setText(
+            messageElementId,
+            getCivicPulseEligibilityMessage(
+                eligibility?.reason
+            )
+        );
+
+
+        setAllCivicPulseVotingDisabled(
+            true
+        );
+
+
+        return false;
+
+    } catch (error) {
+
+        console.error(
+            "Civic Pulse submit eligibility check failed:",
+            error
+        );
+
+
+        civicPulseVotingAccessConfirmed =
+            false;
+
+
+        setText(
+            messageElementId,
+            "Voting access could not be confirmed. Please sign in again."
+        );
+
+
+        setAllCivicPulseVotingDisabled(
+            true
+        );
+
+
+        return false;
+
+    }
+
+}
+/*
+==================================================
+CIVIC PULSE CONTROL STATE
+==================================================
+*/
+
+function setAllCivicPulseVotingDisabled(
+    disabled
+) {
+
+    setApprovalButtonsDisabled(
+        disabled
+    );
+
+
+    setDirectionButtonsDisabled(
+        disabled
+    );
+
+
+    document
+        .querySelectorAll(
+            "[data-confidence-value]"
+        )
+        .forEach(
+            button => {
+
+                button.disabled =
+                    disabled;
+
+            }
+        );
+
+
+    const confidenceSubmitButton =
+        document.getElementById(
+            "confidenceSubmitButton"
+        );
+
+
+    if (
+        confidenceSubmitButton
+    ) {
+
+        confidenceSubmitButton.disabled =
+            disabled;
+
+    }
+
+}
+
+
+/*
+==================================================
+CLEAR ACCESS MESSAGES
+==================================================
+*/
+
+function clearCivicPulseAccessMessages() {
+
+    setText(
+        "pulseApprovalMessage",
+        ""
+    );
+
+
+    setText(
+        "directionVoteMessage",
+        ""
+    );
+
+
+    setText(
+        "confidenceSurveyMessage",
+        ""
+    );
+
+}
+
+
+/*
+==================================================
+ELIGIBILITY MESSAGES
+==================================================
+*/
+
+function showCivicPulseEligibilityMessages(
+    reason
+) {
+
+    const message =
+        getCivicPulseEligibilityMessage(
+            reason
+        );
+
+
+    setText(
+        "pulseApprovalMessage",
+        message
+    );
+
+
+    setText(
+        "directionVoteMessage",
+        message
+    );
+
+
+    setText(
+        "confidenceSurveyMessage",
+        message
+    );
+
+}
+
+
+function showCivicPulseAccessError() {
+
+    const message =
+        "Voting access could not be confirmed. Please sign in again.";
+
+
+    setText(
+        "pulseApprovalMessage",
+        message
+    );
+
+
+    setText(
+        "directionVoteMessage",
+        message
+    );
+
+
+    setText(
+        "confidenceSurveyMessage",
+        message
+    );
+
+}
+
+
+/*
+==================================================
+ELIGIBILITY MESSAGE HELPER
+==================================================
+*/
+
+function getCivicPulseEligibilityMessage(
+    reason
+) {
+
+    switch (
+        reason
+    ) {
+
+        case "signedOut":
+
+            return "Sign in to participate in Civic Pulse.";
+
+        case "emailNotVerified":
+
+            return "Verify your email before participating in Civic Pulse.";
+
+        case "zipMissing":
+
+            return "Add a valid ZIP code to your profile before participating.";
+
+        case "birthdayMissing":
+
+            return "Your birthday is required before participating.";
+
+        case "underMinimumAge":
+
+            return "This account is not eligible to participate.";
+
+        case "agreementMissing":
+
+            return "The participation agreement must be accepted before voting.";
+
+        case "verificationSyncPending":
+
+            return "Your account verification is still being finalized. Please try again.";
+
+        case "profileMissing":
+
+            return "Your participant profile could not be loaded.";
+
+        default:
+
+            return "Your account is not currently eligible to participate.";
+
+    }
 
 }
 
@@ -407,6 +833,27 @@ function initializeApprovalVoting() {
                         if (
                             vote !== "approve" &&
                             vote !== "disapprove"
+                        ) {
+
+                            return;
+
+                        }
+
+
+                        /*
+                        ----------------------------------
+                        SUBMIT-TIME ELIGIBILITY CHECK
+                        ----------------------------------
+                        */
+
+                        const eligible =
+                            await confirmCivicPulseVotingEligibility(
+                                "pulseApprovalMessage"
+                            );
+
+
+                        if (
+                            !eligible
                         ) {
 
                             return;
@@ -463,13 +910,19 @@ function initializeApprovalVoting() {
 
                             setText(
                                 "pulseApprovalMessage",
+                                error?.message ||
                                 "Your response could not be saved. Please try again."
                             );
 
                         } finally {
 
+                            /*
+                            Only re-enable the buttons if
+                            voting access is still valid.
+                            */
+
                             setApprovalButtonsDisabled(
-                                false
+                                !civicPulseVotingAccessConfirmed
                             );
 
                         }
@@ -658,7 +1111,7 @@ function restoreApprovalSelection() {
                 button.classList.toggle(
                     "is-selected",
                     button.dataset.approvalVote ===
-                    selectedVote
+                        selectedVote
                 );
 
             }
@@ -685,8 +1138,6 @@ function setApprovalButtonsDisabled(
         );
 
 }
-
-
 /*
 ==================================================
 COUNTRY DIRECTION VOTING
@@ -713,6 +1164,27 @@ function initializeDirectionVoting() {
                         if (
                             vote !== "right" &&
                             vote !== "wrong"
+                        ) {
+
+                            return;
+
+                        }
+
+
+                        /*
+                        ----------------------------------
+                        SUBMIT-TIME ELIGIBILITY CHECK
+                        ----------------------------------
+                        */
+
+                        const eligible =
+                            await confirmCivicPulseVotingEligibility(
+                                "directionVoteMessage"
+                            );
+
+
+                        if (
+                            !eligible
                         ) {
 
                             return;
@@ -769,13 +1241,14 @@ function initializeDirectionVoting() {
 
                             setText(
                                 "directionVoteMessage",
+                                error?.message ||
                                 "Your response could not be saved. Please try again."
                             );
 
                         } finally {
 
                             setDirectionButtonsDisabled(
-                                false
+                                !civicPulseVotingAccessConfirmed
                             );
 
                         }
@@ -933,7 +1406,7 @@ function restoreDirectionSelection() {
                 button.classList.toggle(
                     "is-selected",
                     button.dataset.directionVote ===
-                    selectedVote
+                        selectedVote
                 );
 
             }
@@ -960,8 +1433,6 @@ function setDirectionButtonsDisabled(
         );
 
 }
-
-
 /*
 ==================================================
 CONFIDENCE SURVEY
@@ -988,6 +1459,15 @@ function initializeConfidenceVoting() {
 
 
                         if (!button) {
+
+                            return;
+
+                        }
+
+
+                        if (
+                            button.disabled
+                        ) {
 
                             return;
 
@@ -1060,6 +1540,27 @@ SAVE CONFIDENCE
 
 async function submitConfidenceSurvey() {
 
+    /*
+    ----------------------------------------------
+    FULL ELIGIBILITY CHECK BEFORE SUBMISSION
+    ----------------------------------------------
+    */
+
+    const eligible =
+        await confirmCivicPulseVotingEligibility(
+            "confidenceSurveyMessage"
+        );
+
+
+    if (
+        !eligible
+    ) {
+
+        return;
+
+    }
+
+
     const ratings =
         {};
 
@@ -1081,7 +1582,9 @@ async function submitConfidenceSurvey() {
                     );
 
 
-                if (!selected) {
+                if (
+                    !selected
+                ) {
 
                     return;
 
@@ -1125,12 +1628,9 @@ async function submitConfidenceSurvey() {
         );
 
 
-    if (submitButton) {
-
-        submitButton.disabled =
-            true;
-
-    }
+    setConfidenceControlsDisabled(
+        true
+    );
 
 
     setText(
@@ -1155,6 +1655,9 @@ async function submitConfidenceSurvey() {
         );
 
 
+        restoreConfidenceSelections();
+
+
         setText(
             "confidenceSurveyMessage",
             "Your confidence ratings have been recorded."
@@ -1170,17 +1673,68 @@ async function submitConfidenceSurvey() {
 
         setText(
             "confidenceSurveyMessage",
+            error?.message ||
             "Your ratings could not be saved. Please try again."
         );
 
     } finally {
 
-        if (submitButton) {
+        setConfidenceControlsDisabled(
+            !civicPulseVotingAccessConfirmed
+        );
+
+
+        if (
+            submitButton &&
+            civicPulseVotingAccessConfirmed
+        ) {
 
             submitButton.disabled =
                 false;
 
         }
+
+    }
+
+}
+
+
+/*
+==================================================
+CONFIDENCE CONTROL STATE
+==================================================
+*/
+
+function setConfidenceControlsDisabled(
+    disabled
+) {
+
+    document
+        .querySelectorAll(
+            "[data-confidence-value]"
+        )
+        .forEach(
+            button => {
+
+                button.disabled =
+                    disabled;
+
+            }
+        );
+
+
+    const submitButton =
+        document.getElementById(
+            "confidenceSubmitButton"
+        );
+
+
+    if (
+        submitButton
+    ) {
+
+        submitButton.disabled =
+            disabled;
 
     }
 
@@ -1242,7 +1796,7 @@ function renderConfidenceTracker() {
                 if (
                     !ratings ||
                     typeof ratings !==
-                    "object"
+                        "object"
                 ) {
 
                     return;
@@ -1488,6 +2042,12 @@ function updateConfidenceMetric(
 }
 
 
+/*
+==================================================
+RESTORE CONFIDENCE SELECTIONS
+==================================================
+*/
+
 function restoreConfidenceSelections() {
 
     const stored =
@@ -1496,7 +2056,9 @@ function restoreConfidenceSelections() {
         );
 
 
-    if (!stored) {
+    if (
+        !stored
+    ) {
 
         return;
 
@@ -1523,59 +2085,72 @@ function restoreConfidenceSelections() {
     Object.entries(
         ratings
     )
-    .forEach(
-        ([category, value]) => {
+        .forEach(
+            (
+                [
+                    category,
+                    value
+                ]
+            ) => {
 
-            const group =
-                document.querySelector(
-                    `[data-confidence-group="${category}"]`
+                const group =
+                    document.querySelector(
+                        `[data-confidence-group="${category}"]`
+                    );
+
+
+                if (
+                    !group
+                ) {
+
+                    return;
+
+                }
+
+
+                group
+                    .querySelectorAll(
+                        "[data-confidence-value]"
+                    )
+                    .forEach(
+                        button => {
+
+                            button.classList.toggle(
+                                "is-selected",
+                                Number(
+                                    button.dataset.confidenceValue
+                                ) ===
+                                Number(
+                                    value
+                                )
+                            );
+
+                        }
+                    );
+
+
+                setText(
+                    getConfidenceUserValueId(
+                        category
+                    ),
+                    getConfidenceLabel(
+                        Number(
+                            value
+                        )
+                    )
                 );
-
-
-            if (!group) {
-
-                return;
 
             }
-
-
-            group
-                .querySelectorAll(
-                    "[data-confidence-value]"
-                )
-                .forEach(
-                    button => {
-
-                        button.classList.toggle(
-                            "is-selected",
-                            Number(
-                                button.dataset.confidenceValue
-                            ) ===
-                            Number(
-                                value
-                            )
-                        );
-
-                    }
-                );
-
-
-            setText(
-                getConfidenceUserValueId(
-                    category
-                ),
-                getConfidenceLabel(
-                    Number(
-                        value
-                    )
-                )
-            );
-
-        }
-    );
+        );
 
 }
 
+
+/*
+==================================================
+CONFIDENCE LABEL
+==================================================
+*/
 
 function getConfidenceLabel(
     value
@@ -1610,6 +2185,12 @@ function getConfidenceLabel(
 
 }
 
+
+/*
+==================================================
+CONFIDENCE USER VALUE ID
+==================================================
+*/
 
 function getConfidenceUserValueId(
     category
@@ -1662,8 +2243,6 @@ function restoreLocalSelections() {
     restoreConfidenceSelections();
 
 }
-
-
 /*
 ==================================================
 PUBLIC HISTORY DISPLAY
@@ -1779,7 +2358,9 @@ function renderApprovalHistory(
     history
 ) {
 
-    if (!container) {
+    if (
+        !container
+    ) {
 
         return;
 
@@ -1848,7 +2429,9 @@ function renderConfidenceHistory(
     history
 ) {
 
-    if (!container) {
+    if (
+        !container
+    ) {
 
         return;
 
@@ -1952,7 +2535,9 @@ function formatHistoryDate(
     value
 ) {
 
-    if (!value) {
+    if (
+        !value
+    ) {
 
         return "Unknown";
 
@@ -1982,11 +2567,13 @@ function formatHistoryDate(
         .toLocaleDateString(
             undefined,
             {
+
                 month:
                     "short",
 
                 day:
                     "numeric"
+
             }
         );
 
@@ -2004,7 +2591,8 @@ function clampPercent(
             Math.round(
                 Number(
                     value
-                ) || 0
+                ) ||
+                0
             )
         )
     );
@@ -2029,7 +2617,9 @@ function setFillWidth(
         );
 
 
-    if (!element) {
+    if (
+        !element
+    ) {
 
         return;
 
@@ -2188,7 +2778,9 @@ function initializeHeader() {
                         );
 
 
-                    if (!group) {
+                    if (
+                        !group
+                    ) {
 
                         return;
 
@@ -2273,7 +2865,9 @@ function closeDropdowns() {
                     );
 
 
-                if (button) {
+                if (
+                    button
+                ) {
 
                     button.setAttribute(
                         "aria-expanded",
@@ -2305,7 +2899,9 @@ function setText(
         );
 
 
-    if (element) {
+    if (
+        element
+    ) {
 
         element.textContent =
             String(

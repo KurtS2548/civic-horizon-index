@@ -1,0 +1,793 @@
+/* ==================================================
+   CIVIC HORIZON INDEX V2
+   SUPREME COURT SIMULATION
+================================================== */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    background: #f7f9fb;
+    color: #243b53;
+    font-family: "Inter", sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+
+.court-page {
+    min-height: 65vh;
+}
+
+
+/* ==================================================
+   HERO
+================================================== */
+
+.court-hero {
+    padding: 72px 0;
+    background:
+        linear-gradient(
+            135deg,
+            #071d2f 0%,
+            #0b253d 58%,
+            #174f7f 100%
+        );
+    color: #ffffff;
+}
+
+.court-hero__container {
+    display: grid;
+    grid-template-columns:
+        minmax(0, 1.2fr)
+        minmax(340px, 0.8fr);
+    align-items: center;
+    gap: 50px;
+    width: min(1180px, calc(100% - 48px));
+    margin: 0 auto;
+}
+
+.court-eyebrow {
+    margin: 0 0 10px;
+    color: #1f5f99;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+}
+
+.court-hero .court-eyebrow {
+    color: #efc75d;
+}
+
+.court-hero__copy h1 {
+    margin: 0;
+    color: #ffffff;
+    font-family: "Merriweather", Georgia, serif;
+    font-size: clamp(2.6rem, 6vw, 4.3rem);
+    line-height: 1.08;
+    letter-spacing: -0.03em;
+}
+
+.court-hero__copy > p:last-of-type {
+    max-width: 720px;
+    margin: 20px 0 0;
+    color: #d0e1ed;
+    line-height: 1.8;
+}
+
+.court-hero__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+    margin-top: 24px;
+}
+
+.court-hero__meta span {
+    padding: 7px 10px;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.07);
+    color: #d5e4ef;
+    font-size: 0.68rem;
+    font-weight: 700;
+}
+
+
+/* ==================================================
+   HERO DASHBOARD
+================================================== */
+
+.court-hero__dashboard {
+    padding: 26px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 22px 55px rgba(0, 0, 0, 0.18);
+    backdrop-filter: blur(8px);
+}
+
+.court-dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    margin-top: 16px;
+}
+
+.court-dashboard-grid > div {
+    padding: 13px 14px;
+    border: 1px solid rgba(255, 255, 255, 0.13);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.court-dashboard-grid span {
+    display: block;
+    color: #b8cfdf;
+    font-size: 0.65rem;
+    font-weight: 700;
+}
+
+.court-dashboard-grid strong {
+    display: block;
+    margin-top: 5px;
+    color: #ffffff;
+    font-size: 1rem;
+}
+
+
+/* ==================================================
+   CONTENT
+================================================== */
+
+.court-content {
+    padding: 64px 0 88px;
+}
+
+.court-content__container {
+    width: min(1180px, calc(100% - 48px));
+    margin: 0 auto;
+}
+
+.court-back-link {
+    display: inline-flex;
+    margin-bottom: 22px;
+    color: #1f5f99;
+    font-size: 0.78rem;
+    font-weight: 800;
+    text-decoration: none;
+}
+
+.court-back-link:hover {
+    text-decoration: underline;
+}
+
+
+/* ==================================================
+   START / RESULTS CARDS
+================================================== */
+
+.court-start-card,
+.court-results-card {
+    padding: 32px;
+    border: 1px solid #d9e2ec;
+    border-radius: 16px;
+    background: #ffffff;
+    box-shadow: 0 14px 36px rgba(16, 42, 67, 0.07);
+}
+
+.court-start-card h2,
+.court-results-card h2 {
+    margin: 0;
+    color: #102a43;
+    font-family: "Merriweather", Georgia, serif;
+    font-size: clamp(2rem, 4vw, 2.7rem);
+}
+
+.court-start-card > p:not(.court-eyebrow),
+.court-results-card > p:not(.court-eyebrow) {
+    max-width: 760px;
+    margin: 14px 0 0;
+    color: #627d98;
+    line-height: 1.75;
+}
+
+.court-preview-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 26px;
+}
+
+.court-preview-grid > div {
+    padding: 16px;
+    border: 1px solid #e1e8ef;
+    border-radius: 10px;
+    background: #f8fafc;
+}
+
+.court-preview-grid span {
+    display: block;
+    color: #7b8fa3;
+    font-size: 0.66rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.court-preview-grid strong {
+    display: block;
+    margin-top: 6px;
+    color: #102a43;
+    font-size: 1rem;
+}
+
+
+/* ==================================================
+   BUTTONS
+================================================== */
+
+.court-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-family: "Inter", sans-serif;
+    font-size: 0.78rem;
+    font-weight: 800;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.court-button--primary {
+    border: 1px solid #1f5f99;
+    background: #1f5f99;
+    color: #ffffff;
+}
+
+.court-button--primary:hover,
+.court-button--primary:focus-visible {
+    background: #174f7f;
+    border-color: #174f7f;
+    outline: none;
+}
+
+.court-button--secondary {
+    border: 1px solid #bcccdc;
+    background: #ffffff;
+    color: #334e68;
+}
+
+.court-start-card .court-button {
+    margin-top: 24px;
+}
+
+
+/* ==================================================
+   GAME LAYOUT
+================================================== */
+
+.court-game-layout {
+    display: grid;
+    grid-template-columns:
+        minmax(0, 1.65fr)
+        minmax(300px, 0.75fr);
+    gap: 20px;
+}
+
+.court-main-column,
+.court-side-column {
+    display: grid;
+    gap: 18px;
+    align-content: start;
+}
+
+.court-panel {
+    padding: 24px;
+    border: 1px solid #d9e2ec;
+    border-radius: 14px;
+    background: #ffffff;
+    box-shadow: 0 10px 24px rgba(16, 42, 67, 0.05);
+}
+
+.court-panel h2 {
+    margin: 0;
+    color: #102a43;
+    font-family: "Merriweather", Georgia, serif;
+    font-size: 1.35rem;
+}
+
+.court-panel__heading,
+.court-scenario-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 18px;
+}
+
+.court-panel__heading > span,
+.court-scenario-top > span {
+    color: #7b8fa3;
+    font-size: 0.72rem;
+    font-weight: 800;
+}
+
+
+/* ==================================================
+   JUDICIAL PROFILE
+================================================== */
+
+.court-profile-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 10px;
+    margin-top: 18px;
+}
+
+.court-profile-grid > div {
+    padding: 13px 14px;
+    border: 1px solid #e5ecf2;
+    border-radius: 9px;
+    background: #f8fafc;
+}
+
+.court-profile-grid span {
+    display: block;
+    color: #7b8fa3;
+    font-size: 0.64rem;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.court-profile-grid strong {
+    display: block;
+    margin-top: 5px;
+    color: #102a43;
+    font-size: 0.88rem;
+}
+
+
+/* ==================================================
+   JUDICIAL PRINCIPLES
+================================================== */
+
+.court-principles {
+    margin-top: 20px;
+}
+
+.court-principles h3 {
+    margin: 0 0 10px;
+    color: #102a43;
+    font-size: 0.86rem;
+}
+
+.court-principles > div {
+    display: inline-flex;
+    margin: 0 7px 7px 0;
+    padding: 7px 10px;
+    border-radius: 999px;
+    background: #f2f6f9;
+    color: #486581;
+    font-size: 0.7rem;
+    font-weight: 700;
+}
+
+
+/* ==================================================
+   SCENARIO
+================================================== */
+
+.court-scenario-card > h2 {
+    margin-top: 8px;
+}
+
+.court-scenario-card > p {
+    margin: 12px 0 0;
+    color: #627d98;
+    line-height: 1.7;
+}
+
+
+/* ==================================================
+   CHOICES
+================================================== */
+
+.court-choice-grid {
+    display: grid;
+    gap: 10px;
+    margin-top: 22px;
+}
+
+.court-choice-button {
+    display: grid;
+    grid-template-columns: 34px minmax(0, 1fr);
+    gap: 12px;
+    align-items: center;
+    width: 100%;
+    min-height: 54px;
+    padding: 12px 14px;
+    border: 1px solid #d9e2ec;
+    border-radius: 10px;
+    background: #ffffff;
+    color: #334e68;
+    cursor: pointer;
+    font-family: "Inter", sans-serif;
+    text-align: left;
+}
+
+.court-choice-button > span {
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    background: #eaf3fb;
+    color: #174f7f;
+    font-size: 0.74rem;
+    font-weight: 800;
+}
+
+.court-choice-button strong {
+    font-size: 0.8rem;
+    line-height: 1.5;
+}
+
+.court-choice-button:hover,
+.court-choice-button:focus-visible {
+    border-color: #9fbdd4;
+    background: #f8fbfd;
+    outline: none;
+}
+
+.court-choice-button:disabled {
+    cursor: default;
+}
+
+.court-choice-selected {
+    border-color: #1f5f99;
+    background: #eef6fc;
+}
+
+
+/* ==================================================
+   OUTCOME
+================================================== */
+
+.court-outcome {
+    display: grid;
+    grid-template-columns: 42px minmax(0, 1fr);
+    gap: 14px;
+    margin-top: 20px;
+    padding: 18px;
+    border-radius: 10px;
+    background: #f8fafc;
+}
+
+.court-outcome[hidden] {
+    display: none;
+}
+
+.court-outcome-icon {
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: #eaf3fb;
+    color: #174f7f;
+    font-weight: 800;
+}
+
+.court-outcome h3 {
+    margin: 0;
+    color: #102a43;
+    font-size: 0.9rem;
+}
+
+.court-outcome p {
+    margin: 6px 0 0;
+    color: #627d98;
+    font-size: 0.8rem;
+    line-height: 1.65;
+}
+
+.court-action-row {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 18px;
+}
+
+
+/* ==================================================
+   COURT WATCH
+================================================== */
+
+#courtNewsFeed {
+    display: grid;
+    gap: 10px;
+    margin-top: 18px;
+}
+
+.court-news-item {
+    padding: 13px 14px;
+    border: 1px solid #e5ecf2;
+    border-radius: 9px;
+    background: #f8fafc;
+}
+
+.court-news-item span {
+    color: #1f5f99;
+    font-size: 0.64rem;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.court-news-item p {
+    margin: 6px 0 0;
+    color: #486581;
+    font-size: 0.76rem;
+    line-height: 1.6;
+}
+
+
+/* ==================================================
+   SIDE METRICS
+================================================== */
+
+.court-metric-list {
+    display: grid;
+    gap: 16px;
+    margin-top: 18px;
+}
+
+.court-metric-row > div:first-child {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.court-metric-row span {
+    color: #627d98;
+    font-size: 0.72rem;
+    font-weight: 700;
+}
+
+.court-metric-row strong {
+    color: #102a43;
+    font-size: 0.78rem;
+}
+
+.court-metric-track {
+    height: 8px;
+    margin-top: 7px;
+    overflow: hidden;
+    border-radius: 999px;
+    background: #e4ebf2;
+}
+
+.court-metric-fill {
+    height: 100%;
+    border-radius: inherit;
+    background: #1f5f99;
+    transition: width 220ms ease;
+}
+
+
+/* ==================================================
+   ACTIVITY
+================================================== */
+
+.court-activity-list {
+    display: grid;
+    gap: 10px;
+    margin-top: 16px;
+}
+
+.court-activity-list > div {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 11px 0;
+    border-bottom: 1px solid #edf2f7;
+}
+
+.court-activity-list > div:last-child {
+    border-bottom: 0;
+}
+
+.court-activity-list span {
+    color: #627d98;
+    font-size: 0.72rem;
+}
+
+.court-activity-list strong {
+    color: #102a43;
+    font-size: 0.76rem;
+    text-align: right;
+}
+
+
+/* ==================================================
+   OBJECTIVE
+================================================== */
+
+.court-objective-card {
+    padding: 22px;
+    border-left: 4px solid #1f5f99;
+    border-radius: 10px;
+    background: #ffffff;
+}
+
+.court-objective-card .court-eyebrow {
+    color: #1f5f99;
+}
+
+.court-objective-card h3 {
+    margin: 0;
+    color: #102a43;
+    font-family: "Merriweather", Georgia, serif;
+    font-size: 1rem;
+}
+
+.court-objective-card p:last-child {
+    margin: 8px 0 0;
+    color: #627d98;
+    font-size: 0.78rem;
+    line-height: 1.65;
+}
+
+
+/* ==================================================
+   RESULTS
+================================================== */
+
+.court-results-card[hidden] {
+    display: none;
+}
+
+.court-report-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 26px;
+}
+
+.court-report-grid > div {
+    padding: 16px;
+    border: 1px solid #e1e8ef;
+    border-radius: 10px;
+    background: #f8fafc;
+}
+
+.court-report-grid span {
+    display: block;
+    color: #7b8fa3;
+    font-size: 0.65rem;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.court-report-grid strong {
+    display: block;
+    margin-top: 6px;
+    color: #102a43;
+    font-size: 1rem;
+}
+
+.court-final-grade {
+    margin-top: 22px;
+    padding: 20px;
+    border-radius: 12px;
+    background: #102a43;
+    text-align: center;
+}
+
+.court-final-grade span {
+    display: block;
+    color: #b8cfdf;
+    font-size: 0.68rem;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.court-final-grade strong {
+    display: block;
+    margin-top: 6px;
+    color: #ffffff;
+    font-size: 2rem;
+}
+
+.court-final-message {
+    margin-top: 20px;
+    color: #486581;
+    line-height: 1.7;
+    text-align: center;
+}
+
+.court-results-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 24px;
+}
+
+
+/* ==================================================
+   RESPONSIVE
+================================================== */
+
+@media (max-width: 980px) {
+
+    .court-hero__container,
+    .court-game-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .court-hero__dashboard {
+        max-width: 700px;
+    }
+
+}
+
+
+@media (max-width: 760px) {
+
+    .court-preview-grid,
+    .court-profile-grid,
+    .court-report-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .court-hero {
+        padding: 60px 0;
+    }
+
+    .court-hero__container,
+    .court-content__container {
+        width: min(1180px, calc(100% - 32px));
+    }
+
+    .court-start-card,
+    .court-results-card,
+    .court-panel {
+        padding: 20px 18px;
+    }
+
+    .court-dashboard-grid,
+    .court-preview-grid,
+    .court-profile-grid,
+    .court-report-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .court-panel__heading,
+    .court-scenario-top {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .court-action-row {
+        justify-content: stretch;
+    }
+
+    .court-action-row .court-button,
+    .court-results-actions .court-button {
+        width: 100%;
+    }
+
+}

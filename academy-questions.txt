@@ -1,0 +1,143 @@
+const lessonQuestions = [
+    {
+        category: "Foundations",
+        question:
+            "Where does the authority of the United States government ultimately come from?",
+        answers: [
+            "Congress",
+            "The President",
+            "The people",
+            "The Supreme Court"
+        ],
+        correctAnswer: 2,
+        explanation:
+            "The Constitution begins with “We the People.” Government officials exercise powers granted through the Constitution and laws, but the system’s authority ultimately comes from the people."
+    },
+    {
+        category: "Three Branches",
+        question:
+            "Which branch of the federal government passes legislation?",
+        answers: [
+            "Legislative branch",
+            "Executive branch",
+            "Judicial branch",
+            "State governments"
+        ],
+        correctAnswer: 0,
+        explanation:
+            "Congress is the legislative branch. It includes the House of Representatives and the Senate, and it considers and passes federal legislation."
+    },
+    {
+        category: "Executive Branch",
+        question:
+            "Who can sign or veto a bill passed by Congress?",
+        answers: [
+            "The Chief Justice",
+            "The President",
+            "The Speaker of the House",
+            "A state governor"
+        ],
+        correctAnswer: 1,
+        explanation:
+            "The president may sign a bill into law or veto it. Congress may override a veto if the required two-thirds majority votes to do so in both chambers."
+    },
+    {
+        category: "Judicial Branch",
+        question:
+            "What is the primary role of the federal courts?",
+        answers: [
+            "Writing the federal budget",
+            "Conducting elections",
+            "Resolving legal disputes and interpreting laws",
+            "Appointing members of Congress"
+        ],
+        correctAnswer: 2,
+        explanation:
+            "Federal courts resolve cases and controversies under federal law and the Constitution. Courts may also review whether government actions comply with the Constitution."
+    },
+    {
+        category: "Congress",
+        question:
+            "Which part of the federal government has the constitutional power to declare war?",
+        answers: [
+            "Congress",
+            "The President acting alone",
+            "The Supreme Court",
+            "State legislatures"
+        ],
+        correctAnswer: 0,
+        explanation:
+            "The Constitution gives Congress the power to declare war. The president serves as Commander in Chief, and the two branches have different responsibilities involving military action."
+    },
+    {
+        category: "Appointments",
+        question:
+            "Who confirms presidential nominees to the United States Supreme Court?",
+        answers: [
+            "The House of Representatives",
+            "The Senate",
+            "State governors",
+            "The Supreme Court"
+        ],
+        correctAnswer: 1,
+        explanation:
+            "The president nominates Supreme Court justices, and the Senate decides whether to confirm those nominees."
+    },
+    {
+        category: "Federalism",
+        question:
+            "Which level of government usually issues driver's licenses?",
+        answers: [
+            "Federal government",
+            "State government",
+            "Congress",
+            "Supreme Court"
+        ],
+        correctAnswer: 1,
+        explanation:
+            "Driver’s licenses are generally issued and regulated by state governments, although federal laws may establish requirements affecting how identification is accepted."
+    },
+    {
+        category: "State and Local Government",
+        question:
+            "Which level of government has the largest direct role in operating public schools?",
+        answers: [
+            "State and local governments",
+            "The President",
+            "The Supreme Court alone",
+            "The United Nations"
+        ],
+        correctAnswer: 0,
+        explanation:
+            "Public education is primarily governed by states and local school districts. The federal government also provides funding and enforces applicable federal laws."
+    },
+    {
+        category: "Constitution",
+        question:
+            "Can the president change the United States Constitution alone?",
+        answers: [
+            "Yes, through an executive order",
+            "Yes, during an emergency",
+            "No",
+            "Only during the final year of a term"
+        ],
+        correctAnswer: 2,
+        explanation:
+            "No single president can amend the Constitution. Amendments require approval through the process described in Article V, involving Congress or a convention and ratification by the states."
+    },
+    {
+        category: "Elections",
+        question:
+            "Who elects members of the United States Congress?",
+        answers: [
+            "The President",
+            "Eligible voters",
+            "The Supreme Court",
+            "State governors"
+        ],
+        correctAnswer: 1,
+        explanation:
+            "Eligible voters elect members of the House of Representatives and the Senate. Each member represents a particular state or congressional district."
+    }
+];
+

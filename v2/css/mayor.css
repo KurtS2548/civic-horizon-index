@@ -1,0 +1,793 @@
+/* ==================================================
+   CIVIC HORIZON INDEX V2
+   MAYOR SIMULATION
+================================================== */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    background: #f7f9fb;
+    color: #243b53;
+    font-family: "Inter", sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+
+.mayor-page {
+    min-height: 65vh;
+}
+
+
+/* ==================================================
+   HERO
+================================================== */
+
+.mayor-hero {
+    padding: 72px 0;
+    background:
+        linear-gradient(
+            135deg,
+            #071d2f 0%,
+            #0b253d 58%,
+            #174f7f 100%
+        );
+    color: #ffffff;
+}
+
+.mayor-hero__container {
+    display: grid;
+    grid-template-columns:
+        minmax(0, 1.2fr)
+        minmax(340px, 0.8fr);
+    align-items: center;
+    gap: 50px;
+    width: min(1180px, calc(100% - 48px));
+    margin: 0 auto;
+}
+
+.mayor-eyebrow {
+    margin: 0 0 10px;
+    color: #1f5f99;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+}
+
+.mayor-hero .mayor-eyebrow {
+    color: #efc75d;
+}
+
+.mayor-hero__copy h1 {
+    margin: 0;
+    color: #ffffff;
+    font-family: "Merriweather", Georgia, serif;
+    font-size: clamp(2.6rem, 6vw, 4.3rem);
+    line-height: 1.08;
+    letter-spacing: -0.03em;
+}
+
+.mayor-hero__copy > p:last-of-type {
+    max-width: 720px;
+    margin: 20px 0 0;
+    color: #d0e1ed;
+    line-height: 1.8;
+}
+
+.mayor-hero__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+    margin-top: 24px;
+}
+
+.mayor-hero__meta span {
+    padding: 7px 10px;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.07);
+    color: #d5e4ef;
+    font-size: 0.68rem;
+    font-weight: 700;
+}
+
+
+/* ==================================================
+   HERO DASHBOARD
+================================================== */
+
+.mayor-hero__dashboard {
+    padding: 26px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 22px 55px rgba(0, 0, 0, 0.18);
+    backdrop-filter: blur(8px);
+}
+
+.mayor-dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    margin-top: 16px;
+}
+
+.mayor-dashboard-grid > div {
+    padding: 13px 14px;
+    border: 1px solid rgba(255, 255, 255, 0.13);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.mayor-dashboard-grid span {
+    display: block;
+    color: #b8cfdf;
+    font-size: 0.65rem;
+    font-weight: 700;
+}
+
+.mayor-dashboard-grid strong {
+    display: block;
+    margin-top: 5px;
+    color: #ffffff;
+    font-size: 1rem;
+}
+
+
+/* ==================================================
+   CONTENT
+================================================== */
+
+.mayor-content {
+    padding: 64px 0 88px;
+}
+
+.mayor-content__container {
+    width: min(1180px, calc(100% - 48px));
+    margin: 0 auto;
+}
+
+.mayor-back-link {
+    display: inline-flex;
+    margin-bottom: 22px;
+    color: #1f5f99;
+    font-size: 0.78rem;
+    font-weight: 800;
+    text-decoration: none;
+}
+
+.mayor-back-link:hover {
+    text-decoration: underline;
+}
+
+
+/* ==================================================
+   START / RESULTS CARDS
+================================================== */
+
+.mayor-start-card,
+.mayor-results-card {
+    padding: 32px;
+    border: 1px solid #d9e2ec;
+    border-radius: 16px;
+    background: #ffffff;
+    box-shadow: 0 14px 36px rgba(16, 42, 67, 0.07);
+}
+
+.mayor-start-card h2,
+.mayor-results-card h2 {
+    margin: 0;
+    color: #102a43;
+    font-family: "Merriweather", Georgia, serif;
+    font-size: clamp(2rem, 4vw, 2.7rem);
+}
+
+.mayor-start-card > p:not(.mayor-eyebrow),
+.mayor-results-card > p:not(.mayor-eyebrow) {
+    max-width: 760px;
+    margin: 14px 0 0;
+    color: #627d98;
+    line-height: 1.75;
+}
+
+.mayor-preview-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 26px;
+}
+
+.mayor-preview-grid > div {
+    padding: 16px;
+    border: 1px solid #e1e8ef;
+    border-radius: 10px;
+    background: #f8fafc;
+}
+
+.mayor-preview-grid span {
+    display: block;
+    color: #7b8fa3;
+    font-size: 0.66rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.mayor-preview-grid strong {
+    display: block;
+    margin-top: 6px;
+    color: #102a43;
+    font-size: 1rem;
+}
+
+
+/* ==================================================
+   BUTTONS
+================================================== */
+
+.mayor-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-family: "Inter", sans-serif;
+    font-size: 0.78rem;
+    font-weight: 800;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.mayor-button--primary {
+    border: 1px solid #1f5f99;
+    background: #1f5f99;
+    color: #ffffff;
+}
+
+.mayor-button--primary:hover,
+.mayor-button--primary:focus-visible {
+    background: #174f7f;
+    border-color: #174f7f;
+    outline: none;
+}
+
+.mayor-button--secondary {
+    border: 1px solid #bcccdc;
+    background: #ffffff;
+    color: #334e68;
+}
+
+.mayor-start-card .mayor-button {
+    margin-top: 24px;
+}
+
+
+/* ==================================================
+   GAME LAYOUT
+================================================== */
+
+.mayor-game-layout {
+    display: grid;
+    grid-template-columns:
+        minmax(0, 1.65fr)
+        minmax(300px, 0.75fr);
+    gap: 20px;
+}
+
+.mayor-main-column,
+.mayor-side-column {
+    display: grid;
+    gap: 18px;
+    align-content: start;
+}
+
+.mayor-panel {
+    padding: 24px;
+    border: 1px solid #d9e2ec;
+    border-radius: 14px;
+    background: #ffffff;
+    box-shadow: 0 10px 24px rgba(16, 42, 67, 0.05);
+}
+
+.mayor-panel h2 {
+    margin: 0;
+    color: #102a43;
+    font-family: "Merriweather", Georgia, serif;
+    font-size: 1.35rem;
+}
+
+.mayor-panel__heading,
+.mayor-scenario-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 18px;
+}
+
+.mayor-panel__heading > span,
+.mayor-scenario-top > span {
+    color: #7b8fa3;
+    font-size: 0.72rem;
+    font-weight: 800;
+}
+
+
+/* ==================================================
+   PROFILE
+================================================== */
+
+.mayor-profile-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 10px;
+    margin-top: 18px;
+}
+
+.mayor-profile-grid > div {
+    padding: 13px 14px;
+    border: 1px solid #e5ecf2;
+    border-radius: 9px;
+    background: #f8fafc;
+}
+
+.mayor-profile-grid span {
+    display: block;
+    color: #7b8fa3;
+    font-size: 0.64rem;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.mayor-profile-grid strong {
+    display: block;
+    margin-top: 5px;
+    color: #102a43;
+    font-size: 0.88rem;
+}
+
+
+/* ==================================================
+   PRIORITIES
+================================================== */
+
+.mayor-priorities {
+    margin-top: 20px;
+}
+
+.mayor-priorities h3 {
+    margin: 0 0 10px;
+    color: #102a43;
+    font-size: 0.86rem;
+}
+
+.mayor-priorities > div {
+    display: inline-flex;
+    margin: 0 7px 7px 0;
+    padding: 7px 10px;
+    border-radius: 999px;
+    background: #f2f6f9;
+    color: #486581;
+    font-size: 0.7rem;
+    font-weight: 700;
+}
+
+
+/* ==================================================
+   SCENARIO
+================================================== */
+
+.mayor-scenario-card > h2 {
+    margin-top: 8px;
+}
+
+.mayor-scenario-card > p {
+    margin: 12px 0 0;
+    color: #627d98;
+    line-height: 1.7;
+}
+
+
+/* ==================================================
+   CHOICES
+================================================== */
+
+.mayor-choice-grid {
+    display: grid;
+    gap: 10px;
+    margin-top: 22px;
+}
+
+.mayor-choice-button {
+    display: grid;
+    grid-template-columns: 34px minmax(0, 1fr);
+    gap: 12px;
+    align-items: center;
+    width: 100%;
+    min-height: 54px;
+    padding: 12px 14px;
+    border: 1px solid #d9e2ec;
+    border-radius: 10px;
+    background: #ffffff;
+    color: #334e68;
+    cursor: pointer;
+    font-family: "Inter", sans-serif;
+    text-align: left;
+}
+
+.mayor-choice-button > span {
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    background: #eaf3fb;
+    color: #174f7f;
+    font-size: 0.74rem;
+    font-weight: 800;
+}
+
+.mayor-choice-button strong {
+    font-size: 0.8rem;
+    line-height: 1.5;
+}
+
+.mayor-choice-button:hover,
+.mayor-choice-button:focus-visible {
+    border-color: #9fbdd4;
+    background: #f8fbfd;
+    outline: none;
+}
+
+.mayor-choice-button:disabled {
+    cursor: default;
+}
+
+.mayor-choice-selected {
+    border-color: #1f5f99;
+    background: #eef6fc;
+}
+
+
+/* ==================================================
+   OUTCOME
+================================================== */
+
+.mayor-outcome {
+    display: grid;
+    grid-template-columns: 42px minmax(0, 1fr);
+    gap: 14px;
+    margin-top: 20px;
+    padding: 18px;
+    border-radius: 10px;
+    background: #f8fafc;
+}
+
+.mayor-outcome[hidden] {
+    display: none;
+}
+
+.mayor-outcome-icon {
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: #eaf3fb;
+    color: #174f7f;
+    font-weight: 800;
+}
+
+.mayor-outcome h3 {
+    margin: 0;
+    color: #102a43;
+    font-size: 0.9rem;
+}
+
+.mayor-outcome p {
+    margin: 6px 0 0;
+    color: #627d98;
+    font-size: 0.8rem;
+    line-height: 1.65;
+}
+
+.mayor-action-row {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 18px;
+}
+
+
+/* ==================================================
+   CITY NEWS
+================================================== */
+
+#mayorNewsFeed {
+    display: grid;
+    gap: 10px;
+    margin-top: 18px;
+}
+
+.mayor-news-item {
+    padding: 13px 14px;
+    border: 1px solid #e5ecf2;
+    border-radius: 9px;
+    background: #f8fafc;
+}
+
+.mayor-news-item span {
+    color: #1f5f99;
+    font-size: 0.64rem;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.mayor-news-item p {
+    margin: 6px 0 0;
+    color: #486581;
+    font-size: 0.76rem;
+    line-height: 1.6;
+}
+
+
+/* ==================================================
+   SIDE METRICS
+================================================== */
+
+.mayor-metric-list {
+    display: grid;
+    gap: 16px;
+    margin-top: 18px;
+}
+
+.mayor-metric-row > div:first-child {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.mayor-metric-row span {
+    color: #627d98;
+    font-size: 0.72rem;
+    font-weight: 700;
+}
+
+.mayor-metric-row strong {
+    color: #102a43;
+    font-size: 0.78rem;
+}
+
+.mayor-metric-track {
+    height: 8px;
+    margin-top: 7px;
+    overflow: hidden;
+    border-radius: 999px;
+    background: #e4ebf2;
+}
+
+.mayor-metric-fill {
+    height: 100%;
+    border-radius: inherit;
+    background: #1f5f99;
+    transition: width 220ms ease;
+}
+
+
+/* ==================================================
+   ACTIVITY
+================================================== */
+
+.mayor-activity-list {
+    display: grid;
+    gap: 10px;
+    margin-top: 16px;
+}
+
+.mayor-activity-list > div {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 11px 0;
+    border-bottom: 1px solid #edf2f7;
+}
+
+.mayor-activity-list > div:last-child {
+    border-bottom: 0;
+}
+
+.mayor-activity-list span {
+    color: #627d98;
+    font-size: 0.72rem;
+}
+
+.mayor-activity-list strong {
+    color: #102a43;
+    font-size: 0.76rem;
+    text-align: right;
+}
+
+
+/* ==================================================
+   OBJECTIVE
+================================================== */
+
+.mayor-objective-card {
+    padding: 22px;
+    border-left: 4px solid #1f5f99;
+    border-radius: 10px;
+    background: #ffffff;
+}
+
+.mayor-objective-card .mayor-eyebrow {
+    color: #1f5f99;
+}
+
+.mayor-objective-card h3 {
+    margin: 0;
+    color: #102a43;
+    font-family: "Merriweather", Georgia, serif;
+    font-size: 1rem;
+}
+
+.mayor-objective-card p:last-child {
+    margin: 8px 0 0;
+    color: #627d98;
+    font-size: 0.78rem;
+    line-height: 1.65;
+}
+
+
+/* ==================================================
+   RESULTS
+================================================== */
+
+.mayor-results-card[hidden] {
+    display: none;
+}
+
+.mayor-report-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 26px;
+}
+
+.mayor-report-grid > div {
+    padding: 16px;
+    border: 1px solid #e1e8ef;
+    border-radius: 10px;
+    background: #f8fafc;
+}
+
+.mayor-report-grid span {
+    display: block;
+    color: #7b8fa3;
+    font-size: 0.65rem;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.mayor-report-grid strong {
+    display: block;
+    margin-top: 6px;
+    color: #102a43;
+    font-size: 1rem;
+}
+
+.mayor-final-grade {
+    margin-top: 22px;
+    padding: 20px;
+    border-radius: 12px;
+    background: #102a43;
+    text-align: center;
+}
+
+.mayor-final-grade span {
+    display: block;
+    color: #b8cfdf;
+    font-size: 0.68rem;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.mayor-final-grade strong {
+    display: block;
+    margin-top: 6px;
+    color: #ffffff;
+    font-size: 2rem;
+}
+
+.mayor-final-message {
+    margin-top: 20px;
+    color: #486581;
+    line-height: 1.7;
+    text-align: center;
+}
+
+.mayor-results-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 24px;
+}
+
+
+/* ==================================================
+   RESPONSIVE
+================================================== */
+
+@media (max-width: 980px) {
+
+    .mayor-hero__container,
+    .mayor-game-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .mayor-hero__dashboard {
+        max-width: 700px;
+    }
+
+}
+
+
+@media (max-width: 760px) {
+
+    .mayor-preview-grid,
+    .mayor-profile-grid,
+    .mayor-report-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .mayor-hero {
+        padding: 60px 0;
+    }
+
+    .mayor-hero__container,
+    .mayor-content__container {
+        width: min(1180px, calc(100% - 32px));
+    }
+
+    .mayor-start-card,
+    .mayor-results-card,
+    .mayor-panel {
+        padding: 20px 18px;
+    }
+
+    .mayor-dashboard-grid,
+    .mayor-preview-grid,
+    .mayor-profile-grid,
+    .mayor-report-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .mayor-panel__heading,
+    .mayor-scenario-top {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .mayor-action-row {
+        justify-content: stretch;
+    }
+
+    .mayor-action-row .mayor-button,
+    .mayor-results-actions .mayor-button {
+        width: 100%;
+    }
+
+}

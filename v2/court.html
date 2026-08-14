@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html
+    lang="en"
+    class="auth-access-pending"
+>
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="Civic Horizon Index Supreme Court simulation."
+    >
+
+    <title>
+        Supreme Court Simulation | Civic Horizon Index
+    </title>
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Merriweather:wght@700&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="css/header.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="css/footer.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="css/court.css"
+    >
+
+</head>
+
+<body>
+
+    <div id="headerContainer"></div>
+
+
+    <main class="court-page">
+
+        <section class="court-hero">
+
+            <div class="court-hero__container">
+
+                <div class="court-hero__copy">
+
+                    <p class="court-eyebrow">
+                        Civic Simulation
+                    </p>
+
+                    <h1>
+                        You Are a Supreme Court Justice
+                    </h1>
+
+                    <p>
+                        Decide constitutional disputes, weigh precedent,
+                        interpret federal law, and consider the long-term
+                        legitimacy of the Court.
+                    </p>
+
+
+                    <div class="court-hero__meta">
+
+                        <span>
+                            Decision simulation
+                        </span>
+
+                        <span>
+                            About 15 minutes
+                        </span>
+
+                        <span>
+                            Multiple legal paths
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <aside class="court-hero__dashboard">
+
+                    <p class="court-eyebrow">
+                        Judicial Dashboard
+                    </p>
+
+                    <div class="court-dashboard-grid">
+
+                        <div>
+                            <span>Public Trust</span>
+                            <strong id="courtTrust">68%</strong>
+                        </div>
+
+                        <div>
+                            <span>Institutional Legitimacy</span>
+                            <strong id="courtLegitimacy">72%</strong>
+                        </div>
+
+                        <div>
+                            <span>Precedent Stability</span>
+                            <strong id="courtPrecedent">70%</strong>
+                        </div>
+
+                        <div>
+                            <span>Judicial Restraint</span>
+                            <strong id="courtRestraint">65%</strong>
+                        </div>
+
+                        <div>
+                            <span>Cases Decided</span>
+                            <strong id="courtCasesDecided">0</strong>
+                        </div>
+
+                        <div>
+                            <span>Major Opinions</span>
+                            <strong id="courtMajorOpinions">0</strong>
+                        </div>
+
+                    </div>
+
+                </aside>
+
+            </div>
+
+        </section>
+
+
+        <section class="court-content">
+
+            <div class="court-content__container">
+
+
+                <!-- START SCREEN -->
+
+                <section
+                    id="courtStartScreen"
+                    class="court-start-card"
+                >
+
+                    <a
+                        href="simulator.html"
+                        class="court-back-link"
+                    >
+                        ← Back to Civic Simulations
+                    </a>
+
+                    <p class="court-eyebrow">
+                        Opening Conference
+                    </p>
+
+                    <h2>
+                        Begin Your Term on the Court
+                    </h2>
+
+                    <p>
+                        You have joined the Supreme Court and will hear
+                        a series of cases involving constitutional rights,
+                        federal power, state authority, executive action,
+                        and precedent.
+                    </p>
+
+                    <p>
+                        Your role is not to choose the most popular outcome.
+                        You must weigh the Constitution, federal law,
+                        precedent, institutional legitimacy, and the limits
+                        of judicial power.
+                    </p>
+
+
+                    <div class="court-preview-grid">
+
+                        <div>
+                            <span>Public Trust</span>
+                            <strong>68%</strong>
+                        </div>
+
+                        <div>
+                            <span>Institutional Legitimacy</span>
+                            <strong>72%</strong>
+                        </div>
+
+                        <div>
+                            <span>Precedent Stability</span>
+                            <strong>70%</strong>
+                        </div>
+
+                        <div>
+                            <span>Judicial Restraint</span>
+                            <strong>65%</strong>
+                        </div>
+
+                    </div>
+
+
+                    <button
+                        type="button"
+                        id="courtStartButton"
+                        class="court-button court-button--primary"
+                    >
+                        Begin the Docket
+                    </button>
+
+                </section>
+
+
+                <!-- GAME SCREEN -->
+
+                <section
+                    id="courtGameScreen"
+                    class="court-game-layout"
+                    hidden
+                >
+
+                    <div class="court-main-column">
+
+
+                        <section class="court-panel">
+
+                            <div class="court-panel__heading">
+
+                                <div>
+
+                                    <p class="court-eyebrow">
+                                        The Court
+                                    </p>
+
+                                    <h2>
+                                        Judicial Conference
+                                    </h2>
+
+                                </div>
+
+                                <span id="courtTurnLabel">
+                                    Case 1
+                                </span>
+
+                            </div>
+
+
+                            <div class="court-profile-grid">
+
+                                <div>
+                                    <span>Public Trust</span>
+                                    <strong id="courtPanelTrust">68%</strong>
+                                </div>
+
+                                <div>
+                                    <span>Legitimacy</span>
+                                    <strong id="courtPanelLegitimacy">72%</strong>
+                                </div>
+
+                                <div>
+                                    <span>Precedent Stability</span>
+                                    <strong id="courtPanelPrecedent">70%</strong>
+                                </div>
+
+                                <div>
+                                    <span>Judicial Restraint</span>
+                                    <strong id="courtPanelRestraint">65%</strong>
+                                </div>
+
+                            </div>
+
+
+                            <div class="court-principles">
+
+                                <h3>
+                                    Judicial Responsibilities
+                                </h3>
+
+                                <div>
+                                    Interpret the Constitution
+                                </div>
+
+                                <div>
+                                    Apply Federal Law
+                                </div>
+
+                                <div>
+                                    Consider Precedent
+                                </div>
+
+                                <div>
+                                    Protect Court Legitimacy
+                                </div>
+
+                            </div>
+
+                        </section>
+
+
+                        <section
+                            id="courtScenarioCard"
+                            class="court-panel court-scenario-card"
+                        >
+
+                            <div class="court-scenario-top">
+
+                                <p
+                                    class="court-eyebrow"
+                                    id="courtScenarioCategory"
+                                >
+                                    Constitutional Case
+                                </p>
+
+                                <span id="courtScenarioProgress">
+                                    Decision 1 of 8
+                                </span>
+
+                            </div>
+
+
+                            <h2 id="courtScenarioTitle">
+                                Loading case...
+                            </h2>
+
+
+                            <p id="courtScenarioText">
+                                Your first case is being prepared.
+                            </p>
+
+
+                            <div
+                                id="courtChoiceContainer"
+                                class="court-choice-grid"
+                            ></div>
+
+
+                            <div
+                                id="courtOutcome"
+                                class="court-outcome"
+                                hidden
+                            >
+
+                                <div
+                                    id="courtOutcomeIcon"
+                                    class="court-outcome-icon"
+                                >
+                                    •
+                                </div>
+
+                                <div>
+
+                                    <h3 id="courtOutcomeTitle">
+                                        Opinion Recorded
+                                    </h3>
+
+                                    <p id="courtOutcomeText"></p>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="court-action-row">
+
+                                <button
+                                    type="button"
+                                    id="courtContinueButton"
+                                    class="court-button court-button--primary"
+                                    hidden
+                                >
+                                    Continue
+                                </button>
+
+                            </div>
+
+                        </section>
+
+
+                        <section class="court-panel">
+
+                            <div class="court-panel__heading">
+
+                                <div>
+
+                                    <p class="court-eyebrow">
+                                        Court Watch
+                                    </p>
+
+                                    <h2>
+                                        Latest Developments
+                                    </h2>
+
+                                </div>
+
+                            </div>
+
+
+                            <div id="courtNewsFeed">
+
+                                <div class="court-news-item">
+
+                                    <span>
+                                        Supreme Court
+                                    </span>
+
+                                    <p>
+                                        New justice joins the Court as a new term begins.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                        </section>
+
+                    </div>
+
+
+                    <aside class="court-side-column">
+
+
+                        <section class="court-panel">
+
+                            <p class="court-eyebrow">
+                                Live Performance
+                            </p>
+
+                            <h2>
+                                Judicial Metrics
+                            </h2>
+
+
+                            <div class="court-metric-list">
+
+
+                                <div class="court-metric-row">
+
+                                    <div>
+                                        <span>Public Trust</span>
+                                        <strong id="sideCourtTrust">68%</strong>
+                                    </div>
+
+                                    <div class="court-metric-track">
+                                        <div
+                                            id="sideCourtTrustBar"
+                                            class="court-metric-fill"
+                                            style="width: 68%;"
+                                        ></div>
+                                    </div>
+
+                                </div>
+
+
+                                <div class="court-metric-row">
+
+                                    <div>
+                                        <span>Institutional Legitimacy</span>
+                                        <strong id="sideCourtLegitimacy">72%</strong>
+                                    </div>
+
+                                    <div class="court-metric-track">
+                                        <div
+                                            id="sideCourtLegitimacyBar"
+                                            class="court-metric-fill"
+                                            style="width: 72%;"
+                                        ></div>
+                                    </div>
+
+                                </div>
+
+
+                                <div class="court-metric-row">
+
+                                    <div>
+                                        <span>Precedent Stability</span>
+                                        <strong id="sideCourtPrecedent">70%</strong>
+                                    </div>
+
+                                    <div class="court-metric-track">
+                                        <div
+                                            id="sideCourtPrecedentBar"
+                                            class="court-metric-fill"
+                                            style="width: 70%;"
+                                        ></div>
+                                    </div>
+
+                                </div>
+
+
+                                <div class="court-metric-row">
+
+                                    <div>
+                                        <span>Judicial Restraint</span>
+                                        <strong id="sideCourtRestraint">65%</strong>
+                                    </div>
+
+                                    <div class="court-metric-track">
+                                        <div
+                                            id="sideCourtRestraintBar"
+                                            class="court-metric-fill"
+                                            style="width: 65%;"
+                                        ></div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </section>
+
+
+                        <section class="court-panel">
+
+                            <p class="court-eyebrow">
+                                Judicial Record
+                            </p>
+
+                            <h2>
+                                Your Term
+                            </h2>
+
+
+                            <div class="court-activity-list">
+
+                                <div>
+                                    <span>Cases Decided</span>
+                                    <strong id="sideCourtCasesDecided">0</strong>
+                                </div>
+
+                                <div>
+                                    <span>Major Opinions</span>
+                                    <strong id="sideCourtMajorOpinions">0</strong>
+                                </div>
+
+                                <div>
+                                    <span>Current Stage</span>
+                                    <strong id="courtCurrentStage">
+                                        Opening Conference
+                                    </strong>
+                                </div>
+
+                                <div>
+                                    <span>Term Progress</span>
+                                    <strong id="courtTermProgress">
+                                        0%
+                                    </strong>
+                                </div>
+
+                            </div>
+
+                        </section>
+
+
+                        <section class="court-objective-card">
+
+                            <p class="court-eyebrow">
+                                Your Objective
+                            </p>
+
+                            <h3>
+                                Interpret, Not Govern
+                            </h3>
+
+                            <p>
+                                Decide cases according to constitutional and
+                                legal principles while considering precedent,
+                                institutional legitimacy, and the proper limits
+                                of judicial power.
+                            </p>
+
+                        </section>
+
+                    </aside>
+
+                </section>
+
+
+                <!-- FINAL REPORT -->
+
+                <section
+                    id="courtResultsScreen"
+                    class="court-results-card"
+                    hidden
+                >
+
+                    <p class="court-eyebrow">
+                        Term Complete
+                    </p>
+
+                    <h2>
+                        Judicial Report Card
+                    </h2>
+
+                    <p>
+                        Your opinions shaped constitutional doctrine,
+                        precedent, public confidence, and the institutional
+                        standing of the Court.
+                    </p>
+
+
+                    <div class="court-report-grid">
+
+                        <div>
+                            <span>Final Public Trust</span>
+                            <strong id="finalCourtTrust">0%</strong>
+                        </div>
+
+                        <div>
+                            <span>Institutional Legitimacy</span>
+                            <strong id="finalCourtLegitimacy">0%</strong>
+                        </div>
+
+                        <div>
+                            <span>Precedent Stability</span>
+                            <strong id="finalCourtPrecedent">0%</strong>
+                        </div>
+
+                        <div>
+                            <span>Judicial Restraint</span>
+                            <strong id="finalCourtRestraint">0%</strong>
+                        </div>
+
+                        <div>
+                            <span>Cases Decided</span>
+                            <strong id="finalCourtCasesDecided">0</strong>
+                        </div>
+
+                        <div>
+                            <span>Major Opinions</span>
+                            <strong id="finalCourtMajorOpinions">0</strong>
+                        </div>
+
+                    </div>
+
+
+                    <div class="court-final-grade">
+
+                        <span>
+                            Overall Grade
+                        </span>
+
+                        <strong id="courtFinalGrade">
+                            B
+                        </strong>
+
+                    </div>
+
+
+                    <div
+                        id="courtFinalMessage"
+                        class="court-final-message"
+                    >
+                        Your judicial term has concluded.
+                    </div>
+
+
+                    <div class="court-results-actions">
+
+                        <a
+                            href="simulator.html"
+                            class="court-button court-button--primary"
+                        >
+                            Return to Simulations
+                        </a>
+
+                        <button
+                            type="button"
+                            id="courtRestartButton"
+                            class="court-button court-button--secondary"
+                        >
+                            Hear Another Docket
+                        </button>
+
+                    </div>
+
+                </section>
+
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <div id="footerContainer"></div>
+
+
+    <script
+        type="module"
+        src="js/court.js"
+    ></script>
+
+    <script
+        type="module"
+        src="js/site-auth.js"
+    ></script>
+
+</body>
+
+</html>

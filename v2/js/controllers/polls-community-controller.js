@@ -5,14 +5,28 @@ POLLS COMMUNITY CONTROLLER
 ==================================================
 */
 
-import {
-    subscribeToSnapshotSummary,
-    getVotesForSurvey
-} from "../services/snapshot-service.js";
 
 import {
+
+    subscribeToSnapshotSummary,
+
+    getVotesForSurvey
+
+} from "../services/snapshot-service.js";
+
+
+import {
+
     submitCommunityVote
+
 } from "../services/firebase-service.js";
+
+
+import {
+
+    getCurrentUserVotingEligibility
+
+} from "../services/auth-service.js";
 
 
 /*
@@ -21,14 +35,28 @@ CONTROLLER STATE
 ==================================================
 */
 
-let controllerInitialized = false;
+let controllerInitialized =
+    false;
 
-let unsubscribeSnapshotSummary = null;
 
-let activeSurveys = [];
-let communityVotes = [];
+let unsubscribeSnapshotSummary =
+    null;
 
-let selectedSurvey = null;
+
+let activeSurveys =
+    [];
+
+
+let communityVotes =
+    [];
+
+
+let selectedSurvey =
+    null;
+
+
+let votingAccessCheckId =
+    0;
 
 
 /*
@@ -39,16 +67,25 @@ PUBLIC INITIALIZATION
 
 export function initializePollsCommunityController() {
 
-    if (controllerInitialized) {
+    if (
+        controllerInitialized
+    ) {
+
         return;
+
     }
 
-    controllerInitialized = true;
+
+    controllerInitialized =
+        true;
+
 
     initializeCommunityEvents();
 
+
     unsubscribeSnapshotSummary =
         subscribeToSnapshotSummary(
+
             summary => {
 
                 activeSurveys =
@@ -57,6 +94,7 @@ export function initializePollsCommunityController() {
                     )
                         ? summary.activeSurveys
                         : [];
+
 
                 communityVotes =
                     Array.isArray(
@@ -73,6 +111,7 @@ export function initializePollsCommunityController() {
                 openPollFromUrl();
 
             },
+
             error => {
 
                 console.error(
@@ -80,9 +119,11 @@ export function initializePollsCommunityController() {
                     error
                 );
 
+
                 renderCommunityError();
 
             }
+
         );
 
 }
@@ -102,7 +143,9 @@ function initializeCommunityEvents() {
         );
 
 
-    if (pollsContainer) {
+    if (
+        pollsContainer
+    ) {
 
         pollsContainer.addEventListener(
             "click",
@@ -118,7 +161,9 @@ function initializeCommunityEvents() {
         );
 
 
-    if (backButton) {
+    if (
+        backButton
+    ) {
 
         backButton.addEventListener(
             "click",
@@ -134,7 +179,9 @@ function initializeCommunityEvents() {
         );
 
 
-    if (voteForm) {
+    if (
+        voteForm
+    ) {
 
         voteForm.addEventListener(
             "submit",
@@ -160,19 +207,30 @@ function renderCommunityPolls() {
         );
 
 
-    if (!container) {
+    if (
+        !container
+    ) {
+
         return;
+
     }
 
 
     const sortedSurveys =
         [...activeSurveys]
             .sort(
-                (surveyA, surveyB) => {
+                (
+                    surveyA,
+                    surveyB
+                ) => {
 
                     return (
-                        getSurveyTimestamp(surveyB) -
-                        getSurveyTimestamp(surveyA)
+                        getSurveyTimestamp(
+                            surveyB
+                        ) -
+                        getSurveyTimestamp(
+                            surveyA
+                        )
                     );
 
                 }
@@ -180,12 +238,14 @@ function renderCommunityPolls() {
 
 
     if (
-        sortedSurveys.length === 0
+        sortedSurveys.length ===
+        0
     ) {
 
         renderEmptyState(
             container
         );
+
 
         return;
 
@@ -194,21 +254,23 @@ function renderCommunityPolls() {
 
     container.innerHTML =
         sortedSurveys
-            .map(survey => {
+            .map(
+                survey => {
 
-                const voteCount =
-                    getVotesForSurvey(
-                        survey.id,
-                        communityVotes
-                    ).length;
+                    const voteCount =
+                        getVotesForSurvey(
+                            survey.id,
+                            communityVotes
+                        ).length;
 
 
-                return createPollCard(
-                    survey,
-                    voteCount
-                );
+                    return createPollCard(
+                        survey,
+                        voteCount
+                    );
 
-            })
+                }
+            )
             .join("");
 
 }
@@ -227,7 +289,8 @@ function createPollCard(
 
     const surveyId =
         escapeHtml(
-            survey.id || ""
+            survey.id ||
+            ""
         );
 
 
@@ -247,7 +310,8 @@ function createPollCard(
 
 
     const voteLabel =
-        voteCount === 1
+        voteCount ===
+            1
             ? "vote"
             : "votes";
 
@@ -319,8 +383,12 @@ function handlePollListClick(
         );
 
 
-    if (!button) {
+    if (
+        !button
+    ) {
+
         return;
+
     }
 
 
@@ -328,8 +396,12 @@ function handlePollListClick(
         button.dataset.pollId;
 
 
-    if (!pollId) {
+    if (
+        !pollId
+    ) {
+
         return;
+
     }
 
 
@@ -355,20 +427,27 @@ function openCommunityVote(
             item => {
 
                 return (
-                    String(item.id) ===
-                    String(pollId)
+                    String(
+                        item.id
+                    ) ===
+                    String(
+                        pollId
+                    )
                 );
 
             }
         );
 
 
-    if (!survey) {
+    if (
+        !survey
+    ) {
 
         console.warn(
             "Community poll could not be found:",
             pollId
         );
+
 
         return;
 
@@ -390,6 +469,18 @@ function openCommunityVote(
     updatePollUrl(
         survey.id
     );
+
+
+    /*
+    ----------------------------------------------
+    ACCOUNT ELIGIBILITY
+
+    The form begins disabled and is enabled only
+    after eligibility is confirmed.
+    ----------------------------------------------
+    */
+
+    checkVotingAccessForSelectedPoll();
 
 }
 
@@ -422,7 +513,18 @@ function renderSelectedPoll(
     clearVoteMessage();
 
 
-    resetVoteButton();
+    /*
+    ----------------------------------------------
+    DEFAULT SAFE STATE
+
+    Do not briefly expose an enabled vote form
+    before account eligibility has been checked.
+    ----------------------------------------------
+    */
+
+    disableVoteForm(
+        "Checking Voting Access..."
+    );
 
 
     if (
@@ -433,6 +535,170 @@ function renderSelectedPoll(
 
         lockVoteForm(
             "You have already voted in this poll on this device."
+        );
+
+    }
+
+}
+
+
+/*
+==================================================
+CHECK VOTING ACCESS
+==================================================
+*/
+
+async function checkVotingAccessForSelectedPoll() {
+
+    if (
+        !selectedSurvey
+    ) {
+
+        return;
+
+    }
+
+
+    const surveyId =
+        String(
+            selectedSurvey.id
+        );
+
+
+    /*
+    Each request receives an ID.
+
+    If the participant quickly changes polls,
+    an older asynchronous result cannot enable
+    the wrong poll's controls.
+    */
+
+    const checkId =
+        ++votingAccessCheckId;
+
+
+    if (
+        hasVotedOnPoll(
+            surveyId
+        )
+    ) {
+
+        lockVoteForm(
+            "You have already voted in this poll on this device."
+        );
+
+
+        return;
+
+    }
+
+
+    disableVoteForm(
+        "Checking Voting Access..."
+    );
+
+
+    showVoteMessage(
+        "Checking your voting access...",
+        "info"
+    );
+
+
+    try {
+
+        const eligibility =
+            await getCurrentUserVotingEligibility();
+
+
+        /*
+        ----------------------------------------------
+        STALE REQUEST CHECK
+        ----------------------------------------------
+        */
+
+        if (
+            checkId !==
+            votingAccessCheckId
+        ) {
+
+            return;
+
+        }
+
+
+        if (
+            !selectedSurvey ||
+            String(
+                selectedSurvey.id
+            ) !==
+            surveyId
+        ) {
+
+            return;
+
+        }
+
+
+        if (
+            hasVotedOnPoll(
+                surveyId
+            )
+        ) {
+
+            lockVoteForm(
+                "You have already voted in this poll on this device."
+            );
+
+
+            return;
+
+        }
+
+
+        if (
+            eligibility?.eligible
+        ) {
+
+            enableVoteForm();
+
+            clearVoteMessage();
+
+
+            return;
+
+        }
+
+
+        blockIneligibleVoting(
+            eligibility
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Community poll eligibility check failed:",
+            error
+        );
+
+
+        if (
+            checkId !==
+            votingAccessCheckId
+        ) {
+
+            return;
+
+        }
+
+
+        disableVoteForm(
+            "Participation Unavailable"
+        );
+
+
+        showVoteMessage(
+            "Voting access could not be confirmed. Please sign in again.",
+            "error"
         );
 
     }
@@ -456,8 +722,12 @@ function renderPollChoices(
         );
 
 
-    if (!container) {
+    if (
+        !container
+    ) {
+
         return;
+
     }
 
 
@@ -468,7 +738,8 @@ function renderPollChoices(
 
 
     if (
-        choices.length === 0
+        choices.length ===
+        0
     ) {
 
         container.innerHTML = `
@@ -482,7 +753,9 @@ function renderPollChoices(
             </div>
         `;
 
+
         disableVoteButton();
+
 
         return;
 
@@ -491,37 +764,40 @@ function renderPollChoices(
 
     container.innerHTML =
         choices
-            .map(choice => {
+            .map(
+                choice => {
 
-                const safeChoice =
-                    escapeHtml(
-                        choice
-                    );
+                    const safeChoice =
+                        escapeHtml(
+                            choice
+                        );
 
 
-                return `
-                    <label class="community-vote-choice">
+                    return `
+                        <label class="community-vote-choice">
 
-                        <input
-                            type="radio"
-                            name="communityVoteChoice"
-                            value="${safeChoice}"
-                        >
+                            <input
+                                type="radio"
+                                name="communityVoteChoice"
+                                value="${safeChoice}"
+                                disabled
+                            >
 
-                        <span
-                            class="community-vote-choice__control"
-                        ></span>
+                            <span
+                                class="community-vote-choice__control"
+                            ></span>
 
-                        <span
-                            class="community-vote-choice__text"
-                        >
-                            ${safeChoice}
-                        </span>
+                            <span
+                                class="community-vote-choice__text"
+                            >
+                                ${safeChoice}
+                            </span>
 
-                    </label>
-                `;
+                        </label>
+                    `;
 
-            })
+                }
+            )
             .join("");
 
 }
@@ -538,9 +814,13 @@ function getSurveyChoices(
 ) {
 
     const possibleChoices = [
+
         survey?.choices,
+
         survey?.options,
+
         survey?.answers
+
     ];
 
 
@@ -550,42 +830,48 @@ function getSurveyChoices(
     ) {
 
         if (
-            Array.isArray(candidate)
+            Array.isArray(
+                candidate
+            )
         ) {
 
             return candidate
-                .map(choice => {
+                .map(
+                    choice => {
 
-                    if (
-                        typeof choice ===
-                        "string"
-                    ) {
+                        if (
+                            typeof choice ===
+                            "string"
+                        ) {
 
-                        return choice.trim();
+                            return choice.trim();
+
+                        }
+
+
+                        if (
+                            choice &&
+                            typeof choice ===
+                                "object"
+                        ) {
+
+                            return String(
+                                choice.label ??
+                                choice.text ??
+                                choice.value ??
+                                ""
+                            ).trim();
+
+                        }
+
+
+                        return "";
 
                     }
-
-
-                    if (
-                        choice &&
-                        typeof choice ===
-                        "object"
-                    ) {
-
-                        return String(
-                            choice.label ??
-                            choice.text ??
-                            choice.value ??
-                            ""
-                        ).trim();
-
-                    }
-
-
-                    return "";
-
-                })
-                .filter(Boolean);
+                )
+                .filter(
+                    Boolean
+                );
 
         }
 
@@ -605,8 +891,12 @@ LIVE VOTE TOTAL
 
 function updateSelectedPollTotal() {
 
-    if (!selectedSurvey) {
+    if (
+        !selectedSurvey
+    ) {
+
         return;
+
     }
 
 
@@ -640,12 +930,83 @@ async function handleVoteFormSubmit(
     event.preventDefault();
 
 
-    if (!selectedSurvey) {
+    if (
+        !selectedSurvey
+    ) {
 
         showVoteMessage(
             "Please select a community poll first.",
             "error"
         );
+
+
+        return;
+
+    }
+
+
+    const surveyId =
+        String(
+            selectedSurvey.id
+        );
+
+
+    /*
+    ----------------------------------------------
+    DEVICE CONVENIENCE LOCK
+    ----------------------------------------------
+    */
+
+    if (
+        hasVotedOnPoll(
+            surveyId
+        )
+    ) {
+
+        lockVoteForm(
+            "You have already voted in this poll on this device."
+        );
+
+
+        return;
+
+    }
+
+
+    /*
+    ----------------------------------------------
+    ACCOUNT ELIGIBILITY RE-CHECK
+
+    Never trust only the page-load check.
+    ----------------------------------------------
+    */
+
+    let eligibility;
+
+
+    try {
+
+        eligibility =
+            await getCurrentUserVotingEligibility();
+
+    } catch (error) {
+
+        console.error(
+            "Community poll submit eligibility check failed:",
+            error
+        );
+
+
+        disableVoteForm(
+            "Participation Unavailable"
+        );
+
+
+        showVoteMessage(
+            "Voting access could not be confirmed. Please sign in again.",
+            "error"
+        );
+
 
         return;
 
@@ -653,14 +1014,38 @@ async function handleVoteFormSubmit(
 
 
     if (
+        !eligibility?.eligible
+    ) {
+
+        blockIneligibleVoting(
+            eligibility
+        );
+
+
+        return;
+
+    }
+
+
+    /*
+    ----------------------------------------------
+    RE-CHECK DEVICE LOCK AFTER ASYNC ELIGIBILITY
+
+    Prevent a second rapid submit from slipping
+    through while the eligibility request ran.
+    ----------------------------------------------
+    */
+
+    if (
         hasVotedOnPoll(
-            selectedSurvey.id
+            surveyId
         )
     ) {
 
         lockVoteForm(
             "You have already voted in this poll on this device."
         );
+
 
         return;
 
@@ -677,12 +1062,15 @@ async function handleVoteFormSubmit(
         );
 
 
-    if (!selectedChoice) {
+    if (
+        !selectedChoice
+    ) {
 
         showVoteMessage(
             "Please select one response.",
             "error"
         );
+
 
         return;
 
@@ -701,6 +1089,9 @@ async function handleVoteFormSubmit(
     );
 
 
+    disableVoteChoiceInputs();
+
+
     showVoteMessage(
         "Saving your vote...",
         "info"
@@ -710,15 +1101,13 @@ async function handleVoteFormSubmit(
     try {
 
         await submitCommunityVote(
-            String(
-                selectedSurvey.id
-            ),
+            surveyId,
             selectedChoice.value
         );
 
 
         markPollAsVoted(
-            selectedSurvey.id
+            surveyId
         );
 
 
@@ -734,6 +1123,9 @@ async function handleVoteFormSubmit(
         );
 
 
+        enableVoteChoiceInputs();
+
+
         setVoteSubmittingState(
             submitButton,
             false
@@ -741,9 +1133,135 @@ async function handleVoteFormSubmit(
 
 
         showVoteMessage(
+            error?.message ||
             "Your vote could not be submitted. Please try again.",
             "error"
         );
+
+    }
+
+}
+
+
+/*
+==================================================
+BLOCK INELIGIBLE VOTING
+==================================================
+*/
+
+function blockIneligibleVoting(
+    eligibility
+) {
+
+    disableVoteForm(
+        getBlockedButtonText(
+            eligibility?.reason
+        )
+    );
+
+
+    showVoteMessage(
+        getEligibilityMessage(
+            eligibility?.reason
+        ),
+        "error"
+    );
+
+}
+
+
+/*
+==================================================
+ELIGIBILITY MESSAGE
+==================================================
+*/
+
+function getEligibilityMessage(
+    reason
+) {
+
+    switch (
+        reason
+    ) {
+
+        case "signedOut":
+
+            return "Sign in to participate in Community Polls.";
+
+        case "emailNotVerified":
+
+            return "Verify your email before participating.";
+
+        case "zipMissing":
+
+            return "Add a valid ZIP code to your profile before participating.";
+
+        case "birthdayMissing":
+
+            return "Your birthday is required before participating.";
+
+        case "underMinimumAge":
+
+            return "This account is not eligible to participate.";
+
+        case "agreementMissing":
+
+            return "The participation agreement must be accepted before voting.";
+
+        case "verificationSyncPending":
+
+            return "Your account verification is still being finalized. Please try again.";
+
+        case "profileMissing":
+
+            return "Your participant profile could not be loaded.";
+
+        default:
+
+            return "Your account is not currently eligible to participate.";
+
+    }
+
+}
+
+
+/*
+==================================================
+BLOCKED BUTTON TEXT
+==================================================
+*/
+
+function getBlockedButtonText(
+    reason
+) {
+
+    switch (
+        reason
+    ) {
+
+        case "signedOut":
+
+            return "Sign In Required";
+
+        case "emailNotVerified":
+
+            return "Verification Required";
+
+        case "zipMissing":
+
+            return "ZIP Code Required";
+
+        case "birthdayMissing":
+
+            return "Birthday Required";
+
+        case "agreementMissing":
+
+            return "Agreement Required";
+
+        default:
+
+            return "Participation Unavailable";
 
     }
 
@@ -827,8 +1345,12 @@ function setVoteSubmittingState(
     isSubmitting
 ) {
 
-    if (!button) {
+    if (
+        !button
+    ) {
+
         return;
+
     }
 
 
@@ -844,6 +1366,129 @@ function setVoteSubmittingState(
 }
 
 
+/*
+==================================================
+ENABLE VOTE FORM
+==================================================
+*/
+
+function enableVoteForm() {
+
+    enableVoteChoiceInputs();
+
+
+    const button =
+        document.querySelector(
+            ".community-vote__submit"
+        );
+
+
+    if (
+        button
+    ) {
+
+        button.disabled =
+            false;
+
+
+        button.textContent =
+            "Submit Vote";
+
+    }
+
+}
+
+
+/*
+==================================================
+DISABLE VOTE FORM
+==================================================
+*/
+
+function disableVoteForm(
+    buttonText =
+        "Participation Unavailable"
+) {
+
+    disableVoteChoiceInputs();
+
+
+    const button =
+        document.querySelector(
+            ".community-vote__submit"
+        );
+
+
+    if (
+        button
+    ) {
+
+        button.disabled =
+            true;
+
+
+        button.textContent =
+            buttonText;
+
+    }
+
+}
+
+
+/*
+==================================================
+ENABLE CHOICE INPUTS
+==================================================
+*/
+
+function enableVoteChoiceInputs() {
+
+    document
+        .querySelectorAll(
+            'input[name="communityVoteChoice"]'
+        )
+        .forEach(
+            input => {
+
+                input.disabled =
+                    false;
+
+            }
+        );
+
+}
+
+
+/*
+==================================================
+DISABLE CHOICE INPUTS
+==================================================
+*/
+
+function disableVoteChoiceInputs() {
+
+    document
+        .querySelectorAll(
+            'input[name="communityVoteChoice"]'
+        )
+        .forEach(
+            input => {
+
+                input.disabled =
+                    true;
+
+            }
+        );
+
+}
+
+
+/*
+==================================================
+RESET VOTE BUTTON
+==================================================
+*/
+
 function resetVoteButton() {
 
     const button =
@@ -852,32 +1497,33 @@ function resetVoteButton() {
         );
 
 
-    if (!button) {
+    if (
+        !button
+    ) {
+
         return;
+
     }
 
 
     button.disabled =
-        false;
+        true;
 
 
     button.textContent =
-        "Submit Vote";
+        "Checking Voting Access...";
 
 
-    document
-        .querySelectorAll(
-            'input[name="communityVoteChoice"]'
-        )
-        .forEach(input => {
-
-            input.disabled =
-                false;
-
-        });
+    disableVoteChoiceInputs();
 
 }
 
+
+/*
+==================================================
+DISABLE VOTE BUTTON
+==================================================
+*/
 
 function disableVoteButton() {
 
@@ -887,7 +1533,9 @@ function disableVoteButton() {
         );
 
 
-    if (button) {
+    if (
+        button
+    ) {
 
         button.disabled =
             true;
@@ -897,20 +1545,17 @@ function disableVoteButton() {
 }
 
 
+/*
+==================================================
+LOCK FORM
+==================================================
+*/
+
 function lockVoteForm(
     message
 ) {
 
-    document
-        .querySelectorAll(
-            'input[name="communityVoteChoice"]'
-        )
-        .forEach(input => {
-
-            input.disabled =
-                true;
-
-        });
+    disableVoteChoiceInputs();
 
 
     const button =
@@ -919,7 +1564,9 @@ function lockVoteForm(
         );
 
 
-    if (button) {
+    if (
+        button
+    ) {
 
         button.disabled =
             true;
@@ -953,8 +1600,12 @@ function showCommunityVoteSection() {
         );
 
 
-    if (!voteSection) {
+    if (
+        !voteSection
+    ) {
+
         return;
+
     }
 
 
@@ -966,8 +1617,13 @@ function showCommunityVoteSection() {
         () => {
 
             voteSection.scrollIntoView({
-                behavior: "smooth",
-                block: "start"
+
+                behavior:
+                    "smooth",
+
+                block:
+                    "start"
+
             });
 
         }
@@ -976,7 +1632,22 @@ function showCommunityVoteSection() {
 }
 
 
+/*
+==================================================
+CLOSE COMMUNITY VOTE
+==================================================
+*/
+
 function closeCommunityVote() {
+
+    /*
+    Invalidate any pending account eligibility
+    request for the poll being closed.
+    */
+
+    votingAccessCheckId +=
+        1;
+
 
     const voteSection =
         document.getElementById(
@@ -984,7 +1655,9 @@ function closeCommunityVote() {
         );
 
 
-    if (voteSection) {
+    if (
+        voteSection
+    ) {
 
         voteSection.hidden =
             true;
@@ -1005,11 +1678,18 @@ function closeCommunityVote() {
         );
 
 
-    if (communitySection) {
+    if (
+        communitySection
+    ) {
 
         communitySection.scrollIntoView({
-            behavior: "smooth",
-            block: "start"
+
+            behavior:
+                "smooth",
+
+            block:
+                "start"
+
         });
 
     }
@@ -1052,6 +1732,12 @@ function updatePollUrl(
 }
 
 
+/*
+==================================================
+CLEAR POLL FROM URL
+==================================================
+*/
+
 function clearPollFromUrl() {
 
     const url =
@@ -1078,10 +1764,20 @@ function clearPollFromUrl() {
 }
 
 
+/*
+==================================================
+OPEN POLL FROM URL
+==================================================
+*/
+
 function openPollFromUrl() {
 
-    if (selectedSurvey) {
+    if (
+        selectedSurvey
+    ) {
+
         return;
+
     }
 
 
@@ -1097,8 +1793,12 @@ function openPollFromUrl() {
         );
 
 
-    if (!pollId) {
+    if (
+        !pollId
+    ) {
+
         return;
+
     }
 
 
@@ -1107,15 +1807,21 @@ function openPollFromUrl() {
             survey => {
 
                 return (
-                    String(survey.id) ===
-                    String(pollId)
+                    String(
+                        survey.id
+                    ) ===
+                    String(
+                        pollId
+                    )
                 );
 
             }
         );
 
 
-    if (surveyExists) {
+    if (
+        surveyExists
+    ) {
 
         openCommunityVote(
             pollId
@@ -1140,8 +1846,12 @@ function clearVoteMessage() {
         );
 
 
-    if (!message) {
+    if (
+        !message
+    ) {
+
         return;
+
     }
 
 
@@ -1155,6 +1865,12 @@ function clearVoteMessage() {
 }
 
 
+/*
+==================================================
+SHOW VOTE MESSAGE
+==================================================
+*/
+
 function showVoteMessage(
     message,
     type
@@ -1166,8 +1882,12 @@ function showVoteMessage(
         );
 
 
-    if (!messageElement) {
+    if (
+        !messageElement
+    ) {
+
         return;
+
     }
 
 
@@ -1206,6 +1926,12 @@ function renderEmptyState(
 }
 
 
+/*
+==================================================
+COMMUNITY ERROR STATE
+==================================================
+*/
+
 function renderCommunityError() {
 
     const container =
@@ -1214,8 +1940,12 @@ function renderCommunityError() {
         );
 
 
-    if (!container) {
+    if (
+        !container
+    ) {
+
         return;
+
     }
 
 
@@ -1245,11 +1975,17 @@ function getSurveyTimestamp(
 ) {
 
     const candidates = [
+
         survey?.createdAt,
+
         survey?.timestamp,
+
         survey?.dateCreated,
+
         survey?.submittedAt,
+
         survey?.updatedAt
+
     ];
 
 
@@ -1303,12 +2039,22 @@ function getSurveyTimestamp(
 }
 
 
+/*
+==================================================
+FORMAT SURVEY DATE
+==================================================
+*/
+
 function formatSurveyDate(
     timestamp
 ) {
 
-    if (!timestamp) {
+    if (
+        !timestamp
+    ) {
+
         return "Current";
+
     }
 
 
@@ -1332,9 +2078,16 @@ function formatSurveyDate(
     return date.toLocaleDateString(
         undefined,
         {
-            month: "short",
-            day: "numeric",
-            year: "numeric"
+
+            month:
+                "short",
+
+            day:
+                "numeric",
+
+            year:
+                "numeric"
+
         }
     );
 
@@ -1358,13 +2111,19 @@ function setText(
         );
 
 
-    if (!element) {
+    if (
+        !element
+    ) {
+
         return;
+
     }
 
 
     element.textContent =
-        String(value);
+        String(
+            value
+        );
 
 }
 
@@ -1380,7 +2139,9 @@ function formatNumber(
 ) {
 
     const number =
-        Number(value);
+        Number(
+            value
+        );
 
 
     if (
@@ -1388,7 +2149,9 @@ function formatNumber(
             number
         )
     ) {
+
         return "0";
+
     }
 
 
@@ -1397,11 +2160,19 @@ function formatNumber(
 }
 
 
+/*
+==================================================
+ESCAPE HTML
+==================================================
+*/
+
 function escapeHtml(
     value
 ) {
 
-    return String(value)
+    return String(
+        value
+    )
         .replaceAll(
             "&",
             "&amp;"
@@ -1434,6 +2205,14 @@ CLEANUP
 
 export function destroyPollsCommunityController() {
 
+    /*
+    Invalidate any pending eligibility request.
+    */
+
+    votingAccessCheckId +=
+        1;
+
+
     if (
         typeof unsubscribeSnapshotSummary ===
         "function"
@@ -1450,7 +2229,9 @@ export function destroyPollsCommunityController() {
         );
 
 
-    if (pollsContainer) {
+    if (
+        pollsContainer
+    ) {
 
         pollsContainer.removeEventListener(
             "click",
@@ -1466,7 +2247,9 @@ export function destroyPollsCommunityController() {
         );
 
 
-    if (backButton) {
+    if (
+        backButton
+    ) {
 
         backButton.removeEventListener(
             "click",
@@ -1482,7 +2265,9 @@ export function destroyPollsCommunityController() {
         );
 
 
-    if (voteForm) {
+    if (
+        voteForm
+    ) {
 
         voteForm.removeEventListener(
             "submit",
@@ -1495,12 +2280,18 @@ export function destroyPollsCommunityController() {
     unsubscribeSnapshotSummary =
         null;
 
-    activeSurveys = [];
 
-    communityVotes = [];
+    activeSurveys =
+        [];
+
+
+    communityVotes =
+        [];
+
 
     selectedSurvey =
         null;
+
 
     controllerInitialized =
         false;

@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html
+    lang="en"
+    class="auth-access-pending"
+>
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="Civic Horizon Index Mayor simulation."
+    >
+
+    <title>
+        Mayor Simulation | Civic Horizon Index
+    </title>
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Merriweather:wght@700&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="css/header.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="css/footer.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="css/mayor.css"
+    >
+
+</head>
+
+<body>
+
+    <div id="headerContainer"></div>
+
+
+    <main class="mayor-page">
+
+
+        <!-- ==================================================
+             HERO
+        ================================================== -->
+
+        <section class="mayor-hero">
+
+            <div class="mayor-hero__container">
+
+                <div class="mayor-hero__copy">
+
+                    <p class="mayor-eyebrow">
+                        Civic Simulation
+                    </p>
+
+                    <h1>
+                        You Are the Mayor
+                    </h1>
+
+                    <p>
+                        Lead a city through budget pressure, neighborhood
+                        concerns, public safety challenges, housing needs,
+                        infrastructure decisions, and city council politics.
+                    </p>
+
+
+                    <div class="mayor-hero__meta">
+
+                        <span>
+                            Local government
+                        </span>
+
+                        <span>
+                            About 15 minutes
+                        </span>
+
+                        <span>
+                            Multiple outcomes
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <aside class="mayor-hero__dashboard">
+
+                    <p class="mayor-eyebrow">
+                        City Dashboard
+                    </p>
+
+                    <div class="mayor-dashboard-grid">
+
+                        <div>
+                            <span>Approval</span>
+                            <strong id="mayorApproval">66%</strong>
+                        </div>
+
+                        <div>
+                            <span>Council Relations</span>
+                            <strong id="mayorCouncil">60%</strong>
+                        </div>
+
+                        <div>
+                            <span>Public Trust</span>
+                            <strong id="mayorTrust">69%</strong>
+                        </div>
+
+                        <div>
+                            <span>City Stability</span>
+                            <strong id="mayorStability">71%</strong>
+                        </div>
+
+                        <div>
+                            <span>Ordinances Signed</span>
+                            <strong id="mayorOrdinancesSigned">0</strong>
+                        </div>
+
+                        <div>
+                            <span>Major Actions</span>
+                            <strong id="mayorMajorActions">0</strong>
+                        </div>
+
+                    </div>
+
+                </aside>
+
+            </div>
+
+        </section>
+
+
+        <!-- ==================================================
+             CONTENT
+        ================================================== -->
+
+        <section class="mayor-content">
+
+            <div class="mayor-content__container">
+
+
+                <!-- ==================================================
+                     START SCREEN
+                ================================================== -->
+
+                <section
+                    id="mayorStartScreen"
+                    class="mayor-start-card"
+                >
+
+                    <a
+                        href="simulator.html"
+                        class="mayor-back-link"
+                    >
+                        ← Back to Civic Simulations
+                    </a>
+
+
+                    <p class="mayor-eyebrow">
+                        City Hall
+                    </p>
+
+
+                    <h2>
+                        Begin Your Term
+                    </h2>
+
+
+                    <p>
+                        You have been elected mayor and now lead the
+                        executive side of city government.
+                    </p>
+
+
+                    <p>
+                        You will work with the city council, local agencies,
+                        residents, neighborhood groups, businesses, and
+                        regional partners while managing limited resources
+                        and immediate community needs.
+                    </p>
+
+
+                    <div class="mayor-preview-grid">
+
+                        <div>
+                            <span>Starting Approval</span>
+                            <strong>66%</strong>
+                        </div>
+
+                        <div>
+                            <span>Council Relations</span>
+                            <strong>60%</strong>
+                        </div>
+
+                        <div>
+                            <span>Public Trust</span>
+                            <strong>69%</strong>
+                        </div>
+
+                        <div>
+                            <span>City Stability</span>
+                            <strong>71%</strong>
+                        </div>
+
+                    </div>
+
+
+                    <button
+                        type="button"
+                        id="mayorStartButton"
+                        class="mayor-button mayor-button--primary"
+                    >
+                        Begin Your Term
+                    </button>
+
+                </section>
+
+
+                <!-- ==================================================
+                     GAME SCREEN
+                ================================================== -->
+
+                <section
+                    id="mayorGameScreen"
+                    class="mayor-game-layout"
+                    hidden
+                >
+
+                    <div class="mayor-main-column">
+
+
+                        <!-- CITY HALL -->
+
+                        <section class="mayor-panel">
+
+                            <div class="mayor-panel__heading">
+
+                                <div>
+
+                                    <p class="mayor-eyebrow">
+                                        Local Executive
+                                    </p>
+
+                                    <h2>
+                                        Mayor's Office
+                                    </h2>
+
+                                </div>
+
+
+                                <span id="mayorTurnLabel">
+                                    Month 1
+                                </span>
+
+                            </div>
+
+
+                            <div class="mayor-profile-grid">
+
+                                <div>
+                                    <span>Current Approval</span>
+                                    <strong id="executiveMayorApproval">66%</strong>
+                                </div>
+
+                                <div>
+                                    <span>Council Relations</span>
+                                    <strong id="executiveMayorCouncil">60%</strong>
+                                </div>
+
+                                <div>
+                                    <span>Public Trust</span>
+                                    <strong id="executiveMayorTrust">69%</strong>
+                                </div>
+
+                                <div>
+                                    <span>City Stability</span>
+                                    <strong id="executiveMayorStability">71%</strong>
+                                </div>
+
+                            </div>
+
+
+                            <div class="mayor-priorities">
+
+                                <h3>
+                                    Mayor Responsibilities
+                                </h3>
+
+                                <div>
+                                    City Budget
+                                </div>
+
+                                <div>
+                                    Public Safety
+                                </div>
+
+                                <div>
+                                    Housing & Neighborhoods
+                                </div>
+
+                                <div>
+                                    Essential Services
+                                </div>
+
+                            </div>
+
+                        </section>
+
+
+                        <!-- SCENARIO -->
+
+                        <section
+                            id="mayorScenarioCard"
+                            class="mayor-panel mayor-scenario-card"
+                        >
+
+                            <div class="mayor-scenario-top">
+
+                                <p
+                                    class="mayor-eyebrow"
+                                    id="mayorScenarioCategory"
+                                >
+                                    City Budget
+                                </p>
+
+                                <span id="mayorScenarioProgress">
+                                    Decision 1 of 8
+                                </span>
+
+                            </div>
+
+
+                            <h2 id="mayorScenarioTitle">
+                                Loading scenario...
+                            </h2>
+
+
+                            <p id="mayorScenarioText">
+                                Your first city challenge is being prepared.
+                            </p>
+
+
+                            <div
+                                id="mayorChoiceContainer"
+                                class="mayor-choice-grid"
+                            ></div>
+
+
+                            <div
+                                id="mayorOutcome"
+                                class="mayor-outcome"
+                                hidden
+                            >
+
+                                <div
+                                    id="mayorOutcomeIcon"
+                                    class="mayor-outcome-icon"
+                                >
+                                    •
+                                </div>
+
+                                <div>
+
+                                    <h3 id="mayorOutcomeTitle">
+                                        Decision Recorded
+                                    </h3>
+
+                                    <p id="mayorOutcomeText"></p>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="mayor-action-row">
+
+                                <button
+                                    type="button"
+                                    id="mayorContinueButton"
+                                    class="mayor-button mayor-button--primary"
+                                    hidden
+                                >
+                                    Continue
+                                </button>
+
+                            </div>
+
+                        </section>
+
+
+                        <!-- CITY NEWS -->
+
+                        <section class="mayor-panel">
+
+                            <div class="mayor-panel__heading">
+
+                                <div>
+
+                                    <p class="mayor-eyebrow">
+                                        City News
+                                    </p>
+
+                                    <h2>
+                                        Latest Headlines
+                                    </h2>
+
+                                </div>
+
+                            </div>
+
+
+                            <div id="mayorNewsFeed">
+
+                                <div class="mayor-news-item">
+
+                                    <span>
+                                        City Hall
+                                    </span>
+
+                                    <p>
+                                        New mayor begins first term.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                        </section>
+
+                    </div>
+
+
+                    <!-- ==================================================
+                         SIDE COLUMN
+                    ================================================== -->
+
+                    <aside class="mayor-side-column">
+
+
+                        <!-- METRICS -->
+
+                        <section class="mayor-panel">
+
+                            <p class="mayor-eyebrow">
+                                Live Performance
+                            </p>
+
+                            <h2>
+                                City Leadership Metrics
+                            </h2>
+
+
+                            <div class="mayor-metric-list">
+
+
+                                <div class="mayor-metric-row">
+
+                                    <div>
+                                        <span>Approval Rating</span>
+                                        <strong id="sideMayorApproval">66%</strong>
+                                    </div>
+
+                                    <div class="mayor-metric-track">
+                                        <div
+                                            id="sideMayorApprovalBar"
+                                            class="mayor-metric-fill"
+                                            style="width: 66%;"
+                                        ></div>
+                                    </div>
+
+                                </div>
+
+
+                                <div class="mayor-metric-row">
+
+                                    <div>
+                                        <span>Council Relations</span>
+                                        <strong id="sideMayorCouncil">60%</strong>
+                                    </div>
+
+                                    <div class="mayor-metric-track">
+                                        <div
+                                            id="sideMayorCouncilBar"
+                                            class="mayor-metric-fill"
+                                            style="width: 60%;"
+                                        ></div>
+                                    </div>
+
+                                </div>
+
+
+                                <div class="mayor-metric-row">
+
+                                    <div>
+                                        <span>Public Trust</span>
+                                        <strong id="sideMayorTrust">69%</strong>
+                                    </div>
+
+                                    <div class="mayor-metric-track">
+                                        <div
+                                            id="sideMayorTrustBar"
+                                            class="mayor-metric-fill"
+                                            style="width: 69%;"
+                                        ></div>
+                                    </div>
+
+                                </div>
+
+
+                                <div class="mayor-metric-row">
+
+                                    <div>
+                                        <span>City Stability</span>
+                                        <strong id="sideMayorStability">71%</strong>
+                                    </div>
+
+                                    <div class="mayor-metric-track">
+                                        <div
+                                            id="sideMayorStabilityBar"
+                                            class="mayor-metric-fill"
+                                            style="width: 71%;"
+                                        ></div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </section>
+
+
+                        <!-- RECORD -->
+
+                        <section class="mayor-panel">
+
+                            <p class="mayor-eyebrow">
+                                Mayor Record
+                            </p>
+
+                            <h2>
+                                Your Term
+                            </h2>
+
+
+                            <div class="mayor-activity-list">
+
+                                <div>
+                                    <span>Ordinances Signed</span>
+                                    <strong id="sideMayorOrdinancesSigned">0</strong>
+                                </div>
+
+                                <div>
+                                    <span>Major Actions</span>
+                                    <strong id="sideMayorMajorActions">0</strong>
+                                </div>
+
+                                <div>
+                                    <span>Current Stage</span>
+                                    <strong id="mayorCurrentStage">
+                                        First 100 Days
+                                    </strong>
+                                </div>
+
+                                <div>
+                                    <span>Term Progress</span>
+                                    <strong id="mayorTermProgress">
+                                        0%
+                                    </strong>
+                                </div>
+
+                            </div>
+
+                        </section>
+
+
+                        <!-- OBJECTIVE -->
+
+                        <section class="mayor-objective-card">
+
+                            <p class="mayor-eyebrow">
+                                Your Objective
+                            </p>
+
+                            <h3>
+                                Make City Government Work
+                            </h3>
+
+                            <p>
+                                Balance neighborhood needs, limited revenue,
+                                council relationships, public safety,
+                                housing pressure, essential services,
+                                and public accountability.
+                            </p>
+
+                        </section>
+
+                    </aside>
+
+                </section>
+
+
+                <!-- ==================================================
+                     FINAL REPORT
+                ================================================== -->
+
+                <section
+                    id="mayorResultsScreen"
+                    class="mayor-results-card"
+                    hidden
+                >
+
+                    <p class="mayor-eyebrow">
+                        Term Complete
+                    </p>
+
+
+                    <h2>
+                        Mayor Report Card
+                    </h2>
+
+
+                    <p>
+                        Your decisions shaped neighborhood confidence,
+                        council cooperation, public trust, and the
+                        day-to-day stability of city government.
+                    </p>
+
+
+                    <div class="mayor-report-grid">
+
+                        <div>
+                            <span>Final Approval</span>
+                            <strong id="finalMayorApproval">0%</strong>
+                        </div>
+
+                        <div>
+                            <span>Council Relations</span>
+                            <strong id="finalMayorCouncil">0%</strong>
+                        </div>
+
+                        <div>
+                            <span>Public Trust</span>
+                            <strong id="finalMayorTrust">0%</strong>
+                        </div>
+
+                        <div>
+                            <span>City Stability</span>
+                            <strong id="finalMayorStability">0%</strong>
+                        </div>
+
+                        <div>
+                            <span>Ordinances Signed</span>
+                            <strong id="finalMayorOrdinancesSigned">0</strong>
+                        </div>
+
+                        <div>
+                            <span>Major Actions</span>
+                            <strong id="finalMayorMajorActions">0</strong>
+                        </div>
+
+                    </div>
+
+
+                    <div class="mayor-final-grade">
+
+                        <span>
+                            Overall Grade
+                        </span>
+
+                        <strong id="mayorFinalGrade">
+                            B
+                        </strong>
+
+                    </div>
+
+
+                    <div
+                        id="mayorFinalMessage"
+                        class="mayor-final-message"
+                    >
+                        Your term has concluded.
+                    </div>
+
+
+                    <div class="mayor-results-actions">
+
+                        <a
+                            href="simulator.html"
+                            class="mayor-button mayor-button--primary"
+                        >
+                            Return to Simulations
+                        </a>
+
+                        <button
+                            type="button"
+                            id="mayorRestartButton"
+                            class="mayor-button mayor-button--secondary"
+                        >
+                            Serve Another Term
+                        </button>
+
+                    </div>
+
+                </section>
+
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <div id="footerContainer"></div>
+
+
+    <script
+        type="module"
+        src="js/mayor.js"
+    ></script>
+
+    <script
+        type="module"
+        src="js/site-auth.js"
+    ></script>
+
+</body>
+
+</html>

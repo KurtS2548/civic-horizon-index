@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html
+    lang="en"
+    class="auth-access-pending"
+>
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="Civic Horizon Index Campaign Trail simulation."
+    >
+
+    <title>
+        Campaign Trail Simulation | Civic Horizon Index
+    </title>
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Merriweather:wght@700&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="css/header.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="css/footer.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="css/campaign.css"
+    >
+
+</head>
+
+<body>
+
+    <div id="headerContainer"></div>
+
+
+    <main class="campaign-page">
+
+
+        <!-- ==================================================
+             HERO
+        ================================================== -->
+
+        <section class="campaign-hero">
+
+            <div class="campaign-hero__container">
+
+                <div class="campaign-hero__copy">
+
+                    <p class="campaign-eyebrow">
+                        Civic Simulation
+                    </p>
+
+                    <h1>
+                        You Are Running for Office
+                    </h1>
+
+                    <p>
+                        Build a campaign, communicate with voters,
+                        allocate resources, respond to media pressure,
+                        prepare for debates, and try to build a winning
+                        coalition before Election Day.
+                    </p>
+
+
+                    <div class="campaign-hero__meta">
+
+                        <span>
+                            Election strategy
+                        </span>
+
+                        <span>
+                            About 15 minutes
+                        </span>
+
+                        <span>
+                            Multiple outcomes
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <aside class="campaign-hero__dashboard">
+
+                    <p class="campaign-eyebrow">
+                        Campaign Dashboard
+                    </p>
+
+                    <div class="campaign-dashboard-grid">
+
+                        <div>
+                            <span>Polling</span>
+                            <strong id="campaignPolling">47%</strong>
+                        </div>
+
+                        <div>
+                            <span>Voter Trust</span>
+                            <strong id="campaignTrust">61%</strong>
+                        </div>
+
+                        <div>
+                            <span>Coalition Strength</span>
+                            <strong id="campaignCoalition">58%</strong>
+                        </div>
+
+                        <div>
+                            <span>Campaign Momentum</span>
+                            <strong id="campaignMomentum">55%</strong>
+                        </div>
+
+                        <div>
+                            <span>Major Events</span>
+                            <strong id="campaignMajorEvents">0</strong>
+                        </div>
+
+                        <div>
+                            <span>Endorsements</span>
+                            <strong id="campaignEndorsements">0</strong>
+                        </div>
+
+                    </div>
+
+                </aside>
+
+            </div>
+
+        </section>
+
+
+        <!-- ==================================================
+             CONTENT
+        ================================================== -->
+
+        <section class="campaign-content">
+
+            <div class="campaign-content__container">
+
+
+                <!-- ==================================================
+                     START SCREEN
+                ================================================== -->
+
+                <section
+                    id="campaignStartScreen"
+                    class="campaign-start-card"
+                >
+
+                    <a
+                        href="simulator.html"
+                        class="campaign-back-link"
+                    >
+                        ← Back to Civic Simulations
+                    </a>
+
+
+                    <p class="campaign-eyebrow">
+                        Campaign Launch
+                    </p>
+
+
+                    <h2>
+                        Begin the Race
+                    </h2>
+
+
+                    <p>
+                        You have officially entered the campaign.
+                        The race is competitive, voters are still making
+                        up their minds, and your campaign has limited time
+                        and resources.
+                    </p>
+
+
+                    <p>
+                        Your choices will affect public trust, campaign
+                        momentum, coalition strength, polling, and whether
+                        voters believe you are prepared to govern.
+                    </p>
+
+
+                    <div class="campaign-preview-grid">
+
+                        <div>
+                            <span>Starting Polling</span>
+                            <strong>47%</strong>
+                        </div>
+
+                        <div>
+                            <span>Voter Trust</span>
+                            <strong>61%</strong>
+                        </div>
+
+                        <div>
+                            <span>Coalition Strength</span>
+                            <strong>58%</strong>
+                        </div>
+
+                        <div>
+                            <span>Campaign Momentum</span>
+                            <strong>55%</strong>
+                        </div>
+
+                    </div>
+
+
+                    <button
+                        type="button"
+                        id="campaignStartButton"
+                        class="campaign-button campaign-button--primary"
+                    >
+                        Launch Campaign
+                    </button>
+
+                </section>
+
+
+                <!-- ==================================================
+                     GAME SCREEN
+                ================================================== -->
+
+                <section
+                    id="campaignGameScreen"
+                    class="campaign-game-layout"
+                    hidden
+                >
+
+                    <div class="campaign-main-column">
+
+
+                        <!-- CAMPAIGN HQ -->
+
+                        <section class="campaign-panel">
+
+                            <div class="campaign-panel__heading">
+
+                                <div>
+
+                                    <p class="campaign-eyebrow">
+                                        Campaign Headquarters
+                                    </p>
+
+                                    <h2>
+                                        Candidate Strategy
+                                    </h2>
+
+                                </div>
+
+
+                                <span id="campaignTurnLabel">
+                                    Week 1
+                                </span>
+
+                            </div>
+
+
+                            <div class="campaign-profile-grid">
+
+                                <div>
+                                    <span>Current Polling</span>
+                                    <strong id="executiveCampaignPolling">47%</strong>
+                                </div>
+
+                                <div>
+                                    <span>Voter Trust</span>
+                                    <strong id="executiveCampaignTrust">61%</strong>
+                                </div>
+
+                                <div>
+                                    <span>Coalition Strength</span>
+                                    <strong id="executiveCampaignCoalition">58%</strong>
+                                </div>
+
+                                <div>
+                                    <span>Momentum</span>
+                                    <strong id="executiveCampaignMomentum">55%</strong>
+                                </div>
+
+                            </div>
+
+
+                            <div class="campaign-priorities">
+
+                                <h3>
+                                    Campaign Responsibilities
+                                </h3>
+
+                                <div>
+                                    Voter Outreach
+                                </div>
+
+                                <div>
+                                    Campaign Resources
+                                </div>
+
+                                <div>
+                                    Debate Preparation
+                                </div>
+
+                                <div>
+                                    Public Communication
+                                </div>
+
+                            </div>
+
+                        </section>
+
+
+                        <!-- SCENARIO -->
+
+                        <section
+                            id="campaignScenarioCard"
+                            class="campaign-panel campaign-scenario-card"
+                        >
+
+                            <div class="campaign-scenario-top">
+
+                                <p
+                                    class="campaign-eyebrow"
+                                    id="campaignScenarioCategory"
+                                >
+                                    Campaign Strategy
+                                </p>
+
+                                <span id="campaignScenarioProgress">
+                                    Decision 1 of 8
+                                </span>
+
+                            </div>
+
+
+                            <h2 id="campaignScenarioTitle">
+                                Loading campaign challenge...
+                            </h2>
+
+
+                            <p id="campaignScenarioText">
+                                Your first campaign decision is being prepared.
+                            </p>
+
+
+                            <div
+                                id="campaignChoiceContainer"
+                                class="campaign-choice-grid"
+                            ></div>
+
+
+                            <div
+                                id="campaignOutcome"
+                                class="campaign-outcome"
+                                hidden
+                            >
+
+                                <div
+                                    id="campaignOutcomeIcon"
+                                    class="campaign-outcome-icon"
+                                >
+                                    •
+                                </div>
+
+                                <div>
+
+                                    <h3 id="campaignOutcomeTitle">
+                                        Decision Recorded
+                                    </h3>
+
+                                    <p id="campaignOutcomeText"></p>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="campaign-action-row">
+
+                                <button
+                                    type="button"
+                                    id="campaignContinueButton"
+                                    class="campaign-button campaign-button--primary"
+                                    hidden
+                                >
+                                    Continue
+                                </button>
+
+                            </div>
+
+                        </section>
+
+
+                        <!-- CAMPAIGN NEWS -->
+
+                        <section class="campaign-panel">
+
+                            <div class="campaign-panel__heading">
+
+                                <div>
+
+                                    <p class="campaign-eyebrow">
+                                        Campaign News
+                                    </p>
+
+                                    <h2>
+                                        Latest Headlines
+                                    </h2>
+
+                                </div>
+
+                            </div>
+
+
+                            <div id="campaignNewsFeed">
+
+                                <div class="campaign-news-item">
+
+                                    <span>
+                                        Campaign Trail
+                                    </span>
+
+                                    <p>
+                                        Candidate officially launches campaign.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                        </section>
+
+                    </div>
+
+
+                    <!-- ==================================================
+                         SIDE COLUMN
+                    ================================================== -->
+
+                    <aside class="campaign-side-column">
+
+
+                        <!-- METRICS -->
+
+                        <section class="campaign-panel">
+
+                            <p class="campaign-eyebrow">
+                                Live Performance
+                            </p>
+
+                            <h2>
+                                Campaign Metrics
+                            </h2>
+
+
+                            <div class="campaign-metric-list">
+
+
+                                <div class="campaign-metric-row">
+
+                                    <div>
+                                        <span>Polling</span>
+                                        <strong id="sideCampaignPolling">47%</strong>
+                                    </div>
+
+                                    <div class="campaign-metric-track">
+                                        <div
+                                            id="sideCampaignPollingBar"
+                                            class="campaign-metric-fill"
+                                            style="width: 47%;"
+                                        ></div>
+                                    </div>
+
+                                </div>
+
+
+                                <div class="campaign-metric-row">
+
+                                    <div>
+                                        <span>Voter Trust</span>
+                                        <strong id="sideCampaignTrust">61%</strong>
+                                    </div>
+
+                                    <div class="campaign-metric-track">
+                                        <div
+                                            id="sideCampaignTrustBar"
+                                            class="campaign-metric-fill"
+                                            style="width: 61%;"
+                                        ></div>
+                                    </div>
+
+                                </div>
+
+
+                                <div class="campaign-metric-row">
+
+                                    <div>
+                                        <span>Coalition Strength</span>
+                                        <strong id="sideCampaignCoalition">58%</strong>
+                                    </div>
+
+                                    <div class="campaign-metric-track">
+                                        <div
+                                            id="sideCampaignCoalitionBar"
+                                            class="campaign-metric-fill"
+                                            style="width: 58%;"
+                                        ></div>
+                                    </div>
+
+                                </div>
+
+
+                                <div class="campaign-metric-row">
+
+                                    <div>
+                                        <span>Campaign Momentum</span>
+                                        <strong id="sideCampaignMomentum">55%</strong>
+                                    </div>
+
+                                    <div class="campaign-metric-track">
+                                        <div
+                                            id="sideCampaignMomentumBar"
+                                            class="campaign-metric-fill"
+                                            style="width: 55%;"
+                                        ></div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </section>
+
+
+                        <!-- RECORD -->
+
+                        <section class="campaign-panel">
+
+                            <p class="campaign-eyebrow">
+                                Campaign Record
+                            </p>
+
+                            <h2>
+                                Your Race
+                            </h2>
+
+
+                            <div class="campaign-activity-list">
+
+                                <div>
+                                    <span>Major Events</span>
+                                    <strong id="sideCampaignMajorEvents">0</strong>
+                                </div>
+
+                                <div>
+                                    <span>Endorsements</span>
+                                    <strong id="sideCampaignEndorsements">0</strong>
+                                </div>
+
+                                <div>
+                                    <span>Current Stage</span>
+                                    <strong id="campaignCurrentStage">
+                                        Campaign Launch
+                                    </strong>
+                                </div>
+
+                                <div>
+                                    <span>Campaign Progress</span>
+                                    <strong id="campaignTermProgress">
+                                        0%
+                                    </strong>
+                                </div>
+
+                            </div>
+
+                        </section>
+
+
+                        <!-- OBJECTIVE -->
+
+                        <section class="campaign-objective-card">
+
+                            <p class="campaign-eyebrow">
+                                Your Objective
+                            </p>
+
+                            <h3>
+                                Build a Winning Coalition
+                            </h3>
+
+                            <p>
+                                Earn voter confidence, communicate honestly,
+                                manage limited resources, build support across
+                                communities, and finish the race with enough
+                                momentum to win.
+                            </p>
+
+                        </section>
+
+                    </aside>
+
+                </section>
+
+
+                <!-- ==================================================
+                     FINAL REPORT
+                ================================================== -->
+
+                <section
+                    id="campaignResultsScreen"
+                    class="campaign-results-card"
+                    hidden
+                >
+
+                    <p class="campaign-eyebrow">
+                        Election Complete
+                    </p>
+
+
+                    <h2>
+                        Campaign Report Card
+                    </h2>
+
+
+                    <p>
+                        Your decisions shaped voter confidence,
+                        coalition strength, campaign momentum,
+                        polling, and the final election result.
+                    </p>
+
+
+                    <div class="campaign-report-grid">
+
+                        <div>
+                            <span>Final Polling</span>
+                            <strong id="finalCampaignPolling">0%</strong>
+                        </div>
+
+                        <div>
+                            <span>Voter Trust</span>
+                            <strong id="finalCampaignTrust">0%</strong>
+                        </div>
+
+                        <div>
+                            <span>Coalition Strength</span>
+                            <strong id="finalCampaignCoalition">0%</strong>
+                        </div>
+
+                        <div>
+                            <span>Campaign Momentum</span>
+                            <strong id="finalCampaignMomentum">0%</strong>
+                        </div>
+
+                        <div>
+                            <span>Major Events</span>
+                            <strong id="finalCampaignMajorEvents">0</strong>
+                        </div>
+
+                        <div>
+                            <span>Endorsements</span>
+                            <strong id="finalCampaignEndorsements">0</strong>
+                        </div>
+
+                    </div>
+
+
+                    <div class="campaign-election-result">
+
+                        <span>
+                            Election Result
+                        </span>
+
+                        <strong id="campaignElectionResult">
+                            Pending
+                        </strong>
+
+                    </div>
+
+
+                    <div class="campaign-final-grade">
+
+                        <span>
+                            Campaign Grade
+                        </span>
+
+                        <strong id="campaignFinalGrade">
+                            B
+                        </strong>
+
+                    </div>
+
+
+                    <div
+                        id="campaignFinalMessage"
+                        class="campaign-final-message"
+                    >
+                        The campaign has concluded.
+                    </div>
+
+
+                    <div class="campaign-results-actions">
+
+                        <a
+                            href="simulator.html"
+                            class="campaign-button campaign-button--primary"
+                        >
+                            Return to Simulations
+                        </a>
+
+                        <button
+                            type="button"
+                            id="campaignRestartButton"
+                            class="campaign-button campaign-button--secondary"
+                        >
+                            Run Another Campaign
+                        </button>
+
+                    </div>
+
+                </section>
+
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <div id="footerContainer"></div>
+
+
+    <script
+        type="module"
+        src="js/campaign.js"
+    ></script>
+
+    <script
+        type="module"
+        src="js/site-auth.js"
+    ></script>
+
+</body>
+
+</html>
