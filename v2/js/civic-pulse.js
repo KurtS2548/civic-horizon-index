@@ -2,7 +2,8 @@
 ==================================================
 CIVIC HORIZON INDEX V2
 CIVIC PULSE
-LIVE FIREBASE + HISTORY CONTROLLER
+
+LIVE FIREBASE + MONTHLY VOTING + HISTORY
 ==================================================
 */
 
@@ -15,7 +16,12 @@ import {
 
     submitPresidentialApproval,
     submitCountryDirection,
-    submitNationalConfidence
+    submitNationalConfidence,
+
+    getMonthlyParticipationStatus,
+    getMonthlyParticipationMessage,
+    getCurrentVotingPeriod,
+    getCurrentVotingPeriodLabel
 
 } from "./services/firebase-service.js";
 
@@ -29,6 +35,8 @@ import {
 
 import {
 
+    subscribeToAuthState,
+    refreshCurrentUser,
     getCurrentUserVotingEligibility
 
 } from "./services/auth-service.js";
@@ -44,16 +52,43 @@ const participantIdStorageKey =
     "civicPulseParticipantId";
 
 
-const approvalSelectionStorageKey =
-    "civicPulseUserApprovalVote";
+/*
+These keys now include the voting period.
+
+Example:
+
+civicPulseUserApprovalVote-2026-08
+civicPulseUserApprovalVote-2026-09
+
+That prevents an August browser selection from appearing
+as the participant's September selection.
+*/
+
+function getApprovalSelectionStorageKey() {
+
+    return (
+        `civicPulseUserApprovalVote-${getCurrentVotingPeriod()}`
+    );
+
+}
 
 
-const directionSelectionStorageKey =
-    "civicPulseUserDirectionVote";
+function getDirectionSelectionStorageKey() {
+
+    return (
+        `civicPulseUserDirectionVote-${getCurrentVotingPeriod()}`
+    );
+
+}
 
 
-const confidenceSelectionStorageKey =
-    "civicPulseConfidenceRatings";
+function getConfidenceSelectionStorageKey() {
+
+    return (
+        `civicPulseConfidenceRatings-${getCurrentVotingPeriod()}`
+    );
+
+}
 
 
 /*
@@ -64,23 +99,36 @@ STATE
 
 const pulseState = {
 
-    approvalResponses: [],
+    approvalResponses:
+        [],
 
-    directionResponses: [],
+    directionResponses:
+        [],
 
-    confidenceResponses: [],
+    confidenceResponses:
+        [],
 
-    history: []
+    history:
+        [],
+
+    votingAccess: {
+
+        presidentialApproval:
+            null,
+
+        countryDirection:
+            null,
+
+        nationalConfidence:
+            null
+
+    }
 
 };
 
 
-let civicPulseVotingAccessConfirmed =
-    false;
-
-
-let civicPulseEligibilityCheckId =
-    0;
+let unsubscribeAuthState =
+    null;
 
 
 /*
@@ -110,34 +158,55 @@ async function initializeCivicPulsePage() {
 
 
     /*
-    Keep all voting controls protected until
-    account eligibility has been confirmed.
+    ----------------------------------------------
+    INSTALL INTERACTION HANDLERS FIRST
+    ----------------------------------------------
     */
-
-    setAllCivicPulseVotingDisabled(
-        true
-    );
-
 
     initializeApprovalVoting();
 
-
     initializeDirectionVoting();
-
 
     initializeConfidenceVoting();
 
 
+    /*
+    ----------------------------------------------
+    RESTORE THIS MONTH'S LOCAL DISPLAY ONLY
+    ----------------------------------------------
+    */
+
     restoreLocalSelections();
 
+
+    /*
+    ----------------------------------------------
+    LIVE PUBLIC RESULTS
+    ----------------------------------------------
+    */
 
     initializeLiveSubscriptions();
 
 
+    /*
+    ----------------------------------------------
+    PUBLIC HISTORY
+    ----------------------------------------------
+    */
+
     initializeHistorySubscription();
 
 
-    await initializeCivicPulseVotingAccess();
+    /*
+    ----------------------------------------------
+    AUTH + MONTHLY ACCESS
+
+    Firebase must finish restoring the saved session
+    before we decide whether the visitor is signed in.
+    ----------------------------------------------
+    */
+
+    initializeCivicPulseVotingAccess();
 
 }
 
@@ -359,73 +428,15 @@ function initializeHistorySubscription() {
 
 /*
 ==================================================
-PARTICIPANT ID
+CIVIC PULSE AUTH + MONTHLY ACCESS
 ==================================================
 */
 
-function getParticipantId() {
+function initializeCivicPulseVotingAccess() {
 
-    const existing =
-        getStoredValue(
-            participantIdStorageKey
-        );
-
-
-    if (existing) {
-
-        return existing;
-
-    }
-
-
-    let participantId;
-
-
-    if (
-        window.crypto &&
-        typeof window.crypto.randomUUID ===
-            "function"
-    ) {
-
-        participantId =
-            `participant-${window.crypto.randomUUID()}`;
-
-    } else {
-
-        participantId =
-            `participant-${Date.now()}-${Math.random()
-                .toString(36)
-                .slice(2, 12)}`;
-
-    }
-
-
-    setStoredValue(
-        participantIdStorageKey,
-        participantId
-    );
-
-
-    return participantId;
-
-}
-
-
-/*
-==================================================
-CIVIC PULSE VOTING ACCESS
-==================================================
-*/
-
-async function initializeCivicPulseVotingAccess() {
-
-    const checkId =
-        ++civicPulseEligibilityCheckId;
-
-
-    civicPulseVotingAccessConfirmed =
-        false;
-
+    /*
+    Start locked while Firebase restores the session.
+    */
 
     setAllCivicPulseVotingDisabled(
         true
@@ -434,113 +445,403 @@ async function initializeCivicPulseVotingAccess() {
 
     setText(
         "pulseApprovalMessage",
-        "Checking voting access..."
+        "Checking your participation access..."
     );
 
 
     setText(
         "directionVoteMessage",
-        "Checking voting access..."
+        "Checking your participation access..."
     );
 
 
     setText(
         "confidenceSurveyMessage",
-        "Checking voting access..."
+        "Checking your participation access..."
     );
 
 
-    try {
+    unsubscribeAuthState =
+        subscribeToAuthState(
 
-        const eligibility =
-            await getCurrentUserVotingEligibility();
+            async user => {
 
+                if (!user) {
 
-        if (
-            checkId !==
-            civicPulseEligibilityCheckId
-        ) {
-
-            return;
-
-        }
+                    setAllCivicPulseVotingDisabled(
+                        true
+                    );
 
 
-        if (
-            eligibility?.eligible
-        ) {
-
-            civicPulseVotingAccessConfirmed =
-                true;
+                    setCivicPulseBlockedMessages(
+                        "signedOut"
+                    );
 
 
-            setAllCivicPulseVotingDisabled(
-                false
-            );
+                    return;
+
+                }
 
 
-            clearCivicPulseAccessMessages();
+                try {
+
+                    const refreshedUser =
+                        await refreshCurrentUser();
 
 
-            return;
+                    if (!refreshedUser) {
 
-        }
-
-
-        civicPulseVotingAccessConfirmed =
-            false;
+                        setAllCivicPulseVotingDisabled(
+                            true
+                        );
 
 
-        setAllCivicPulseVotingDisabled(
-            true
+                        setCivicPulseBlockedMessages(
+                            "signedOut"
+                        );
+
+
+                        return;
+
+                    }
+
+
+                    await refreshAllCivicPulseVotingAccess();
+
+                } catch (error) {
+
+                    console.error(
+                        "Civic Pulse auth initialization failed:",
+                        error
+                    );
+
+
+                    setAllCivicPulseVotingDisabled(
+                        true
+                    );
+
+
+                    setCivicPulseBlockedMessages(
+                        "accessCheckFailed"
+                    );
+
+                }
+
+            },
+
+            error => {
+
+                console.error(
+                    "Civic Pulse auth state error:",
+                    error
+                );
+
+
+                setAllCivicPulseVotingDisabled(
+                    true
+                );
+
+
+                setCivicPulseBlockedMessages(
+                    "accessCheckFailed"
+                );
+
+            }
+
         );
-
-
-        showCivicPulseEligibilityMessages(
-            eligibility?.reason
-        );
-
-    } catch (error) {
-
-        console.error(
-            "Civic Pulse eligibility check failed:",
-            error
-        );
-
-
-        if (
-            checkId !==
-            civicPulseEligibilityCheckId
-        ) {
-
-            return;
-
-        }
-
-
-        civicPulseVotingAccessConfirmed =
-            false;
-
-
-        setAllCivicPulseVotingDisabled(
-            true
-        );
-
-
-        showCivicPulseAccessError();
-
-    }
 
 }
 
 
 /*
 ==================================================
-SUBMIT-TIME ELIGIBILITY CHECK
+REFRESH ALL THREE TRACKERS
+==================================================
+*/
+
+async function refreshAllCivicPulseVotingAccess() {
+
+    /*
+    ----------------------------------------------
+    GENERAL ACCOUNT ELIGIBILITY
+    ----------------------------------------------
+    */
+
+    const eligibility =
+        await getCurrentUserVotingEligibility();
+
+
+    if (
+        !eligibility?.eligible
+    ) {
+
+        setAllCivicPulseVotingDisabled(
+            true
+        );
+
+
+        setCivicPulseBlockedMessages(
+            eligibility?.reason
+        );
+
+
+        return;
+
+    }
+
+
+    /*
+    ----------------------------------------------
+    MONTHLY STATUS
+
+    Each tracker is independent.
+
+    A participant can therefore have:
+
+    Presidential Approval       completed
+    Country Direction           open
+    National Confidence         open
+    ----------------------------------------------
+    */
+
+    const results =
+        await Promise.all([
+
+            getMonthlyParticipationStatus(
+                "presidentialApproval"
+            ),
+
+            getMonthlyParticipationStatus(
+                "countryDirection"
+            ),
+
+            getMonthlyParticipationStatus(
+                "nationalConfidence"
+            )
+
+        ]);
+
+
+    pulseState.votingAccess.presidentialApproval =
+        results[0];
+
+
+    pulseState.votingAccess.countryDirection =
+        results[1];
+
+
+    pulseState.votingAccess.nationalConfidence =
+        results[2];
+
+
+    applyApprovalMonthlyAccess(
+        results[0]
+    );
+
+
+    applyDirectionMonthlyAccess(
+        results[1]
+    );
+
+
+    applyConfidenceMonthlyAccess(
+        results[2]
+    );
+
+}
+
+
+/*
+==================================================
+APPROVAL MONTHLY ACCESS
+==================================================
+*/
+
+function applyApprovalMonthlyAccess(
+    status
+) {
+
+    const eligible =
+        status?.eligible ===
+        true;
+
+
+    setApprovalButtonsDisabled(
+        !eligible
+    );
+
+
+    if (
+        status?.reason ===
+        "alreadyParticipatedThisMonth"
+    ) {
+
+        setText(
+            "pulseApprovalMessage",
+            getMonthlyParticipationMessage(
+                status
+            )
+        );
+
+
+        return;
+
+    }
+
+
+    if (eligible) {
+
+        setText(
+            "pulseApprovalMessage",
+            `Voting is open for ${getCurrentVotingPeriodLabel()}.`
+        );
+
+
+        return;
+
+    }
+
+
+    setText(
+        "pulseApprovalMessage",
+        getMonthlyParticipationMessage(
+            status
+        )
+    );
+
+}
+
+
+/*
+==================================================
+DIRECTION MONTHLY ACCESS
+==================================================
+*/
+
+function applyDirectionMonthlyAccess(
+    status
+) {
+
+    const eligible =
+        status?.eligible ===
+        true;
+
+
+    setDirectionButtonsDisabled(
+        !eligible
+    );
+
+
+    if (
+        status?.reason ===
+        "alreadyParticipatedThisMonth"
+    ) {
+
+        setText(
+            "directionVoteMessage",
+            getMonthlyParticipationMessage(
+                status
+            )
+        );
+
+
+        return;
+
+    }
+
+
+    if (eligible) {
+
+        setText(
+            "directionVoteMessage",
+            `Voting is open for ${getCurrentVotingPeriodLabel()}.`
+        );
+
+
+        return;
+
+    }
+
+
+    setText(
+        "directionVoteMessage",
+        getMonthlyParticipationMessage(
+            status
+        )
+    );
+
+}
+
+
+/*
+==================================================
+CONFIDENCE MONTHLY ACCESS
+==================================================
+*/
+
+function applyConfidenceMonthlyAccess(
+    status
+) {
+
+    const eligible =
+        status?.eligible ===
+        true;
+
+
+    setConfidenceControlsDisabled(
+        !eligible
+    );
+
+
+    if (
+        status?.reason ===
+        "alreadyParticipatedThisMonth"
+    ) {
+
+        setText(
+            "confidenceSurveyMessage",
+            getMonthlyParticipationMessage(
+                status
+            )
+        );
+
+
+        return;
+
+    }
+
+
+    if (eligible) {
+
+        setText(
+            "confidenceSurveyMessage",
+            `Voting is open for ${getCurrentVotingPeriodLabel()}.`
+        );
+
+
+        return;
+
+    }
+
+
+    setText(
+        "confidenceSurveyMessage",
+        getMonthlyParticipationMessage(
+            status
+        )
+    );
+
+}
+
+
+/*
+==================================================
+CONFIRM INDIVIDUAL TRACKER ACCESS
 ==================================================
 */
 
 async function confirmCivicPulseVotingEligibility(
+    tracker,
     messageElementId
 ) {
 
@@ -551,57 +852,66 @@ async function confirmCivicPulseVotingEligibility(
 
 
         if (
-            eligibility?.eligible
+            !eligibility?.eligible
         ) {
 
-            civicPulseVotingAccessConfirmed =
-                true;
+            setText(
+                messageElementId,
+                getCivicPulseEligibilityMessage(
+                    eligibility?.reason
+                )
+            );
 
 
-            return true;
+            return false;
 
         }
 
 
-        civicPulseVotingAccessConfirmed =
-            false;
+        const monthlyStatus =
+            await getMonthlyParticipationStatus(
+                tracker
+            );
+
+
+        pulseState.votingAccess[
+            tracker
+        ] =
+            monthlyStatus;
+
+
+        if (
+            !monthlyStatus?.eligible
+        ) {
+
+            setText(
+                messageElementId,
+                getMonthlyParticipationMessage(
+                    monthlyStatus
+                )
+            );
+
+
+            return false;
+
+        }
+
+
+        return true;
+
+    } catch (error) {
+
+        console.error(
+            `${tracker} voting eligibility check failed:`,
+            error
+        );
 
 
         setText(
             messageElementId,
             getCivicPulseEligibilityMessage(
-                eligibility?.reason
+                "accessCheckFailed"
             )
-        );
-
-
-        setAllCivicPulseVotingDisabled(
-            true
-        );
-
-
-        return false;
-
-    } catch (error) {
-
-        console.error(
-            "Civic Pulse submit eligibility check failed:",
-            error
-        );
-
-
-        civicPulseVotingAccessConfirmed =
-            false;
-
-
-        setText(
-            messageElementId,
-            "Voting access could not be confirmed. Please sign in again."
-        );
-
-
-        setAllCivicPulseVotingDisabled(
-            true
         );
 
 
@@ -610,9 +920,11 @@ async function confirmCivicPulseVotingEligibility(
     }
 
 }
+
+
 /*
 ==================================================
-CIVIC PULSE CONTROL STATE
+DISABLE ALL CIVIC PULSE VOTING
 ==================================================
 */
 
@@ -630,6 +942,23 @@ function setAllCivicPulseVotingDisabled(
     );
 
 
+    setConfidenceControlsDisabled(
+        disabled
+    );
+
+}
+
+
+/*
+==================================================
+CONFIDENCE CONTROL STATE
+==================================================
+*/
+
+function setConfidenceControlsDisabled(
+    disabled
+) {
+
     document
         .querySelectorAll(
             "[data-confidence-value]"
@@ -644,17 +973,17 @@ function setAllCivicPulseVotingDisabled(
         );
 
 
-    const confidenceSubmitButton =
+    const submitButton =
         document.getElementById(
             "confidenceSubmitButton"
         );
 
 
     if (
-        confidenceSubmitButton
+        submitButton
     ) {
 
-        confidenceSubmitButton.disabled =
+        submitButton.disabled =
             disabled;
 
     }
@@ -664,39 +993,11 @@ function setAllCivicPulseVotingDisabled(
 
 /*
 ==================================================
-CLEAR ACCESS MESSAGES
+BLOCKED MESSAGES
 ==================================================
 */
 
-function clearCivicPulseAccessMessages() {
-
-    setText(
-        "pulseApprovalMessage",
-        ""
-    );
-
-
-    setText(
-        "directionVoteMessage",
-        ""
-    );
-
-
-    setText(
-        "confidenceSurveyMessage",
-        ""
-    );
-
-}
-
-
-/*
-==================================================
-ELIGIBILITY MESSAGES
-==================================================
-*/
-
-function showCivicPulseEligibilityMessages(
+function setCivicPulseBlockedMessages(
     reason
 ) {
 
@@ -726,35 +1027,9 @@ function showCivicPulseEligibilityMessages(
 }
 
 
-function showCivicPulseAccessError() {
-
-    const message =
-        "Voting access could not be confirmed. Please sign in again.";
-
-
-    setText(
-        "pulseApprovalMessage",
-        message
-    );
-
-
-    setText(
-        "directionVoteMessage",
-        message
-    );
-
-
-    setText(
-        "confidenceSurveyMessage",
-        message
-    );
-
-}
-
-
 /*
 ==================================================
-ELIGIBILITY MESSAGE HELPER
+GENERAL ELIGIBILITY MESSAGE
 ==================================================
 */
 
@@ -770,33 +1045,46 @@ function getCivicPulseEligibilityMessage(
 
             return "Sign in to participate in Civic Pulse.";
 
+
         case "emailNotVerified":
 
             return "Verify your email before participating in Civic Pulse.";
+
 
         case "zipMissing":
 
             return "Add a valid ZIP code to your profile before participating.";
 
+
         case "birthdayMissing":
 
             return "Your birthday is required before participating.";
+
 
         case "underMinimumAge":
 
             return "This account is not eligible to participate.";
 
+
         case "agreementMissing":
 
             return "The participation agreement must be accepted before voting.";
+
 
         case "verificationSyncPending":
 
             return "Your account verification is still being finalized. Please try again.";
 
+
         case "profileMissing":
 
             return "Your participant profile could not be loaded.";
+
+
+        case "accessCheckFailed":
+
+            return "Voting access could not be confirmed. Please sign in again.";
+
 
         default:
 
@@ -807,6 +1095,58 @@ function getCivicPulseEligibilityMessage(
 }
 
 
+/*
+==================================================
+PARTICIPANT ID
+==================================================
+*/
+
+function getParticipantId() {
+
+    const existing =
+        getStoredValue(
+            participantIdStorageKey
+        );
+
+
+    if (existing) {
+
+        return existing;
+
+    }
+
+
+    let participantId;
+
+
+    if (
+        window.crypto &&
+        typeof window.crypto.randomUUID ===
+        "function"
+    ) {
+
+        participantId =
+            `participant-${window.crypto.randomUUID()}`;
+
+    } else {
+
+        participantId =
+            `participant-${Date.now()}-${Math.random()
+                .toString(36)
+                .slice(2, 12)}`;
+
+    }
+
+
+    setStoredValue(
+        participantIdStorageKey,
+        participantId
+    );
+
+
+    return participantId;
+
+}
 /*
 ==================================================
 PRESIDENTIAL APPROVAL VOTING
@@ -840,21 +1180,20 @@ function initializeApprovalVoting() {
                         }
 
 
-                        /*
-                        ----------------------------------
-                        SUBMIT-TIME ELIGIBILITY CHECK
-                        ----------------------------------
-                        */
-
                         const eligible =
                             await confirmCivicPulseVotingEligibility(
+                                "presidentialApproval",
                                 "pulseApprovalMessage"
                             );
 
 
-                        if (
-                            !eligible
-                        ) {
+                        if (!eligible) {
+
+                            applyApprovalMonthlyAccess(
+                                pulseState.votingAccess
+                                    .presidentialApproval
+                            );
+
 
                             return;
 
@@ -887,7 +1226,7 @@ function initializeApprovalVoting() {
 
 
                             setStoredValue(
-                                approvalSelectionStorageKey,
+                                getApprovalSelectionStorageKey(),
                                 vote
                             );
 
@@ -895,9 +1234,19 @@ function initializeApprovalVoting() {
                             restoreApprovalSelection();
 
 
-                            setText(
-                                "pulseApprovalMessage",
-                                "Your response has been recorded."
+                            const monthlyStatus =
+                                await getMonthlyParticipationStatus(
+                                    "presidentialApproval"
+                                );
+
+
+                            pulseState.votingAccess
+                                .presidentialApproval =
+                                monthlyStatus;
+
+
+                            applyApprovalMonthlyAccess(
+                                monthlyStatus
                             );
 
                         } catch (error) {
@@ -908,21 +1257,52 @@ function initializeApprovalVoting() {
                             );
 
 
+                            if (
+                                error?.code ===
+                                "already-participated-this-month"
+                            ) {
+
+                                const monthlyStatus =
+                                    await getMonthlyParticipationStatus(
+                                        "presidentialApproval"
+                                    );
+
+
+                                pulseState.votingAccess
+                                    .presidentialApproval =
+                                    monthlyStatus;
+
+
+                                applyApprovalMonthlyAccess(
+                                    monthlyStatus
+                                );
+
+
+                                return;
+
+                            }
+
+
                             setText(
                                 "pulseApprovalMessage",
                                 error?.message ||
                                 "Your response could not be saved. Please try again."
                             );
 
-                        } finally {
 
-                            /*
-                            Only re-enable the buttons if
-                            voting access is still valid.
-                            */
+                            const monthlyStatus =
+                                await getMonthlyParticipationStatus(
+                                    "presidentialApproval"
+                                );
 
-                            setApprovalButtonsDisabled(
-                                !civicPulseVotingAccessConfirmed
+
+                            pulseState.votingAccess
+                                .presidentialApproval =
+                                monthlyStatus;
+
+
+                            applyApprovalMonthlyAccess(
+                                monthlyStatus
                             );
 
                         }
@@ -962,28 +1342,34 @@ function renderApprovalTracker() {
 
                 const response =
                     String(
-                        record?.response || ""
+                        record?.response ||
+                        ""
                     );
 
 
                 if (
-                    response === "Approve" ||
-                    response === "Strongly Approve"
+                    response ===
+                        "Approve" ||
+                    response ===
+                        "Strongly Approve"
                 ) {
 
                     approve +=
                         1;
 
                 } else if (
-                    response === "Disapprove" ||
-                    response === "Strongly Disapprove"
+                    response ===
+                        "Disapprove" ||
+                    response ===
+                        "Strongly Disapprove"
                 ) {
 
                     disapprove +=
                         1;
 
                 } else if (
-                    response === "Neutral"
+                    response ===
+                    "Neutral"
                 ) {
 
                     neutral +=
@@ -1097,7 +1483,7 @@ function restoreApprovalSelection() {
 
     const selectedVote =
         getStoredValue(
-            approvalSelectionStorageKey
+            getApprovalSelectionStorageKey()
         );
 
 
@@ -1111,7 +1497,7 @@ function restoreApprovalSelection() {
                 button.classList.toggle(
                     "is-selected",
                     button.dataset.approvalVote ===
-                        selectedVote
+                    selectedVote
                 );
 
             }
@@ -1138,6 +1524,8 @@ function setApprovalButtonsDisabled(
         );
 
 }
+
+
 /*
 ==================================================
 COUNTRY DIRECTION VOTING
@@ -1171,21 +1559,20 @@ function initializeDirectionVoting() {
                         }
 
 
-                        /*
-                        ----------------------------------
-                        SUBMIT-TIME ELIGIBILITY CHECK
-                        ----------------------------------
-                        */
-
                         const eligible =
                             await confirmCivicPulseVotingEligibility(
+                                "countryDirection",
                                 "directionVoteMessage"
                             );
 
 
-                        if (
-                            !eligible
-                        ) {
+                        if (!eligible) {
+
+                            applyDirectionMonthlyAccess(
+                                pulseState.votingAccess
+                                    .countryDirection
+                            );
+
 
                             return;
 
@@ -1218,7 +1605,7 @@ function initializeDirectionVoting() {
 
 
                             setStoredValue(
-                                directionSelectionStorageKey,
+                                getDirectionSelectionStorageKey(),
                                 vote
                             );
 
@@ -1226,9 +1613,19 @@ function initializeDirectionVoting() {
                             restoreDirectionSelection();
 
 
-                            setText(
-                                "directionVoteMessage",
-                                "Your response has been recorded."
+                            const monthlyStatus =
+                                await getMonthlyParticipationStatus(
+                                    "countryDirection"
+                                );
+
+
+                            pulseState.votingAccess
+                                .countryDirection =
+                                monthlyStatus;
+
+
+                            applyDirectionMonthlyAccess(
+                                monthlyStatus
                             );
 
                         } catch (error) {
@@ -1239,16 +1636,52 @@ function initializeDirectionVoting() {
                             );
 
 
+                            if (
+                                error?.code ===
+                                "already-participated-this-month"
+                            ) {
+
+                                const monthlyStatus =
+                                    await getMonthlyParticipationStatus(
+                                        "countryDirection"
+                                    );
+
+
+                                pulseState.votingAccess
+                                    .countryDirection =
+                                    monthlyStatus;
+
+
+                                applyDirectionMonthlyAccess(
+                                    monthlyStatus
+                                );
+
+
+                                return;
+
+                            }
+
+
                             setText(
                                 "directionVoteMessage",
                                 error?.message ||
                                 "Your response could not be saved. Please try again."
                             );
 
-                        } finally {
 
-                            setDirectionButtonsDisabled(
-                                !civicPulseVotingAccessConfirmed
+                            const monthlyStatus =
+                                await getMonthlyParticipationStatus(
+                                    "countryDirection"
+                                );
+
+
+                            pulseState.votingAccess
+                                .countryDirection =
+                                monthlyStatus;
+
+
+                            applyDirectionMonthlyAccess(
+                                monthlyStatus
                             );
 
                         }
@@ -1284,7 +1717,8 @@ function renderDirectionTracker() {
 
                 const response =
                     String(
-                        record?.response || ""
+                        record?.response ||
+                        ""
                     );
 
 
@@ -1392,7 +1826,7 @@ function restoreDirectionSelection() {
 
     const selectedVote =
         getStoredValue(
-            directionSelectionStorageKey
+            getDirectionSelectionStorageKey()
         );
 
 
@@ -1406,7 +1840,7 @@ function restoreDirectionSelection() {
                 button.classList.toggle(
                     "is-selected",
                     button.dataset.directionVote ===
-                        selectedVote
+                    selectedVote
                 );
 
             }
@@ -1540,21 +1974,20 @@ SAVE CONFIDENCE
 
 async function submitConfidenceSurvey() {
 
-    /*
-    ----------------------------------------------
-    FULL ELIGIBILITY CHECK BEFORE SUBMISSION
-    ----------------------------------------------
-    */
-
     const eligible =
         await confirmCivicPulseVotingEligibility(
+            "nationalConfidence",
             "confidenceSurveyMessage"
         );
 
 
-    if (
-        !eligible
-    ) {
+    if (!eligible) {
+
+        applyConfidenceMonthlyAccess(
+            pulseState.votingAccess
+                .nationalConfidence
+        );
+
 
         return;
 
@@ -1582,9 +2015,7 @@ async function submitConfidenceSurvey() {
                     );
 
 
-                if (
-                    !selected
-                ) {
+                if (!selected) {
 
                     return;
 
@@ -1622,12 +2053,6 @@ async function submitConfidenceSurvey() {
     }
 
 
-    const submitButton =
-        document.getElementById(
-            "confidenceSubmitButton"
-        );
-
-
     setConfidenceControlsDisabled(
         true
     );
@@ -1648,7 +2073,7 @@ async function submitConfidenceSurvey() {
 
 
         setStoredValue(
-            confidenceSelectionStorageKey,
+            getConfidenceSelectionStorageKey(),
             JSON.stringify(
                 ratings
             )
@@ -1658,9 +2083,19 @@ async function submitConfidenceSurvey() {
         restoreConfidenceSelections();
 
 
-        setText(
-            "confidenceSurveyMessage",
-            "Your confidence ratings have been recorded."
+        const monthlyStatus =
+            await getMonthlyParticipationStatus(
+                "nationalConfidence"
+            );
+
+
+        pulseState.votingAccess
+            .nationalConfidence =
+            monthlyStatus;
+
+
+        applyConfidenceMonthlyAccess(
+            monthlyStatus
         );
 
     } catch (error) {
@@ -1671,70 +2106,53 @@ async function submitConfidenceSurvey() {
         );
 
 
+        if (
+            error?.code ===
+            "already-participated-this-month"
+        ) {
+
+            const monthlyStatus =
+                await getMonthlyParticipationStatus(
+                    "nationalConfidence"
+                );
+
+
+            pulseState.votingAccess
+                .nationalConfidence =
+                monthlyStatus;
+
+
+            applyConfidenceMonthlyAccess(
+                monthlyStatus
+            );
+
+
+            return;
+
+        }
+
+
         setText(
             "confidenceSurveyMessage",
             error?.message ||
             "Your ratings could not be saved. Please try again."
         );
 
-    } finally {
 
-        setConfidenceControlsDisabled(
-            !civicPulseVotingAccessConfirmed
+        const monthlyStatus =
+            await getMonthlyParticipationStatus(
+                "nationalConfidence"
+            );
+
+
+        pulseState.votingAccess
+            .nationalConfidence =
+            monthlyStatus;
+
+
+        applyConfidenceMonthlyAccess(
+            monthlyStatus
         );
-
-
-        if (
-            submitButton &&
-            civicPulseVotingAccessConfirmed
-        ) {
-
-            submitButton.disabled =
-                false;
-
-        }
-
-    }
-
-}
-
-
-/*
-==================================================
-CONFIDENCE CONTROL STATE
-==================================================
-*/
-
-function setConfidenceControlsDisabled(
-    disabled
-) {
-
-    document
-        .querySelectorAll(
-            "[data-confidence-value]"
-        )
-        .forEach(
-            button => {
-
-                button.disabled =
-                    disabled;
-
-            }
-        );
-
-
-    const submitButton =
-        document.getElementById(
-            "confidenceSubmitButton"
-        );
-
-
-    if (
-        submitButton
-    ) {
-
-        submitButton.disabled =
-            disabled;
 
     }
 
@@ -1752,10 +2170,15 @@ function renderConfidenceTracker() {
     const categories = [
 
         "government",
+
         "congress",
+
         "court",
+
         "economy",
+
         "media",
+
         "democracy"
 
     ];
@@ -1763,24 +2186,46 @@ function renderConfidenceTracker() {
 
     const totals = {
 
-        government: 0,
-        congress: 0,
-        court: 0,
-        economy: 0,
-        media: 0,
-        democracy: 0
+        government:
+            0,
+
+        congress:
+            0,
+
+        court:
+            0,
+
+        economy:
+            0,
+
+        media:
+            0,
+
+        democracy:
+            0
 
     };
 
 
     const counts = {
 
-        government: 0,
-        congress: 0,
-        court: 0,
-        economy: 0,
-        media: 0,
-        democracy: 0
+        government:
+            0,
+
+        congress:
+            0,
+
+        court:
+            0,
+
+        economy:
+            0,
+
+        media:
+            0,
+
+        democracy:
+            0
 
     };
 
@@ -1953,9 +2398,13 @@ function renderConfidenceSnapshot(
     const institutionCategories = [
 
         "government",
+
         "congress",
+
         "court",
+
         "media",
+
         "democracy"
 
     ];
@@ -2052,13 +2501,11 @@ function restoreConfidenceSelections() {
 
     const stored =
         getStoredValue(
-            confidenceSelectionStorageKey
+            getConfidenceSelectionStorageKey()
         );
 
 
-    if (
-        !stored
-    ) {
+    if (!stored) {
 
         return;
 
@@ -2086,12 +2533,7 @@ function restoreConfidenceSelections() {
         ratings
     )
         .forEach(
-            (
-                [
-                    category,
-                    value
-                ]
-            ) => {
+            ([category, value]) => {
 
                 const group =
                     document.querySelector(
@@ -2099,9 +2541,7 @@ function restoreConfidenceSelections() {
                     );
 
 
-                if (
-                    !group
-                ) {
+                if (!group) {
 
                     return;
 
@@ -2236,9 +2676,7 @@ function restoreLocalSelections() {
 
     restoreApprovalSelection();
 
-
     restoreDirectionSelection();
-
 
     restoreConfidenceSelections();
 
@@ -2358,9 +2796,7 @@ function renderApprovalHistory(
     history
 ) {
 
-    if (
-        !container
-    ) {
+    if (!container) {
 
         return;
 
@@ -2429,9 +2865,7 @@ function renderConfidenceHistory(
     history
 ) {
 
-    if (
-        !container
-    ) {
+    if (!container) {
 
         return;
 
@@ -2527,7 +2961,7 @@ function renderHistoryUnavailable() {
 
 /*
 ==================================================
-HISTORY HELPERS
+HISTORY DATE
 ==================================================
 */
 
@@ -2535,9 +2969,7 @@ function formatHistoryDate(
     value
 ) {
 
-    if (
-        !value
-    ) {
+    if (!value) {
 
         return "Unknown";
 
@@ -2567,18 +2999,22 @@ function formatHistoryDate(
         .toLocaleDateString(
             undefined,
             {
-
                 month:
                     "short",
 
                 day:
                     "numeric"
-
             }
         );
 
 }
 
+
+/*
+==================================================
+PERCENTAGE
+==================================================
+*/
 
 function clampPercent(
     value
@@ -2591,8 +3027,7 @@ function clampPercent(
             Math.round(
                 Number(
                     value
-                ) ||
-                0
+                ) || 0
             )
         )
     );
@@ -2617,9 +3052,7 @@ function setFillWidth(
         );
 
 
-    if (
-        !element
-    ) {
+    if (!element) {
 
         return;
 
@@ -2778,9 +3211,7 @@ function initializeHeader() {
                         );
 
 
-                    if (
-                        !group
-                    ) {
+                    if (!group) {
 
                         return;
 
@@ -2948,6 +3379,42 @@ function escapeHtml(
         );
 
 }
+
+
+/*
+==================================================
+CLEANUP
+==================================================
+*/
+
+function cleanupCivicPulsePage() {
+
+    if (
+        typeof unsubscribeAuthState ===
+        "function"
+    ) {
+
+        unsubscribeAuthState();
+
+    }
+
+
+    unsubscribeAuthState =
+        null;
+
+}
+
+
+/*
+==================================================
+PAGE EXIT
+==================================================
+*/
+
+window.addEventListener(
+    "pagehide",
+    cleanupCivicPulsePage
+);
 
 
 /*

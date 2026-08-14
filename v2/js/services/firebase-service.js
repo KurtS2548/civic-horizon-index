@@ -2,29 +2,41 @@
 ==================================================
 CIVIC HORIZON INDEX V2
 SHARED FIREBASE SERVICE
+
+MONTHLY VOTING SYSTEM
 ==================================================
 */
 
 
 import {
+
     auth,
+
     database
+
 } from "../../../js/firebase.js";
 
 
 import {
+
     ref,
+
     onValue,
+
     push,
+
     set,
+
     get,
+
     update
+
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 
 /*
 ==================================================
-DATABASE REFERENCES
+EXISTING DATABASE REFERENCES
 ==================================================
 */
 
@@ -72,7 +84,546 @@ const nationalConfidenceRef =
 
 /*
 ==================================================
+MONTHLY TRACKERS
+==================================================
+*/
+
+const monthlyTrackerNames = [
+
+    "nationalPriorities",
+
+    "presidentialApproval",
+
+    "countryDirection",
+
+    "nationalConfidence"
+
+];
+
+
+/*
+==================================================
+CURRENT VOTING PERIOD
+
+Automatically returns:
+
+2026-08
+2026-09
+2026-12
+2027-01
+
+No manual reset is required.
+==================================================
+*/
+
+export function getCurrentVotingPeriod() {
+
+    const now =
+        new Date();
+
+
+    const year =
+        now.getFullYear();
+
+
+    const month =
+        String(
+            now.getMonth() + 1
+        ).padStart(
+            2,
+            "0"
+        );
+
+
+    return `${year}-${month}`;
+
+}
+
+
+/*
+==================================================
+VOTING PERIOD LABEL
+==================================================
+*/
+
+export function getCurrentVotingPeriodLabel() {
+
+    const now =
+        new Date();
+
+
+    return now.toLocaleDateString(
+        "en-US",
+        {
+            month:
+                "long",
+
+            year:
+                "numeric"
+        }
+    );
+
+}
+
+
+/*
+==================================================
+CURRENT VERIFIED USER
+==================================================
+*/
+
+function getVerifiedCurrentUser() {
+
+    const user =
+        auth.currentUser;
+
+
+    if (!user) {
+
+        throw new Error(
+            "You must sign in before participating."
+        );
+
+    }
+
+
+    if (
+        !user.emailVerified
+    ) {
+
+        throw new Error(
+            "Please verify your email before participating."
+        );
+
+    }
+
+
+    return user;
+
+}
+
+
+/*
+==================================================
+VALIDATE MONTHLY TRACKER
+==================================================
+*/
+
+function validateMonthlyTracker(
+    tracker
+) {
+
+    if (
+        !monthlyTrackerNames.includes(
+            tracker
+        )
+    ) {
+
+        throw new Error(
+            "Invalid monthly voting tracker."
+        );
+
+    }
+
+
+    return tracker;
+
+}
+
+
+/*
+==================================================
+MONTHLY PARTICIPANT REFERENCE
+
+Structure:
+
+monthlyVotes/
+    YYYY-MM/
+        tracker/
+            Firebase UID
+==================================================
+*/
+
+function getMonthlyParticipantReference(
+    tracker,
+    userId = ""
+) {
+
+    const validatedTracker =
+        validateMonthlyTracker(
+            tracker
+        );
+
+
+    const user =
+        auth.currentUser;
+
+
+    const uid =
+        userId ||
+        user?.uid ||
+        "";
+
+
+    if (!uid) {
+
+        throw new Error(
+            "A signed-in participant is required."
+        );
+
+    }
+
+
+    const votingPeriod =
+        getCurrentVotingPeriod();
+
+
+    return ref(
+        database,
+        `monthlyVotes/${votingPeriod}/${validatedTracker}/${uid}`
+    );
+
+}
+
+
+/*
+==================================================
+HAS PARTICIPATED THIS MONTH
+==================================================
+*/
+
+export async function hasParticipatedThisMonth(
+    tracker
+) {
+
+    const user =
+        auth.currentUser;
+
+
+    if (!user) {
+
+        return false;
+
+    }
+
+
+    const monthlyReference =
+        getMonthlyParticipantReference(
+            tracker,
+            user.uid
+        );
+
+
+    const snapshot =
+        await get(
+            monthlyReference
+        );
+
+
+    return snapshot.exists();
+
+}
+
+
+/*
+==================================================
+GET CURRENT MONTHLY RESPONSE
+==================================================
+*/
+
+export async function getMyCurrentMonthlyVote(
+    tracker
+) {
+
+    const user =
+        auth.currentUser;
+
+
+    if (!user) {
+
+        return null;
+
+    }
+
+
+    const votingPeriod =
+        getCurrentVotingPeriod();
+
+
+    const monthlyReference =
+        getMonthlyParticipantReference(
+            tracker,
+            user.uid
+        );
+
+
+    const snapshot =
+        await get(
+            monthlyReference
+        );
+
+
+    if (
+        !snapshot.exists()
+    ) {
+
+        return null;
+
+    }
+
+
+    return {
+
+        id:
+            user.uid,
+
+        votingPeriod,
+
+        ...snapshot.val()
+
+    };
+
+}
+
+
+/*
+==================================================
+MONTHLY PARTICIPATION STATUS
+==================================================
+*/
+
+export async function getMonthlyParticipationStatus(
+    tracker
+) {
+
+    const user =
+        auth.currentUser;
+
+
+    const votingPeriod =
+        getCurrentVotingPeriod();
+
+
+    const votingPeriodLabel =
+        getCurrentVotingPeriodLabel();
+
+
+    if (!user) {
+
+        return {
+
+            eligible:
+                false,
+
+            reason:
+                "signedOut",
+
+            alreadyParticipated:
+                false,
+
+            votingPeriod,
+
+            votingPeriodLabel
+
+        };
+
+    }
+
+
+    if (
+        !user.emailVerified
+    ) {
+
+        return {
+
+            eligible:
+                false,
+
+            reason:
+                "emailNotVerified",
+
+            alreadyParticipated:
+                false,
+
+            votingPeriod,
+
+            votingPeriodLabel
+
+        };
+
+    }
+
+
+    const alreadyParticipated =
+        await hasParticipatedThisMonth(
+            tracker
+        );
+
+
+    if (
+        alreadyParticipated
+    ) {
+
+        return {
+
+            eligible:
+                false,
+
+            reason:
+                "alreadyParticipatedThisMonth",
+
+            alreadyParticipated:
+                true,
+
+            votingPeriod,
+
+            votingPeriodLabel
+
+        };
+
+    }
+
+
+    return {
+
+        eligible:
+            true,
+
+        reason:
+            "eligible",
+
+        alreadyParticipated:
+            false,
+
+        votingPeriod,
+
+        votingPeriodLabel
+
+    };
+
+}
+
+
+/*
+==================================================
+SAVE MONTHLY VOTE
+
+This is the private Firebase UID-based record that
+prevents duplicate voting during the same month.
+
+Firebase Rules provide the final enforcement layer.
+==================================================
+*/
+
+async function saveMonthlyVote(
+    tracker,
+    responseData
+) {
+
+    const user =
+        getVerifiedCurrentUser();
+
+
+    const validatedTracker =
+        validateMonthlyTracker(
+            tracker
+        );
+
+
+    if (
+        !responseData ||
+        typeof responseData !==
+            "object"
+    ) {
+
+        throw new Error(
+            "Valid monthly voting data is required."
+        );
+
+    }
+
+
+    const votingPeriod =
+        getCurrentVotingPeriod();
+
+
+    const monthlyReference =
+        getMonthlyParticipantReference(
+            validatedTracker,
+            user.uid
+        );
+
+
+    /*
+    ----------------------------------------------
+    FRIENDLY DUPLICATE CHECK
+
+    Firebase Rules also prevent overwriting the
+    record. This check simply gives the participant
+    a clearer message before the write is attempted.
+    ----------------------------------------------
+    */
+
+    const existingSnapshot =
+        await get(
+            monthlyReference
+        );
+
+
+    if (
+        existingSnapshot.exists()
+    ) {
+
+        const error =
+            new Error(
+                `You have already participated in ${getCurrentVotingPeriodLabel()}. Voting will reopen automatically next month.`
+            );
+
+
+        error.code =
+            "already-participated-this-month";
+
+
+        throw error;
+
+    }
+
+
+    const record = {
+
+        ...responseData,
+
+        votingPeriod
+
+    };
+
+
+    await set(
+        monthlyReference,
+        record
+    );
+
+
+    return {
+
+        id:
+            user.uid,
+
+        votingPeriod,
+
+        ...record
+
+    };
+
+}
+
+
+/*
+==================================================
 LIVE DATA SUBSCRIPTIONS
+
+These continue reading the existing public result
+paths during the monthly-voting migration.
 ==================================================
 */
 
@@ -83,6 +634,7 @@ export function subscribeToPrioritySubmissions(
 
     return onValue(
         prioritySubmissionsRef,
+
         snapshot => {
 
             callback(
@@ -92,6 +644,7 @@ export function subscribeToPrioritySubmissions(
             );
 
         },
+
         errorCallback
     );
 
@@ -105,6 +658,7 @@ export function subscribeToCommunitySurveys(
 
     return onValue(
         communitySurveysRef,
+
         snapshot => {
 
             callback(
@@ -114,6 +668,7 @@ export function subscribeToCommunitySurveys(
             );
 
         },
+
         errorCallback
     );
 
@@ -127,6 +682,7 @@ export function subscribeToCommunityVotes(
 
     return onValue(
         communityVotesRef,
+
         snapshot => {
 
             callback(
@@ -136,6 +692,7 @@ export function subscribeToCommunityVotes(
             );
 
         },
+
         errorCallback
     );
 
@@ -155,6 +712,7 @@ export function subscribeToPresidentialApproval(
 
     return onValue(
         presidentialApprovalRef,
+
         snapshot => {
 
             callback(
@@ -164,6 +722,7 @@ export function subscribeToPresidentialApproval(
             );
 
         },
+
         errorCallback
     );
 
@@ -183,6 +742,7 @@ export function subscribeToCountryDirection(
 
     return onValue(
         countryDirectionRef,
+
         snapshot => {
 
             callback(
@@ -192,6 +752,7 @@ export function subscribeToCountryDirection(
             );
 
         },
+
         errorCallback
     );
 
@@ -211,6 +772,7 @@ export function subscribeToNationalConfidence(
 
     return onValue(
         nationalConfidenceRef,
+
         snapshot => {
 
             callback(
@@ -220,15 +782,14 @@ export function subscribeToNationalConfidence(
             );
 
         },
+
         errorCallback
     );
 
 }
-
-
 /*
 ==================================================
-NATIONAL PRIORITIES SUBMISSION
+NATIONAL PRIORITIES MONTHLY SUBMISSION
 ==================================================
 */
 
@@ -239,7 +800,8 @@ export async function submitPrioritySubmission(
 
     if (
         !ratings ||
-        typeof ratings !== "object"
+        typeof ratings !==
+            "object"
     ) {
 
         throw new Error(
@@ -249,14 +811,9 @@ export async function submitPrioritySubmission(
     }
 
 
-    /*
-    ----------------------------------------------
-    ANONYMOUS AGE GROUP
+    const user =
+        getVerifiedCurrentUser();
 
-    No UID, email, birthday, name, or ZIP is
-    stored in the public submission.
-    ----------------------------------------------
-    */
 
     const ageGroup =
         additionalData?.ageGroup ===
@@ -277,20 +834,21 @@ export async function submitPrioritySubmission(
     }
 
 
-    const submissionReference =
-        push(
-            prioritySubmissionsRef
-        );
+    const submittedAt =
+        new Date().toISOString();
 
 
-    const submissionData = {
+    const votingPeriod =
+        getCurrentVotingPeriod();
+
+
+    const monthlyData = {
 
         ratings,
 
         ageGroup,
 
-        submittedAt:
-            new Date().toISOString(),
+        submittedAt,
 
         survey:
             "nationalPriorities",
@@ -301,9 +859,76 @@ export async function submitPrioritySubmission(
     };
 
 
+    /*
+    ----------------------------------------------
+    PRIVATE MONTHLY RECORD
+
+    This prevents the same account from submitting
+    National Priorities more than once in the same
+    YYYY-MM voting period.
+    ----------------------------------------------
+    */
+
+    await saveMonthlyVote(
+        "nationalPriorities",
+        monthlyData
+    );
+
+
+    /*
+    ----------------------------------------------
+    CURRENT PUBLIC RESULTS
+
+    Keep the existing anonymous public results path
+    working during the migration.
+
+    No UID, email, birthday, name, or ZIP is copied
+    into this public record.
+    ----------------------------------------------
+    */
+
+    const submissionReference =
+        push(
+            prioritySubmissionsRef
+        );
+
+
+    const publicSubmissionData = {
+
+    ratings,
+
+    ageGroup,
+
+    submittedAt,
+
+    survey:
+        "nationalPriorities",
+
+    surveyVersion:
+        "2.1"
+
+};
+
+
     await set(
         submissionReference,
-        submissionData
+        publicSubmissionData
+    );
+
+
+    /*
+    ----------------------------------------------
+    PRIVATE PARTICIPANT HISTORY
+    ----------------------------------------------
+    */
+
+    await safelySavePrivateNationalPriorityHistory(
+        user,
+        {
+            submittedAt,
+            ratings,
+            votingPeriod
+        }
     );
 
 
@@ -312,7 +937,116 @@ export async function submitPrioritySubmission(
         id:
             submissionReference.key,
 
-        ...submissionData
+        votingPeriod,
+
+        ...publicSubmissionData
+
+    };
+
+}
+
+
+/*
+==================================================
+PRIVATE NATIONAL PRIORITY HISTORY
+==================================================
+*/
+
+async function safelySavePrivateNationalPriorityHistory(
+    user,
+    responseData
+) {
+
+    try {
+
+        return await savePrivateNationalPriorityHistory(
+            user,
+            responseData
+        );
+
+    } catch (error) {
+
+        /*
+        ----------------------------------------------
+        IMPORTANT
+
+        The monthly vote and public anonymous result
+        have already succeeded.
+
+        A private-history error must not make the
+        participant believe the entire vote failed.
+        ----------------------------------------------
+        */
+
+        console.error(
+            "Private National Priorities history could not be saved:",
+            error
+        );
+
+
+        return null;
+
+    }
+
+}
+
+
+async function savePrivateNationalPriorityHistory(
+    user,
+    responseData
+) {
+
+    if (
+        !user ||
+        !user.uid ||
+        !user.emailVerified
+    ) {
+
+        return null;
+
+    }
+
+
+    if (
+        !responseData ||
+        typeof responseData !==
+            "object"
+    ) {
+
+        throw new Error(
+            "National Priorities history data is required."
+        );
+
+    }
+
+
+    const historyReference =
+        ref(
+            database,
+            `userActivity/${user.uid}/nationalPriorities`
+        );
+
+
+    const submissionReference =
+        push(
+            historyReference
+        );
+
+
+    await set(
+        submissionReference,
+        {
+            ...responseData
+        }
+    );
+
+
+    return {
+
+        id:
+            submissionReference.key,
+
+        ...responseData
 
     };
 
@@ -388,7 +1122,8 @@ export async function updateCommunitySurvey(
 
     if (
         !surveyId ||
-        typeof surveyId !== "string"
+        typeof surveyId !==
+            "string"
     ) {
 
         throw new Error(
@@ -447,7 +1182,8 @@ function validateCommunitySurvey(
 
     if (
         !surveyData ||
-        typeof surveyData !== "object"
+        typeof surveyData !==
+            "object"
     ) {
 
         throw new Error(
@@ -566,7 +1302,8 @@ export async function submitCommunityVote(
 
     if (
         !surveyId ||
-        typeof surveyId !== "string"
+        typeof surveyId !==
+            "string"
     ) {
 
         throw new Error(
@@ -578,7 +1315,8 @@ export async function submitCommunityVote(
 
     if (
         !choice ||
-        typeof choice !== "string"
+        typeof choice !==
+            "string"
     ) {
 
         throw new Error(
@@ -644,12 +1382,6 @@ async function savePrivateCivicPulseHistory(
         auth.currentUser;
 
 
-    /*
-    ----------------------------------------------
-    VERIFIED ACCOUNT REQUIRED
-    ----------------------------------------------
-    */
-
     if (
         !user ||
         !user.emailVerified
@@ -697,18 +1429,6 @@ async function savePrivateCivicPulseHistory(
     }
 
 
-    /*
-    ----------------------------------------------
-    PRIVATE ACCOUNT HISTORY
-
-    Firebase UID is used ONLY inside the private
-    userActivity tree.
-
-    It is never copied into the public Civic Pulse
-    response.
-    ----------------------------------------------
-    */
-
     const historyReference =
         ref(
             database,
@@ -725,9 +1445,7 @@ async function savePrivateCivicPulseHistory(
     await set(
         submissionReference,
         {
-
             ...responseData
-
         }
     );
 
@@ -736,6 +1454,286 @@ async function savePrivateCivicPulseHistory(
 
         id:
             submissionReference.key,
+
+        ...responseData
+
+    };
+
+}
+
+
+/*
+==================================================
+SAFE PRIVATE CIVIC PULSE HISTORY
+==================================================
+*/
+
+async function safelySavePrivateCivicPulseHistory(
+    tracker,
+    responseData
+) {
+
+    try {
+
+        return await savePrivateCivicPulseHistory(
+            tracker,
+            responseData
+        );
+
+    } catch (error) {
+
+        console.error(
+            `Private ${tracker} history could not be saved:`,
+            error
+        );
+
+
+        return null;
+
+    }
+
+}
+/*
+==================================================
+ATOMIC MONTHLY CIVIC PULSE WRITE
+==================================================
+*/
+
+async function saveMonthlyCivicPulseResponse(
+    tracker,
+    responseData,
+    publicPath,
+    participantId = ""
+) {
+
+    const user =
+        getVerifiedCurrentUser();
+
+
+    const validatedTracker =
+        validateMonthlyTracker(
+            tracker
+        );
+
+
+    const votingPeriod =
+        getCurrentVotingPeriod();
+
+
+    const monthlyReference =
+        getMonthlyParticipantReference(
+            validatedTracker,
+            user.uid
+        );
+
+
+    /*
+    ----------------------------------------------
+    FRIENDLY DUPLICATE CHECK
+
+    Firebase Rules remain the final protection.
+    ----------------------------------------------
+    */
+
+    const existingSnapshot =
+        await get(
+            monthlyReference
+        );
+
+
+    if (
+        existingSnapshot.exists()
+    ) {
+
+        const error =
+            new Error(
+                `You have already participated in ${getCurrentVotingPeriodLabel()}. Voting will reopen automatically next month.`
+            );
+
+
+        error.code =
+            "already-participated-this-month";
+
+
+        throw error;
+
+    }
+
+
+    /*
+    ----------------------------------------------
+    ANONYMOUS PUBLIC PARTICIPANT ID
+
+    The Firebase UID is NEVER placed into the
+    public Civic Pulse record.
+    ----------------------------------------------
+    */
+
+    const cleanedParticipantId =
+        validateParticipantId(
+            participantId
+        );
+
+
+    let publicResponseId;
+
+
+    if (
+        cleanedParticipantId
+    ) {
+
+        /*
+        Example:
+
+        2026-08-participant-abc123
+
+        When September arrives it naturally becomes:
+
+        2026-09-participant-abc123
+
+        Therefore the public record can be created again
+        without overwriting the August response.
+        */
+
+        publicResponseId =
+            `${votingPeriod}-${cleanedParticipantId}`;
+
+    } else {
+
+        const temporaryReference =
+            push(
+                ref(
+                    database,
+                    publicPath
+                )
+            );
+
+
+        publicResponseId =
+            temporaryReference.key;
+
+    }
+
+
+    if (
+        !publicResponseId
+    ) {
+
+        throw new Error(
+            "A public response ID could not be created."
+        );
+
+    }
+
+
+    /*
+    ----------------------------------------------
+    PRIVATE HISTORY ID
+    ----------------------------------------------
+    */
+
+    const privateHistoryReference =
+        push(
+            ref(
+                database,
+                `userActivity/${user.uid}/civicPulse/${validatedTracker}`
+            )
+        );
+
+
+    const historyId =
+        privateHistoryReference.key;
+
+
+    if (
+        !historyId
+    ) {
+
+        throw new Error(
+            "A private history record could not be created."
+        );
+
+    }
+
+
+    /*
+    ----------------------------------------------
+    MULTI-LOCATION ATOMIC UPDATE
+
+    All three records succeed together or fail
+    together.
+
+    1. Private monthly eligibility record
+    2. Anonymous public result
+    3. Private account history
+    ----------------------------------------------
+    */
+
+    const updates = {};
+
+
+    updates[
+        `monthlyVotes/${votingPeriod}/${validatedTracker}/${user.uid}`
+    ] = {
+
+        ...responseData,
+
+        votingPeriod
+
+    };
+
+
+    updates[
+        `${publicPath}/${publicResponseId}`
+    ] = {
+
+        ...responseData,
+
+        votingPeriod,
+
+        ...(cleanedParticipantId
+            ? {
+                participantId:
+                    cleanedParticipantId
+            }
+            : {})
+
+    };
+
+
+    /*
+    The existing userActivity rules do not require
+    votingPeriod, so private history keeps its current
+    compatible structure. submittedAt still preserves
+    the exact month and year.
+    */
+
+    updates[
+        `userActivity/${user.uid}/civicPulse/${validatedTracker}/${historyId}`
+    ] = {
+
+        ...responseData
+
+    };
+
+
+    await update(
+        ref(
+            database
+        ),
+        updates
+    );
+
+
+    return {
+
+        id:
+            publicResponseId,
+
+        participantId:
+            cleanedParticipantId,
+
+        votingPeriod,
 
         ...responseData
 
@@ -783,15 +1781,12 @@ export async function submitPresidentialApproval(
     }
 
 
-    const submittedAt =
-        new Date().toISOString();
-
-
     const responseData = {
 
         response,
 
-        submittedAt,
+        submittedAt:
+            new Date().toISOString(),
 
         tracker:
             "presidentialApproval",
@@ -802,113 +1797,17 @@ export async function submitPresidentialApproval(
     };
 
 
-    const cleanedParticipantId =
-        validateParticipantId(
-            participantId
-        );
+    return saveMonthlyCivicPulseResponse(
 
-
-    /*
-    ----------------------------------------------
-    CURRENT PUBLIC CIVIC PULSE RESPONSE
-
-    The public tracker uses the random browser
-    participant ID.
-
-    Updating an answer replaces that participant's
-    current public response.
-    ----------------------------------------------
-    */
-
-    if (
-        cleanedParticipantId
-    ) {
-
-        const participantReference =
-            ref(
-                database,
-                `civicPulse/presidentialApproval/responses/${cleanedParticipantId}`
-            );
-
-
-        await set(
-            participantReference,
-            {
-
-                ...responseData,
-
-                participantId:
-                    cleanedParticipantId
-
-            }
-        );
-
-
-        /*
-        ------------------------------------------
-        PRIVATE ACCOUNT HISTORY
-        ------------------------------------------
-        */
-
-        await safelySavePrivateCivicPulseHistory(
-            "presidentialApproval",
-            responseData
-        );
-
-
-        return {
-
-            id:
-                cleanedParticipantId,
-
-            participantId:
-                cleanedParticipantId,
-
-            ...responseData
-
-        };
-
-    }
-
-
-    /*
-    ----------------------------------------------
-    BACKWARD COMPATIBILITY
-    ----------------------------------------------
-    */
-
-    const responseReference =
-        push(
-            presidentialApprovalRef
-        );
-
-
-    await set(
-        responseReference,
-        responseData
-    );
-
-
-    /*
-    A verified account can still receive private
-    history even if an older caller does not pass
-    the browser participant ID.
-    */
-
-    await safelySavePrivateCivicPulseHistory(
         "presidentialApproval",
-        responseData
+
+        responseData,
+
+        "civicPulse/presidentialApproval/responses",
+
+        participantId
+
     );
-
-
-    return {
-
-        id:
-            responseReference.key,
-
-        ...responseData
-
-    };
 
 }
 
@@ -946,15 +1845,12 @@ export async function submitCountryDirection(
     }
 
 
-    const submittedAt =
-        new Date().toISOString();
-
-
     const responseData = {
 
         response,
 
-        submittedAt,
+        submittedAt:
+            new Date().toISOString(),
 
         tracker:
             "countryDirection",
@@ -965,83 +1861,17 @@ export async function submitCountryDirection(
     };
 
 
-    const cleanedParticipantId =
-        validateParticipantId(
-            participantId
-        );
+    return saveMonthlyCivicPulseResponse(
 
-
-    if (
-        cleanedParticipantId
-    ) {
-
-        const participantReference =
-            ref(
-                database,
-                `civicPulse/countryDirection/responses/${cleanedParticipantId}`
-            );
-
-
-        await set(
-            participantReference,
-            {
-
-                ...responseData,
-
-                participantId:
-                    cleanedParticipantId
-
-            }
-        );
-
-
-        await safelySavePrivateCivicPulseHistory(
-            "countryDirection",
-            responseData
-        );
-
-
-        return {
-
-            id:
-                cleanedParticipantId,
-
-            participantId:
-                cleanedParticipantId,
-
-            ...responseData
-
-        };
-
-    }
-
-
-    const responseReference =
-        push(
-            countryDirectionRef
-        );
-
-
-    await set(
-        responseReference,
-        responseData
-    );
-
-
-    await safelySavePrivateCivicPulseHistory(
         "countryDirection",
-        responseData
+
+        responseData,
+
+        "civicPulse/countryDirection/responses",
+
+        participantId
+
     );
-
-
-    return {
-
-        id:
-            responseReference.key,
-
-        ...responseData
-
-    };
 
 }
 
@@ -1063,16 +1893,13 @@ export async function submitNationalConfidence(
         );
 
 
-    const submittedAt =
-        new Date().toISOString();
-
-
     const responseData = {
 
         ratings:
             validatedRatings,
 
-        submittedAt,
+        submittedAt:
+            new Date().toISOString(),
 
         tracker:
             "nationalConfidence",
@@ -1083,129 +1910,17 @@ export async function submitNationalConfidence(
     };
 
 
-    const cleanedParticipantId =
-        validateParticipantId(
-            participantId
-        );
+    return saveMonthlyCivicPulseResponse(
 
-
-    if (
-        cleanedParticipantId
-    ) {
-
-        const participantReference =
-            ref(
-                database,
-                `civicPulse/nationalConfidence/responses/${cleanedParticipantId}`
-            );
-
-
-        await set(
-            participantReference,
-            {
-
-                ...responseData,
-
-                participantId:
-                    cleanedParticipantId
-
-            }
-        );
-
-
-        await safelySavePrivateCivicPulseHistory(
-            "nationalConfidence",
-            responseData
-        );
-
-
-        return {
-
-            id:
-                cleanedParticipantId,
-
-            participantId:
-                cleanedParticipantId,
-
-            ...responseData
-
-        };
-
-    }
-
-
-    const responseReference =
-        push(
-            nationalConfidenceRef
-        );
-
-
-    await set(
-        responseReference,
-        responseData
-    );
-
-
-    await safelySavePrivateCivicPulseHistory(
         "nationalConfidence",
-        responseData
+
+        responseData,
+
+        "civicPulse/nationalConfidence/responses",
+
+        participantId
+
     );
-
-
-    return {
-
-        id:
-            responseReference.key,
-
-        ...responseData
-
-    };
-
-}
-
-
-/*
-==================================================
-SAFE PRIVATE HISTORY WRITE
-==================================================
-*/
-
-async function safelySavePrivateCivicPulseHistory(
-    tracker,
-    responseData
-) {
-
-    try {
-
-        return await savePrivateCivicPulseHistory(
-            tracker,
-            responseData
-        );
-
-    } catch (error) {
-
-        /*
-        ----------------------------------------------
-        IMPORTANT
-
-        The public/current Civic Pulse response has
-        already succeeded.
-
-        A private-history problem must not make the
-        participant believe their public response
-        failed and cause them to submit it again.
-        ----------------------------------------------
-        */
-
-        console.error(
-            `Private ${tracker} history could not be saved:`,
-            error
-        );
-
-
-        return null;
-
-    }
 
 }
 
@@ -1222,7 +1937,8 @@ function validateConfidenceRatings(
 
     if (
         !ratings ||
-        typeof ratings !== "object"
+        typeof ratings !==
+            "object"
     ) {
 
         throw new Error(
@@ -1304,8 +2020,6 @@ function validateConfidenceRatings(
     return cleanedRatings;
 
 }
-
-
 /*
 ==================================================
 ONE-TIME READ HELPERS
@@ -1404,7 +2118,7 @@ export async function getNationalConfidenceResponses() {
 
 /*
 ==================================================
-GENERAL DATABASE HELPERS
+GENERAL DATABASE HELPER
 ==================================================
 */
 
@@ -1415,7 +2129,8 @@ export async function updateDatabasePath(
 
     if (
         !path ||
-        typeof path !== "string"
+        typeof path !==
+            "string"
     ) {
 
         throw new Error(
@@ -1427,7 +2142,8 @@ export async function updateDatabasePath(
 
     if (
         !updates ||
-        typeof updates !== "object"
+        typeof updates !==
+            "object"
     ) {
 
         throw new Error(
@@ -1484,6 +2200,7 @@ function validateParticipantId(
 
     /*
     Firebase Realtime Database keys cannot contain:
+
     .  #  $  [  ]  /
     */
 
@@ -1507,7 +2224,207 @@ function validateParticipantId(
 
 /*
 ==================================================
-UTILITY FUNCTIONS
+CURRENT MONTH RECORD CHECK
+==================================================
+*/
+
+function recordBelongsToCurrentVotingPeriod(
+    record
+) {
+
+    if (
+        !record ||
+        typeof record !==
+            "object"
+    ) {
+
+        return false;
+
+    }
+
+
+    const currentPeriod =
+        getCurrentVotingPeriod();
+
+
+    /*
+    ----------------------------------------------
+    NEW MONTHLY RECORDS
+
+    Civic Pulse responses now contain votingPeriod
+    directly.
+    ----------------------------------------------
+    */
+
+    if (
+        typeof record.votingPeriod ===
+            "string"
+    ) {
+
+        return (
+            record.votingPeriod ===
+            currentPeriod
+        );
+
+    }
+
+
+    /*
+    ----------------------------------------------
+    NATIONAL PRIORITIES
+
+    The existing public National Priorities rules
+    do not yet store votingPeriod.
+
+    We determine its month from submittedAt while
+    the private monthlyVotes record remains the
+    actual duplicate-vote protection.
+    ----------------------------------------------
+    */
+
+    if (
+        typeof record.submittedAt !==
+            "string"
+    ) {
+
+        return false;
+
+    }
+
+
+    const submittedDate =
+        new Date(
+            record.submittedAt
+        );
+
+
+    if (
+        Number.isNaN(
+            submittedDate.getTime()
+        )
+    ) {
+
+        return false;
+
+    }
+
+
+    const submittedYear =
+        submittedDate.getFullYear();
+
+
+    const submittedMonth =
+        String(
+            submittedDate.getMonth() + 1
+        ).padStart(
+            2,
+            "0"
+        );
+
+
+    const submittedPeriod =
+        `${submittedYear}-${submittedMonth}`;
+
+
+    return (
+        submittedPeriod ===
+        currentPeriod
+    );
+
+}
+
+
+/*
+==================================================
+SHOULD FILTER SNAPSHOT BY MONTH
+==================================================
+*/
+
+function shouldFilterSnapshotByMonth(
+    snapshot
+) {
+
+    if (
+        !snapshot ||
+        !snapshot.ref
+    ) {
+
+        return false;
+
+    }
+
+
+    const currentKey =
+        snapshot.ref.key ||
+        "";
+
+
+    const parentKey =
+        snapshot.ref.parent?.key ||
+        "";
+
+
+    const grandparentKey =
+        snapshot.ref.parent?.parent?.key ||
+        "";
+
+
+    /*
+    ----------------------------------------------
+    NATIONAL PRIORITIES
+    ----------------------------------------------
+    */
+
+    if (
+        currentKey ===
+        "prioritySubmissions"
+    ) {
+
+        return true;
+
+    }
+
+
+    /*
+    ----------------------------------------------
+    CIVIC PULSE PUBLIC RESPONSES
+    ----------------------------------------------
+    */
+
+    if (
+        currentKey ===
+            "responses" &&
+        grandparentKey ===
+            "civicPulse" &&
+        (
+            parentKey ===
+                "presidentialApproval" ||
+            parentKey ===
+                "countryDirection" ||
+            parentKey ===
+                "nationalConfidence"
+        )
+    ) {
+
+        return true;
+
+    }
+
+
+    return false;
+
+}
+
+
+/*
+==================================================
+SNAPSHOT TO ARRAY
+
+For recurring national trackers, this automatically
+returns only records belonging to the current
+YYYY-MM voting period.
+
+Community polls and other data remain unfiltered.
 ==================================================
 */
 
@@ -1549,6 +2466,154 @@ function snapshotToArray(
     );
 
 
-    return records;
+    if (
+        !shouldFilterSnapshotByMonth(
+            snapshot
+        )
+    ) {
+
+        return records;
+
+    }
+
+
+    return records.filter(
+        record =>
+            recordBelongsToCurrentVotingPeriod(
+                record
+            )
+    );
+
+}
+
+
+/*
+==================================================
+MONTHLY PARTICIPATION MESSAGE
+==================================================
+*/
+
+export function getMonthlyParticipationMessage(
+    status
+) {
+
+    if (
+        !status
+    ) {
+
+        return "";
+
+    }
+
+
+    switch (
+        status.reason
+    ) {
+
+        case "alreadyParticipatedThisMonth":
+
+            return (
+                `You have already participated in ${status.votingPeriodLabel}. Voting will reopen automatically next month.`
+            );
+
+
+        case "signedOut":
+
+            return (
+                "Sign in to participate."
+            );
+
+
+        case "emailNotVerified":
+
+            return (
+                "Verify your email before participating."
+            );
+
+
+        case "eligible":
+
+            return "";
+
+
+        default:
+
+            return (
+                "Participation is currently unavailable."
+            );
+
+    }
+
+}
+
+
+/*
+==================================================
+NEXT VOTING PERIOD
+==================================================
+*/
+
+export function getNextVotingPeriodLabel() {
+
+    const now =
+        new Date();
+
+
+    const nextMonth =
+        new Date(
+            now.getFullYear(),
+            now.getMonth() + 1,
+            1
+        );
+
+
+    return nextMonth.toLocaleDateString(
+        "en-US",
+        {
+            month:
+                "long",
+
+            year:
+                "numeric"
+        }
+    );
+
+}
+
+
+/*
+==================================================
+NEXT VOTING PERIOD KEY
+==================================================
+*/
+
+export function getNextVotingPeriod() {
+
+    const now =
+        new Date();
+
+
+    const nextMonth =
+        new Date(
+            now.getFullYear(),
+            now.getMonth() + 1,
+            1
+        );
+
+
+    const year =
+        nextMonth.getFullYear();
+
+
+    const month =
+        String(
+            nextMonth.getMonth() + 1
+        ).padStart(
+            2,
+            "0"
+        );
+
+
+    return `${year}-${month}`;
 
 }

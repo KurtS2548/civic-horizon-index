@@ -2,6 +2,8 @@
 ==================================================
 CIVIC HORIZON INDEX V2
 NATIONAL PRIORITIES POLL CONTROLLER
+
+MONTHLY VOTING
 ==================================================
 */
 
@@ -17,9 +19,22 @@ import {
 
 import {
 
+    subscribeToAuthState,
+
+    refreshCurrentUser,
+
     getCurrentUserVotingEligibility
 
 } from "../services/auth-service.js";
+
+
+import {
+
+    getMonthlyParticipationStatus,
+
+    getMonthlyParticipationMessage
+
+} from "../services/firebase-service.js";
 
 
 /*
@@ -30,6 +45,10 @@ CONTROLLER STATE
 
 let controllerInitialized =
     false;
+
+
+let unsubscribeAuthState =
+    null;
 
 
 /*
@@ -68,7 +87,7 @@ VOTING ACCESS
 ==================================================
 */
 
-async function initializeVotingAccess() {
+function initializeVotingAccess() {
 
     const form =
         document.getElementById(
@@ -89,33 +108,150 @@ async function initializeVotingAccess() {
         );
 
 
+    disableFormControls(
+        form
+    );
+
+
+    if (
+        submitButton
+    ) {
+
+        submitButton.disabled =
+            true;
+
+
+        submitButton.textContent =
+            "Checking Participation Access...";
+
+    }
+
+
+    showMessage(
+        "Checking your participation access...",
+        "info"
+    );
+
+
+    unsubscribeAuthState =
+        subscribeToAuthState(
+
+            async user => {
+
+                if (!user) {
+
+                    blockIneligibleVoting(
+                        form,
+                        submitButton,
+                        {
+                            reason:
+                                "signedOut"
+                        }
+                    );
+
+
+                    return;
+
+                }
+
+
+                try {
+
+                    const refreshedUser =
+                        await refreshCurrentUser();
+
+
+                    if (!refreshedUser) {
+
+                        blockIneligibleVoting(
+                            form,
+                            submitButton,
+                            {
+                                reason:
+                                    "signedOut"
+                            }
+                        );
+
+
+                        return;
+
+                    }
+
+
+                    await refreshVotingAccess(
+                        form,
+                        submitButton
+                    );
+
+                } catch (error) {
+
+                    console.error(
+                        "National priorities auth initialization failed:",
+                        error
+                    );
+
+
+                    blockAccessFailure(
+                        form,
+                        submitButton
+                    );
+
+                }
+
+            },
+
+            error => {
+
+                console.error(
+                    "National priorities auth state error:",
+                    error
+                );
+
+
+                blockAccessFailure(
+                    form,
+                    submitButton
+                );
+
+            }
+
+        );
+
+}
+
+
+/*
+==================================================
+REFRESH VOTING ACCESS
+==================================================
+*/
+
+async function refreshVotingAccess(
+    form,
+    submitButton
+) {
+
     try {
+
+        /*
+        ----------------------------------------------
+        ACCOUNT ELIGIBILITY
+        ----------------------------------------------
+        */
 
         const eligibility =
             await getCurrentUserVotingEligibility();
 
 
         if (
-            eligibility?.eligible
+            !eligibility?.eligible
         ) {
 
-            enableFormControls(
-                form
+            blockIneligibleVoting(
+                form,
+                submitButton,
+                eligibility
             );
-
-
-            if (
-                submitButton
-            ) {
-
-                submitButton.disabled =
-                    false;
-
-
-                submitButton.textContent =
-                    "Submit National Priorities";
-
-            }
 
 
             return;
@@ -123,10 +259,37 @@ async function initializeVotingAccess() {
         }
 
 
-        blockIneligibleVoting(
+        /*
+        ----------------------------------------------
+        MONTHLY PARTICIPATION CHECK
+        ----------------------------------------------
+        */
+
+        const monthlyStatus =
+            await getMonthlyParticipationStatus(
+                "nationalPriorities"
+            );
+
+
+        if (
+            !monthlyStatus?.eligible
+        ) {
+
+            blockMonthlyVoting(
+                form,
+                submitButton,
+                monthlyStatus
+            );
+
+
+            return;
+
+        }
+
+
+        enableEligibleVoting(
             form,
-            submitButton,
-            eligibility
+            submitButton
         );
 
     } catch (error) {
@@ -137,27 +300,144 @@ async function initializeVotingAccess() {
         );
 
 
-        disableFormControls(
-            form
-        );
-
-
-        if (
+        blockAccessFailure(
+            form,
             submitButton
-        ) {
-
-            submitButton.disabled =
-                true;
-
-        }
-
-
-        showMessage(
-            "Voting access could not be confirmed. Please sign in again.",
-            "error"
         );
 
     }
+
+}
+
+
+/*
+==================================================
+ENABLE ELIGIBLE VOTING
+==================================================
+*/
+
+function enableEligibleVoting(
+    form,
+    submitButton
+) {
+
+    enableFormControls(
+        form
+    );
+
+
+    if (
+        submitButton
+    ) {
+
+        submitButton.disabled =
+            false;
+
+
+        submitButton.textContent =
+            "Submit National Priorities";
+
+    }
+
+
+    showMessage(
+        "",
+        "info"
+    );
+
+}
+
+
+/*
+==================================================
+MONTHLY BLOCK
+==================================================
+*/
+
+function blockMonthlyVoting(
+    form,
+    submitButton,
+    monthlyStatus
+) {
+
+    disableFormControls(
+        form
+    );
+
+
+    if (
+        submitButton
+    ) {
+
+        submitButton.disabled =
+            true;
+
+
+        if (
+            monthlyStatus?.reason ===
+            "alreadyParticipatedThisMonth"
+        ) {
+
+            submitButton.textContent =
+                "Response Submitted";
+
+        } else {
+
+            submitButton.textContent =
+                "Participation Unavailable";
+
+        }
+
+    }
+
+
+    showMessage(
+        getMonthlyParticipationMessage(
+            monthlyStatus
+        ),
+        monthlyStatus?.reason ===
+            "alreadyParticipatedThisMonth"
+            ? "success"
+            : "error"
+    );
+
+}
+
+
+/*
+==================================================
+ACCESS FAILURE
+==================================================
+*/
+
+function blockAccessFailure(
+    form,
+    submitButton
+) {
+
+    disableFormControls(
+        form
+    );
+
+
+    if (
+        submitButton
+    ) {
+
+        submitButton.disabled =
+            true;
+
+
+        submitButton.textContent =
+            "Participation Unavailable";
+
+    }
+
+
+    showMessage(
+        "Voting access could not be confirmed. Please sign in again.",
+        "error"
+    );
 
 }
 
@@ -297,16 +577,28 @@ async function handleFormSubmit(
         );
 
 
-    /*
-    ----------------------------------------------
-    FULL ELIGIBILITY CHECK
-
-    Re-check at submit time so a participant
-    cannot bypass the initial page-state check.
-    ----------------------------------------------
-    */
-
     try {
+
+        const refreshedUser =
+            await refreshCurrentUser();
+
+
+        if (!refreshedUser) {
+
+            blockIneligibleVoting(
+                form,
+                submitButton,
+                {
+                    reason:
+                        "signedOut"
+                }
+            );
+
+
+            return;
+
+        }
+
 
         const eligibility =
             await getCurrentUserVotingEligibility();
@@ -327,6 +619,28 @@ async function handleFormSubmit(
 
         }
 
+
+        const monthlyStatus =
+            await getMonthlyParticipationStatus(
+                "nationalPriorities"
+            );
+
+
+        if (
+            !monthlyStatus?.eligible
+        ) {
+
+            blockMonthlyVoting(
+                form,
+                submitButton,
+                monthlyStatus
+            );
+
+
+            return;
+
+        }
+
     } catch (error) {
 
         console.error(
@@ -335,9 +649,9 @@ async function handleFormSubmit(
         );
 
 
-        showMessage(
-            "Voting access could not be confirmed. Please sign in again.",
-            "error"
+        blockAccessFailure(
+            form,
+            submitButton
         );
 
 
@@ -372,17 +686,23 @@ async function handleFormSubmit(
 
 
         showMessage(
-            "Thank you. Your national priority ratings have been recorded.",
+            "Thank you. Your national priority ratings have been recorded for this month.",
             "success"
         );
 
 
-        submitButton.textContent =
-            "Response Submitted";
+        if (
+            submitButton
+        ) {
+
+            submitButton.textContent =
+                "Response Submitted";
 
 
-        submitButton.disabled =
-            true;
+            submitButton.disabled =
+                true;
+
+        }
 
 
         disableFormControls(
@@ -395,6 +715,22 @@ async function handleFormSubmit(
             "National priorities submission error:",
             error
         );
+
+
+        if (
+            error?.code ===
+            "already-participated-this-month"
+        ) {
+
+            await refreshVotingAccess(
+                form,
+                submitButton
+            );
+
+
+            return;
+
+        }
 
 
         setSubmittingState(
@@ -475,33 +811,46 @@ function getEligibilityMessage(
 
             return "Sign in to participate in National Priorities.";
 
+
         case "emailNotVerified":
 
             return "Verify your email before participating.";
+
 
         case "zipMissing":
 
             return "Add a valid ZIP code to your profile before participating.";
 
+
         case "birthdayMissing":
 
             return "Your birthday is required before participating.";
+
 
         case "underMinimumAge":
 
             return "This account is not eligible to participate.";
 
+
         case "agreementMissing":
 
             return "The participation agreement must be accepted before voting.";
+
 
         case "verificationSyncPending":
 
             return "Your account verification is still being finalized. Please try again.";
 
+
         case "profileMissing":
 
             return "Your participant profile could not be loaded.";
+
+
+        case "accessCheckFailed":
+
+            return "Voting access could not be confirmed. Please sign in again.";
+
 
         default:
 
@@ -530,17 +879,31 @@ function getBlockedButtonText(
 
             return "Sign In Required";
 
+
         case "emailNotVerified":
 
             return "Verification Required";
+
 
         case "zipMissing":
 
             return "ZIP Code Required";
 
+
         case "birthdayMissing":
 
             return "Birthday Required";
+
+
+        case "agreementMissing":
+
+            return "Agreement Required";
+
+
+        case "verificationSyncPending":
+
+            return "Verification Pending";
+
 
         default:
 
@@ -736,6 +1099,20 @@ export function destroyPollsNationalPrioritiesController() {
         );
 
     }
+
+
+    if (
+        typeof unsubscribeAuthState ===
+        "function"
+    ) {
+
+        unsubscribeAuthState();
+
+    }
+
+
+    unsubscribeAuthState =
+        null;
 
 
     controllerInitialized =
