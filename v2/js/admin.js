@@ -5,10 +5,14 @@ SECURE ADMIN CENTER INITIALIZATION
 ==================================================
 */
 
+
 import {
+
     subscribeToAuthState,
     signInAdmin,
-    signOutAdmin
+    signOutAdmin,
+    isAdminUser
+
 } from "./services/auth-service.js";
 
 
@@ -18,8 +22,17 @@ STATE
 ==================================================
 */
 
-let adminComponentsLoaded = false;
-let adminControllerStarted = false;
+let adminComponentsLoaded =
+    false;
+
+let adminControllerStarted =
+    false;
+
+let pollSuggestionsStarted =
+    false;
+
+let unauthorizedSignOutRunning =
+    false;
 
 
 /*
@@ -38,6 +51,7 @@ async function loadComponent(
             containerId
         );
 
+
     if (!container) {
 
         console.error(
@@ -45,7 +59,9 @@ async function loadComponent(
         );
 
         return false;
+
     }
+
 
     try {
 
@@ -54,17 +70,22 @@ async function loadComponent(
                 componentPath
             );
 
+
         if (!response.ok) {
 
             throw new Error(
                 `Component request failed: ${response.status}`
             );
+
         }
+
 
         container.innerHTML =
             await response.text();
 
+
         return true;
+
 
     } catch (error) {
 
@@ -73,7 +94,9 @@ async function loadComponent(
             error
         );
 
+
         container.innerHTML = `
+
             <div
                 style="
                     padding: 18px;
@@ -82,12 +105,18 @@ async function loadComponent(
                     text-align: center;
                 "
             >
+
                 This section could not be loaded.
+
             </div>
+
         `;
 
+
         return false;
+
     }
+
 }
 
 
@@ -98,6 +127,17 @@ INITIAL PAGE LOAD
 */
 
 async function initializeAdminPage() {
+
+    /*
+    ----------------------------------------------
+    IMPORTANT SECURITY DESIGN
+
+    Only the public shell loads before authorization.
+
+    Secure admin components are not fetched until
+    the Firebase user passes the admin UID check.
+    ----------------------------------------------
+    */
 
     await Promise.all([
 
@@ -144,22 +184,163 @@ AUTHENTICATION WATCH
 function watchAuthentication() {
 
     subscribeToAuthState(
+
         async user => {
 
-            if (user) {
+            /*
+            ------------------------------------------
+            NO FIREBASE SESSION
+            ------------------------------------------
+            */
 
-                await showAuthenticatedAdmin(
-                    user
-                );
+            if (!user) {
 
-            } else {
+                unauthorizedSignOutRunning =
+                    false;
+
 
                 showLogin();
 
+                return;
+
             }
 
+
+            /*
+            ------------------------------------------
+            ADMIN UID CHECK
+
+            Being signed in is NOT enough.
+
+            The Firebase user must match the one
+            authorized Civic Horizon admin UID.
+            ------------------------------------------
+            */
+
+            if (
+                !isAdminUser(
+                    user
+                )
+            ) {
+
+                await handleUnauthorizedUser();
+
+                return;
+
+            }
+
+
+            /*
+            ------------------------------------------
+            AUTHORIZED ADMIN
+            ------------------------------------------
+            */
+
+            unauthorizedSignOutRunning =
+                false;
+
+
+            await showAuthenticatedAdmin(
+                user
+            );
+
         }
+
     );
+
+}
+
+
+/*
+==================================================
+UNAUTHORIZED USER
+==================================================
+*/
+
+async function handleUnauthorizedUser() {
+
+    /*
+    Prevent duplicate sign-out attempts if Firebase
+    fires another auth-state callback while the
+    unauthorized session is being terminated.
+    */
+
+    if (
+        unauthorizedSignOutRunning
+    ) {
+
+        return;
+
+    }
+
+
+    unauthorizedSignOutRunning =
+        true;
+
+
+    /*
+    ----------------------------------------------
+    KEEP ADMIN APPLICATION HIDDEN
+    ----------------------------------------------
+    */
+
+    hideAdminApplication();
+
+
+    /*
+    ----------------------------------------------
+    SHOW LOGIN WITH ACCESS MESSAGE
+    ----------------------------------------------
+    */
+
+    const loginContainer =
+        document.getElementById(
+            "adminLoginContainer"
+        );
+
+
+    if (loginContainer) {
+
+        loginContainer.hidden =
+            false;
+
+    }
+
+
+    setLoginMessage(
+        "This account is not authorized to access the Civic Horizon Admin Center.",
+        "error"
+    );
+
+
+    /*
+    ----------------------------------------------
+    TERMINATE PARTICIPANT SESSION
+
+    A normal Civic Horizon participant may already
+    be signed into the public website.
+
+    Visiting admin.html must never turn that public
+    session into an admin session.
+    ----------------------------------------------
+    */
+
+    try {
+
+        await signOutAdmin();
+
+    } catch (error) {
+
+        console.error(
+            "Unauthorized session could not be signed out:",
+            error
+        );
+
+
+        unauthorizedSignOutRunning =
+            false;
+
+    }
 
 }
 
@@ -179,7 +360,9 @@ function initializeLoginForm() {
 
 
     if (!form) {
+
         return;
+
     }
 
 
@@ -190,6 +373,12 @@ function initializeLoginForm() {
 
 }
 
+
+/*
+==================================================
+LOGIN SUBMIT
+==================================================
+*/
 
 async function handleLoginSubmit(
     event
@@ -203,11 +392,13 @@ async function handleLoginSubmit(
 
 
     const email =
-        form.elements.email?.value || "";
+        form.elements.email?.value ||
+        "";
 
 
     const password =
-        form.elements.password?.value || "";
+        form.elements.password?.value ||
+        "";
 
 
     const submitButton =
@@ -227,6 +418,7 @@ async function handleLoginSubmit(
         submitButton.disabled =
             true;
 
+
         submitButton.textContent =
             "Signing In...";
 
@@ -234,6 +426,13 @@ async function handleLoginSubmit(
 
 
     try {
+
+        /*
+        signInAdmin performs its own UID verification.
+
+        Even valid Firebase credentials are rejected
+        unless they belong to the authorized admin.
+        */
 
         await signInAdmin(
             email,
@@ -246,6 +445,7 @@ async function handleLoginSubmit(
             "success"
         );
 
+
     } catch (error) {
 
         console.error(
@@ -255,10 +455,13 @@ async function handleLoginSubmit(
 
 
         setLoginMessage(
+
             getFriendlyAuthError(
                 error
             ),
+
             "error"
+
         );
 
 
@@ -266,6 +469,7 @@ async function handleLoginSubmit(
 
             submitButton.disabled =
                 false;
+
 
             submitButton.textContent =
                 "Sign In";
@@ -292,7 +496,9 @@ function initializeSignOut() {
 
 
     if (!button) {
+
         return;
+
     }
 
 
@@ -304,6 +510,12 @@ function initializeSignOut() {
 }
 
 
+/*
+==================================================
+HANDLE SIGN OUT
+==================================================
+*/
+
 async function handleSignOut() {
 
     const button =
@@ -314,8 +526,12 @@ async function handleSignOut() {
 
     if (button) {
 
-        button.disabled = true;
-        button.textContent = "Signing Out...";
+        button.disabled =
+            true;
+
+
+        button.textContent =
+            "Signing Out...";
 
     }
 
@@ -323,6 +539,7 @@ async function handleSignOut() {
     try {
 
         await signOutAdmin();
+
 
     } catch (error) {
 
@@ -334,8 +551,12 @@ async function handleSignOut() {
 
         if (button) {
 
-            button.disabled = false;
-            button.textContent = "Sign Out";
+            button.disabled =
+                false;
+
+
+            button.textContent =
+                "Sign Out";
 
         }
 
@@ -354,6 +575,28 @@ async function showAuthenticatedAdmin(
     user
 ) {
 
+    /*
+    ----------------------------------------------
+    SECONDARY SECURITY CHECK
+
+    Never reveal the Admin Center based solely on
+    the caller having passed a user object.
+    ----------------------------------------------
+    */
+
+    if (
+        !isAdminUser(
+            user
+        )
+    ) {
+
+        await handleUnauthorizedUser();
+
+        return;
+
+    }
+
+
     const loginContainer =
         document.getElementById(
             "adminLoginContainer"
@@ -370,6 +613,49 @@ async function showAuthenticatedAdmin(
         document.getElementById(
             "adminSession"
         );
+
+
+    /*
+    ----------------------------------------------
+    LOAD SECURE ADMIN COMPONENTS
+
+    These are not fetched until AFTER authorization.
+    ----------------------------------------------
+    */
+
+    if (
+        !adminComponentsLoaded
+    ) {
+
+        await loadAdminComponents();
+
+
+        adminComponentsLoaded =
+            true;
+
+    }
+
+
+    /*
+    ----------------------------------------------
+    CHECK AUTHORIZATION AGAIN AFTER ASYNC LOAD
+
+    This protects against the session changing while
+    components are being fetched.
+    ----------------------------------------------
+    */
+
+    if (
+        !isAdminUser(
+            user
+        )
+    ) {
+
+        await handleUnauthorizedUser();
+
+        return;
+
+    }
 
 
     if (loginContainer) {
@@ -390,7 +676,8 @@ async function showAuthenticatedAdmin(
 
     setText(
         "adminSessionEmail",
-        user.email || "Administrator"
+        user.email ||
+        "Administrator"
     );
 
 
@@ -402,18 +689,12 @@ async function showAuthenticatedAdmin(
 
     if (signOutButton) {
 
-        signOutButton.disabled = false;
-        signOutButton.textContent = "Sign Out";
-
-    }
+        signOutButton.disabled =
+            false;
 
 
-    if (!adminComponentsLoaded) {
-
-        await loadAdminComponents();
-
-        adminComponentsLoaded =
-            true;
+        signOutButton.textContent =
+            "Sign Out";
 
     }
 
@@ -426,11 +707,77 @@ async function showAuthenticatedAdmin(
     }
 
 
-    if (!adminControllerStarted) {
+    /*
+    ----------------------------------------------
+    EXISTING ADMIN CONTROLLER
+    ----------------------------------------------
+    */
+
+    if (
+        !adminControllerStarted
+    ) {
 
         await startAdminController();
 
+
         adminControllerStarted =
+            true;
+
+    }
+
+
+    /*
+    ----------------------------------------------
+    POLL SUGGESTIONS CONTROLLER
+    ----------------------------------------------
+    */
+
+    if (
+        !pollSuggestionsStarted
+    ) {
+
+        await startPollSuggestionsController();
+
+
+        pollSuggestionsStarted =
+            true;
+
+    }
+
+}
+
+
+/*
+==================================================
+HIDE ADMIN APPLICATION
+==================================================
+*/
+
+function hideAdminApplication() {
+
+    const adminPage =
+        document.getElementById(
+            "adminPage"
+        );
+
+
+    const sessionBar =
+        document.getElementById(
+            "adminSession"
+        );
+
+
+    if (adminPage) {
+
+        adminPage.hidden =
+            true;
+
+    }
+
+
+    if (sessionBar) {
+
+        sessionBar.hidden =
             true;
 
     }
@@ -459,6 +806,11 @@ async function loadAdminComponents() {
         ),
 
         loadComponent(
+            "adminPollSuggestionsContainer",
+            "components/admin-poll-suggestions.html"
+        ),
+
+        loadComponent(
             "adminCommunityPollsContainer",
             "components/admin-community-polls.html"
         ),
@@ -475,7 +827,7 @@ async function loadAdminComponents() {
 
 /*
 ==================================================
-START ADMIN CONTROLLER
+START EXISTING ADMIN CONTROLLER
 ==================================================
 */
 
@@ -505,6 +857,7 @@ async function startAdminController() {
         controllerModule
             .initializeAdminController();
 
+
     } catch (error) {
 
         console.error(
@@ -512,7 +865,56 @@ async function startAdminController() {
             error
         );
 
+
         showAdminFallback();
+
+    }
+
+}
+
+
+/*
+==================================================
+START POLL SUGGESTIONS CONTROLLER
+==================================================
+*/
+
+async function startPollSuggestionsController() {
+
+    try {
+
+        const controllerModule =
+            await import(
+                "./controllers/admin-poll-suggestions-controller.js"
+            );
+
+
+        if (
+            typeof controllerModule
+                .initializeAdminPollSuggestions !==
+            "function"
+        ) {
+
+            throw new Error(
+                "Poll Suggestions controller initialization function was not found."
+            );
+
+        }
+
+
+        controllerModule
+            .initializeAdminPollSuggestions();
+
+
+    } catch (error) {
+
+        console.error(
+            "Poll Suggestions review could not start:",
+            error
+        );
+
+
+        showPollSuggestionsFallback();
 
     }
 
@@ -527,21 +929,12 @@ SHOW LOGIN
 
 function showLogin() {
 
+    hideAdminApplication();
+
+
     const loginContainer =
         document.getElementById(
             "adminLoginContainer"
-        );
-
-
-    const adminPage =
-        document.getElementById(
-            "adminPage"
-        );
-
-
-    const sessionBar =
-        document.getElementById(
-            "adminSession"
         );
 
 
@@ -549,22 +942,6 @@ function showLogin() {
 
         loginContainer.hidden =
             false;
-
-    }
-
-
-    if (adminPage) {
-
-        adminPage.hidden =
-            true;
-
-    }
-
-
-    if (sessionBar) {
-
-        sessionBar.hidden =
-            true;
 
     }
 
@@ -579,6 +956,7 @@ function showLogin() {
 
         submitButton.disabled =
             false;
+
 
         submitButton.textContent =
             "Sign In";
@@ -606,7 +984,9 @@ function setLoginMessage(
 
 
     if (!element) {
+
         return;
+
     }
 
 
@@ -631,39 +1011,65 @@ function getFriendlyAuthError(
 ) {
 
     const code =
-        error?.code || "";
+        error?.code ||
+        "";
 
 
     if (
-        code === "auth/invalid-credential" ||
-        code === "auth/wrong-password" ||
-        code === "auth/user-not-found"
+        code ===
+        "auth/admin-access-denied"
     ) {
 
-        return "The email or password is incorrect.";
+        return (
+            "This account is not authorized to access the Civic Horizon Admin Center."
+        );
 
     }
 
 
     if (
-        code === "auth/too-many-requests"
+        code ===
+            "auth/invalid-credential" ||
+        code ===
+            "auth/wrong-password" ||
+        code ===
+            "auth/user-not-found"
     ) {
 
-        return "Too many sign-in attempts. Please wait and try again.";
+        return (
+            "The email or password is incorrect."
+        );
 
     }
 
 
     if (
-        code === "auth/network-request-failed"
+        code ===
+        "auth/too-many-requests"
     ) {
 
-        return "A network error occurred. Check your connection and try again.";
+        return (
+            "Too many sign-in attempts. Please wait and try again."
+        );
 
     }
 
 
-    return "Unable to sign in. Please try again.";
+    if (
+        code ===
+        "auth/network-request-failed"
+    ) {
+
+        return (
+            "A network error occurred. Check your connection and try again."
+        );
+
+    }
+
+
+    return (
+        "Unable to sign in. Please try again."
+    );
 
 }
 
@@ -681,20 +1087,65 @@ function showAdminFallback() {
         "—"
     );
 
+
     setText(
         "adminCommunityVoteCount",
         "—"
     );
+
 
     setText(
         "adminPriorityParticipantCount",
         "—"
     );
 
+
     setText(
         "adminApprovalResponseCount",
         "—"
     );
+
+}
+
+
+/*
+==================================================
+POLL SUGGESTIONS FALLBACK
+==================================================
+*/
+
+function showPollSuggestionsFallback() {
+
+    const container =
+        document.getElementById(
+            "adminSuggestionsList"
+        );
+
+
+    if (!container) {
+
+        return;
+
+    }
+
+
+    container.innerHTML = `
+
+        <div class="admin-suggestions__empty">
+
+            <h3>
+                Poll suggestions unavailable
+            </h3>
+
+            <p>
+                The suggestion review system could
+                not be loaded. Refresh the page and
+                try again.
+            </p>
+
+        </div>
+
+    `;
 
 }
 
@@ -712,10 +1163,12 @@ function initializeHeader() {
             "mobileMenuButton"
         );
 
+
     const navigation =
         document.getElementById(
             "primaryNavigation"
         );
+
 
     const dropdownButtons =
         document.querySelectorAll(
@@ -740,15 +1193,20 @@ function initializeHeader() {
 
                 menuButton.setAttribute(
                     "aria-expanded",
-                    String(isOpen)
+                    String(
+                        isOpen
+                    )
                 );
 
 
                 menuButton.setAttribute(
+
                     "aria-label",
+
                     isOpen
                         ? "Close navigation menu"
                         : "Open navigation menu"
+
                 );
 
 
@@ -781,7 +1239,9 @@ function initializeHeader() {
 
 
                     if (!group) {
+
                         return;
+
                     }
 
 
@@ -838,9 +1298,12 @@ function initializeHeader() {
         event => {
 
             if (
-                event.key !== "Escape"
+                event.key !==
+                "Escape"
             ) {
+
                 return;
+
             }
 
 
@@ -943,7 +1406,9 @@ function setText(
     if (element) {
 
         element.textContent =
-            String(value);
+            String(
+                value
+            );
 
     }
 

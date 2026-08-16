@@ -1,0 +1,567 @@
+<!--
+==================================================
+CIVIC HORIZON INDEX V2
+ADMIN — POLL SUGGESTIONS REVIEW
+==================================================
+-->
+
+<section
+    class="admin-section admin-suggestions"
+    id="adminPollSuggestionsSection"
+>
+
+    <div class="admin-section__header">
+
+        <div>
+
+            <p class="admin-section__eyebrow">
+                PARTICIPANT INPUT
+            </p>
+
+            <h2>
+                Poll Suggestions
+            </h2>
+
+            <p class="admin-section__description">
+                Review poll ideas submitted through
+                Civic Horizon's Suggest a Poll Topic
+                form.
+            </p>
+
+        </div>
+
+
+        <div class="admin-suggestions__summary">
+
+            <div class="admin-suggestions__summary-item">
+
+                <span>
+                    Pending
+                </span>
+
+                <strong id="adminSuggestionPendingCount">
+                    0
+                </strong>
+
+            </div>
+
+
+            <div class="admin-suggestions__summary-item">
+
+                <span>
+                    Under Review
+                </span>
+
+                <strong id="adminSuggestionReviewCount">
+                    0
+                </strong>
+
+            </div>
+
+
+            <div class="admin-suggestions__summary-item">
+
+                <span>
+                    Approved
+                </span>
+
+                <strong id="adminSuggestionApprovedCount">
+                    0
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!--
+    ==================================================
+    TRANSPARENCY REMINDER
+    ==================================================
+    -->
+
+    <div class="admin-suggestions__standards">
+
+        <div class="admin-suggestions__standards-icon">
+            ✓
+        </div>
+
+        <div>
+
+            <strong>
+                Civic Horizon Review Standard
+            </strong>
+
+            <p>
+                Approval means the topic is suitable
+                for consideration. It does not mean
+                the participant's exact wording must
+                be published.
+            </p>
+
+            <p>
+                Every final poll question should be
+                checked for neutrality, clarity,
+                relevance, duplication, fairness,
+                and compliance with Civic Horizon's
+                community standards before publication.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!--
+    ==================================================
+    REVIEW WORKFLOW
+    ==================================================
+    -->
+
+    <div class="admin-suggestions__workflow">
+
+        <div class="admin-suggestions__workflow-step">
+
+            <span>
+                1
+            </span>
+
+            <strong>
+                Pending Review
+            </strong>
+
+            <p>
+                New participant suggestions enter here.
+            </p>
+
+        </div>
+
+
+        <div class="admin-suggestions__workflow-arrow">
+            →
+        </div>
+
+
+        <div class="admin-suggestions__workflow-step">
+
+            <span>
+                2
+            </span>
+
+            <strong>
+                Under Review
+            </strong>
+
+            <p>
+                Evaluate the topic and wording.
+            </p>
+
+        </div>
+
+
+        <div class="admin-suggestions__workflow-arrow">
+            →
+        </div>
+
+
+        <div class="admin-suggestions__workflow-step">
+
+            <span>
+                3
+            </span>
+
+            <strong>
+                Approved
+            </strong>
+
+            <p>
+                Suitable for possible poll development.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!--
+    ==================================================
+    FILTERS
+    ==================================================
+    -->
+
+    <div class="admin-suggestions__toolbar">
+
+
+        <div class="admin-suggestions__filter">
+
+            <label for="adminSuggestionStatusFilter">
+                Status
+            </label>
+
+            <select id="adminSuggestionStatusFilter">
+
+                <option value="all">
+                    All Suggestions
+                </option>
+
+                <option value="pendingReview">
+                    Pending Review
+                </option>
+
+                <option value="underReview">
+                    Under Review
+                </option>
+
+                <option value="approved">
+                    Approved
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="admin-suggestions__filter">
+
+            <label for="adminSuggestionLevelFilter">
+                Level
+            </label>
+
+            <select id="adminSuggestionLevelFilter">
+
+                <option value="all">
+                    All Levels
+                </option>
+
+                <option value="national">
+                    National
+                </option>
+
+                <option value="state">
+                    State
+                </option>
+
+                <option value="local">
+                    Local
+                </option>
+
+                <option value="community">
+                    Community
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="admin-suggestions__search">
+
+            <label for="adminSuggestionSearch">
+                Search
+            </label>
+
+            <input
+                type="search"
+                id="adminSuggestionSearch"
+                placeholder="Search topics or questions"
+            >
+
+        </div>
+
+    </div>
+
+
+    <!--
+    ==================================================
+    MESSAGE
+    ==================================================
+    -->
+
+    <div
+        class="admin-suggestions__message"
+        id="adminSuggestionsMessage"
+        aria-live="polite"
+    ></div>
+
+
+    <!--
+    ==================================================
+    SUGGESTION LIST
+    ==================================================
+    -->
+
+    <div
+        class="admin-suggestions__list"
+        id="adminSuggestionsList"
+    >
+
+        <div class="admin-suggestions__loading">
+
+            <p>
+                Loading poll suggestions...
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!--
+    ==================================================
+    EMPTY STATE
+    ==================================================
+    -->
+
+    <template id="adminSuggestionsEmptyTemplate">
+
+        <div class="admin-suggestions__empty">
+
+            <h3>
+                No suggestions found
+            </h3>
+
+            <p>
+                There are no poll suggestions matching
+                the current filters.
+            </p>
+
+        </div>
+
+    </template>
+
+
+    <!--
+    ==================================================
+    PERMANENT DELETE CONFIRMATION
+    ==================================================
+    -->
+
+    <div
+        class="admin-suggestions__delete-modal"
+        id="adminSuggestionDeleteModal"
+        hidden
+    >
+
+        <div class="admin-suggestions__delete-backdrop"></div>
+
+
+        <div
+            class="admin-suggestions__delete-dialog"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="adminSuggestionDeleteTitle"
+        >
+
+            <p class="admin-section__eyebrow">
+                PERMANENT ACTION
+            </p>
+
+            <h3 id="adminSuggestionDeleteTitle">
+                Reject and permanently delete?
+            </h3>
+
+            <p>
+                This suggestion will be permanently
+                removed from Civic Horizon's database.
+            </p>
+
+            <p>
+                This action cannot be undone.
+            </p>
+
+
+            <div class="admin-suggestions__delete-actions">
+
+                <button
+                    type="button"
+                    class="admin-suggestions__button admin-suggestions__button--secondary"
+                    id="adminSuggestionDeleteCancel"
+                >
+                    Cancel
+                </button>
+
+
+                <button
+                    type="button"
+                    class="admin-suggestions__button admin-suggestions__button--danger"
+                    id="adminSuggestionDeleteConfirm"
+                >
+                    Permanently Delete
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!--
+    ==================================================
+    REVIEW GUIDELINES
+    ==================================================
+    -->
+
+    <div class="admin-suggestions__guidelines">
+
+        <h3>
+            Before approving a suggestion
+        </h3>
+
+
+        <div class="admin-suggestions__guideline-grid">
+
+
+            <article>
+
+                <span>
+                    01
+                </span>
+
+                <strong>
+                    Public relevance
+                </strong>
+
+                <p>
+                    Does the issue meaningfully affect
+                    the public or the selected
+                    community?
+                </p>
+
+            </article>
+
+
+            <article>
+
+                <span>
+                    02
+                </span>
+
+                <strong>
+                    Neutral wording
+                </strong>
+
+                <p>
+                    Can the question be asked without
+                    favoring one answer, party,
+                    candidate, ideology, or desired
+                    result?
+                </p>
+
+            </article>
+
+
+            <article>
+
+                <span>
+                    03
+                </span>
+
+                <strong>
+                    Clear language
+                </strong>
+
+                <p>
+                    Will participants understand what
+                    they are being asked without
+                    unnecessary jargon?
+                </p>
+
+            </article>
+
+
+            <article>
+
+                <span>
+                    04
+                </span>
+
+                <strong>
+                    No duplication
+                </strong>
+
+                <p>
+                    Is the topic meaningfully different
+                    from a poll that is already active
+                    or recently completed?
+                </p>
+
+            </article>
+
+
+            <article>
+
+                <span>
+                    05
+                </span>
+
+                <strong>
+                    Respect for everyone
+                </strong>
+
+                <p>
+                    Does the suggestion address an
+                    issue or idea rather than attacking
+                    a person or group?
+                </p>
+
+            </article>
+
+
+            <article>
+
+                <span>
+                    06
+                </span>
+
+                <strong>
+                    Useful results
+                </strong>
+
+                <p>
+                    Will the answers provide meaningful
+                    information about what participants
+                    actually think?
+                </p>
+
+            </article>
+
+
+        </div>
+
+    </div>
+
+
+    <!--
+    ==================================================
+    REVIEW ASSISTANCE
+    ==================================================
+    -->
+
+    <div class="admin-suggestions__assistance">
+
+        <p class="admin-section__eyebrow">
+            REVIEW ASSISTANCE
+        </p>
+
+        <h3>
+            Need help reviewing a large number of suggestions?
+        </h3>
+
+        <p>
+            Suggestions can be reviewed in batches for
+            neutrality, clarity, public relevance,
+            duplication, partisan wording, and
+            compliance with Civic Horizon standards.
+        </p>
+
+        <p>
+            The final decision to approve or reject a
+            topic remains with Civic Horizon.
+        </p>
+
+    </div>
+
+</section>

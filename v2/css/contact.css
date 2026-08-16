@@ -1,0 +1,1170 @@
+/*
+==================================================
+CIVIC HORIZON INDEX V2
+CONTACT PAGE
+==================================================
+*/
+
+
+/*
+==================================================
+ROOT
+==================================================
+*/
+
+:root {
+
+    --contact-blue:
+        #123f73;
+
+    --contact-blue-dark:
+        #0c2e56;
+
+    --contact-gold:
+        #d7ad45;
+
+    --contact-gold-soft:
+        #f4ead0;
+
+    --contact-white:
+        #ffffff;
+
+    --contact-bg:
+        #f7f9fc;
+
+    --contact-text:
+        #1d2a38;
+
+    --contact-muted:
+        #66788a;
+
+    --contact-border:
+        #d9e1e8;
+
+    --contact-danger-bg:
+        #fff6f6;
+
+    --contact-danger-border:
+        #e4b8b8;
+
+    --contact-success-bg:
+        #f2f9f4;
+
+    --contact-shadow:
+        0 12px 30px rgba(13, 45, 84, 0.08);
+
+}
+
+
+/*
+==================================================
+BASE
+==================================================
+*/
+
+* {
+
+    box-sizing:
+        border-box;
+
+}
+
+
+html {
+
+    scroll-behavior:
+        smooth;
+
+}
+
+
+body {
+
+    margin:
+        0;
+
+    background:
+        var(--contact-bg);
+
+    color:
+        var(--contact-text);
+
+    font-family:
+        Inter,
+        Arial,
+        sans-serif;
+
+    line-height:
+        1.6;
+
+}
+
+
+main {
+
+    overflow:
+        hidden;
+
+}
+
+
+a {
+
+    color:
+        inherit;
+
+}
+
+
+/*
+==================================================
+CONTAINER
+==================================================
+*/
+
+.contact-container {
+
+    width:
+        min(
+            1180px,
+            calc(100% - 40px)
+        );
+
+    margin:
+        0 auto;
+
+}
+
+
+/*
+==================================================
+TYPOGRAPHY
+==================================================
+*/
+
+.contact-eyebrow {
+
+    margin:
+        0 0 12px;
+
+    color:
+        var(--contact-gold);
+
+    font-size:
+        0.78rem;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        0.13em;
+
+    text-transform:
+        uppercase;
+
+}
+
+
+.contact-section-heading,
+.standards-header {
+
+    max-width:
+        760px;
+
+    margin-bottom:
+        36px;
+
+}
+
+
+.contact-section-heading h2,
+.standards-header h2,
+.poll-suggestion-intro h2,
+.general-contact-layout h2,
+.community-standards-card h2 {
+
+    margin:
+        0 0 16px;
+
+    color:
+        var(--contact-blue-dark);
+
+    font-family:
+        Merriweather,
+        Georgia,
+        serif;
+
+    font-size:
+        clamp(
+            2rem,
+            4vw,
+            3rem
+        );
+
+    line-height:
+        1.18;
+
+}
+
+
+/*
+==================================================
+HERO
+==================================================
+*/
+
+.contact-hero {
+
+    padding:
+        92px 0 78px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #0d315b 0%,
+            #164d87 100%
+        );
+
+    color:
+        var(--contact-white);
+
+}
+
+
+.contact-hero .contact-eyebrow {
+
+    color:
+        #f2cf73;
+
+}
+
+
+.contact-hero h1 {
+
+    max-width:
+        840px;
+
+    margin:
+        0;
+
+    font-family:
+        Merriweather,
+        Georgia,
+        serif;
+
+    font-size:
+        clamp(
+            2.8rem,
+            7vw,
+            5rem
+        );
+
+    line-height:
+        1.05;
+
+}
+
+
+.contact-hero-text {
+
+    max-width:
+        760px;
+
+    margin:
+        24px 0 0;
+
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            0.88
+        );
+
+    font-size:
+        1.18rem;
+
+}
+
+
+/*
+==================================================
+GENERAL SECTION SPACING
+==================================================
+*/
+
+.contact-section,
+.standards-section,
+.community-standards-section,
+.general-contact-section,
+.poll-suggestion-section {
+
+    padding:
+        78px 0;
+
+}
+
+
+.contact-section,
+.community-standards-section {
+
+    background:
+        var(--contact-white);
+
+}
+
+
+/*
+==================================================
+CONTACT OPTION CARDS
+==================================================
+*/
+
+.contact-option-grid {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(
+                0,
+                1fr
+            )
+        );
+
+    gap:
+        24px;
+
+}
+
+
+.contact-option-card {
+
+    padding:
+        30px;
+
+    border:
+        1px solid
+        var(--contact-border);
+
+    border-radius:
+        18px;
+
+    background:
+        var(--contact-white);
+
+    box-shadow:
+        var(--contact-shadow);
+
+}
+
+
+.contact-option-card h3 {
+
+    margin:
+        0 0 12px;
+
+    color:
+        var(--contact-blue-dark);
+
+    font-size:
+        1.25rem;
+
+}
+
+
+.contact-option-card p {
+
+    margin:
+        0;
+
+    color:
+        var(--contact-muted);
+
+}
+
+
+.contact-option-featured {
+
+    border:
+        2px solid
+        var(--contact-gold);
+
+    background:
+        linear-gradient(
+            180deg,
+            #fffdf8 0%,
+            #ffffff 100%
+        );
+
+}
+
+
+.contact-card-link {
+
+    display:
+        inline-block;
+
+    margin-top:
+        20px;
+
+    color:
+        var(--contact-blue);
+
+    font-weight:
+        800;
+
+    text-decoration:
+        none;
+
+}
+
+
+.contact-card-link:hover {
+
+    text-decoration:
+        underline;
+
+}
+
+
+/*
+==================================================
+POLL SUGGESTION SECTION
+==================================================
+*/
+
+.poll-suggestion-section {
+
+    background:
+        #eef4fa;
+
+}
+
+
+.poll-suggestion-layout {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        minmax(
+            0,
+            0.9fr
+        )
+        minmax(
+            0,
+            1.1fr
+        );
+
+    gap:
+        54px;
+
+    align-items:
+        start;
+
+}
+
+
+.poll-suggestion-intro {
+
+    position:
+        sticky;
+
+    top:
+        32px;
+
+}
+
+
+.poll-suggestion-intro p {
+
+    color:
+        var(--contact-muted);
+
+}
+
+
+.poll-suggestion-form,
+.general-contact-form {
+
+    padding:
+        34px;
+
+    border:
+        1px solid
+        var(--contact-border);
+
+    border-radius:
+        20px;
+
+    background:
+        var(--contact-white);
+
+    box-shadow:
+        var(--contact-shadow);
+
+}
+
+
+/*
+==================================================
+FORM FIELDS
+==================================================
+*/
+
+.contact-field {
+
+    display:
+        grid;
+
+    gap:
+        8px;
+
+    margin-bottom:
+        22px;
+
+}
+
+
+.contact-field label {
+
+    color:
+        var(--contact-blue-dark);
+
+    font-size:
+        0.95rem;
+
+    font-weight:
+        800;
+
+}
+
+
+.contact-field input,
+.contact-field select,
+.contact-field textarea {
+
+    width:
+        100%;
+
+    border:
+        1px solid
+        #cbd6df;
+
+    border-radius:
+        12px;
+
+    background:
+        #ffffff;
+
+    color:
+        var(--contact-text);
+
+    font:
+        inherit;
+
+    padding:
+        13px 14px;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+
+}
+
+
+.contact-field textarea {
+
+    resize:
+        vertical;
+
+    min-height:
+        120px;
+
+}
+
+
+.contact-field input:focus,
+.contact-field select:focus,
+.contact-field textarea:focus {
+
+    outline:
+        none;
+
+    border-color:
+        var(--contact-blue);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(
+            18,
+            63,
+            115,
+            0.12
+        );
+
+}
+
+
+/*
+==================================================
+PRIMARY BUTTON
+==================================================
+*/
+
+.contact-primary-button {
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    min-height:
+        48px;
+
+    border:
+        0;
+
+    border-radius:
+        12px;
+
+    padding:
+        0 22px;
+
+    background:
+        var(--contact-blue);
+
+    color:
+        #ffffff;
+
+    font-size:
+        1rem;
+
+    font-weight:
+        800;
+
+    cursor:
+        pointer;
+
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease,
+        opacity 0.2s ease;
+
+}
+
+
+.contact-primary-button:hover {
+
+    background:
+        var(--contact-blue-dark);
+
+    transform:
+        translateY(
+            -1px
+        );
+
+}
+
+
+.contact-primary-button:disabled {
+
+    cursor:
+        not-allowed;
+
+    opacity:
+        0.65;
+
+    transform:
+        none;
+
+}
+
+
+/*
+==================================================
+FORM NOTES + MESSAGES
+==================================================
+*/
+
+.contact-form-note {
+
+    margin:
+        16px 0 0;
+
+    color:
+        var(--contact-muted);
+
+    font-size:
+        0.88rem;
+
+}
+
+
+.contact-form-message {
+
+    min-height:
+        24px;
+
+    margin:
+        -4px 0 16px;
+
+    font-size:
+        0.93rem;
+
+    font-weight:
+        700;
+
+}
+
+
+.contact-form-message[data-message-type="success"] {
+
+    color:
+        #28623b;
+
+}
+
+
+.contact-form-message[data-message-type="error"] {
+
+    color:
+        #9c2f2f;
+
+}
+
+
+.contact-form-message[data-message-type="info"] {
+
+    color:
+        var(--contact-blue);
+
+}
+
+
+/*
+==================================================
+TRANSPARENCY / STANDARDS
+==================================================
+*/
+
+.standards-section {
+
+    background:
+        var(--contact-bg);
+
+}
+
+
+.standards-header p {
+
+    color:
+        var(--contact-muted);
+
+}
+
+
+.standards-card {
+
+    padding:
+        42px;
+
+    border:
+        1px solid
+        var(--contact-border);
+
+    border-radius:
+        20px;
+
+    background:
+        var(--contact-white);
+
+    box-shadow:
+        var(--contact-shadow);
+
+}
+
+
+.standards-card p {
+
+    color:
+        var(--contact-muted);
+
+}
+
+
+.standards-card h3 {
+
+    margin:
+        30px 0 14px;
+
+    color:
+        var(--contact-blue-dark);
+
+}
+
+
+.standards-card ul {
+
+    display:
+        grid;
+
+    gap:
+        12px;
+
+    margin:
+        18px 0 0;
+
+    padding-left:
+        22px;
+
+}
+
+
+.standards-card li {
+
+    color:
+        var(--contact-text);
+
+}
+
+
+.standards-callout {
+
+    margin:
+        32px 0;
+
+    padding:
+        24px;
+
+    border-left:
+        5px solid
+        var(--contact-gold);
+
+    border-radius:
+        12px;
+
+    background:
+        var(--contact-gold-soft);
+
+}
+
+
+.standards-callout strong {
+
+    display:
+        block;
+
+    margin-bottom:
+        8px;
+
+    color:
+        var(--contact-blue-dark);
+
+}
+
+
+.standards-callout p {
+
+    margin:
+        0;
+
+    color:
+        var(--contact-text);
+
+}
+
+
+.standards-mission {
+
+    margin-top:
+        28px;
+
+    color:
+        var(--contact-blue-dark)
+        !important;
+
+    font-size:
+        1.08rem;
+
+    font-weight:
+        800;
+
+}
+
+
+/*
+==================================================
+COMMUNITY STANDARDS
+==================================================
+*/
+
+.community-standards-card {
+
+    max-width:
+        980px;
+
+    margin:
+        0 auto;
+
+    padding:
+        44px;
+
+    border:
+        1px solid
+        var(--contact-border);
+
+    border-radius:
+        22px;
+
+    background:
+        var(--contact-white);
+
+    box-shadow:
+        var(--contact-shadow);
+
+}
+
+
+.community-standards-card p {
+
+    color:
+        var(--contact-muted);
+
+}
+
+
+.community-standards-lead {
+
+    color:
+        var(--contact-text)
+        !important;
+
+    font-size:
+        1.18rem;
+
+    font-weight:
+        800;
+
+}
+
+
+.community-standards-card h3 {
+
+    margin:
+        30px 0 12px;
+
+    color:
+        var(--contact-blue-dark);
+
+}
+
+
+.zero-tolerance-box {
+
+    margin:
+        32px 0;
+
+    padding:
+        28px;
+
+    border:
+        1px solid
+        var(--contact-danger-border);
+
+    border-radius:
+        16px;
+
+    background:
+        var(--contact-danger-bg);
+
+}
+
+
+.zero-tolerance-box h3 {
+
+    margin:
+        0 0 10px;
+
+    color:
+        #842d2d;
+
+}
+
+
+.zero-tolerance-box p {
+
+    margin:
+        0;
+
+    color:
+        #633737;
+
+}
+
+
+.community-closing-statement {
+
+    margin:
+        34px 0 0;
+
+    padding-top:
+        28px;
+
+    border-top:
+        1px solid
+        var(--contact-border);
+
+    color:
+        var(--contact-blue-dark)
+        !important;
+
+    font-size:
+        1.1rem;
+
+}
+
+
+/*
+==================================================
+GENERAL CONTACT
+==================================================
+*/
+
+.general-contact-section {
+
+    background:
+        #eef4fa;
+
+}
+
+
+.general-contact-layout {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        minmax(
+            0,
+            0.8fr
+        )
+        minmax(
+            0,
+            1.2fr
+        );
+
+    gap:
+        54px;
+
+    align-items:
+        start;
+
+}
+
+
+.general-contact-layout > div > p {
+
+    color:
+        var(--contact-muted);
+
+}
+
+
+/*
+==================================================
+RESPONSIVE
+==================================================
+*/
+
+@media (
+    max-width:
+    900px
+) {
+
+    .contact-option-grid,
+    .poll-suggestion-layout,
+    .general-contact-layout {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+
+    .poll-suggestion-intro {
+
+        position:
+            static;
+
+    }
+
+}
+
+
+@media (
+    max-width:
+    640px
+) {
+
+    .contact-container {
+
+        width:
+            min(
+                100% - 24px,
+                1180px
+            );
+
+    }
+
+
+    .contact-hero {
+
+        padding:
+            68px 0 58px;
+
+    }
+
+
+    .contact-section,
+    .standards-section,
+    .community-standards-section,
+    .general-contact-section,
+    .poll-suggestion-section {
+
+        padding:
+            58px 0;
+
+    }
+
+
+    .contact-option-card,
+    .poll-suggestion-form,
+    .general-contact-form,
+    .standards-card,
+    .community-standards-card {
+
+        padding:
+            24px;
+
+        border-radius:
+            16px;
+
+    }
+
+
+    .contact-primary-button {
+
+        width:
+            100%;
+
+    }
+
+}

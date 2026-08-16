@@ -1291,6 +1291,167 @@ function validateCommunitySurvey(
 
 /*
 ==================================================
+COMMUNITY POLL PARTICIPATION LOCK
+==================================================
+
+Private structure:
+
+communityPollVotes/
+    pollId/
+        Firebase UID/
+            surveyId
+            choice
+            publicVoteId
+            submittedAt
+
+The Firebase UID never appears in the public votes
+collection.
+
+The private lock is created once and cannot be
+overwritten by the participant.
+==================================================
+*/
+
+function getCommunityPollVoteLockReference(
+    surveyId,
+    userId = ""
+) {
+
+    const cleanSurveyId =
+        String(
+            surveyId || ""
+        ).trim();
+
+
+    if (!cleanSurveyId) {
+
+        throw new Error(
+            "A valid community poll is required."
+        );
+
+    }
+
+
+    const user =
+        auth.currentUser;
+
+
+    const uid =
+        userId ||
+        user?.uid ||
+        "";
+
+
+    if (!uid) {
+
+        throw new Error(
+            "A signed-in participant is required."
+        );
+
+    }
+
+
+    return ref(
+        database,
+        `communityPollVotes/${cleanSurveyId}/${uid}`
+    );
+
+}
+
+
+/*
+==================================================
+HAS VOTED IN COMMUNITY POLL
+==================================================
+*/
+
+export async function hasVotedInCommunityPoll(
+    surveyId
+) {
+
+    const user =
+        auth.currentUser;
+
+
+    if (!user) {
+
+        return false;
+
+    }
+
+
+    const lockReference =
+        getCommunityPollVoteLockReference(
+            surveyId,
+            user.uid
+        );
+
+
+    const snapshot =
+        await get(
+            lockReference
+        );
+
+
+    return snapshot.exists();
+
+}
+
+
+/*
+==================================================
+GET MY COMMUNITY POLL VOTE
+==================================================
+*/
+
+export async function getMyCommunityPollVote(
+    surveyId
+) {
+
+    const user =
+        auth.currentUser;
+
+
+    if (!user) {
+
+        return null;
+
+    }
+
+
+    const lockReference =
+        getCommunityPollVoteLockReference(
+            surveyId,
+            user.uid
+        );
+
+
+    const snapshot =
+        await get(
+            lockReference
+        );
+
+
+    if (
+        !snapshot.exists()
+    ) {
+
+        return null;
+
+    }
+
+
+    return {
+
+        ...snapshot.val()
+
+    };
+
+}
+
+
+/*
+==================================================
 COMMUNITY POLL VOTE SUBMISSION
 ==================================================
 */
@@ -1300,11 +1461,29 @@ export async function submitCommunityVote(
     choice
 ) {
 
-    if (
-        !surveyId ||
-        typeof surveyId !==
-            "string"
-    ) {
+    /*
+    ----------------------------------------------
+    VERIFIED ACCOUNT REQUIRED
+    ----------------------------------------------
+    */
+
+    const user =
+        getVerifiedCurrentUser();
+
+
+    const cleanSurveyId =
+        String(
+            surveyId || ""
+        ).trim();
+
+
+    const cleanChoice =
+        String(
+            choice || ""
+        ).trim();
+
+
+    if (!cleanSurveyId) {
 
         throw new Error(
             "A valid community poll is required."
@@ -1313,11 +1492,7 @@ export async function submitCommunityVote(
     }
 
 
-    if (
-        !choice ||
-        typeof choice !==
-            "string"
-    ) {
+    if (!cleanChoice) {
 
         throw new Error(
             "A valid poll response is required."
@@ -1326,22 +1501,408 @@ export async function submitCommunityVote(
     }
 
 
+    /*
+    ----------------------------------------------
+    CONFIRM POLL EXISTS
+    ----------------------------------------------
+    */
+
+    const surveyReference =
+        ref(
+            database,
+            `createdSurveys/${cleanSurveyId}`
+        );
+
+
+    const surveySnapshot =
+        await get(
+            surveyReference
+        );
+
+
+    if (
+        !surveySnapshot.exists()
+    ) {
+
+        throw new Error(
+            "This community poll could not be found."
+        );
+
+    }
+
+
+    const survey =
+        surveySnapshot.val() ||
+        {};
+
+
+    /*
+    ----------------------------------------------
+    POLL MUST BE ACTIVE
+    ----------------------------------------------
+    */
+
+    if (
+        survey.active !==
+        true
+    ) {
+
+        throw new Error(
+            "This community poll is no longer accepting responses."
+        );
+
+    }
+
+
+    /*
+    ----------------------------------------------
+    VALIDATE CHOICE AGAINST REAL POLL
+
+    Do not trust arbitrary text supplied by the
+    browser.
+    ----------------------------------------------
+    */
+
+    const allowedChoices =
+        Array.isArray(
+            survey.choices
+        )
+            ? survey.choices
+                .map(
+                    item => {
+
+                        return String(
+                            item || ""
+                        ).trim();
+
+                    }
+                )
+                .filter(
+                    Boolean
+                )
+            : [];
+
+
+    if (
+        !allowedChoices.includes(
+            cleanChoice
+        )
+    ) {
+
+        throw new Error(
+            "That response is not a valid choice for this poll."
+        );
+
+    }
+
+
+    /*
+    ----------------------------------------------
+    PRIVATE PARTICIPATION LOCK
+    ----------------------------------------------
+    */
+
+    const lockReference =
+        getCommunityPollVoteLockReference(
+            cleanSurveyId,
+            user.uid
+        );
+
+
+    const existingLockSnapshot =
+        await get(
+            lockReference
+        );
+
+
+    /*
+    ----------------------------------------------
+    EXISTING LOCK
+
+    If a public vote already exists, this account
+    has already voted.
+
+    If the private lock exists but the public write
+    failed during a previous attempt, the SAME vote
+    can safely finish using the SAME public vote ID.
+    ----------------------------------------------
+    */
+
+    if (
+        existingLockSnapshot.exists()
+    ) {
+
+        const existingLock =
+            existingLockSnapshot.val() ||
+            {};
+
+
+        const existingPublicVoteId =
+            String(
+                existingLock.publicVoteId ||
+                ""
+            ).trim();
+
+
+        const existingChoice =
+            String(
+                existingLock.choice ||
+                ""
+            ).trim();
+
+
+        if (
+            !existingPublicVoteId ||
+            !existingChoice
+        ) {
+
+            throw new Error(
+                "Your previous community poll participation record is incomplete. Please contact Civic Horizon support."
+            );
+
+        }
+
+
+        const existingPublicVoteReference =
+            ref(
+                database,
+                `votes/${existingPublicVoteId}`
+            );
+
+
+        const existingPublicVoteSnapshot =
+            await get(
+                existingPublicVoteReference
+            );
+
+
+        /*
+        ------------------------------------------
+        ALREADY COMPLETED
+        ------------------------------------------
+        */
+
+        if (
+            existingPublicVoteSnapshot.exists()
+        ) {
+
+            const error =
+                new Error(
+                    "You have already voted in this community poll."
+                );
+
+
+            error.code =
+                "already-voted-community-poll";
+
+
+            throw error;
+
+        }
+
+
+        /*
+        ------------------------------------------
+        LOCKED CHOICE CANNOT BE CHANGED
+        ------------------------------------------
+        */
+
+        if (
+            existingChoice !==
+            cleanChoice
+        ) {
+
+            const error =
+                new Error(
+                    "You have already selected a response for this community poll."
+                );
+
+
+            error.code =
+                "already-voted-community-poll";
+
+
+            throw error;
+
+        }
+
+
+        /*
+        ------------------------------------------
+        RECOVER INCOMPLETE PUBLIC WRITE
+        ------------------------------------------
+        */
+
+        const recoveredVoteData = {
+
+            surveyId:
+                cleanSurveyId,
+
+            choice:
+                existingChoice,
+
+            submittedAt:
+                existingLock.submittedAt ||
+                new Date().toISOString(),
+
+            source:
+                "v2PollsCenter"
+
+        };
+
+
+        await set(
+            existingPublicVoteReference,
+            recoveredVoteData
+        );
+
+
+        return {
+
+            id:
+                existingPublicVoteId,
+
+            recovered:
+                true,
+
+            ...recoveredVoteData
+
+        };
+
+    }
+
+
+    /*
+    ----------------------------------------------
+    GENERATE ANONYMOUS PUBLIC VOTE ID
+
+    This is NOT the participant's Firebase UID.
+    ----------------------------------------------
+    */
+
     const voteReference =
         push(
             communityVotesRef
         );
 
 
+    const publicVoteId =
+        voteReference.key;
+
+
+    if (!publicVoteId) {
+
+        throw new Error(
+            "A community vote ID could not be created."
+        );
+
+    }
+
+
+    const submittedAt =
+        new Date().toISOString();
+
+
+    /*
+    ----------------------------------------------
+    PRIVATE LOCK DATA
+    ----------------------------------------------
+    */
+
+    const lockData = {
+
+        surveyId:
+            cleanSurveyId,
+
+        choice:
+            cleanChoice,
+
+        publicVoteId,
+
+        submittedAt
+
+    };
+
+
+    /*
+    ----------------------------------------------
+    CREATE ONE-TIME PRIVATE LOCK
+
+    Firebase Rules will allow only:
+
+    verified user
+        +
+    own Firebase UID
+        +
+    nonexistent lock
+
+    Once this succeeds, that account has claimed
+    its one vote for this poll.
+    ----------------------------------------------
+    */
+
+    try {
+
+        await set(
+            lockReference,
+            lockData
+        );
+
+    } catch (error) {
+
+        /*
+        ------------------------------------------
+        HANDLE TWO TABS / FAST DOUBLE CLICK
+        ------------------------------------------
+        */
+
+        const latestSnapshot =
+            await get(
+                lockReference
+            );
+
+
+        if (
+            latestSnapshot.exists()
+        ) {
+
+            const duplicateError =
+                new Error(
+                    "You have already voted in this community poll."
+                );
+
+
+            duplicateError.code =
+                "already-voted-community-poll";
+
+
+            throw duplicateError;
+
+        }
+
+
+        throw error;
+
+    }
+
+
+    /*
+    ----------------------------------------------
+    PUBLIC ANONYMOUS VOTE
+
+    UID is intentionally NOT included.
+    ----------------------------------------------
+    */
+
     const voteData = {
 
         surveyId:
-            surveyId.trim(),
+            cleanSurveyId,
 
         choice:
-            choice.trim(),
+            cleanChoice,
 
-        submittedAt:
-            new Date().toISOString(),
+        submittedAt,
 
         source:
             "v2PollsCenter"
@@ -1358,11 +1919,44 @@ export async function submitCommunityVote(
     return {
 
         id:
-            voteReference.key,
+            publicVoteId,
+
+        recovered:
+            false,
 
         ...voteData
 
     };
+
+}
+
+
+/*
+==================================================
+COMMUNITY POLL PARTICIPATION MESSAGE
+==================================================
+*/
+
+export function getCommunityPollParticipationMessage(
+    error
+) {
+
+    if (
+        error?.code ===
+        "already-voted-community-poll"
+    ) {
+
+        return (
+            "You have already voted in this community poll."
+        );
+
+    }
+
+
+    return (
+        error?.message ||
+        "Your community poll vote could not be submitted."
+    );
 
 }
 

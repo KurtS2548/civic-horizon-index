@@ -445,15 +445,37 @@ export async function sendCurrentUserVerificationEmail() {
         refreshedUser.emailVerified
     ) {
 
-        await getIdToken(
-            refreshedUser,
-            true
-        );
+        try {
+
+            await getIdToken(
+                refreshedUser,
+                true
+            );
+
+        } catch (error) {
+
+            console.warn(
+                "Firebase ID token refresh failed:",
+                error
+            );
+
+        }
 
 
-        await syncVerificationStatus(
-            refreshedUser
-        );
+        try {
+
+            await syncVerificationStatus(
+                refreshedUser
+            );
+
+        } catch (error) {
+
+            console.warn(
+                "Verification profile synchronization failed:",
+                error
+            );
+
+        }
 
 
         return {
@@ -500,6 +522,18 @@ export async function refreshCurrentUser() {
     }
 
 
+    /*
+    ----------------------------------------------
+    AUTHENTICATION FIRST
+
+    Firebase Authentication is the source of truth
+    for email verification.
+
+    Database synchronization must never prevent
+    account.js from receiving the refreshed user.
+    ----------------------------------------------
+    */
+
     await reload(
         user
     );
@@ -516,21 +550,83 @@ export async function refreshCurrentUser() {
     }
 
 
-    await getIdToken(
-        refreshedUser,
-        true
-    );
+    /*
+    ----------------------------------------------
+    REFRESH ID TOKEN
+    ----------------------------------------------
+    */
+
+    try {
+
+        await getIdToken(
+            refreshedUser,
+            true
+        );
+
+    } catch (error) {
+
+        console.warn(
+            "Firebase ID token refresh failed:",
+            error
+        );
+
+    }
 
 
-    await syncVerificationStatus(
-        refreshedUser
-    );
+    /*
+    ----------------------------------------------
+    SYNC VERIFICATION PROFILE
+
+    Secondary operation. Failure here must not
+    block authentication.
+    ----------------------------------------------
+    */
+
+    try {
+
+        await syncVerificationStatus(
+            refreshedUser
+        );
+
+    } catch (error) {
+
+        console.warn(
+            "Verification profile synchronization failed:",
+            error
+        );
+
+    }
 
 
-    await syncAgeClassification(
-        refreshedUser.uid
-    );
+    /*
+    ----------------------------------------------
+    SYNC AGE CLASSIFICATION
 
+    Also secondary to authentication.
+    ----------------------------------------------
+    */
+
+    try {
+
+        await syncAgeClassification(
+            refreshedUser.uid
+        );
+
+    } catch (error) {
+
+        console.warn(
+            "Age classification synchronization failed:",
+            error
+        );
+
+    }
+
+
+    /*
+    ----------------------------------------------
+    ALWAYS RETURN REFRESHED AUTH USER
+    ----------------------------------------------
+    */
 
     return refreshedUser;
 
@@ -730,9 +826,20 @@ export async function getCurrentUserProfile() {
     }
 
 
-    await syncAgeClassification(
-        user.uid
-    );
+    try {
+
+        await syncAgeClassification(
+            user.uid
+        );
+
+    } catch (error) {
+
+        console.warn(
+            "Age classification synchronization failed:",
+            error
+        );
+
+    }
 
 
     const profileReference =
@@ -879,10 +986,21 @@ export async function getCurrentUserVotingEligibility() {
     }
 
 
-    await getIdToken(
-        refreshedUser,
-        true
-    );
+    try {
+
+        await getIdToken(
+            refreshedUser,
+            true
+        );
+
+    } catch (error) {
+
+        console.warn(
+            "Voting eligibility token refresh failed:",
+            error
+        );
+
+    }
 
 
     if (
@@ -902,14 +1020,36 @@ export async function getCurrentUserVotingEligibility() {
     }
 
 
-    await syncVerificationStatus(
-        refreshedUser
-    );
+    try {
+
+        await syncVerificationStatus(
+            refreshedUser
+        );
+
+    } catch (error) {
+
+        console.warn(
+            "Voting verification synchronization failed:",
+            error
+        );
+
+    }
 
 
-    await syncAgeClassification(
-        refreshedUser.uid
-    );
+    try {
+
+        await syncAgeClassification(
+            refreshedUser.uid
+        );
+
+    } catch (error) {
+
+        console.warn(
+            "Voting age classification synchronization failed:",
+            error
+        );
+
+    }
 
 
     const profile =
@@ -1011,22 +1151,64 @@ export async function getCurrentUserVotingEligibility() {
     }
 
 
+    /*
+    ----------------------------------------------
+    PROFILE VERIFICATION SYNC
+
+    Firebase Authentication remains authoritative.
+
+    If Firebase says verified but the profile has
+    not synchronized yet, try one final profile
+    synchronization before denying eligibility.
+    ----------------------------------------------
+    */
+
     if (
         profile.accountStatus !==
-        "verified" ||
+            "verified" ||
         profile.emailVerified !==
-        true
+            true
     ) {
 
-        return {
+        try {
 
-            eligible:
-                false,
+            await syncVerificationStatus(
+                refreshedUser
+            );
 
-            reason:
-                "verificationSyncPending"
+        } catch (error) {
 
-        };
+            console.warn(
+                "Final voting verification synchronization failed:",
+                error
+            );
+
+        }
+
+
+        const refreshedProfile =
+            await getCurrentUserProfile();
+
+
+        if (
+            !refreshedProfile ||
+            refreshedProfile.accountStatus !==
+                "verified" ||
+            refreshedProfile.emailVerified !==
+                true
+        ) {
+
+            return {
+
+                eligible:
+                    false,
+
+                reason:
+                    "verificationSyncPending"
+
+            };
+
+        }
 
     }
 
@@ -1115,7 +1297,36 @@ export async function signOutPublicUser() {
 
 /*
 ==================================================
-ADMIN COMPATIBILITY
+ADMIN SECURITY
+==================================================
+*/
+
+const ADMIN_UID =
+    "46MRUizWh5Yl83XXk4CBuI3TUZc2";
+
+
+/*
+==================================================
+CHECK ADMIN USER
+==================================================
+*/
+
+export function isAdminUser(
+    user
+) {
+
+    return Boolean(
+        user &&
+        user.uid ===
+            ADMIN_UID
+    );
+
+}
+
+
+/*
+==================================================
+ADMIN SIGN IN
 ==================================================
 */
 
@@ -1124,13 +1335,55 @@ export async function signInAdmin(
     password
 ) {
 
-    return signInPublicUser(
-        email,
-        password
-    );
+    const user =
+        await signInPublicUser(
+            email,
+            password
+        );
+
+
+    /*
+    ----------------------------------------------
+    ADMIN UID REQUIRED
+    ----------------------------------------------
+    */
+
+    if (
+        !isAdminUser(
+            user
+        )
+    ) {
+
+        await signOut(
+            auth
+        );
+
+
+        const error =
+            new Error(
+                "This account is not authorized to access the Admin Center."
+            );
+
+
+        error.code =
+            "auth/admin-access-denied";
+
+
+        throw error;
+
+    }
+
+
+    return user;
 
 }
 
+
+/*
+==================================================
+ADMIN SIGN OUT
+==================================================
+*/
 
 export async function signOutAdmin() {
 
@@ -1141,9 +1394,30 @@ export async function signOutAdmin() {
 }
 
 
+/*
+==================================================
+CURRENT ADMIN USER
+==================================================
+*/
+
 export function getCurrentAdminUser() {
 
-    return auth.currentUser;
+    const user =
+        auth.currentUser;
+
+
+    if (
+        !isAdminUser(
+            user
+        )
+    ) {
+
+        return null;
+
+    }
+
+
+    return user;
 
 }
 
@@ -1483,10 +1757,10 @@ function parseBirthday(
         String(
             birthday
         )
-        .split("-")
-        .map(
-            Number
-        );
+            .split("-")
+            .map(
+                Number
+            );
 
 
     return new Date(

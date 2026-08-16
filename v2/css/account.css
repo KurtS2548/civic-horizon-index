@@ -109,6 +109,11 @@ body {
     color: #ffffff;
 }
 
+.account-switcher__button:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
 
 /* ==================================================
    PANEL
@@ -123,7 +128,7 @@ body {
 }
 
 .account-panel[hidden] {
-    display: none;
+    display: none !important;
 }
 
 .account-panel__heading {
@@ -189,6 +194,13 @@ body {
 .account-form select:focus {
     border-color: #1f5f99;
     outline: 3px solid rgba(31, 95, 153, 0.1);
+}
+
+.account-form input:disabled,
+.account-form select:disabled {
+    cursor: not-allowed;
+    background: #f1f5f9;
+    color: #829ab1;
 }
 
 .account-form__hint {
@@ -280,8 +292,12 @@ body {
 }
 
 .account-text-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-start;
     justify-self: start;
-    padding: 0;
+    min-height: 32px;
+    padding: 4px 0;
     border: 0;
     background: transparent;
     color: #1f5f99;
@@ -289,12 +305,18 @@ body {
     font-size: 0.68rem;
     font-weight: 800;
     cursor: pointer;
+    pointer-events: auto;
 }
 
 .account-text-button:hover,
 .account-text-button:focus-visible {
     text-decoration: underline;
     outline: none;
+}
+
+.account-text-button:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
 }
 
 
@@ -312,8 +334,26 @@ body {
 
 
 /* ==================================================
-   VERIFICATION PAGE SUPPORT
+   VERIFICATION
 ================================================== */
+
+.account-verification-actions {
+    display: grid;
+    gap: 10px;
+    margin-top: 6px;
+    padding: 12px 0 2px;
+}
+
+.account-verification-actions[hidden] {
+    display: none !important;
+}
+
+.account-verification-actions .account-text-button {
+    position: relative;
+    z-index: 2;
+    width: fit-content;
+    pointer-events: auto;
+}
 
 .account-panel--verification {
     max-width: 540px;
@@ -350,10 +390,23 @@ body {
     line-height: 1.45;
 }
 
-.account-verification-actions {
-    display: grid;
-    gap: 8px;
-    margin-top: 14px;
+
+/* ==================================================
+   ACCESSIBILITY / INTERACTION SAFETY
+================================================== */
+
+button,
+input,
+select,
+a {
+    pointer-events: auto;
+}
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+a:focus-visible {
+    outline-offset: 2px;
 }
 
 

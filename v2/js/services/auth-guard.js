@@ -3,6 +3,23 @@
 CIVIC HORIZON INDEX V2
 AUTHENTICATION GUARD
 ==================================================
+
+
+SITE ACCESS POLICY
+
+1. A Firebase-authenticated user may enter Civic Horizon.
+
+2. Email verification is NOT required merely to view
+   the site.
+
+3. Voting and other participant actions perform their
+   own verified-email checks.
+
+4. Temporary Firebase refresh failures do NOT destroy
+   the user's session.
+
+5. Admin security remains separate.
+==================================================
 */
 
 
@@ -27,6 +44,20 @@ DESTINATIONS
 
 const ACCOUNT_PAGE =
     "account.html";
+
+
+/*
+==================================================
+STATE
+==================================================
+*/
+
+let accessGranted =
+    false;
+
+
+let redirectStarted =
+    false;
 
 
 /*
@@ -60,12 +91,20 @@ export function protectCurrentPage() {
 
             /*
             ------------------------------------------
-            REFRESH USER
+            SIGNED IN
 
-            This confirms the latest verification
-            state before the protected page opens.
+            Firebase Auth already supplied a valid
+            authenticated user.
+
+            Attempt a refresh so we have the latest
+            account state, but do NOT sign the user
+            out if that refresh temporarily fails.
             ------------------------------------------
             */
+
+            let refreshedUser =
+                user;
+
 
             try {
 
@@ -74,33 +113,62 @@ export function protectCurrentPage() {
                 );
 
 
-                await getIdToken(
-                    user,
-                    true
+                refreshedUser =
+                    auth.currentUser ||
+                    user;
+
+
+                /*
+                Refresh the token when possible so
+                database security rules see current
+                authentication claims.
+                */
+
+                try {
+
+                    await getIdToken(
+                        refreshedUser,
+                        true
+                    );
+
+                } catch (tokenError) {
+
+                    console.warn(
+                        "Auth token refresh could not be completed:",
+                        tokenError
+                    );
+
+                }
+
+            } catch (reloadError) {
+
+                console.warn(
+                    "Auth user refresh could not be completed:",
+                    reloadError
                 );
 
-            } catch (error) {
 
-                console.error(
-                    "Auth refresh failed:",
-                    error
-                );
+                /*
+                IMPORTANT:
 
+                A reload failure is not the same thing
+                as a sign-out.
 
-                await forceSignOut();
+                Keep the authenticated user supplied by
+                onAuthStateChanged instead of destroying
+                the session.
+                */
 
-                return;
+                refreshedUser =
+                    auth.currentUser ||
+                    user;
 
             }
 
 
-            const refreshedUser =
-                auth.currentUser;
-
-
             /*
             ------------------------------------------
-            SESSION DISAPPEARED
+            SESSION CHECK
             ------------------------------------------
             */
 
@@ -115,62 +183,24 @@ export function protectCurrentPage() {
 
             /*
             ------------------------------------------
-            EMAIL MUST BE VERIFIED
-
-            No verification page is used.
-
-            The participant returns to account.html,
-            where the background verification flow
-            continues automatically.
-            ------------------------------------------
-            */
-
-            if (
-                !refreshedUser.emailVerified
-            ) {
-
-                redirectToAccount();
-
-                return;
-
-            }
-
-
-            /*
-            ------------------------------------------
             ACCESS GRANTED
+
+            Email verification is intentionally NOT
+            checked here.
+
+            Voting eligibility is enforced separately
+            by auth-service.js, firebase-service.js,
+            and Firebase Realtime Database Rules.
             ------------------------------------------
             */
 
-            document.documentElement
-                .classList.remove(
-                    "auth-access-pending"
-                );
-
-
-            document.documentElement
-                .classList.add(
-                    "auth-access-granted"
-                );
-
-
-            document.dispatchEvent(
-                new CustomEvent(
-                    "civicAuthReady",
-                    {
-                        detail: {
-
-                            user:
-                                refreshedUser
-
-                        }
-                    }
-                )
+            grantAccess(
+                refreshedUser
             );
 
         },
 
-        async error => {
+        error => {
 
             console.error(
                 "Authentication guard failed:",
@@ -178,7 +208,17 @@ export function protectCurrentPage() {
             );
 
 
-            await forceSignOut();
+            /*
+            Auth state itself failed.
+
+            Do not call signOut() here because the
+            session may still be valid.
+
+            Simply deny page access and return to the
+            account gateway.
+            */
+
+            redirectToAccount();
 
         }
 
@@ -189,7 +229,58 @@ export function protectCurrentPage() {
 
 /*
 ==================================================
-RELIABLE SIGN OUT
+GRANT ACCESS
+==================================================
+*/
+
+function grantAccess(
+    user
+) {
+
+    if (
+        accessGranted
+    ) {
+
+        return;
+
+    }
+
+
+    accessGranted =
+        true;
+
+
+    document.documentElement
+        .classList.remove(
+            "auth-access-pending"
+        );
+
+
+    document.documentElement
+        .classList.add(
+            "auth-access-granted"
+        );
+
+
+    document.dispatchEvent(
+        new CustomEvent(
+            "civicAuthReady",
+            {
+                detail: {
+
+                    user
+
+                }
+            }
+        )
+    );
+
+}
+
+
+/*
+==================================================
+RELIABLE USER-REQUESTED SIGN OUT
 ==================================================
 */
 
@@ -199,30 +290,13 @@ export async function signOutAndExit() {
 
         /*
         ------------------------------------------
-        SIGN OUT THROUGH FIREBASE
+        USER REQUESTED SIGN OUT
         ------------------------------------------
         */
 
         await signOut(
             auth
         );
-
-
-        /*
-        ------------------------------------------
-        CONFIRM SESSION IS CLEARED
-        ------------------------------------------
-        */
-
-        if (
-            auth.currentUser
-        ) {
-
-            throw new Error(
-                "Firebase session did not clear."
-            );
-
-        }
 
 
         /*
@@ -237,9 +311,6 @@ export async function signOutAndExit() {
         /*
         ------------------------------------------
         RETURN TO ACCOUNT PAGE
-
-        replace() prevents Back from restoring
-        the protected page as the active page.
         ------------------------------------------
         */
 
@@ -279,6 +350,21 @@ export function getGuardedCurrentUser() {
 
 /*
 ==================================================
+SIGNED-IN SESSION
+==================================================
+*/
+
+export function hasSignedInSession() {
+
+    return Boolean(
+        auth.currentUser
+    );
+
+}
+
+
+/*
+==================================================
 VERIFIED SESSION
 ==================================================
 */
@@ -306,6 +392,15 @@ REDIRECT TO ACCOUNT
 function redirectToAccount() {
 
     if (
+        redirectStarted
+    ) {
+
+        return;
+
+    }
+
+
+    if (
         getCurrentFileName() ===
         ACCOUNT_PAGE
     ) {
@@ -313,6 +408,13 @@ function redirectToAccount() {
         return;
 
     }
+
+
+    redirectStarted =
+        true;
+
+
+    rememberRequestedPage();
 
 
     window.location.replace(
@@ -324,34 +426,31 @@ function redirectToAccount() {
 
 /*
 ==================================================
-FORCE SIGN OUT
+REMEMBER REQUESTED PAGE
 ==================================================
 */
 
-async function forceSignOut() {
+function rememberRequestedPage() {
 
     try {
 
-        await signOut(
-            auth
+        const requestedPage =
+            `${window.location.pathname}${window.location.search}${window.location.hash}`;
+
+
+        sessionStorage.setItem(
+            "civicHorizonReturnPage",
+            requestedPage
         );
 
     } catch (error) {
 
-        console.error(
-            "Forced sign out failed:",
+        console.warn(
+            "Could not remember requested page:",
             error
         );
 
     }
-
-
-    clearTemporarySessionData();
-
-
-    window.location.replace(
-        ACCOUNT_PAGE
-    );
 
 }
 
@@ -397,6 +496,7 @@ function getCurrentFileName() {
     const fileName =
         pathname
             .split("/")
+            .filter(Boolean)
             .pop();
 
 
@@ -407,6 +507,7 @@ function getCurrentFileName() {
     }
 
 
-    return fileName;
+    return fileName
+        .toLowerCase();
 
 }

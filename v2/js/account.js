@@ -1,7 +1,7 @@
 /*
 ==================================================
 CIVIC HORIZON INDEX V2
-STREAMLINED ACCOUNT CONTROLLER
+ACCOUNT CONTROLLER
 ==================================================
 */
 
@@ -18,7 +18,9 @@ import {
 
     sendCurrentUserVerificationEmail,
 
-    refreshCurrentUser
+    refreshCurrentUser,
+
+    signOutPublicUser
 
 } from "./services/auth-service.js";
 
@@ -85,6 +87,8 @@ async function initializeAccountPage() {
     initializeSignInForm();
 
     initializePasswordReset();
+
+    initializeVerificationActions();
 
     initializeVerificationEvents();
 
@@ -163,31 +167,10 @@ ACCOUNT SWITCHER
 
 function initializeAccountSwitcher() {
 
-    const signInButton =
-        document.getElementById(
+    document
+        .getElementById(
             "showSignInButton"
-        );
-
-
-    const createButton =
-        document.getElementById(
-            "showCreateAccountButton"
-        );
-
-
-    const signInPanel =
-        document.getElementById(
-            "signInPanel"
-        );
-
-
-    const createPanel =
-        document.getElementById(
-            "createAccountPanel"
-        );
-
-
-    signInButton
+        )
         ?.addEventListener(
             "click",
             () => {
@@ -207,7 +190,10 @@ function initializeAccountSwitcher() {
         );
 
 
-    createButton
+    document
+        .getElementById(
+            "showCreateAccountButton"
+        )
         ?.addEventListener(
             "click",
             () => {
@@ -249,18 +235,6 @@ function showSignInPanel() {
         );
 
 
-    const signInButton =
-        document.getElementById(
-            "showSignInButton"
-        );
-
-
-    const createButton =
-        document.getElementById(
-            "showCreateAccountButton"
-        );
-
-
     if (
         signInPanel
     ) {
@@ -281,13 +255,19 @@ function showSignInPanel() {
     }
 
 
-    signInButton
+    document
+        .getElementById(
+            "showSignInButton"
+        )
         ?.classList.add(
             "is-active"
         );
 
 
-    createButton
+    document
+        .getElementById(
+            "showCreateAccountButton"
+        )
         ?.classList.remove(
             "is-active"
         );
@@ -326,18 +306,6 @@ function showCreateAccountPanel() {
         );
 
 
-    const signInButton =
-        document.getElementById(
-            "showSignInButton"
-        );
-
-
-    const createButton =
-        document.getElementById(
-            "showCreateAccountButton"
-        );
-
-
     if (
         signInPanel
     ) {
@@ -358,13 +326,19 @@ function showCreateAccountPanel() {
     }
 
 
-    createButton
+    document
+        .getElementById(
+            "showCreateAccountButton"
+        )
         ?.classList.add(
             "is-active"
         );
 
 
-    signInButton
+    document
+        .getElementById(
+            "showSignInButton"
+        )
         ?.classList.remove(
             "is-active"
         );
@@ -395,12 +369,15 @@ function initializeAuthState() {
 
         async user => {
 
+            /*
+            ------------------------------------------
+            SIGNED OUT
+            ------------------------------------------
+            */
+
             if (!user) {
 
-                stopVerificationWatch();
-
-                verificationMode =
-                    false;
+                resetVerificationMode();
 
 
                 return;
@@ -410,20 +387,13 @@ function initializeAuthState() {
 
             /*
             ------------------------------------------
-            VERIFIED USER
-
-            Go directly to Civic Horizon Home.
-            No profile page.
-            No verification page.
+            VERIFIED
             ------------------------------------------
             */
 
             if (
                 user.emailVerified
             ) {
-
-                stopVerificationWatch();
-
 
                 enterSite();
 
@@ -434,15 +404,13 @@ function initializeAuthState() {
 
             /*
             ------------------------------------------
-            UNVERIFIED USER
-
-            Stay on this compact account screen.
-            Quietly watch Firebase until verification
-            is completed.
+            UNVERIFIED
             ------------------------------------------
             */
 
-            enterVerificationMode();
+            enterVerificationMode(
+                "session"
+            );
 
         },
 
@@ -529,23 +497,15 @@ async function handleCreateAccount(
         );
 
 
-    const agreement =
-        document.getElementById(
-            "createAgreement"
-        );
-
-
     const agreementAccepted =
         Boolean(
-            agreement?.checked
+            document
+                .getElementById(
+                    "createAgreement"
+                )
+                ?.checked
         );
 
-
-    /*
-    ----------------------------------------------
-    BASIC VALIDATION
-    ----------------------------------------------
-    */
 
     if (!displayName) {
 
@@ -647,12 +607,6 @@ async function handleCreateAccount(
     }
 
 
-    /*
-    ----------------------------------------------
-    CREATE ACCOUNT
-    ----------------------------------------------
-    */
-
     const button =
         document.getElementById(
             "createAccountButton"
@@ -674,15 +628,6 @@ async function handleCreateAccount(
 
     try {
 
-        /*
-        createPublicAccount() already:
-
-        - creates Firebase user
-        - creates participant profile
-        - stores birthday / ZIP
-        - sends verification email
-        */
-
         await createPublicAccount({
 
             displayName,
@@ -699,14 +644,6 @@ async function handleCreateAccount(
 
         });
 
-
-        /*
-        ------------------------------------------
-        DO NOT REDIRECT TO ANOTHER PAGE.
-
-        Stay here and wait quietly for verification.
-        ------------------------------------------
-        */
 
         enterVerificationMode(
             "create"
@@ -828,14 +765,6 @@ async function handleSignIn(
             );
 
 
-        /*
-        ------------------------------------------
-        VERIFIED
-
-        Straight to Home.
-        ------------------------------------------
-        */
-
         if (
             user.emailVerified
         ) {
@@ -847,25 +776,15 @@ async function handleSignIn(
         }
 
 
-        /*
-        ------------------------------------------
-        UNVERIFIED
-
-        Stay here. No separate verification page.
-        ------------------------------------------
-        */
-
         enterVerificationMode(
             "signin"
         );
 
 
         /*
-        Send one new verification email for a
-        returning unverified user.
-
-        Account creation already sent one, so we
-        only do this for sign-in.
+        ------------------------------------------
+        SEND A FRESH VERIFICATION EMAIL
+        ------------------------------------------
         */
 
         try {
@@ -928,48 +847,39 @@ function enterVerificationMode(
     );
 
 
+    showSignInPanelWithoutReset();
+
+
+    showVerificationActions();
+
+
     if (
         source ===
         "create"
     ) {
 
         setText(
-            "createAccountMessage",
-            "Account created. Check your email to finish signing in. We’ll continue automatically when verification is complete."
-        );
-
-
-        setButtonBusy(
-            document.getElementById(
-                "createAccountButton"
-            ),
-            true,
-            "Waiting for Email Verification..."
+            "signInMessage",
+            "Account created. Check your email and click the verification link. We’ll continue automatically once your email is verified."
         );
 
     } else {
 
-        showSignInPanelWithoutFocus();
-
-
         setText(
             "signInMessage",
-            "Check your email to finish signing in. This page will continue automatically once your email is verified."
-        );
-
-
-        setButtonBusy(
-            document.getElementById(
-                "signInButton"
-            ),
-            true,
-            "Waiting for Verification..."
+            "Check your email and click the verification link. This page will continue automatically once your email is verified."
         );
 
     }
 
 
-    createResendButton();
+    setButtonBusy(
+        document.getElementById(
+            "signInButton"
+        ),
+        true,
+        "Waiting for Verification..."
+    );
 
 
     startVerificationWatch();
@@ -979,11 +889,11 @@ function enterVerificationMode(
 
 /*
 ==================================================
-SIGN IN PANEL WITHOUT RESETTING MESSAGE
+SHOW SIGN IN WITHOUT RESETTING MESSAGE
 ==================================================
 */
 
-function showSignInPanelWithoutFocus() {
+function showSignInPanelWithoutReset() {
 
     const signInPanel =
         document.getElementById(
@@ -1039,6 +949,88 @@ function showSignInPanelWithoutFocus() {
 
 /*
 ==================================================
+VERIFICATION ACTIONS
+==================================================
+*/
+
+function initializeVerificationActions() {
+
+    document
+        .getElementById(
+            "resendVerificationButton"
+        )
+        ?.addEventListener(
+            "click",
+            handleResendVerification
+        );
+
+
+    document
+        .getElementById(
+            "verificationSignOutButton"
+        )
+        ?.addEventListener(
+            "click",
+            handleVerificationSignOut
+        );
+
+}
+
+
+/*
+==================================================
+SHOW VERIFICATION ACTIONS
+==================================================
+*/
+
+function showVerificationActions() {
+
+    const actions =
+        document.getElementById(
+            "verificationActions"
+        );
+
+
+    if (
+        actions
+    ) {
+
+        actions.hidden =
+            false;
+
+    }
+
+}
+
+
+/*
+==================================================
+HIDE VERIFICATION ACTIONS
+==================================================
+*/
+
+function hideVerificationActions() {
+
+    const actions =
+        document.getElementById(
+            "verificationActions"
+        );
+
+
+    if (
+        actions
+    ) {
+
+        actions.hidden =
+            true;
+
+    }
+
+}
+
+
+/*
+==================================================
 VERIFICATION WATCH
 ==================================================
 */
@@ -1054,16 +1046,8 @@ function startVerificationWatch() {
     }
 
 
-    /*
-    Check immediately.
-    */
-
     checkVerificationStatus();
 
-
-    /*
-    Then continue checking quietly.
-    */
 
     verificationTimer =
         window.setInterval(
@@ -1105,7 +1089,7 @@ function stopVerificationWatch() {
 
 /*
 ==================================================
-CHECK VERIFICATION
+CHECK VERIFICATION STATUS
 ==================================================
 */
 
@@ -1134,20 +1118,11 @@ async function checkVerificationStatus() {
             user?.emailVerified
         ) {
 
-            stopVerificationWatch();
-
-
             enterSite();
 
         }
 
     } catch (error) {
-
-        /*
-        Do not interrupt the participant with
-        repeated errors while the background
-        verification check is running.
-        */
 
         console.warn(
             "Background verification check:",
@@ -1166,16 +1141,11 @@ async function checkVerificationStatus() {
 
 /*
 ==================================================
-VERIFY IMMEDIATELY WHEN USER RETURNS
+CHECK WHEN USER RETURNS
 ==================================================
 */
 
 function initializeVerificationEvents() {
-
-    /*
-    If verification happens in another tab,
-    check immediately when the participant returns.
-    */
 
     window.addEventListener(
         "focus",
@@ -1209,76 +1179,6 @@ function initializeVerificationEvents() {
 
         }
     );
-
-}
-
-
-/*
-==================================================
-RESEND VERIFICATION BUTTON
-==================================================
-*/
-
-function createResendButton() {
-
-    if (
-        document.getElementById(
-            "accountResendVerificationButton"
-        )
-    ) {
-
-        return;
-
-    }
-
-
-    const button =
-        document.createElement(
-            "button"
-        );
-
-
-    button.type =
-        "button";
-
-
-    button.id =
-        "accountResendVerificationButton";
-
-
-    button.className =
-        "account-text-button";
-
-
-    button.textContent =
-        "Resend verification email";
-
-
-    button.addEventListener(
-        "click",
-        handleResendVerification
-    );
-
-
-    const message =
-        document.getElementById(
-            "signInMessage"
-        ) ||
-        document.getElementById(
-            "createAccountMessage"
-        );
-
-
-    if (
-        message?.parentElement
-    ) {
-
-        message.parentElement.insertBefore(
-            button,
-            message.nextSibling
-        );
-
-    }
 
 }
 
@@ -1364,6 +1264,12 @@ async function handleResendVerification(
         button.textContent =
             "Resend verification email";
 
+
+        setText(
+            "signInMessage",
+            "Verification email could not be sent. Please try again."
+        );
+
     }
 
 }
@@ -1371,7 +1277,164 @@ async function handleResendVerification(
 
 /*
 ==================================================
-DISABLE SWITCHER DURING VERIFICATION
+SIGN OUT / USE ANOTHER ACCOUNT
+==================================================
+*/
+
+async function handleVerificationSignOut(
+    event
+) {
+
+    const button =
+        event.currentTarget;
+
+
+    if (
+        button.disabled
+    ) {
+
+        return;
+
+    }
+
+
+    button.disabled =
+        true;
+
+
+    button.textContent =
+        "Signing out...";
+
+
+    try {
+
+        stopVerificationWatch();
+
+
+        await signOutPublicUser();
+
+
+        resetVerificationMode();
+
+
+        setText(
+            "signInMessage",
+            "You are signed out. Sign in or create another account."
+        );
+
+
+        document
+            .getElementById(
+                "signInPassword"
+            )
+            ?.focus();
+
+    } catch (error) {
+
+        console.error(
+            "Verification sign-out failed:",
+            error
+        );
+
+
+        button.disabled =
+            false;
+
+
+        button.textContent =
+            "Sign out / Use another account";
+
+    }
+
+}
+
+
+/*
+==================================================
+RESET VERIFICATION MODE
+==================================================
+*/
+
+function resetVerificationMode() {
+
+    stopVerificationWatch();
+
+
+    verificationMode =
+        false;
+
+
+    disableSwitcher(
+        false
+    );
+
+
+    hideVerificationActions();
+
+
+    setButtonBusy(
+        document.getElementById(
+            "signInButton"
+        ),
+        false,
+        "Sign In"
+    );
+
+
+    setButtonBusy(
+        document.getElementById(
+            "createAccountButton"
+        ),
+        false,
+        "Create Account"
+    );
+
+
+    const resendButton =
+        document.getElementById(
+            "resendVerificationButton"
+        );
+
+
+    if (
+        resendButton
+    ) {
+
+        resendButton.disabled =
+            false;
+
+
+        resendButton.textContent =
+            "Resend verification email";
+
+    }
+
+
+    const signOutButton =
+        document.getElementById(
+            "verificationSignOutButton"
+        );
+
+
+    if (
+        signOutButton
+    ) {
+
+        signOutButton.disabled =
+            false;
+
+
+        signOutButton.textContent =
+            "Sign out / Use another account";
+
+    }
+
+}
+
+
+/*
+==================================================
+DISABLE ACCOUNT SWITCHER
 ==================================================
 */
 
@@ -1424,10 +1487,9 @@ function enterSite() {
     stopVerificationWatch();
 
 
-    /*
-    replace() keeps Back from returning the
-    participant to the login screen.
-    */
+    verificationMode =
+        false;
+
 
     window.location.replace(
         HOME_PAGE

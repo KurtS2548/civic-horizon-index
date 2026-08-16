@@ -3,6 +3,18 @@
 CIVIC HORIZON INDEX V2
 POLLS COMMUNITY CONTROLLER
 ==================================================
+
+COMMUNITY POLL SECURITY MODEL
+
+- Signed-in participant required
+- Verified email required for voting
+- Participant eligibility checked before voting
+- Firebase UID-based vote lock determines whether
+  the account has already voted
+- No localStorage/device vote lock
+- Firebase Realtime Database Rules provide the
+  final server-side protection
+==================================================
 */
 
 
@@ -17,7 +29,11 @@ import {
 
 import {
 
-    submitCommunityVote
+    submitCommunityVote,
+
+    hasVotedInCommunityPoll,
+
+    getCommunityPollParticipationMessage
 
 } from "../services/firebase-service.js";
 
@@ -473,10 +489,9 @@ function openCommunityVote(
 
     /*
     ----------------------------------------------
-    ACCOUNT ELIGIBILITY
+    CHECK ACCOUNT + FIREBASE VOTE LOCK
 
-    The form begins disabled and is enabled only
-    after eligibility is confirmed.
+    The form stays disabled until both checks finish.
     ----------------------------------------------
     */
 
@@ -515,29 +530,17 @@ function renderSelectedPoll(
 
     /*
     ----------------------------------------------
-    DEFAULT SAFE STATE
+    SAFE INITIAL STATE
 
-    Do not briefly expose an enabled vote form
-    before account eligibility has been checked.
+    Inputs are disabled until Firebase confirms:
+    - eligibility
+    - account has not already voted
     ----------------------------------------------
     */
 
     disableVoteForm(
         "Checking Voting Access..."
     );
-
-
-    if (
-        hasVotedOnPoll(
-            survey.id
-        )
-    ) {
-
-        lockVoteForm(
-            "You have already voted in this poll on this device."
-        );
-
-    }
 
 }
 
@@ -566,31 +569,17 @@ async function checkVotingAccessForSelectedPoll() {
 
 
     /*
-    Each request receives an ID.
+    ----------------------------------------------
+    STALE REQUEST PROTECTION
 
-    If the participant quickly changes polls,
-    an older asynchronous result cannot enable
-    the wrong poll's controls.
+    If the user switches polls while this check is
+    running, the old result cannot enable the new
+    poll accidentally.
+    ----------------------------------------------
     */
 
     const checkId =
         ++votingAccessCheckId;
-
-
-    if (
-        hasVotedOnPoll(
-            surveyId
-        )
-    ) {
-
-        lockVoteForm(
-            "You have already voted in this poll on this device."
-        );
-
-
-        return;
-
-    }
 
 
     disableVoteForm(
@@ -606,47 +595,35 @@ async function checkVotingAccessForSelectedPoll() {
 
     try {
 
+        /*
+        ----------------------------------------------
+        STEP 1
+        PARTICIPANT ELIGIBILITY
+        ----------------------------------------------
+        */
+
         const eligibility =
             await getCurrentUserVotingEligibility();
 
 
-        /*
-        ----------------------------------------------
-        STALE REQUEST CHECK
-        ----------------------------------------------
-        */
-
         if (
-            checkId !==
-            votingAccessCheckId
-        ) {
-
-            return;
-
-        }
-
-
-        if (
-            !selectedSurvey ||
-            String(
-                selectedSurvey.id
-            ) !==
-            surveyId
-        ) {
-
-            return;
-
-        }
-
-
-        if (
-            hasVotedOnPoll(
+            isStaleVotingCheck(
+                checkId,
                 surveyId
             )
         ) {
 
-            lockVoteForm(
-                "You have already voted in this poll on this device."
+            return;
+
+        }
+
+
+        if (
+            !eligibility?.eligible
+        ) {
+
+            blockIneligibleVoting(
+                eligibility
             );
 
 
@@ -655,13 +632,41 @@ async function checkVotingAccessForSelectedPoll() {
         }
 
 
+        /*
+        ----------------------------------------------
+        STEP 2
+        FIREBASE ACCOUNT VOTE LOCK
+
+        This replaces the old localStorage/device
+        system completely.
+        ----------------------------------------------
+        */
+
+        const alreadyVoted =
+            await hasVotedInCommunityPoll(
+                surveyId
+            );
+
+
         if (
-            eligibility?.eligible
+            isStaleVotingCheck(
+                checkId,
+                surveyId
+            )
         ) {
 
-            enableVoteForm();
+            return;
 
-            clearVoteMessage();
+        }
+
+
+        if (
+            alreadyVoted
+        ) {
+
+            lockVoteForm(
+                "You have already voted in this community poll."
+            );
 
 
             return;
@@ -669,21 +674,29 @@ async function checkVotingAccessForSelectedPoll() {
         }
 
 
-        blockIneligibleVoting(
-            eligibility
-        );
+        /*
+        ----------------------------------------------
+        ELIGIBLE + NO EXISTING FIREBASE LOCK
+        ----------------------------------------------
+        */
+
+        enableVoteForm();
+
+        clearVoteMessage();
 
     } catch (error) {
 
         console.error(
-            "Community poll eligibility check failed:",
+            "Community poll voting access check failed:",
             error
         );
 
 
         if (
-            checkId !==
-            votingAccessCheckId
+            isStaleVotingCheck(
+                checkId,
+                surveyId
+            )
         ) {
 
             return;
@@ -697,11 +710,53 @@ async function checkVotingAccessForSelectedPoll() {
 
 
         showVoteMessage(
-            "Voting access could not be confirmed. Please sign in again.",
+            "Voting access could not be confirmed. Please refresh the page and try again.",
             "error"
         );
 
     }
+
+}
+
+
+/*
+==================================================
+STALE VOTING CHECK
+==================================================
+*/
+
+function isStaleVotingCheck(
+    checkId,
+    surveyId
+) {
+
+    if (
+        checkId !==
+        votingAccessCheckId
+    ) {
+
+        return true;
+
+    }
+
+
+    if (
+        !selectedSurvey
+    ) {
+
+        return true;
+
+    }
+
+
+    return (
+        String(
+            selectedSurvey.id
+        ) !==
+        String(
+            surveyId
+        )
+    );
 
 }
 
@@ -951,107 +1006,6 @@ async function handleVoteFormSubmit(
         );
 
 
-    /*
-    ----------------------------------------------
-    DEVICE CONVENIENCE LOCK
-    ----------------------------------------------
-    */
-
-    if (
-        hasVotedOnPoll(
-            surveyId
-        )
-    ) {
-
-        lockVoteForm(
-            "You have already voted in this poll on this device."
-        );
-
-
-        return;
-
-    }
-
-
-    /*
-    ----------------------------------------------
-    ACCOUNT ELIGIBILITY RE-CHECK
-
-    Never trust only the page-load check.
-    ----------------------------------------------
-    */
-
-    let eligibility;
-
-
-    try {
-
-        eligibility =
-            await getCurrentUserVotingEligibility();
-
-    } catch (error) {
-
-        console.error(
-            "Community poll submit eligibility check failed:",
-            error
-        );
-
-
-        disableVoteForm(
-            "Participation Unavailable"
-        );
-
-
-        showVoteMessage(
-            "Voting access could not be confirmed. Please sign in again.",
-            "error"
-        );
-
-
-        return;
-
-    }
-
-
-    if (
-        !eligibility?.eligible
-    ) {
-
-        blockIneligibleVoting(
-            eligibility
-        );
-
-
-        return;
-
-    }
-
-
-    /*
-    ----------------------------------------------
-    RE-CHECK DEVICE LOCK AFTER ASYNC ELIGIBILITY
-
-    Prevent a second rapid submit from slipping
-    through while the eligibility request ran.
-    ----------------------------------------------
-    */
-
-    if (
-        hasVotedOnPoll(
-            surveyId
-        )
-    ) {
-
-        lockVoteForm(
-            "You have already voted in this poll on this device."
-        );
-
-
-        return;
-
-    }
-
-
     const form =
         event.currentTarget;
 
@@ -1083,6 +1037,12 @@ async function handleVoteFormSubmit(
         );
 
 
+    /*
+    ----------------------------------------------
+    LOCK FORM WHILE CHECKING/SUBMITTING
+    ----------------------------------------------
+    */
+
     setVoteSubmittingState(
         submitButton,
         true
@@ -1093,21 +1053,89 @@ async function handleVoteFormSubmit(
 
 
     showVoteMessage(
-        "Saving your vote...",
+        "Confirming your voting access...",
         "info"
     );
 
 
     try {
 
-        await submitCommunityVote(
-            surveyId,
-            selectedChoice.value
+        /*
+        ----------------------------------------------
+        RE-CHECK ELIGIBILITY AT SUBMISSION
+
+        Never trust only the earlier page check.
+        ----------------------------------------------
+        */
+
+        const eligibility =
+            await getCurrentUserVotingEligibility();
+
+
+        if (
+            !eligibility?.eligible
+        ) {
+
+            blockIneligibleVoting(
+                eligibility
+            );
+
+
+            return;
+
+        }
+
+
+        /*
+        ----------------------------------------------
+        RE-CHECK FIREBASE DUPLICATE LOCK
+
+        This catches refreshes, second tabs, or other
+        browser sessions for the same account.
+        ----------------------------------------------
+        */
+
+        const alreadyVoted =
+            await hasVotedInCommunityPoll(
+                surveyId
+            );
+
+
+        if (
+            alreadyVoted
+        ) {
+
+            lockVoteForm(
+                "You have already voted in this community poll."
+            );
+
+
+            return;
+
+        }
+
+
+        showVoteMessage(
+            "Saving your vote...",
+            "info"
         );
 
 
-        markPollAsVoted(
-            surveyId
+        /*
+        ----------------------------------------------
+        SUBMIT
+
+        firebase-service.js creates:
+        1. private UID vote lock
+        2. anonymous public vote record
+
+        Firebase Rules enforce both.
+        ----------------------------------------------
+        */
+
+        await submitCommunityVote(
+            surveyId,
+            selectedChoice.value
         );
 
 
@@ -1123,6 +1151,32 @@ async function handleVoteFormSubmit(
         );
 
 
+        /*
+        ----------------------------------------------
+        FIREBASE DUPLICATE PROTECTION
+
+        The server may detect a duplicate even if
+        the earlier browser check did not.
+        ----------------------------------------------
+        */
+
+        if (
+            error?.code ===
+            "already-voted-community-poll"
+        ) {
+
+            lockVoteForm(
+                getCommunityPollParticipationMessage(
+                    error
+                )
+            );
+
+
+            return;
+
+        }
+
+
         enableVoteChoiceInputs();
 
 
@@ -1133,8 +1187,9 @@ async function handleVoteFormSubmit(
 
 
         showVoteMessage(
-            error?.message ||
-            "Your vote could not be submitted. Please try again.",
+            getCommunityPollParticipationMessage(
+                error
+            ),
             "error"
         );
 
@@ -1188,33 +1243,41 @@ function getEligibilityMessage(
 
             return "Sign in to participate in Community Polls.";
 
+
         case "emailNotVerified":
 
             return "Verify your email before participating.";
+
 
         case "zipMissing":
 
             return "Add a valid ZIP code to your profile before participating.";
 
+
         case "birthdayMissing":
 
             return "Your birthday is required before participating.";
+
 
         case "underMinimumAge":
 
             return "This account is not eligible to participate.";
 
+
         case "agreementMissing":
 
             return "The participation agreement must be accepted before voting.";
 
+
         case "verificationSyncPending":
 
-            return "Your account verification is still being finalized. Please try again.";
+            return "Your account verification is still being finalized. Please sign out and sign back in once.";
+
 
         case "profileMissing":
 
             return "Your participant profile could not be loaded.";
+
 
         default:
 
@@ -1243,21 +1306,31 @@ function getBlockedButtonText(
 
             return "Sign In Required";
 
+
         case "emailNotVerified":
 
             return "Verification Required";
+
 
         case "zipMissing":
 
             return "ZIP Code Required";
 
+
         case "birthdayMissing":
 
             return "Birthday Required";
 
+
         case "agreementMissing":
 
             return "Agreement Required";
+
+
+        case "verificationSyncPending":
+
+            return "Verification Pending";
+
 
         default:
 
@@ -1270,73 +1343,7 @@ function getBlockedButtonText(
 
 /*
 ==================================================
-ONE-VOTE DEVICE CHECK
-==================================================
-*/
-
-function getVoteStorageKey(
-    surveyId
-) {
-
-    return (
-        `chi-community-poll-voted-${surveyId}`
-    );
-
-}
-
-
-function hasVotedOnPoll(
-    surveyId
-) {
-
-    try {
-
-        return (
-            window.localStorage.getItem(
-                getVoteStorageKey(
-                    surveyId
-                )
-            ) ===
-            "true"
-        );
-
-    } catch (error) {
-
-        return false;
-
-    }
-
-}
-
-
-function markPollAsVoted(
-    surveyId
-) {
-
-    try {
-
-        window.localStorage.setItem(
-            getVoteStorageKey(
-                surveyId
-            ),
-            "true"
-        );
-
-    } catch (error) {
-
-        console.warn(
-            "Community vote could not be stored locally:",
-            error
-        );
-
-    }
-
-}
-
-
-/*
-==================================================
-VOTE FORM STATE
+VOTE SUBMITTING STATE
 ==================================================
 */
 
@@ -1641,8 +1648,8 @@ CLOSE COMMUNITY VOTE
 function closeCommunityVote() {
 
     /*
-    Invalidate any pending account eligibility
-    request for the poll being closed.
+    Invalidate pending eligibility / Firebase lock
+    checks for the poll being closed.
     */
 
     votingAccessCheckId +=
@@ -1904,7 +1911,7 @@ function showVoteMessage(
 
 /*
 ==================================================
-EMPTY / ERROR STATES
+EMPTY STATE
 ==================================================
 */
 
@@ -2206,7 +2213,7 @@ CLEANUP
 export function destroyPollsCommunityController() {
 
     /*
-    Invalidate any pending eligibility request.
+    Invalidate pending async voting checks.
     */
 
     votingAccessCheckId +=
