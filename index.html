@@ -10,7 +10,15 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>Civic Horizon Index</title>
+    <meta
+        name="description"
+        content="Civic Horizon Index"
+    >
+
+    <title>
+        Civic Horizon Index
+    </title>
+
 
     <!--
     ==================================================
@@ -19,37 +27,30 @@
 
     The current production website lives in /v2/.
 
-    This root page immediately routes visitors to
-    the current Civic Horizon Index website.
-
-    window.location.replace() is used so the old
-    landing page does not remain in browser history.
-
-    The meta refresh provides a fallback if
-    JavaScript is unavailable.
+    This page uses one standard JavaScript redirect
+    with a full HTTPS address for better consistency
+    across desktop, iPhone, Android, and in-app
+    browsers.
     ==================================================
     -->
+
 
     <link
         rel="canonical"
         href="https://kurts2548.github.io/civic-horizon-index/v2/"
     >
 
-    <meta
-        http-equiv="refresh"
-        content="0; url=./v2/"
-    >
 
     <script>
 
         /*
         ==============================================
-        IMMEDIATE PRODUCTION ROUTING
+        PRODUCTION ROUTING
         ==============================================
         */
 
         window.location.replace(
-            "./v2/"
+            "https://kurts2548.github.io/civic-horizon-index/v2/"
         );
 
     </script>
@@ -60,8 +61,12 @@
 <body>
 
     <!--
-    This content should only appear if automatic
-    navigation is unavailable.
+    ==================================================
+    FALLBACK CONTENT
+
+    This will only remain visible if the automatic
+    redirect does not happen.
+    ==================================================
     -->
 
     <main>
@@ -75,12 +80,31 @@
         </p>
 
         <p>
-            <a href="./v2/">
-                Continue to Civic Horizon Index
+            If the site does not open automatically,
+            use the link below.
+        </p>
+
+        <p>
+
+            <a
+                href="https://kurts2548.github.io/civic-horizon-index/v2/"
+            >
+                Open Civic Horizon Index
             </a>
+
         </p>
 
     </main>
+
+
+    <noscript>
+
+        <p>
+            JavaScript is turned off.
+            Use the link above to open Civic Horizon Index.
+        </p>
+
+    </noscript>
 
 </body>
 
