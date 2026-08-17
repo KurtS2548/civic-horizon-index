@@ -1,0 +1,618 @@
+/*
+==================================================
+CIVIC HORIZON INDEX V2
+ACADEMY — GOVERNMENT MONEY GUIDE
+COMPACT ACCORDION LAYOUT
+==================================================
+*/
+
+
+.government-money-page {
+    min-height: 65vh;
+    background: #f7f9fb;
+}
+
+
+/*
+==================================================
+HERO
+==================================================
+*/
+
+.government-money-hero {
+    padding: 70px 0 60px;
+    background:
+        linear-gradient(
+            135deg,
+            #071d2f 0%,
+            #0b253d 58%,
+            #174f7f 100%
+        );
+    color: #ffffff;
+}
+
+
+.government-money-hero__container {
+    width: min(
+        980px,
+        calc(100% - 48px)
+    );
+    margin: 0 auto;
+}
+
+
+.government-money-hero h1 {
+    margin: 0;
+    max-width: 860px;
+    color: #ffffff;
+    font-family:
+        "Merriweather",
+        Georgia,
+        serif;
+    font-size:
+        clamp(
+            2.4rem,
+            6vw,
+            3.8rem
+        );
+    line-height: 1.08;
+    letter-spacing: -0.03em;
+}
+
+
+.government-money-hero__intro {
+    max-width: 760px;
+    margin: 18px 0 0;
+    color: #d0e1ed;
+    font-size: 1rem;
+    line-height: 1.75;
+}
+
+
+/*
+==================================================
+SHARED SECTIONS
+==================================================
+*/
+
+.government-money-section {
+    padding: 64px 0;
+    background: #ffffff;
+}
+
+
+.government-money-section--light {
+    background: #f7f9fb;
+}
+
+
+.government-money-section__container {
+    width: min(
+        980px,
+        calc(100% - 48px)
+    );
+    margin: 0 auto;
+}
+
+
+.government-money-section__heading {
+    max-width: 760px;
+    margin-bottom: 28px;
+}
+
+
+.government-money-section__heading h2,
+.government-money-takeaway h2 {
+    margin: 0;
+    color: #102a43;
+    font-family:
+        "Merriweather",
+        Georgia,
+        serif;
+    font-size:
+        clamp(
+            1.8rem,
+            4vw,
+            2.5rem
+        );
+    line-height: 1.25;
+}
+
+
+.government-money-section__heading > p:last-child,
+.government-money-takeaway > p:not(
+    .academy-section-eyebrow
+) {
+    margin: 14px 0 0;
+    color: #627d98;
+    line-height: 1.75;
+}
+
+
+/*
+==================================================
+INTRO CARD
+==================================================
+*/
+
+.government-money-intro-card {
+    padding: 28px;
+    border: 1px solid #d9e2ec;
+    border-radius: 16px;
+    background: #ffffff;
+    box-shadow:
+        0 10px 28px
+        rgba(
+            16,
+            42,
+            67,
+            0.06
+        );
+}
+
+
+.government-money-intro-card h2 {
+    margin: 0;
+    color: #102a43;
+    font-family:
+        "Merriweather",
+        Georgia,
+        serif;
+    font-size:
+        clamp(
+            1.7rem,
+            3vw,
+            2.2rem
+        );
+    line-height: 1.3;
+}
+
+
+.government-money-intro-card p:not(
+    .academy-section-eyebrow
+) {
+    margin: 14px 0 0;
+    color: #486581;
+    line-height: 1.75;
+}
+
+
+/*
+==================================================
+ACCORDION MENU
+==================================================
+*/
+
+.government-money-menu {
+    display: grid;
+    gap: 12px;
+}
+
+
+.government-money-topic {
+    overflow: hidden;
+    border: 1px solid #d9e2ec;
+    border-radius: 14px;
+    background: #ffffff;
+    box-shadow:
+        0 8px 22px
+        rgba(
+            16,
+            42,
+            67,
+            0.04
+        );
+}
+
+
+.government-money-topic__summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    padding: 18px 20px;
+    cursor: pointer;
+    list-style: none;
+}
+
+
+.government-money-topic__summary::-webkit-details-marker {
+    display: none;
+}
+
+
+.government-money-topic__summary > div {
+    display: grid;
+    gap: 4px;
+}
+
+
+.government-money-topic__summary > div > span {
+    color: #1f5f99;
+    font-size: 0.65rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+
+.government-money-topic__summary strong {
+    color: #102a43;
+    font-family:
+        "Merriweather",
+        Georgia,
+        serif;
+    font-size: 1rem;
+    line-height: 1.35;
+}
+
+
+.government-money-topic__icon {
+    display: grid;
+    place-items: center;
+    flex: 0 0 auto;
+    width: 32px;
+    height: 32px;
+    border-radius: 999px;
+    background: #eaf3fb;
+    color: #174f7f;
+    font-size: 1.15rem;
+    font-weight: 800;
+    transition: transform 180ms ease;
+}
+
+
+.government-money-topic[open]
+.government-money-topic__icon {
+    transform: rotate(45deg);
+}
+
+
+/*
+==================================================
+OPEN TOPIC CONTENT
+==================================================
+*/
+
+.government-money-topic__content {
+    padding: 20px;
+    border-top: 1px solid #e5ecf2;
+}
+
+
+.government-money-topic__content h3 {
+    margin: 0;
+    color: #102a43;
+    font-family:
+        "Merriweather",
+        Georgia,
+        serif;
+    font-size: 1.08rem;
+    line-height: 1.4;
+}
+
+
+.government-money-topic__content > p {
+    margin: 12px 0 0;
+    color: #486581;
+    font-size: 0.86rem;
+    line-height: 1.75;
+}
+
+
+/*
+==================================================
+LISTS
+==================================================
+*/
+
+.government-money-list {
+    display: grid;
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(0, 1fr)
+        );
+    gap: 10px;
+    margin-top: 18px;
+}
+
+
+.government-money-list > div {
+    padding: 11px 13px;
+    border: 1px solid #e5ecf2;
+    border-radius: 9px;
+    background: #f8fafc;
+    color: #486581;
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+
+/*
+==================================================
+EXAMPLE / NOTE BOXES
+==================================================
+*/
+
+.government-money-example,
+.government-money-note {
+    margin-top: 16px;
+    padding: 16px 18px;
+    border-radius: 10px;
+}
+
+
+.government-money-example {
+    border: 1px solid #d9e2ec;
+    background: #f8fafc;
+}
+
+
+.government-money-note {
+    border: 1px solid #9fbdd4;
+    background: #eaf3fb;
+}
+
+
+.government-money-example strong,
+.government-money-note strong {
+    color: #102a43;
+    font-size: 0.78rem;
+}
+
+
+.government-money-example p,
+.government-money-note p {
+    margin: 8px 0 0;
+    color: #486581;
+    font-size: 0.82rem;
+    line-height: 1.7;
+}
+
+
+/*
+==================================================
+CURRENT DATA CARD
+==================================================
+*/
+
+.government-money-data-card {
+    padding: 26px;
+    border: 1px solid #d9e2ec;
+    border-radius: 16px;
+    background: #ffffff;
+    box-shadow:
+        0 10px 28px
+        rgba(
+            16,
+            42,
+            67,
+            0.05
+        );
+}
+
+
+.government-money-data-card > span {
+    display: block;
+    color: #1f5f99;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+
+.government-money-data-grid {
+    display: grid;
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(0, 1fr)
+        );
+    gap: 14px;
+    margin-top: 18px;
+}
+
+
+.government-money-data-grid > div {
+    padding: 18px;
+    border: 1px solid #e5ecf2;
+    border-radius: 10px;
+    background: #f8fafc;
+}
+
+
+.government-money-data-grid strong {
+    display: block;
+    color: #102a43;
+    font-family:
+        "Merriweather",
+        Georgia,
+        serif;
+    font-size: 1.25rem;
+}
+
+
+.government-money-data-grid p {
+    margin: 8px 0 0;
+    color: #627d98;
+    font-size: 0.8rem;
+    line-height: 1.6;
+}
+
+
+/*
+==================================================
+FACT GRID
+==================================================
+*/
+
+.government-money-fact-grid {
+    display: grid;
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(0, 1fr)
+        );
+    gap: 12px;
+}
+
+
+.government-money-fact-grid > div {
+    padding: 16px;
+    border: 1px solid #e5ecf2;
+    border-radius: 10px;
+    background: #f8fafc;
+}
+
+
+.government-money-fact-grid strong {
+    display: block;
+    color: #1f5f99;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+}
+
+
+.government-money-fact-grid p {
+    margin: 8px 0 0;
+    color: #486581;
+    font-size: 0.82rem;
+    line-height: 1.65;
+}
+
+
+/*
+==================================================
+SOURCE LINKS
+==================================================
+*/
+
+.government-money-source-link {
+    display: inline-flex;
+    align-items: center;
+    margin-top: 14px;
+    color: #1f5f99;
+    font-size: 0.8rem;
+    font-weight: 800;
+    text-decoration: none;
+}
+
+
+.government-money-source-link:hover,
+.government-money-source-link:focus-visible {
+    text-decoration: underline;
+    outline: none;
+}
+
+
+/*
+==================================================
+FINAL TAKEAWAY
+==================================================
+*/
+
+.government-money-takeaway {
+    padding: 28px;
+    border: 1px solid #9fbdd4;
+    border-radius: 16px;
+    background: #eaf3fb;
+}
+
+
+.government-money-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 22px;
+}
+
+
+/*
+==================================================
+HOVER / FOCUS
+==================================================
+*/
+
+.government-money-topic__summary:hover {
+    background: #f8fafc;
+}
+
+
+.government-money-topic__summary:focus-visible {
+    outline: 3px solid rgba(31, 95, 153, 0.25);
+    outline-offset: -3px;
+}
+
+
+/*
+==================================================
+RESPONSIVE
+==================================================
+*/
+
+@media (
+    max-width: 760px
+) {
+
+    .government-money-list,
+    .government-money-data-grid,
+    .government-money-fact-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+
+@media (
+    max-width: 600px
+) {
+
+    .government-money-hero {
+        padding: 58px 0 52px;
+    }
+
+
+    .government-money-hero__container,
+    .government-money-section__container {
+        width: min(
+            980px,
+            calc(100% - 32px)
+        );
+    }
+
+
+    .government-money-section {
+        padding: 52px 0;
+    }
+
+
+    .government-money-intro-card,
+    .government-money-data-card,
+    .government-money-takeaway {
+        padding: 22px 18px;
+    }
+
+
+    .government-money-topic__summary {
+        padding: 16px 18px;
+    }
+
+
+    .government-money-topic__content {
+        padding: 18px;
+    }
+
+
+    .government-money-hero h1 {
+        font-size:
+            clamp(
+                2.15rem,
+                11vw,
+                3.1rem
+            );
+    }
+
+}

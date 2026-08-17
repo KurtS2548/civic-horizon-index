@@ -5,7 +5,11 @@ PRESIDENT SIMULATION
 BRANCHING EXECUTIVE LEADERSHIP ENGINE
 ==================================================
 */
+import {
 
+    saveSimulationCompletion
+
+} from "./services/simulation-progress-service.js";
 
 /*
 ==================================================
@@ -4567,7 +4571,7 @@ SHOW FINAL RESULTS
 ==================================================
 */
 
-function showFinalResults() {
+async function showFinalResults() {
 
     finalizeAdministrationOutcome();
 
@@ -4659,7 +4663,35 @@ function showFinalResults() {
     saveSimulationRecord(
         grade
     );
+    
+    /*
+    ----------------------------------------------
+    ACCOUNT-BASED SIMULATION RECORD
+    ----------------------------------------------
+    */
 
+    try {
+
+        await saveSimulationCompletion(
+            "president",
+            {
+
+                grade,
+
+                result:
+                    gameState.administrationOutcome
+
+            }
+        );
+
+    } catch (error) {
+
+        console.warn(
+            "President simulation account progress could not be saved:",
+            error
+        );
+
+    }
 
     setText(
         "presidentTermProgress",

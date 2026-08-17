@@ -5,7 +5,11 @@ SUPREME COURT SIMULATION
 BRANCHING JUDICIAL ENGINE
 ==================================================
 */
+import {
 
+    saveSimulationCompletion
+
+} from "./services/simulation-progress-service.js";
 
 /*
 ==================================================
@@ -3930,7 +3934,7 @@ SHOW FINAL RESULTS
 ==================================================
 */
 
-function showFinalResults() {
+async function showFinalResults() {
 
     finalizeJudicialOutcome();
 
@@ -4022,6 +4026,35 @@ function showFinalResults() {
     saveSimulationRecord(
         grade
     );
+
+        /*
+    ----------------------------------------------
+    ACCOUNT-BASED SIMULATION RECORD
+    ----------------------------------------------
+    */
+
+    try {
+
+        await saveSimulationCompletion(
+            "court",
+            {
+
+                grade,
+
+                result:
+                    gameState.judicialOutcome
+
+            }
+        );
+
+    } catch (error) {
+
+        console.warn(
+            "Supreme Court simulation account progress could not be saved:",
+            error
+        );
+
+    }
 
 
     setText(

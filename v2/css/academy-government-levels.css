@@ -1,0 +1,495 @@
+/*
+==================================================
+CIVIC HORIZON INDEX V2
+ACADEMY — GOVERNMENT LEVELS GUIDE
+COMPACT ACCORDION LAYOUT
+==================================================
+*/
+
+
+.government-levels-page {
+    min-height: 65vh;
+    background: #f7f9fb;
+}
+
+
+/*
+==================================================
+HERO
+==================================================
+*/
+
+.government-levels-hero {
+    padding: 70px 0 60px;
+    background:
+        linear-gradient(
+            135deg,
+            #071d2f 0%,
+            #0b253d 58%,
+            #174f7f 100%
+        );
+    color: #ffffff;
+}
+
+
+.government-levels-hero__container {
+    width: min(
+        980px,
+        calc(100% - 48px)
+    );
+    margin: 0 auto;
+}
+
+
+.government-levels-hero h1 {
+    margin: 0;
+    max-width: 860px;
+    color: #ffffff;
+    font-family:
+        "Merriweather",
+        Georgia,
+        serif;
+    font-size:
+        clamp(
+            2.4rem,
+            6vw,
+            3.8rem
+        );
+    line-height: 1.08;
+    letter-spacing: -0.03em;
+}
+
+
+.government-levels-hero__intro {
+    max-width: 760px;
+    margin: 18px 0 0;
+    color: #d0e1ed;
+    font-size: 1rem;
+    line-height: 1.75;
+}
+
+
+/*
+==================================================
+SHARED SECTIONS
+==================================================
+*/
+
+.government-levels-section {
+    padding: 64px 0;
+    background: #ffffff;
+}
+
+
+.government-levels-section--light {
+    background: #f7f9fb;
+}
+
+
+.government-levels-section__container {
+    width: min(
+        980px,
+        calc(100% - 48px)
+    );
+    margin: 0 auto;
+}
+
+
+.government-levels-section__heading {
+    max-width: 760px;
+    margin-bottom: 28px;
+}
+
+
+.government-levels-section__heading h2,
+.government-levels-takeaway h2 {
+    margin: 0;
+    color: #102a43;
+    font-family:
+        "Merriweather",
+        Georgia,
+        serif;
+    font-size:
+        clamp(
+            1.8rem,
+            4vw,
+            2.5rem
+        );
+    line-height: 1.25;
+}
+
+
+.government-levels-section__heading > p:last-child {
+    margin: 14px 0 0;
+    color: #627d98;
+    line-height: 1.75;
+}
+
+
+/*
+==================================================
+INTRO CARD
+==================================================
+*/
+
+.government-levels-intro-card {
+    padding: 28px;
+    border: 1px solid #d9e2ec;
+    border-radius: 16px;
+    background: #ffffff;
+    box-shadow:
+        0 10px 28px
+        rgba(
+            16,
+            42,
+            67,
+            0.06
+        );
+}
+
+
+.government-levels-intro-card h2 {
+    margin: 0;
+    color: #102a43;
+    font-family:
+        "Merriweather",
+        Georgia,
+        serif;
+    font-size:
+        clamp(
+            1.7rem,
+            3vw,
+            2.2rem
+        );
+    line-height: 1.3;
+}
+
+
+.government-levels-intro-card p:not(
+    .academy-section-eyebrow
+) {
+    margin: 14px 0 0;
+    color: #486581;
+    line-height: 1.75;
+}
+
+
+/*
+==================================================
+ACCORDION MENU
+==================================================
+*/
+
+.government-levels-menu {
+    display: grid;
+    gap: 12px;
+}
+
+
+.government-levels-topic {
+    overflow: hidden;
+    border: 1px solid #d9e2ec;
+    border-radius: 14px;
+    background: #ffffff;
+    box-shadow:
+        0 8px 22px
+        rgba(
+            16,
+            42,
+            67,
+            0.04
+        );
+}
+
+
+.government-levels-topic__summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    padding: 18px 20px;
+    cursor: pointer;
+    list-style: none;
+}
+
+
+.government-levels-topic__summary::-webkit-details-marker {
+    display: none;
+}
+
+
+.government-levels-topic__summary > div {
+    display: grid;
+    gap: 4px;
+}
+
+
+.government-levels-topic__summary > div > span {
+    color: #1f5f99;
+    font-size: 0.65rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+
+.government-levels-topic__summary strong {
+    color: #102a43;
+    font-family:
+        "Merriweather",
+        Georgia,
+        serif;
+    font-size: 1rem;
+    line-height: 1.35;
+}
+
+
+.government-levels-topic__icon {
+    display: grid;
+    place-items: center;
+    flex: 0 0 auto;
+    width: 32px;
+    height: 32px;
+    border-radius: 999px;
+    background: #eaf3fb;
+    color: #174f7f;
+    font-size: 1.15rem;
+    font-weight: 800;
+    transition: transform 180ms ease;
+}
+
+
+.government-levels-topic[open]
+.government-levels-topic__icon {
+    transform: rotate(45deg);
+}
+
+
+/*
+==================================================
+OPEN TOPIC CONTENT
+==================================================
+*/
+
+.government-levels-topic__content {
+    padding: 20px;
+    border-top: 1px solid #e5ecf2;
+}
+
+
+.government-levels-topic__content h3 {
+    margin: 0;
+    color: #102a43;
+    font-family:
+        "Merriweather",
+        Georgia,
+        serif;
+    font-size: 1.08rem;
+    line-height: 1.4;
+}
+
+
+.government-levels-topic__content > p {
+    margin: 12px 0 0;
+    color: #486581;
+    font-size: 0.86rem;
+    line-height: 1.75;
+}
+
+
+/*
+==================================================
+RESPONSIBILITY LIST
+==================================================
+*/
+
+.government-levels-list {
+    display: grid;
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(0, 1fr)
+        );
+    gap: 10px;
+    margin-top: 18px;
+}
+
+
+.government-levels-list > div {
+    padding: 11px 13px;
+    border: 1px solid #e5ecf2;
+    border-radius: 9px;
+    background: #f8fafc;
+    color: #486581;
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+
+/*
+==================================================
+EXAMPLE / NOTE BOXES
+==================================================
+*/
+
+.government-levels-example,
+.government-levels-note {
+    margin-top: 16px;
+    padding: 16px 18px;
+    border-radius: 10px;
+}
+
+
+.government-levels-example {
+    border: 1px solid #d9e2ec;
+    background: #f8fafc;
+}
+
+
+.government-levels-note {
+    border: 1px solid #9fbdd4;
+    background: #eaf3fb;
+}
+
+
+.government-levels-example strong,
+.government-levels-note strong {
+    color: #102a43;
+    font-size: 0.78rem;
+}
+
+
+.government-levels-example p,
+.government-levels-note p {
+    margin: 8px 0 0;
+    color: #486581;
+    font-size: 0.82rem;
+    line-height: 1.7;
+}
+
+
+/*
+==================================================
+FINAL TAKEAWAY
+==================================================
+*/
+
+.government-levels-takeaway {
+    padding: 28px;
+    border: 1px solid #9fbdd4;
+    border-radius: 16px;
+    background: #eaf3fb;
+}
+
+
+.government-levels-takeaway > p:not(
+    .academy-section-eyebrow
+) {
+    margin: 14px 0 0;
+    color: #486581;
+    line-height: 1.75;
+}
+
+
+.government-levels-takeaway__question {
+    color: #102a43 !important;
+    font-family:
+        "Merriweather",
+        Georgia,
+        serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+}
+
+
+.government-levels-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 22px;
+}
+
+
+/*
+==================================================
+HOVER / FOCUS
+==================================================
+*/
+
+.government-levels-topic__summary:hover {
+    background: #f8fafc;
+}
+
+
+.government-levels-topic__summary:focus-visible {
+    outline: 3px solid rgba(31, 95, 153, 0.25);
+    outline-offset: -3px;
+}
+
+
+/*
+==================================================
+RESPONSIVE
+==================================================
+*/
+
+@media (
+    max-width: 700px
+) {
+
+    .government-levels-list {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+
+@media (
+    max-width: 600px
+) {
+
+    .government-levels-hero {
+        padding: 58px 0 52px;
+    }
+
+
+    .government-levels-hero__container,
+    .government-levels-section__container {
+        width: min(
+            980px,
+            calc(100% - 32px)
+        );
+    }
+
+
+    .government-levels-section {
+        padding: 52px 0;
+    }
+
+
+    .government-levels-intro-card,
+    .government-levels-takeaway {
+        padding: 22px 18px;
+    }
+
+
+    .government-levels-topic__summary {
+        padding: 16px 18px;
+    }
+
+
+    .government-levels-topic__content {
+        padding: 18px;
+    }
+
+
+    .government-levels-hero h1 {
+        font-size:
+            clamp(
+                2.15rem,
+                11vw,
+                3.1rem
+            );
+    }
+
+}

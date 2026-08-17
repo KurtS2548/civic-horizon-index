@@ -181,6 +181,11 @@ async function initializeAcademyPage() {
         ),
 
         loadComponent(
+            "academyGovernmentContainer",
+            "components/academy-government.html"
+        ),
+
+        loadComponent(
             "academyPurposeContainer",
             "components/academy-purpose.html"
         ),

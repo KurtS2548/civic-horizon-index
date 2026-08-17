@@ -6,6 +6,12 @@ BRANCHING LEGISLATIVE ENGINE
 ==================================================
 */
 
+import {
+
+    saveSimulationCompletion
+
+} from "./services/simulation-progress-service.js";
+
 
 /*
 ==================================================
@@ -787,8 +793,6 @@ const congressScenarios = [
     }
 
 ];
-
-
 /*
 ==================================================
 BRANCH SCENARIOS
@@ -1391,13 +1395,13 @@ const outcomeText =
     document.getElementById(
         "congressOutcomeText"
     );
-
-
-const newsFeed =
+    const newsFeed =
     document.getElementById(
         "congressNewsFeed"
     );
-    /*
+
+
+/*
 ==================================================
 HOUSE FAILURE RECOVERY
 ==================================================
@@ -2083,8 +2087,7 @@ const senateRecoveryScenario = {
             headline:
                 "Smaller infrastructure compromise revives stalled legislation."
         },
-
-        {
+                {
             text:
                 "Ask House leadership to pressure the Senate publicly",
 
@@ -2794,8 +2797,7 @@ const accountabilitySuccessScenario = {
 
             coalition:
                 -1,
-
-            evidence:
+                            evidence:
                 0,
 
             credibility:
@@ -3037,6 +3039,8 @@ const accountabilityFailureScenario = {
     ]
 
 };
+
+
 /*
 ==================================================
 UTILITY HELPERS
@@ -3492,7 +3496,7 @@ function renderScenario() {
             .join("");
 
 
-    choiceContainer
+        choiceContainer
         .querySelectorAll(
             ".congress-choice-button"
         )
@@ -3511,8 +3515,6 @@ function renderScenario() {
     updateDashboard();
 
 }
-
-
 /*
 ==================================================
 HANDLE CHOICE
@@ -4196,6 +4198,7 @@ function preparePostSenateBranch() {
         return;
 
     }
+        
 
 
     gameState.finalBillStatus =
@@ -4532,6 +4535,8 @@ function continueSimulation() {
     );
 
 }
+
+
 /*
 ==================================================
 FINAL LEGISLATIVE OUTCOME
@@ -4892,9 +4897,8 @@ SHOW FINAL RESULTS
 ==================================================
 */
 
-function showFinalResults() {
-
-    finalizeLegislativeOutcome();
+async function showFinalResults() {
+        finalizeLegislativeOutcome();
 
 
     if (
@@ -5075,6 +5079,42 @@ function showFinalResults() {
 
         console.warn(
             "Congress simulation result could not be stored:",
+            error
+        );
+
+    }
+
+
+    /*
+    ----------------------------------------------
+    ACCOUNT-BASED SIMULATION RECORD
+
+    Firebase stores the participant's permanent
+    Congress simulation history.
+
+    Local storage above remains in place as a
+    fallback for the existing Simulation Center.
+    ----------------------------------------------
+    */
+
+    try {
+
+        await saveSimulationCompletion(
+            "congress",
+            {
+
+                grade,
+
+                result:
+                    gameState.legislativeOutcome
+
+            }
+        );
+
+    } catch (error) {
+
+        console.warn(
+            "Congress simulation account progress could not be saved:",
             error
         );
 
@@ -5300,7 +5340,6 @@ function resetSimulation() {
 
     updateDashboard();
 
-
     renderScenario();
 
 
@@ -5376,7 +5415,6 @@ function startSimulation() {
 
 
     updateDashboard();
-
 
     renderScenario();
 

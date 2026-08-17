@@ -5,7 +5,11 @@ CAMPAIGN TRAIL SIMULATION
 BRANCHING CAMPAIGN ENGINE
 ==================================================
 */
+import {
 
+    saveSimulationCompletion
+
+} from "./services/simulation-progress-service.js";
 
 /*
 ==================================================
@@ -4602,7 +4606,7 @@ SHOW FINAL RESULTS
 ==================================================
 */
 
-function showFinalResults() {
+async function showFinalResults() {
 
     finalizeCampaignOutcome();
 
@@ -4701,6 +4705,34 @@ function showFinalResults() {
         grade
     );
 
+        /*
+    ----------------------------------------------
+    ACCOUNT-BASED SIMULATION RECORD
+    ----------------------------------------------
+    */
+
+    try {
+
+        await saveSimulationCompletion(
+            "campaign",
+            {
+
+                grade,
+
+                result:
+                    gameState.campaignOutcome
+
+            }
+        );
+
+    } catch (error) {
+
+        console.warn(
+            "Campaign Trail simulation account progress could not be saved:",
+            error
+        );
+
+    }
 
     setText(
         "campaignTermProgress",

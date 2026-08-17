@@ -5,7 +5,11 @@ MAYOR SIMULATION
 BRANCHING CITY LEADERSHIP ENGINE
 ==================================================
 */
+import {
 
+    saveSimulationCompletion
+
+} from "./services/simulation-progress-service.js";
 
 /*
 ==================================================
@@ -4498,7 +4502,7 @@ SHOW FINAL RESULTS
 ==================================================
 */
 
-function showFinalResults() {
+async function showFinalResults() {
 
     finalizeAdministrationOutcome();
 
@@ -4591,6 +4595,34 @@ function showFinalResults() {
         grade
     );
 
+        /*
+    ----------------------------------------------
+    ACCOUNT-BASED SIMULATION RECORD
+    ----------------------------------------------
+    */
+
+    try {
+
+        await saveSimulationCompletion(
+            "mayor",
+            {
+
+                grade,
+
+                result:
+                    gameState.administrationOutcome
+
+            }
+        );
+
+    } catch (error) {
+
+        console.warn(
+            "Mayor simulation account progress could not be saved:",
+            error
+        );
+
+    }
 
     setText(
         "mayorTermProgress",
