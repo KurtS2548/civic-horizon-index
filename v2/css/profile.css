@@ -651,3 +651,241 @@
     font-size: 0.7rem;
     line-height: 1.5;
 }
+/* ==================================================
+   POLL SUGGESTION
+================================================== */
+
+.profile-poll-suggestion-card {
+    display: grid;
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+    gap: 32px;
+    padding: 24px;
+    border: 1px solid #d9e2ec;
+    border-radius: 14px;
+    background: #ffffff;
+    box-shadow: 0 8px 24px rgba(16, 42, 67, 0.05);
+}
+
+
+.profile-poll-suggestion-intro {
+    padding: 4px 10px 4px 2px;
+}
+
+
+.profile-poll-suggestion-intro h3 {
+    margin: 0;
+    color: #102a43;
+    font-family: "Merriweather", Georgia, serif;
+    font-size: 1.05rem;
+    line-height: 1.45;
+}
+
+
+.profile-poll-suggestion-intro p {
+    margin: 12px 0 0;
+    color: #627d98;
+    font-size: 0.72rem;
+    line-height: 1.65;
+}
+
+
+.profile-poll-suggestion-intro::after {
+    display: block;
+    width: 48px;
+    height: 3px;
+    margin-top: 20px;
+    border-radius: 999px;
+    background: #efc75d;
+    content: "";
+}
+
+
+/* ==================================================
+   POLL SUGGESTION FORM
+================================================== */
+
+.profile-poll-suggestion-form {
+    display: grid;
+    gap: 15px;
+    padding: 20px;
+    border: 1px solid #e1e8ef;
+    border-radius: 12px;
+    background: #f8fafc;
+}
+
+
+.profile-poll-suggestion-field {
+    display: grid;
+    gap: 6px;
+}
+
+
+.profile-poll-suggestion-field label {
+    color: #334e68;
+    font-size: 0.68rem;
+    font-weight: 800;
+}
+
+
+.profile-poll-suggestion-field input,
+.profile-poll-suggestion-field select,
+.profile-poll-suggestion-field textarea {
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid #bcccdc;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #102a43;
+    font-family: "Inter", sans-serif;
+    font-size: 0.76rem;
+    transition:
+        border-color 160ms ease,
+        box-shadow 160ms ease;
+}
+
+
+.profile-poll-suggestion-field input,
+.profile-poll-suggestion-field select {
+    min-height: 42px;
+    padding: 9px 11px;
+}
+
+
+.profile-poll-suggestion-field textarea {
+    min-height: 105px;
+    padding: 11px;
+    line-height: 1.55;
+    resize: vertical;
+}
+
+
+.profile-poll-suggestion-field input::placeholder,
+.profile-poll-suggestion-field textarea::placeholder {
+    color: #9fb3c8;
+}
+
+
+.profile-poll-suggestion-field input:focus,
+.profile-poll-suggestion-field select:focus,
+.profile-poll-suggestion-field textarea:focus {
+    border-color: #1f5f99;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(31, 95, 153, 0.1);
+}
+
+
+/* ==================================================
+   POLL SUGGESTION BUTTON
+================================================== */
+
+.profile-poll-suggestion-form .account-button--primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    justify-self: start;
+    min-height: 42px;
+    padding: 10px 18px;
+    border: 0;
+    border-radius: 8px;
+    background: #efc75d;
+    color: #102a43;
+    font-family: "Inter", sans-serif;
+    font-size: 0.76rem;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 7px 17px rgba(212, 170, 55, 0.16);
+    transition:
+        background-color 180ms ease,
+        transform 180ms ease,
+        opacity 180ms ease;
+}
+
+
+.profile-poll-suggestion-form .account-button--primary:hover,
+.profile-poll-suggestion-form .account-button--primary:focus-visible {
+    background: #e4b947;
+    outline: none;
+    transform: translateY(-1px);
+}
+
+
+.profile-poll-suggestion-form .account-button--primary:disabled {
+    cursor: not-allowed;
+    opacity: 0.65;
+    transform: none;
+}
+
+
+/* ==================================================
+   POLL SUGGESTION MESSAGE / NOTE
+================================================== */
+
+#profilePollSuggestionMessage {
+    min-height: 18px;
+    margin: 0;
+    font-size: 0.7rem;
+    font-weight: 700;
+    line-height: 1.5;
+}
+
+
+#profilePollSuggestionMessage[data-message-type="success"] {
+    color: #237a57;
+}
+
+
+#profilePollSuggestionMessage[data-message-type="error"] {
+    color: #b42318;
+}
+
+
+#profilePollSuggestionMessage[data-message-type="info"] {
+    color: #1f5f99;
+}
+
+
+.profile-poll-suggestion-note {
+    margin: 0;
+    color: #829ab1;
+    font-size: 0.63rem;
+    line-height: 1.55;
+}
+
+
+/* ==================================================
+   POLL SUGGESTION RESPONSIVE
+================================================== */
+
+@media (max-width: 800px) {
+
+    .profile-poll-suggestion-card {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+}
+
+
+@media (max-width: 520px) {
+
+    .profile-poll-suggestion-card {
+        padding: 14px;
+    }
+
+
+    .profile-poll-suggestion-intro {
+        padding: 0;
+    }
+
+
+    .profile-poll-suggestion-form {
+        padding: 14px;
+    }
+
+
+    .profile-poll-suggestion-form .account-button--primary {
+        width: 100%;
+        justify-self: stretch;
+    }
+
+}

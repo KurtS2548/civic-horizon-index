@@ -379,58 +379,58 @@
 
 
                 <div
-    id="profileCivicPulseHistory"
-    class="profile-history-card"
->
+                    id="profileCivicPulseHistory"
+                    class="profile-history-card"
+                >
 
-    <div class="profile-empty-state">
+                    <div class="profile-empty-state">
 
-        Civic Pulse personal history will appear here
-        after you participate in the trackers.
+                        Civic Pulse personal history will appear here
+                        after you participate in the trackers.
 
-    </div>
+                    </div>
 
-</div>
-
-
-<div
-    id="profileConfidenceTrendCard"
-    class="profile-chart-card profile-confidence-trend"
-    hidden
->
-
-    <div class="profile-confidence-trend__heading">
-
-        <div>
-
-            <p class="profile-dashboard__eyebrow">
-                National Confidence Trend
-            </p>
-
-            <h3>
-                How your confidence has changed
-            </h3>
-
-            <p>
-                Your average confidence across government,
-                Congress, courts, the economy, media, and
-                democracy.
-            </p>
-
-        </div>
-
-    </div>
+                </div>
 
 
-    <div class="profile-chart-container">
+                <div
+                    id="profileConfidenceTrendCard"
+                    class="profile-chart-card profile-confidence-trend"
+                    hidden
+                >
 
-        <canvas
-            id="profileConfidenceTrendChart"
-        ></canvas>
+                    <div class="profile-confidence-trend__heading">
 
-    </div>
+                        <div>
 
-</div>
+                            <p class="profile-dashboard__eyebrow">
+                                National Confidence Trend
+                            </p>
+
+                            <h3>
+                                How your confidence has changed
+                            </h3>
+
+                            <p>
+                                Your average confidence across government,
+                                Congress, courts, the economy, media, and
+                                democracy.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="profile-chart-container">
+
+                        <canvas
+                            id="profileConfidenceTrendChart"
+                        ></canvas>
+
+                    </div>
+
+                </div>
 
             </div>
 
@@ -472,6 +472,193 @@
                         Your recent polls and surveys will appear here.
 
                     </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ==================================================
+             SUGGEST A POLL
+        ================================================== -->
+
+        <section
+            class="profile-dashboard__section profile-dashboard__section--alternate"
+            id="suggest-poll"
+        >
+
+            <div class="profile-dashboard__container">
+
+                <div class="profile-section-heading">
+
+                    <div>
+
+                        <p class="profile-dashboard__eyebrow">
+                            Help Shape the Conversation
+                        </p>
+
+                        <h2>
+                            Suggest a Poll
+                        </h2>
+
+                        <p>
+                            Have an issue you believe Civic Horizon
+                            participants should have the opportunity to
+                            weigh in on? Submit it here for review.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="profile-poll-suggestion-card">
+
+                    <div class="profile-poll-suggestion-intro">
+
+                        <h3>
+                            Your suggestion can help identify issues
+                            worth asking about
+                        </h3>
+
+                        <p>
+                            Suggestions do not automatically become polls.
+                            Each submission is reviewed for relevance,
+                            neutrality, clarity, fairness, and duplication
+                            before it can be considered for publication.
+                        </p>
+
+                        <p>
+                            Civic Horizon may rewrite a proposed question
+                            to make it more neutral, accurate, or easy to
+                            understand.
+                        </p>
+
+                    </div>
+
+
+                    <form
+                        id="profilePollSuggestionForm"
+                        class="profile-poll-suggestion-form"
+                        novalidate
+                    >
+
+                        <div class="profile-poll-suggestion-field">
+
+                            <label for="profileSuggestionLevel">
+                                Level
+                            </label>
+
+                            <select
+                                id="profileSuggestionLevel"
+                                name="level"
+                                required
+                            >
+
+                                <option value="">
+                                    Select one
+                                </option>
+
+                                <option value="national">
+                                    National
+                                </option>
+
+                                <option value="state">
+                                    State
+                                </option>
+
+                                <option value="local">
+                                    Local
+                                </option>
+
+                                <option value="community">
+                                    Community
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="profile-poll-suggestion-field">
+
+                            <label for="profileSuggestionTopic">
+                                Topic or issue
+                            </label>
+
+                            <input
+                                type="text"
+                                id="profileSuggestionTopic"
+                                name="topic"
+                                maxlength="150"
+                                placeholder="Example: Housing affordability"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="profile-poll-suggestion-field">
+
+                            <label for="profileSuggestionQuestion">
+                                What question should Civic Horizon consider?
+                            </label>
+
+                            <textarea
+                                id="profileSuggestionQuestion"
+                                name="question"
+                                rows="4"
+                                maxlength="500"
+                                placeholder="Write the question or idea you would like Civic Horizon to consider."
+                                required
+                            ></textarea>
+
+                        </div>
+
+
+                        <div class="profile-poll-suggestion-field">
+
+                            <label for="profileSuggestionReason">
+                                Why do you think this issue should be polled?
+                            </label>
+
+                            <textarea
+                                id="profileSuggestionReason"
+                                name="reason"
+                                rows="4"
+                                maxlength="750"
+                                placeholder="Briefly explain why you believe this issue matters."
+                                required
+                            ></textarea>
+
+                        </div>
+
+
+                        <div
+                            id="profilePollSuggestionMessage"
+                            class="account-message"
+                            aria-live="polite"
+                        ></div>
+
+
+                        <button
+                            type="submit"
+                            id="profilePollSuggestionButton"
+                            class="account-button account-button--primary"
+                        >
+                            Submit Suggestion
+                        </button>
+
+
+                        <p class="profile-poll-suggestion-note">
+                            Submission does not guarantee publication.
+                            Never include passwords, financial information,
+                            or other sensitive personal information.
+                        </p>
+
+                    </form>
 
                 </div>
 
@@ -637,7 +824,10 @@
         type="module"
         src="js/profile.js"
     ></script>
-
+<script
+    type="module"
+    src="js/profile-poll-suggestions.js"
+></script>
 
     <script
         type="module"

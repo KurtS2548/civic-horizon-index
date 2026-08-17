@@ -8,10 +8,6 @@ MY CIVIC DASHBOARD CONTROLLER
 
 import {
 
-    subscribeToAuthState,
-
-    refreshCurrentUser,
-
     getCurrentUserProfile,
 
     getCurrentUserVotingEligibility,
@@ -23,7 +19,9 @@ import {
 
 import {
 
-    signOutAndExit
+    signOutAndExit,
+
+    getGuardedCurrentUser
 
 } from "./services/auth-guard.js";
 
@@ -207,90 +205,98 @@ AUTH STATE
 
 function initializeAuthState() {
 
-    subscribeToAuthState(
+    /*
+    The site-wide authentication guard is responsible
+    for determining whether the participant is signed in.
 
-        async user => {
+    Profile must not run a second Firebase reload/redirect
+    cycle because temporary refresh failures should not be
+    treated as a real sign-out.
+    */
 
-            currentUser =
-                user;
-
-
-            if (!user) {
-
-                window.location.replace(
-                    "account.html"
-                );
-
-                return;
-
-            }
-
-
-            try {
-
-                const refreshedUser =
-                    await refreshCurrentUser();
-
-
-                if (!refreshedUser) {
-
-                    window.location.replace(
-                        "account.html"
-                    );
-
-                    return;
-
-                }
-
-
-                currentUser =
-                    refreshedUser;
-
-
-                if (
-                    !refreshedUser.emailVerified
-                ) {
-
-                    window.location.replace(
-                        "account.html"
-                    );
-
-                    return;
-
-                }
-
-
-                await renderDashboard();
-
-            } catch (error) {
-
-                console.error(
-                    "Profile initialization failed:",
-                    error
-                );
-
-
-                renderProfileError();
-
-            }
-
-        },
-
-        error => {
-
-            console.error(
-                "Profile auth state error:",
-                error
-            );
-
-
-            window.location.replace(
-                "account.html"
-            );
-
+    document.addEventListener(
+        "civicAuthReady",
+        handleProfileAuthReady,
+        {
+            once:
+                true
         }
-
     );
+
+
+    /*
+    In case the shared guard has already completed before
+    this listener is registered, safely check the currently
+    authenticated user as a fallback.
+    */
+
+    const existingUser =
+        getGuardedCurrentUser();
+
+
+    if (existingUser) {
+
+        handleProfileAuthReady(
+            {
+                detail: {
+                    user:
+                        existingUser
+                }
+            }
+        );
+
+    }
+
+}
+
+
+/*
+==================================================
+PROFILE AUTH READY
+==================================================
+*/
+
+async function handleProfileAuthReady(
+    event
+) {
+
+    const user =
+        event?.detail?.user ||
+        getGuardedCurrentUser();
+
+
+    if (!user) {
+
+        /*
+        Do not redirect from here.
+
+        The shared auth guard owns signed-out redirects.
+        */
+
+        return;
+
+    }
+
+
+    currentUser =
+        user;
+
+
+    try {
+
+        await renderDashboard();
+
+    } catch (error) {
+
+        console.error(
+            "Profile initialization failed:",
+            error
+        );
+
+
+        renderProfileError();
+
+    }
 
 }
 
