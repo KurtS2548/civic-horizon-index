@@ -574,3 +574,17 @@ html.auth-access-granted body {
     }
 
 }
+/* MOBILE DROPDOWN POSITION FIX */
+
+@media (max-width: 600px) {
+
+    .navigation-dropdown {
+        padding-left: 18px;
+        padding-right: 6px;
+    }
+
+    .navigation-dropdown a {
+        padding: 12px 10px;
+    }
+
+}
