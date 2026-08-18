@@ -11,7 +11,147 @@ import {
     saveSimulationCompletion
 
 } from "./services/simulation-progress-service.js";
+/*
+==================================================
+SHARED PAGE COMPONENTS
+==================================================
+*/
 
+async function loadComponent(
+    containerId,
+    componentPath
+) {
+
+    const container =
+        document.getElementById(
+            containerId
+        );
+
+
+    if (!container) {
+
+        return false;
+
+    }
+
+
+    try {
+
+        const response =
+            await fetch(
+                componentPath
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                `Component request failed: ${response.status}`
+            );
+
+        }
+
+
+        container.innerHTML =
+            await response.text();
+
+
+        return true;
+
+    } catch (error) {
+
+        console.error(
+            `Could not load ${componentPath}:`,
+            error
+        );
+
+
+        return false;
+
+    }
+
+}
+
+
+Promise.all([
+
+    loadComponent(
+        "headerContainer",
+        "components/header.html"
+    ),
+
+    loadComponent(
+        "footerContainer",
+        "components/footer.html"
+    )
+
+]).then(
+    () => {
+
+        initializeSharedHeader();
+
+    }
+);
+
+/*
+==================================================
+SHARED HEADER INTERACTION
+==================================================
+*/
+
+function initializeSharedHeader() {
+
+    const menuButton =
+        document.getElementById(
+            "mobileMenuButton"
+        );
+
+
+    const navigation =
+        document.getElementById(
+            "primaryNavigation"
+        );
+
+
+    if (
+        !menuButton ||
+        !navigation
+    ) {
+
+        return;
+
+    }
+
+
+    menuButton.addEventListener(
+        "click",
+        () => {
+
+            const isOpen =
+                navigation.classList.toggle(
+                    "open"
+                );
+
+
+            menuButton.setAttribute(
+                "aria-expanded",
+                String(
+                    isOpen
+                )
+            );
+
+
+            menuButton.setAttribute(
+                "aria-label",
+                isOpen
+                    ? "Close navigation menu"
+                    : "Open navigation menu"
+            );
+
+        }
+    );
+
+}
 
 /*
 ==================================================
