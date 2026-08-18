@@ -2,7 +2,6 @@
 
     <div class="site-header__container">
 
-
         <!-- BRAND -->
 
         <a
@@ -32,7 +31,7 @@
         </a>
 
 
-        <!-- ACCOUNT CONTROLS -->
+        <!-- DESKTOP ACCOUNT CONTROLS -->
 
         <div class="site-header__account">
 
@@ -55,7 +54,7 @@
         </div>
 
 
-        <!-- MOBILE MENU -->
+        <!-- MOBILE MENU BUTTON -->
 
         <button
             type="button"
@@ -73,7 +72,7 @@
         </button>
 
 
-                <!-- PRIMARY NAVIGATION -->
+        <!-- NAVIGATION -->
 
         <nav
             class="primary-navigation"
@@ -82,250 +81,403 @@
         >
 
 
-            <!-- MOBILE PROFILE -->
+            <!-- ==================================================
+            DESKTOP NAVIGATION
+            ================================================== -->
 
-            <a
-                href="profile.html"
-                class="primary-navigation__link mobile-profile-link"
-            >
-                My Profile
-            </a>
+            <div class="desktop-navigation">
 
 
-            <!-- HOME -->
-
-            <a
-                href="index.html"
-                class="primary-navigation__link"
-                data-page-link="home"
-            >
-                Home
-            </a>
-
-
-            <!-- PARTICIPATE -->
-
-            <div class="navigation-group">
-
-                <button
-                    type="button"
-                    class="primary-navigation__link navigation-group__button"
-                    aria-expanded="false"
+                <a
+                    href="index.html"
+                    class="primary-navigation__link"
+                    data-page-link="home"
                 >
-                    Participate
+                    Home
+                </a>
 
-                    <span
-                        class="navigation-group__chevron"
-                        aria-hidden="true"
+
+                <!-- PARTICIPATE -->
+
+                <div class="navigation-group">
+
+                    <button
+                        type="button"
+                        class="primary-navigation__link navigation-group__button"
+                        aria-expanded="false"
                     >
-                        ▾
-                    </span>
 
-                </button>
+                        Participate
 
-
-                <div class="navigation-dropdown">
-
-                    <a href="polls.html">
-
-                        <strong>
-                            Polls Center
-                        </strong>
-
-                        <span>
-                            Take the National Priorities Survey and
-                            participate in community polls.
+                        <span
+                            class="navigation-group__chevron"
+                            aria-hidden="true"
+                        >
+                            ▾
                         </span>
 
-                    </a>
+                    </button>
 
 
-                    <a href="polls.html#national-priorities">
+                    <div class="navigation-dropdown">
 
-                        <strong>
-                            National Priorities
-                        </strong>
+                        <a href="polls.html">
 
-                        <span>
-                            Rate the issues that deserve the most
-                            national attention.
-                        </span>
+                            <strong>
+                                Polls Center
+                            </strong>
 
-                    </a>
+                            <span>
+                                Take the National Priorities Survey and
+                                participate in community polls.
+                            </span>
+
+                        </a>
 
 
-                    <a href="polls.html#community-polls">
+                        <a href="polls.html#national-priorities">
 
-                        <strong>
-                            Community Polls
-                        </strong>
+                            <strong>
+                                National Priorities
+                            </strong>
 
-                        <span>
-                            Respond to current civic questions.
-                        </span>
+                            <span>
+                                Rate the issues that deserve the most
+                                national attention.
+                            </span>
 
-                    </a>
+                        </a>
+
+
+                        <a href="polls.html#community-polls">
+
+                            <strong>
+                                Community Polls
+                            </strong>
+
+                            <span>
+                                Respond to current civic questions.
+                            </span>
+
+                        </a>
+
+                    </div>
 
                 </div>
+
+
+                <!-- CIVIC PULSE -->
+
+                <div class="navigation-group">
+
+                    <button
+                        type="button"
+                        class="primary-navigation__link navigation-group__button"
+                        aria-expanded="false"
+                    >
+
+                        Civic Pulse
+
+                        <span
+                            class="navigation-group__chevron"
+                            aria-hidden="true"
+                        >
+                            ▾
+                        </span>
+
+                    </button>
+
+
+                    <div class="navigation-dropdown">
+
+                        <a href="civic-pulse.html">
+
+                            <strong>
+                                Civic Pulse Overview
+                            </strong>
+
+                            <span>
+                                Follow permanent national sentiment
+                                trackers.
+                            </span>
+
+                        </a>
+
+
+                        <a href="civic-pulse.html#presidential-approval">
+
+                            <strong>
+                                Presidential Approval
+                            </strong>
+
+                            <span>
+                                Rate the current president's job
+                                performance.
+                            </span>
+
+                        </a>
+
+
+                        <a href="civic-pulse.html#national-confidence">
+
+                            <strong>
+                                National Confidence
+                            </strong>
+
+                            <span>
+                                Explore confidence in institutions,
+                                the economy, and the media.
+                            </span>
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+
+                <!-- EXPLORE -->
+
+                <div class="navigation-group">
+
+                    <button
+                        type="button"
+                        class="primary-navigation__link navigation-group__button"
+                        aria-expanded="false"
+                    >
+
+                        Explore
+
+                        <span
+                            class="navigation-group__chevron"
+                            aria-hidden="true"
+                        >
+                            ▾
+                        </span>
+
+                    </button>
+
+
+                    <div class="navigation-dropdown">
+
+                        <a href="results.html">
+
+                            <strong>
+                                National Results Center
+                            </strong>
+
+                            <span>
+                                Explore national rankings and community
+                                poll results.
+                            </span>
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+
+                <a
+                    href="academy.html"
+                    class="primary-navigation__link"
+                    data-page-link="academy"
+                >
+                    Learn
+                </a>
+
+
+                <a
+                    href="simulator.html"
+                    class="primary-navigation__link"
+                    data-page-link="simulator"
+                >
+                    Experience
+                </a>
+
+
+                <a
+                    href="about.html"
+                    class="primary-navigation__link"
+                    data-page-link="about"
+                >
+                    About
+                </a>
+
+
+                <a
+                    href="polls.html"
+                    class="site-header__action"
+                >
+                    Vote Now
+                </a>
 
             </div>
 
 
-            <!-- CIVIC PULSE -->
+            <!-- ==================================================
+            MOBILE NAVIGATION
+            NO INDENTED SUBMENUS
+            ================================================== -->
 
-            <div class="navigation-group">
+            <div class="mobile-navigation">
 
-                <button
-                    type="button"
-                    class="primary-navigation__link navigation-group__button"
-                    aria-expanded="false"
+
+                <a
+                    href="profile.html"
+                    class="mobile-navigation__link mobile-navigation__profile"
                 >
-                    Civic Pulse
+                    My Profile
+                </a>
 
-                    <span
-                        class="navigation-group__chevron"
-                        aria-hidden="true"
+
+                <a
+                    href="index.html"
+                    class="mobile-navigation__link"
+                >
+                    Home
+                </a>
+
+
+                <!-- PARTICIPATE -->
+
+                <div class="mobile-navigation__section">
+
+                    <div class="mobile-navigation__section-label">
+                        Participate
+                    </div>
+
+                    <a
+                        href="polls.html"
+                        class="mobile-navigation__link"
                     >
-                        ▾
-                    </span>
-
-                </button>
-
-
-                <div class="navigation-dropdown">
-
-                    <a href="civic-pulse.html">
-
-                        <strong>
-                            Civic Pulse Overview
-                        </strong>
-
-                        <span>
-                            Follow permanent national sentiment
-                            trackers.
-                        </span>
-
+                        Polls Center
                     </a>
 
-
-                    <a href="civic-pulse.html#presidential-approval">
-
-                        <strong>
-                            Presidential Approval
-                        </strong>
-
-                        <span>
-                            Rate the current president's job
-                            performance.
-                        </span>
-
+                    <a
+                        href="polls.html#national-priorities"
+                        class="mobile-navigation__link"
+                    >
+                        National Priorities
                     </a>
 
-
-                    <a href="civic-pulse.html#national-confidence">
-
-                        <strong>
-                            National Confidence
-                        </strong>
-
-                        <span>
-                            Explore confidence in institutions,
-                            the economy, and the media.
-                        </span>
-
+                    <a
+                        href="polls.html#community-polls"
+                        class="mobile-navigation__link"
+                    >
+                        Community Polls
                     </a>
 
                 </div>
 
-            </div>
 
+                <!-- CIVIC PULSE -->
 
-            <!-- EXPLORE -->
+                <div class="mobile-navigation__section">
 
-            <div class="navigation-group">
+                    <div class="mobile-navigation__section-label">
+                        Civic Pulse
+                    </div>
 
-                <button
-                    type="button"
-                    class="primary-navigation__link navigation-group__button"
-                    aria-expanded="false"
-                >
-                    Explore
-
-                    <span
-                        class="navigation-group__chevron"
-                        aria-hidden="true"
+                    <a
+                        href="civic-pulse.html"
+                        class="mobile-navigation__link"
                     >
-                        ▾
-                    </span>
+                        Civic Pulse Overview
+                    </a>
 
-                </button>
+                    <a
+                        href="civic-pulse.html#presidential-approval"
+                        class="mobile-navigation__link"
+                    >
+                        Presidential Approval
+                    </a>
 
-
-                <div class="navigation-dropdown">
-
-                    <a href="results.html">
-
-                        <strong>
-                            National Results Center
-                        </strong>
-
-                        <span>
-                            Explore national rankings and community
-                            poll results.
-                        </span>
-
+                    <a
+                        href="civic-pulse.html#national-confidence"
+                        class="mobile-navigation__link"
+                    >
+                        National Confidence
                     </a>
 
                 </div>
 
+
+                <!-- EXPLORE -->
+
+                <div class="mobile-navigation__section">
+
+                    <div class="mobile-navigation__section-label">
+                        Explore
+                    </div>
+
+                    <a
+                        href="results.html"
+                        class="mobile-navigation__link"
+                    >
+                        National Results Center
+                    </a>
+
+                </div>
+
+
+                <!-- LEARN -->
+
+                <div class="mobile-navigation__section">
+
+                    <div class="mobile-navigation__section-label">
+                        Learn & Experience
+                    </div>
+
+                    <a
+                        href="academy.html"
+                        class="mobile-navigation__link"
+                    >
+                        Civic Academy
+                    </a>
+
+                    <a
+                        href="simulator.html"
+                        class="mobile-navigation__link"
+                    >
+                        Simulations
+                    </a>
+
+                </div>
+
+
+                <!-- MORE -->
+
+                <div class="mobile-navigation__section">
+
+                    <div class="mobile-navigation__section-label">
+                        More
+                    </div>
+
+                    <a
+                        href="about.html"
+                        class="mobile-navigation__link"
+                    >
+                        About Civic Horizon
+                    </a>
+
+                </div>
+
+
+                <!-- VOTE -->
+
+                <a
+                    href="polls.html"
+                    class="mobile-navigation__vote"
+                >
+                    Vote Now
+                </a>
+
+
             </div>
-
-
-            <!-- LEARN -->
-
-            <a
-                href="academy.html"
-                class="primary-navigation__link"
-                data-page-link="academy"
-            >
-                Learn
-            </a>
-
-
-            <!-- EXPERIENCE -->
-
-            <a
-                href="simulator.html"
-                class="primary-navigation__link"
-                data-page-link="simulator"
-            >
-                Experience
-            </a>
-
-
-            <!-- ABOUT -->
-
-            <a
-                href="about.html"
-                class="primary-navigation__link"
-                data-page-link="about"
-            >
-                About
-            </a>
-
-
-            <!-- VOTE NOW -->
-
-            <a
-                href="polls.html"
-                class="site-header__action"
-            >
-                Vote Now
-            </a>
 
 
         </nav>
-
 
     </div>
 
