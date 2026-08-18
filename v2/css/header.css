@@ -464,14 +464,10 @@ span:nth-child(3) {
         display: none;
     }
 
-    .navigation-group:hover .navigation-dropdown,
-    .navigation-group:focus-within .navigation-dropdown {
-        display: none;
-    }
-
-    .navigation-group.open .navigation-dropdown {
-        display: block;
-    }
+    .navigation-group.open .navigation-dropdown,
+.navigation-group:focus-within .navigation-dropdown {
+    display: block;
+}
 
     .navigation-dropdown a {
         display: block;
