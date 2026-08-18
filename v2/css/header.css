@@ -588,3 +588,19 @@ html.auth-access-granted body {
     }
 
 }
+/* FINAL MOBILE SUBMENU ALIGNMENT */
+
+@media (max-width: 600px) {
+
+    .navigation-dropdown {
+        padding-left: 0;
+        padding-right: 0;
+        margin-left: 0;
+    }
+
+    .navigation-dropdown a {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+}
