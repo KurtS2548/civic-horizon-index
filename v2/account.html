@@ -19,6 +19,7 @@
         Account | Civic Horizon Index
     </title>
 
+
     <link
         rel="preconnect"
         href="https://fonts.googleapis.com"
@@ -34,6 +35,7 @@
         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Merriweather:wght@700&display=swap"
         rel="stylesheet"
     >
+
 
     <link
         rel="stylesheet"
@@ -101,9 +103,9 @@
                 </div>
 
 
-                <!-- ==================================================
-                     SIGN IN
-                ================================================== -->
+                <!-- ==========================================
+                SIGN IN
+                =========================================== -->
 
                 <section
                     id="signInPanel"
@@ -186,12 +188,6 @@
                         ></p>
 
 
-                        <!--
-                        ==================================================
-                        VERIFICATION ACTIONS
-                        ==================================================
-                        -->
-
                         <div
                             id="verificationActions"
                             class="account-verification-actions"
@@ -221,9 +217,9 @@
                 </section>
 
 
-                <!-- ==================================================
-                     CREATE ACCOUNT
-                ================================================== -->
+                <!-- ==========================================
+                CREATE ACCOUNT
+                =========================================== -->
 
                 <section
                     id="createAccountPanel"
@@ -292,40 +288,114 @@
                         </div>
 
 
-                        <div class="account-form__row">
+                        <!-- ==========================================
+                        BIRTHDAY
+                        =========================================== -->
 
-                            <label>
+                        <div class="account-birthday-field">
 
-                                <span>
-                                    Birthday
-                                </span>
+                            <span class="account-birthday-field__label">
+                                Birthday
+                            </span>
 
-                                <input
-                                    type="date"
-                                    id="createBirthday"
-                                    autocomplete="bday"
-                                    required
-                                >
+                            <div class="account-birthday-selects">
 
-                            </label>
+                                <label>
+
+                                    <span class="account-birthday-selects__small-label">
+                                        Month
+                                    </span>
+
+                                    <select
+                                        id="createBirthMonth"
+                                        autocomplete="bday-month"
+                                        required
+                                    >
+                                        <option value="">
+                                            Month
+                                        </option>
+
+                                        <option value="01">January</option>
+                                        <option value="02">February</option>
+                                        <option value="03">March</option>
+                                        <option value="04">April</option>
+                                        <option value="05">May</option>
+                                        <option value="06">June</option>
+                                        <option value="07">July</option>
+                                        <option value="08">August</option>
+                                        <option value="09">September</option>
+                                        <option value="10">October</option>
+                                        <option value="11">November</option>
+                                        <option value="12">December</option>
+
+                                    </select>
+
+                                </label>
 
 
-                            <label>
+                                <label>
 
-                                <span>
-                                    Email
-                                </span>
+                                    <span class="account-birthday-selects__small-label">
+                                        Day
+                                    </span>
 
-                                <input
-                                    type="email"
-                                    id="createEmail"
-                                    autocomplete="email"
-                                    required
-                                >
+                                    <select
+                                        id="createBirthDay"
+                                        autocomplete="bday-day"
+                                        required
+                                    >
+                                        <option value="">
+                                            Day
+                                        </option>
+                                    </select>
 
-                            </label>
+                                </label>
+
+
+                                <label>
+
+                                    <span class="account-birthday-selects__small-label">
+                                        Year
+                                    </span>
+
+                                    <select
+                                        id="createBirthYear"
+                                        autocomplete="bday-year"
+                                        required
+                                    >
+                                        <option value="">
+                                            Year
+                                        </option>
+                                    </select>
+
+                                </label>
+
+                            </div>
+
+
+                            <input
+                                type="hidden"
+                                id="createBirthday"
+                                name="birthday"
+                            >
 
                         </div>
+
+
+                        <label>
+
+                            <span>
+                                Email
+                            </span>
+
+                            <input
+                                type="email"
+                                id="createEmail"
+                                autocomplete="email"
+                                required
+                            >
+
+                        </label>
 
 
                         <div class="account-form__row">

@@ -82,6 +82,8 @@ async function initializeAccountPage() {
 
     initializeAccountSwitcher();
 
+    initializeBirthdaySelectors();
+
     initializeCreateAccountForm();
 
     initializeSignInForm();
@@ -214,6 +216,332 @@ function initializeAccountSwitcher() {
 
 }
 
+
+/*
+==================================================
+BIRTHDAY SELECTORS
+==================================================
+*/
+
+function initializeBirthdaySelectors() {
+
+    const monthSelect =
+        document.getElementById(
+            "createBirthMonth"
+        );
+
+
+    const daySelect =
+        document.getElementById(
+            "createBirthDay"
+        );
+
+
+    const yearSelect =
+        document.getElementById(
+            "createBirthYear"
+        );
+
+
+    if (
+        !monthSelect ||
+        !daySelect ||
+        !yearSelect
+    ) {
+
+        return;
+
+    }
+
+
+    populateBirthYears(
+        yearSelect
+    );
+
+
+    populateBirthDays(
+        monthSelect,
+        daySelect,
+        yearSelect
+    );
+
+
+    monthSelect.addEventListener(
+        "change",
+        () => {
+
+            populateBirthDays(
+                monthSelect,
+                daySelect,
+                yearSelect
+            );
+
+
+            updateBirthdayValue(
+                monthSelect,
+                daySelect,
+                yearSelect
+            );
+
+        }
+    );
+
+
+    daySelect.addEventListener(
+        "change",
+        () => {
+
+            updateBirthdayValue(
+                monthSelect,
+                daySelect,
+                yearSelect
+            );
+
+        }
+    );
+
+
+    yearSelect.addEventListener(
+        "change",
+        () => {
+
+            populateBirthDays(
+                monthSelect,
+                daySelect,
+                yearSelect
+            );
+
+
+            updateBirthdayValue(
+                monthSelect,
+                daySelect,
+                yearSelect
+            );
+
+        }
+    );
+
+}
+
+
+/*
+==================================================
+POPULATE BIRTH YEARS
+==================================================
+*/
+
+function populateBirthYears(
+    yearSelect
+) {
+
+    const currentYear =
+        new Date().getFullYear();
+
+
+    const oldestYear =
+        currentYear - 120;
+
+
+    for (
+        let year = currentYear;
+        year >= oldestYear;
+        year -= 1
+    ) {
+
+        const option =
+            document.createElement(
+                "option"
+            );
+
+
+        option.value =
+            String(
+                year
+            );
+
+
+        option.textContent =
+            String(
+                year
+            );
+
+
+        yearSelect.appendChild(
+            option
+        );
+
+    }
+
+}
+
+
+/*
+==================================================
+POPULATE BIRTH DAYS
+==================================================
+*/
+
+function populateBirthDays(
+    monthSelect,
+    daySelect,
+    yearSelect
+) {
+
+    const previousDay =
+        daySelect.value;
+
+
+    daySelect.innerHTML =
+        `
+            <option value="">
+                Day
+            </option>
+        `;
+
+
+    const month =
+        Number(
+            monthSelect.value
+        );
+
+
+    const year =
+        Number(
+            yearSelect.value
+        );
+
+
+    if (
+        !month
+    ) {
+
+        return;
+
+    }
+
+
+    const yearForCalculation =
+        year ||
+        2000;
+
+
+    const daysInMonth =
+        new Date(
+            yearForCalculation,
+            month,
+            0
+        ).getDate();
+
+
+    for (
+        let day = 1;
+        day <= daysInMonth;
+        day += 1
+    ) {
+
+        const option =
+            document.createElement(
+                "option"
+            );
+
+
+        const dayValue =
+            String(
+                day
+            ).padStart(
+                2,
+                "0"
+            );
+
+
+        option.value =
+            dayValue;
+
+
+        option.textContent =
+            String(
+                day
+            );
+
+
+        if (
+            dayValue ===
+            previousDay
+        ) {
+
+            option.selected =
+                true;
+
+        }
+
+
+        daySelect.appendChild(
+            option
+        );
+
+    }
+
+}
+
+
+/*
+==================================================
+UPDATE BIRTHDAY VALUE
+==================================================
+*/
+
+function updateBirthdayValue(
+    monthSelect,
+    daySelect,
+    yearSelect
+) {
+
+    const birthdayInput =
+        document.getElementById(
+            "createBirthday"
+        );
+
+
+    if (
+        !birthdayInput
+    ) {
+
+        return;
+
+    }
+
+
+    const month =
+        monthSelect.value;
+
+
+    const day =
+        daySelect.value;
+
+
+    const year =
+        yearSelect.value;
+
+
+    if (
+        !month ||
+        !day ||
+        !year
+    ) {
+
+        birthdayInput.value =
+            "";
+
+
+        return;
+
+    }
+
+
+    birthdayInput.value =
+        `${year}-${month}-${day}`;
+
+}
 
 /*
 ==================================================

@@ -475,13 +475,7 @@ span:nth-child(3) {
 }
 
 
-@media (max-width: 700px) {
 
-    .site-header__profile {
-        display: none;
-    }
-
-}
 
 
 @media (max-width: 600px) {
@@ -500,6 +494,7 @@ span:nth-child(3) {
         font-size: 0.88rem;
     }
 
+    .site-header__profile,
     .site-header__logout {
         min-height: 32px;
         padding: 6px 8px;
@@ -508,6 +503,27 @@ span:nth-child(3) {
 
     .primary-navigation {
         padding-inline: 16px;
+    }
+
+    .site-brand__text {
+        display: none;
+    }
+
+    .site-header__account {
+        gap: 5px;
+    }
+
+    .site-header__profile,
+    .site-header__logout {
+        min-height: 32px;
+        padding: 6px 7px;
+        font-size: 0.62rem;
+    }
+
+    .mobile-menu-button {
+        width: 38px;
+        height: 38px;
+        padding: 8px;
     }
 
 }
@@ -521,4 +537,21 @@ html.auth-access-pending body {
 
 html.auth-access-granted body {
     visibility: visible;
+}
+/* PHONE PROFILE FIX */
+
+.mobile-profile-link {
+    display: none;
+}
+
+@media (max-width: 600px) {
+
+    .site-header__profile {
+        display: none;
+    }
+
+    .mobile-profile-link {
+        display: flex;
+    }
+
 }

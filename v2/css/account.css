@@ -212,6 +212,80 @@ body {
 
 
 /* ==================================================
+   BIRTHDAY SELECTORS
+================================================== */
+
+.account-birthday-field {
+    display: grid;
+    gap: 6px;
+}
+
+.account-birthday-field__label {
+    color: #334e68;
+    font-size: 0.7rem;
+    font-weight: 800;
+}
+
+.account-birthday-selects {
+    display: grid;
+    grid-template-columns:
+        minmax(0, 1.35fr)
+        minmax(0, 0.8fr)
+        minmax(0, 1fr);
+    gap: 8px;
+}
+
+.account-birthday-selects label {
+    display: grid;
+    gap: 4px;
+}
+
+.account-birthday-selects__small-label {
+    color: #829ab1 !important;
+    font-size: 0.6rem !important;
+    font-weight: 700 !important;
+}
+
+.account-birthday-selects select {
+    min-height: 44px;
+    padding: 8px 9px;
+    font-size: 0.78rem;
+    cursor: pointer;
+}
+
+
+/* ==================================================
+   BIRTHDAY MOBILE
+================================================== */
+
+@media (max-width: 620px) {
+
+    .account-birthday-selects {
+        grid-template-columns:
+            minmax(0, 1.25fr)
+            minmax(0, 0.75fr)
+            minmax(0, 0.9fr);
+        gap: 6px;
+    }
+
+    .account-birthday-selects select {
+        min-height: 46px;
+        padding: 8px 7px;
+        font-size: 0.76rem;
+    }
+
+}
+
+
+@media (max-width: 390px) {
+
+    .account-birthday-selects {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+/* ==================================================
    CONSENT
 ================================================== */
 
