@@ -555,3 +555,22 @@ html.auth-access-granted body {
     }
 
 }
+/* MOBILE DROPDOWN READABILITY FIX */
+
+@media (max-width: 600px) {
+
+    .navigation-dropdown {
+        padding-left: 4px;
+    }
+
+    .navigation-dropdown a {
+        padding: 12px 8px;
+    }
+
+    .navigation-dropdown strong,
+    .navigation-dropdown span {
+        display: block;
+        width: 100%;
+    }
+
+}
