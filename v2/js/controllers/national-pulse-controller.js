@@ -20,6 +20,7 @@ RESULT ELEMENT MAP
 */
 
 const resultElements = {
+
     "Strongly Approve": {
         percentId: "stronglyApprovePercent",
         barId: "stronglyApproveBar"
@@ -44,6 +45,7 @@ const resultElements = {
         percentId: "stronglyDisapprovePercent",
         barId: "stronglyDisapproveBar"
     }
+
 };
 
 
@@ -53,9 +55,12 @@ CONTROLLER STATE
 ==================================================
 */
 
-let nationalPulseControllerInitialized = false;
+let nationalPulseControllerInitialized =
+    false;
 
-let unsubscribePulseSummary = null;
+
+let unsubscribePulseSummary =
+    null;
 
 
 /*
@@ -66,13 +71,21 @@ PUBLIC INITIALIZATION
 
 export function initializeNationalPulseController() {
 
-    if (nationalPulseControllerInitialized) {
+    if (
+        nationalPulseControllerInitialized
+    ) {
+
         return;
+
     }
 
-    nationalPulseControllerInitialized = true;
+
+    nationalPulseControllerInitialized =
+        true;
+
 
     initializeApprovalForm();
+
     subscribeToApprovalData();
 
 }
@@ -88,11 +101,15 @@ function subscribeToApprovalData() {
 
     unsubscribePulseSummary =
         subscribeToPresidentialApprovalSummary(
+
             summary => {
 
-                renderApprovalResults(summary);
+                renderApprovalResults(
+                    summary
+                );
 
             },
+
             error => {
 
                 console.error(
@@ -100,62 +117,92 @@ function subscribeToApprovalData() {
                     error
                 );
 
+
                 renderApprovalError();
 
             }
+
         );
 
 }
 
 
-function renderApprovalResults(summary) {
+/*
+==================================================
+RENDER APPROVAL RESULTS
+==================================================
+*/
+
+function renderApprovalResults(
+    summary
+) {
 
     const totalResponses =
-        Number(summary?.totalResponses) || 0;
+        Number(
+            summary?.totalResponses
+        ) || 0;
+
 
     const results =
-        Array.isArray(summary?.results)
+        Array.isArray(
+            summary?.results
+        )
             ? summary.results
             : [];
 
 
     setText(
         "pulseResponseCount",
-        formatNumber(totalResponses)
+        formatNumber(
+            totalResponses
+        )
     );
 
 
-    results.forEach(result => {
+    results.forEach(
+        result => {
 
-        const elementMap =
-            resultElements[result.response];
+            const elementMap =
+                resultElements[
+                    result.response
+                ];
 
-        if (!elementMap) {
-            return;
+
+            if (
+                !elementMap
+            ) {
+
+                return;
+
+            }
+
+
+            const percentage =
+                Number(
+                    result.percentage
+                ) || 0;
+
+
+            setText(
+                elementMap.percentId,
+                `${percentage.toFixed(1)}%`
+            );
+
+
+            setBarWidth(
+                elementMap.barId,
+                percentage
+            );
+
         }
-
-
-        const percentage =
-            Number(result.percentage) || 0;
-
-
-        setText(
-            elementMap.percentId,
-            `${percentage.toFixed(1)}%`
-        );
-
-
-        setBarWidth(
-            elementMap.barId,
-            percentage
-        );
-
-    });
+    );
 
 
     const updatedAt =
         summary?.updatedAt
-            ? new Date(summary.updatedAt)
+            ? new Date(
+                summary.updatedAt
+            )
             : new Date();
 
 
@@ -173,7 +220,7 @@ FORM INITIALIZATION
 ==================================================
 */
 
-async function initializeApprovalForm() { 
+async function initializeApprovalForm() {
 
     const form =
         document.getElementById(
@@ -181,8 +228,12 @@ async function initializeApprovalForm() {
         );
 
 
-    if (!form) {
+    if (
+        !form
+    ) {
+
         return;
+
     }
 
 
@@ -190,33 +241,32 @@ async function initializeApprovalForm() {
         "submit",
         handleApprovalSubmit
     );
+
+
     try {
 
-    const weeklyStatus =
-        await getPresidentialApprovalParticipationStatus();
+        const weeklyStatus =
+            await getPresidentialApprovalParticipationStatus();
 
 
-    if (
-        weeklyStatus?.alreadyParticipated
-    ) {
+        if (
+            weeklyStatus?.alreadyParticipated
+        ) {
 
-        lockApprovalForm(
-            `You have already responded for ${weeklyStatus.votingPeriodLabel}. Voting reopens next Monday.`
+            lockApprovalForm(
+                `You have already responded for ${weeklyStatus.votingPeriodLabel}. Voting reopens next Monday.`
+            );
+
+        }
+
+    } catch (error) {
+
+        console.error(
+            "Presidential approval weekly status check failed:",
+            error
         );
 
     }
-
-} catch (error) {
-
-    console.error(
-        "Presidential approval weekly status check failed:",
-        error
-    );
-
-}
-
-
-    
 
 }
 
@@ -227,7 +277,9 @@ FORM SUBMISSION
 ==================================================
 */
 
-async function handleApprovalSubmit(event) {
+async function handleApprovalSubmit(
+    event
+) {
 
     event.preventDefault();
 
@@ -235,27 +287,55 @@ async function handleApprovalSubmit(event) {
     const form =
         event.currentTarget;
 
+
     const selectedInput =
         form.querySelector(
             'input[name="presidentialApproval"]:checked'
         );
 
+
     const submitButton =
         form.querySelector(
             ".pulse-poll__submit"
         );
-        try {
-
-    const weeklyStatus =
-        await getPresidentialApprovalParticipationStatus();
 
 
-    if (
-        weeklyStatus?.alreadyParticipated
-    ) {
+    /*
+    ----------------------------------------------
+    CONFIRM WEEKLY VOTING STATUS
+    ----------------------------------------------
+    */
 
-        lockApprovalForm(
-            `You have already responded for ${weeklyStatus.votingPeriodLabel}. Voting reopens next Monday.`
+    try {
+
+        const weeklyStatus =
+            await getPresidentialApprovalParticipationStatus();
+
+
+        if (
+            weeklyStatus?.alreadyParticipated
+        ) {
+
+            lockApprovalForm(
+                `You have already responded for ${weeklyStatus.votingPeriodLabel}. Voting reopens next Monday.`
+            );
+
+
+            return;
+
+        }
+
+    } catch (error) {
+
+        console.error(
+            "Presidential approval weekly status check failed:",
+            error
+        );
+
+
+        showMessage(
+            "Voting access could not be confirmed. Please try again.",
+            "error"
         );
 
 
@@ -263,38 +343,33 @@ async function handleApprovalSubmit(event) {
 
     }
 
-} catch (error) {
 
-    console.error(
-        "Presidential approval weekly status check failed:",
-        error
-    );
+    /*
+    ----------------------------------------------
+    RESPONSE REQUIRED
+    ----------------------------------------------
+    */
 
-
-    showMessage(
-        "Voting access could not be confirmed. Please try again.",
-        "error"
-    );
-
-
-    return;
-
-}
-
-
-    
-
-
-    if (!selectedInput) {
+    if (
+        !selectedInput
+    ) {
 
         showMessage(
             "Please select one response.",
             "error"
         );
 
+
         return;
+
     }
 
+
+    /*
+    ----------------------------------------------
+    SUBMIT
+    ----------------------------------------------
+    */
 
     setSubmittingState(
         submitButton,
@@ -327,20 +402,22 @@ async function handleApprovalSubmit(event) {
         console.error(
             "Presidential approval submission error:",
             error
-            if (
-    error?.code ===
-    "already-participated-this-week"
-) {
-
-    lockApprovalForm(
-        "You have already responded this week. Voting reopens next Monday."
-    );
-
-
-    return;
-
-}
         );
+
+
+        if (
+            error?.code ===
+            "already-participated-this-week"
+        ) {
+
+            lockApprovalForm(
+                "You have already responded this week. Voting reopens next Monday."
+            );
+
+
+            return;
+
+        }
 
 
         setSubmittingState(
@@ -370,8 +447,12 @@ function setSubmittingState(
     isSubmitting
 ) {
 
-    if (!submitButton) {
+    if (
+        !submitButton
+    ) {
+
         return;
+
     }
 
 
@@ -387,7 +468,15 @@ function setSubmittingState(
 }
 
 
-function lockApprovalForm(message) {
+/*
+==================================================
+LOCK APPROVAL FORM
+==================================================
+*/
+
+function lockApprovalForm(
+    message
+) {
 
     const form =
         document.getElementById(
@@ -395,8 +484,12 @@ function lockApprovalForm(message) {
         );
 
 
-    if (!form) {
+    if (
+        !form
+    ) {
+
         return;
+
     }
 
 
@@ -404,11 +497,14 @@ function lockApprovalForm(message) {
         .querySelectorAll(
             'input[name="presidentialApproval"]'
         )
-        .forEach(input => {
+        .forEach(
+            input => {
 
-            input.disabled = true;
+                input.disabled =
+                    true;
 
-        });
+            }
+        );
 
 
     const submitButton =
@@ -417,9 +513,13 @@ function lockApprovalForm(message) {
         );
 
 
-    if (submitButton) {
+    if (
+        submitButton
+    ) {
 
-        submitButton.disabled = true;
+        submitButton.disabled =
+            true;
+
 
         submitButton.textContent =
             "Response Submitted";
@@ -448,6 +548,7 @@ function renderApprovalError() {
         "—"
     );
 
+
     setText(
         "pulseUpdatedText",
         "Results unavailable"
@@ -455,20 +556,25 @@ function renderApprovalError() {
 
 
     Object
-        .values(resultElements)
-        .forEach(elementMap => {
+        .values(
+            resultElements
+        )
+        .forEach(
+            elementMap => {
 
-            setText(
-                elementMap.percentId,
-                "—"
-            );
+                setText(
+                    elementMap.percentId,
+                    "—"
+                );
 
-            setBarWidth(
-                elementMap.barId,
-                0
-            );
 
-        });
+                setBarWidth(
+                    elementMap.barId,
+                    0
+                );
+
+            }
+        );
 
 
     const submitButton =
@@ -477,9 +583,12 @@ function renderApprovalError() {
         );
 
 
-    if (submitButton) {
+    if (
+        submitButton
+    ) {
 
-        submitButton.disabled = true;
+        submitButton.disabled =
+            true;
 
     }
 
@@ -509,13 +618,18 @@ function showMessage(
         );
 
 
-    if (!messageElement) {
+    if (
+        !messageElement
+    ) {
+
         return;
+
     }
 
 
     messageElement.textContent =
         message;
+
 
     messageElement.dataset.messageType =
         type;
@@ -540,16 +654,28 @@ function setText(
         );
 
 
-    if (!element) {
+    if (
+        !element
+    ) {
+
         return;
+
     }
 
 
     element.textContent =
-        String(value);
+        String(
+            value
+        );
 
 }
 
+
+/*
+==================================================
+BAR WIDTH
+==================================================
+*/
 
 function setBarWidth(
     elementId,
@@ -562,8 +688,12 @@ function setBarWidth(
         );
 
 
-    if (!element) {
+    if (
+        !element
+    ) {
+
         return;
+
     }
 
 
@@ -572,7 +702,9 @@ function setBarWidth(
             0,
             Math.min(
                 100,
-                Number(percentage) || 0
+                Number(
+                    percentage
+                ) || 0
             )
         );
 
@@ -589,27 +721,48 @@ FORMAT HELPERS
 ==================================================
 */
 
-function formatNumber(value) {
+function formatNumber(
+    value
+) {
 
     const number =
-        Number(value);
+        Number(
+            value
+        );
 
 
-    if (!Number.isFinite(number)) {
+    if (
+        !Number.isFinite(
+            number
+        )
+    ) {
+
         return "0";
+
     }
 
 
-    return number.toLocaleString();
+    return number
+        .toLocaleString();
 
 }
 
 
-function formatTime(date) {
+/*
+==================================================
+TIME
+==================================================
+*/
+
+function formatTime(
+    date
+) {
 
     if (
         !(date instanceof Date) ||
-        Number.isNaN(date.getTime())
+        Number.isNaN(
+            date.getTime()
+        )
     ) {
 
         return "live";
@@ -617,13 +770,17 @@ function formatTime(date) {
     }
 
 
-    return date.toLocaleTimeString(
-        undefined,
-        {
-            hour: "numeric",
-            minute: "2-digit"
-        }
-    );
+    return date
+        .toLocaleTimeString(
+            undefined,
+            {
+                hour:
+                    "numeric",
+
+                minute:
+                    "2-digit"
+            }
+        );
 
 }
 
@@ -652,7 +809,9 @@ export function destroyNationalPulseController() {
         );
 
 
-    if (form) {
+    if (
+        form
+    ) {
 
         form.removeEventListener(
             "submit",
@@ -662,8 +821,11 @@ export function destroyNationalPulseController() {
     }
 
 
-    unsubscribePulseSummary = null;
+    unsubscribePulseSummary =
+        null;
 
-    nationalPulseControllerInitialized = false;
+
+    nationalPulseControllerInitialized =
+        false;
 
 }
