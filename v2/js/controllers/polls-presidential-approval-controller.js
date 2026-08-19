@@ -12,14 +12,19 @@ import {
 
     submitPresidentialApprovalResponse,
 
-    hasSubmittedPresidentialApproval,
 
-    markPresidentialApprovalSubmitted
+    markPresidentialApprovalSubmitted,
+
+    getPresidentialApprovalParticipationStatus
 
 } from "../services/pulse-service.js";
 
 
 import {
+
+    subscribeToAuthState,
+
+    refreshCurrentUser,
 
     getCurrentUserVotingEligibility
 
@@ -91,70 +96,132 @@ async function initializeVotingAccess() {
     }
 
 
-    /*
-    ----------------------------------------------
-    DEVICE RESPONSE LOCK
-    ----------------------------------------------
-    */
+    subscribeToAuthState(
 
-    if (
-        hasSubmittedPresidentialApproval()
-    ) {
+        async user => {
 
-        lockForm(
-            "You have already responded to this tracker on this device."
-        );
+            if (!user) {
 
-
-        return;
-
-    }
+                blockIneligibleVoting(
+                    form,
+                    {
+                        reason:
+                            "signedOut"
+                    }
+                );
 
 
-    try {
+                return;
 
-        const eligibility =
-            await getCurrentUserVotingEligibility();
+            }
 
 
-        if (
-            eligibility?.eligible
-        ) {
+            try {
 
-            enableForm(
+                const refreshedUser =
+                    await refreshCurrentUser();
+
+
+                if (!refreshedUser) {
+
+                    blockIneligibleVoting(
+                        form,
+                        {
+                            reason:
+                                "signedOut"
+                        }
+                    );
+
+
+                    return;
+
+                }
+
+
+                const eligibility =
+                    await getCurrentUserVotingEligibility();
+
+
+                if (
+                    !eligibility?.eligible
+                ) {
+
+                    blockIneligibleVoting(
+                        form,
+                        eligibility
+                    );
+
+
+                    return;
+
+                }
+
+
+                const weeklyStatus =
+                    await getPresidentialApprovalParticipationStatus();
+
+
+                if (
+                    weeklyStatus?.alreadyParticipated
+                ) {
+
+                    lockForm(
+                        `You have already responded for ${weeklyStatus.votingPeriodLabel}. Voting reopens next Monday.`
+                    );
+
+
+                    return;
+
+                }
+
+
+                enableForm(
+                    form
+                );
+
+            } catch (error) {
+
+                console.error(
+                    "Presidential approval eligibility check failed:",
+                    error
+                );
+
+
+                disableForm(
+                    form
+                );
+
+
+                showMessage(
+                    "Voting access could not be confirmed. Please sign in again.",
+                    "error"
+                );
+
+            }
+
+        },
+
+        error => {
+
+            console.error(
+                "Presidential approval auth state error:",
+                error
+            );
+
+
+            disableForm(
                 form
             );
 
 
-            return;
+            showMessage(
+                "Voting access could not be confirmed. Please sign in again.",
+                "error"
+            );
 
         }
 
-
-        blockIneligibleVoting(
-            form,
-            eligibility
-        );
-
-    } catch (error) {
-
-        console.error(
-            "Presidential approval eligibility check failed:",
-            error
-        );
-
-
-        disableForm(
-            form
-        );
-
-
-        showMessage(
-            "Voting access could not be confirmed. Please sign in again.",
-            "error"
-        );
-
-    }
+    );
 
 }
 
@@ -217,24 +284,7 @@ async function handleFormSubmit(
         );
 
 
-    /*
-    ----------------------------------------------
-    DEVICE RESPONSE LOCK
-    ----------------------------------------------
-    */
-
-    if (
-        hasSubmittedPresidentialApproval()
-    ) {
-
-        lockForm(
-            "You have already responded to this tracker on this device."
-        );
-
-
-        return;
-
-    }
+    
 
 
     /*
@@ -248,8 +298,28 @@ async function handleFormSubmit(
 
     try {
 
-        const eligibility =
-            await getCurrentUserVotingEligibility();
+    const refreshedUser =
+        await refreshCurrentUser();
+
+
+    if (!refreshedUser) {
+
+        blockIneligibleVoting(
+            form,
+            {
+                reason:
+                    "signedOut"
+            }
+        );
+
+
+        return;
+
+    }
+
+
+    const eligibility =
+        await getCurrentUserVotingEligibility();
 
 
         if (
@@ -283,6 +353,43 @@ async function handleFormSubmit(
         return;
 
     }
+
+    try {
+
+    const weeklyStatus =
+        await getPresidentialApprovalParticipationStatus();
+
+
+    if (
+        weeklyStatus?.alreadyParticipated
+    ) {
+
+        lockForm(
+            `You have already responded for ${weeklyStatus.votingPeriodLabel}. Voting reopens next Monday.`
+        );
+
+
+        return;
+
+    }
+
+} catch (error) {
+
+    console.error(
+        "Presidential approval weekly participation check failed:",
+        error
+    );
+
+
+    showMessage(
+        "Voting access could not be confirmed. Please try again.",
+        "error"
+    );
+
+
+    return;
+
+}
 
 
     if (
@@ -349,6 +456,8 @@ async function handleFormSubmit(
     }
 
 }
+
+
 
 
 /*

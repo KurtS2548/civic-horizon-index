@@ -8,8 +8,8 @@ NATIONAL PULSE CONTROLLER
 import {
     subscribeToPresidentialApprovalSummary,
     submitPresidentialApprovalResponse,
-    hasSubmittedPresidentialApproval,
-    markPresidentialApprovalSubmitted
+    markPresidentialApprovalSubmitted,
+    getPresidentialApprovalParticipationStatus
 } from "../services/pulse-service.js";
 
 
@@ -173,7 +173,7 @@ FORM INITIALIZATION
 ==================================================
 */
 
-function initializeApprovalForm() {
+async function initializeApprovalForm() { 
 
     const form =
         document.getElementById(
@@ -190,17 +190,33 @@ function initializeApprovalForm() {
         "submit",
         handleApprovalSubmit
     );
+    try {
+
+    const weeklyStatus =
+        await getPresidentialApprovalParticipationStatus();
 
 
     if (
-        hasSubmittedPresidentialApproval()
+        weeklyStatus?.alreadyParticipated
     ) {
 
         lockApprovalForm(
-            "You have already responded to this tracker on this device."
+            `You have already responded for ${weeklyStatus.votingPeriodLabel}. Voting reopens next Monday.`
         );
 
     }
+
+} catch (error) {
+
+    console.error(
+        "Presidential approval weekly status check failed:",
+        error
+    );
+
+}
+
+
+    
 
 }
 
@@ -228,18 +244,45 @@ async function handleApprovalSubmit(event) {
         form.querySelector(
             ".pulse-poll__submit"
         );
+        try {
+
+    const weeklyStatus =
+        await getPresidentialApprovalParticipationStatus();
 
 
     if (
-        hasSubmittedPresidentialApproval()
+        weeklyStatus?.alreadyParticipated
     ) {
 
         lockApprovalForm(
-            "You have already responded to this tracker on this device."
+            `You have already responded for ${weeklyStatus.votingPeriodLabel}. Voting reopens next Monday.`
         );
 
+
         return;
+
     }
+
+} catch (error) {
+
+    console.error(
+        "Presidential approval weekly status check failed:",
+        error
+    );
+
+
+    showMessage(
+        "Voting access could not be confirmed. Please try again.",
+        "error"
+    );
+
+
+    return;
+
+}
+
+
+    
 
 
     if (!selectedInput) {
@@ -284,6 +327,19 @@ async function handleApprovalSubmit(event) {
         console.error(
             "Presidential approval submission error:",
             error
+            if (
+    error?.code ===
+    "already-participated-this-week"
+) {
+
+    lockApprovalForm(
+        "You have already responded this week. Voting reopens next Monday."
+    );
+
+
+    return;
+
+}
         );
 
 

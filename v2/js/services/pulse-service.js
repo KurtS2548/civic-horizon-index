@@ -7,7 +7,9 @@ NATIONAL PULSE SERVICE
 
 import {
     subscribeToPresidentialApproval,
-    submitPresidentialApproval
+    submitPresidentialApproval,
+    getCurrentWeeklyVotingPeriod,
+    getWeeklyParticipationStatus
 } from "./firebase-service.js";
 
 
@@ -249,6 +251,20 @@ export async function submitPresidentialApprovalResponse(
 
 }
 
+/*
+==================================================
+PRESIDENTIAL APPROVAL WEEKLY STATUS
+==================================================
+*/
+
+export async function getPresidentialApprovalParticipationStatus() {
+
+    return getWeeklyParticipationStatus(
+        "presidentialApproval"
+    );
+
+}
+
 
 /*
 ==================================================
@@ -264,10 +280,15 @@ export function hasSubmittedPresidentialApproval() {
 
     try {
 
-        return (
+        const storedPeriod =
             localStorage.getItem(
                 presidentialApprovalStorageKey
-            ) === "true"
+            );
+
+
+        return (
+            storedPeriod ===
+            getCurrentWeeklyVotingPeriod()
         );
 
     } catch (error) {
@@ -290,7 +311,7 @@ export function markPresidentialApprovalSubmitted() {
 
         localStorage.setItem(
             presidentialApprovalStorageKey,
-            "true"
+            getCurrentWeeklyVotingPeriod()
         );
 
     } catch (error) {

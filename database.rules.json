@@ -1,0 +1,685 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+
+    "createdSurveys": {
+      ".read": "auth != null",
+
+      "$pollId": {
+        ".write": "auth != null && auth.uid === '46MRUizWh5Yl83XXk4CBuI3TUZc2'",
+
+        ".validate": "newData.hasChildren(['question', 'choices', 'active']) && newData.child('question').isString() && newData.child('question').val().length >= 5 && newData.child('question').val().length <= 240 && newData.child('choices').hasChildren(['0', '1']) && newData.child('active').isBoolean()"
+      }
+    },
+
+    "votes": {
+      ".read": "auth != null",
+
+      "$voteId": {
+        ".write": "auth != null && auth.token.email_verified === true && !data.exists() && newData.exists() && root.child('communityPollVotes').child(newData.child('surveyId').val()).child(auth.uid).exists() && root.child('communityPollVotes').child(newData.child('surveyId').val()).child(auth.uid).child('publicVoteId').val() === $voteId && root.child('communityPollVotes').child(newData.child('surveyId').val()).child(auth.uid).child('surveyId').val() === newData.child('surveyId').val() && root.child('communityPollVotes').child(newData.child('surveyId').val()).child(auth.uid).child('choice').val() === newData.child('choice').val()",
+
+        ".validate": "newData.hasChildren(['surveyId', 'choice', 'submittedAt', 'source']) && newData.child('surveyId').isString() && newData.child('surveyId').val().length > 0 && newData.child('surveyId').val().length <= 100 && newData.child('choice').isString() && newData.child('choice').val().length > 0 && newData.child('choice').val().length <= 120 && newData.child('submittedAt').isString() && newData.child('submittedAt').val().length >= 20 && newData.child('submittedAt').val().length <= 40 && newData.child('source').isString() && newData.child('source').val() === 'v2PollsCenter' && root.child('createdSurveys').child(newData.child('surveyId').val()).child('active').val() === true",
+
+        "surveyId": {
+          ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 100"
+        },
+
+        "choice": {
+          ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 120"
+        },
+
+        "submittedAt": {
+          ".validate": "newData.isString() && newData.val().length >= 20 && newData.val().length <= 40"
+        },
+
+        "source": {
+          ".validate": "newData.isString() && newData.val() === 'v2PollsCenter'"
+        },
+
+        "$other": {
+          ".validate": false
+        }
+      }
+    },
+
+    "communityPollVotes": {
+      "$pollId": {
+        "$uid": {
+          ".read": "auth != null && auth.uid === $uid",
+
+          ".write": "auth != null && auth.uid === $uid && auth.token.email_verified === true && !data.exists() && newData.exists() && root.child('createdSurveys').child($pollId).child('active').val() === true",
+
+          ".validate": "newData.hasChildren(['surveyId', 'choice', 'publicVoteId', 'submittedAt']) && newData.child('surveyId').val() === $pollId",
+
+          "surveyId": {
+            ".validate": "newData.isString() && newData.val() === $pollId && newData.val().length > 0 && newData.val().length <= 100"
+          },
+
+          "choice": {
+            ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 120"
+          },
+
+          "publicVoteId": {
+            ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 128"
+          },
+
+          "submittedAt": {
+            ".validate": "newData.isString() && newData.val().length >= 20 && newData.val().length <= 40"
+          },
+
+          "$other": {
+            ".validate": false
+          }
+        }
+      }
+    },
+
+    "prioritySubmissions": {
+      ".read": "auth != null",
+
+      "$submissionId": {
+        ".write": "auth != null && auth.token.email_verified === true && !data.exists() && newData.exists()",
+
+        ".validate": "newData.hasChildren(['ratings', 'ageGroup', 'submittedAt', 'survey', 'surveyVersion'])",
+
+        "ratings": {
+          ".validate": "newData.hasChildren(['economy', 'healthcare', 'education', 'housing', 'immigration', 'publicSafety', 'nationalSecurity', 'environment', 'governmentAccountability', 'childrenFamilies'])",
+
+          "economy": {
+            ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 10"
+          },
+
+          "healthcare": {
+            ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 10"
+          },
+
+          "education": {
+            ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 10"
+          },
+
+          "housing": {
+            ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 10"
+          },
+
+          "immigration": {
+            ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 10"
+          },
+
+          "publicSafety": {
+            ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 10"
+          },
+
+          "nationalSecurity": {
+            ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 10"
+          },
+
+          "environment": {
+            ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 10"
+          },
+
+          "governmentAccountability": {
+            ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 10"
+          },
+
+          "childrenFamilies": {
+            ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 10"
+          },
+
+          "$other": {
+            ".validate": false
+          }
+        },
+
+        "ageGroup": {
+          ".validate": "newData.isString() && (newData.val() === 'youth' || newData.val() === 'adult')"
+        },
+
+        "submittedAt": {
+          ".validate": "newData.isString()"
+        },
+
+        "survey": {
+          ".validate": "newData.isString() && newData.val() === 'nationalPriorities'"
+        },
+
+        "surveyVersion": {
+          ".validate": "newData.isString() && newData.val() === '2.1'"
+        },
+
+        "$other": {
+          ".validate": false
+        }
+      }
+    },
+
+    "monthlyVotes": {
+      "$period": {
+        "$tracker": {
+          "$uid": {
+            ".read": "auth != null && auth.uid === $uid",
+
+            ".write": "auth != null && auth.uid === $uid && auth.token.email_verified === true && !data.exists() && newData.exists()",
+
+            ".validate": "($tracker === 'nationalPriorities' || $tracker === 'nationalConfidence') && newData.hasChildren(['submittedAt', 'votingPeriod']) && newData.child('submittedAt').isString() && newData.child('votingPeriod').isString() && newData.child('votingPeriod').val() === $period"}
+        }
+      }
+    },
+      
+      "weeklyVotes": {
+  "$period": {
+    "$tracker": {
+      "$uid": {
+        ".read": "auth != null && auth.uid === $uid",
+
+        ".write": "auth != null && auth.uid === $uid && auth.token.email_verified === true && !data.exists() && newData.exists()",
+
+        ".validate": "($tracker === 'presidentialApproval' || $tracker === 'countryDirection') && newData.hasChildren(['submittedAt', 'votingPeriod']) && newData.child('submittedAt').isString() && newData.child('votingPeriod').isString() && newData.child('votingPeriod').val() === $period"
+      }
+    }
+  }
+},
+
+    "pollSuggestions": {
+      ".read": "auth != null && auth.uid === '46MRUizWh5Yl83XXk4CBuI3TUZc2'",
+
+      "$suggestionId": {
+        ".write": "(auth != null && auth.token.email_verified === true && !data.exists() && newData.exists() && newData.child('submittedByUid').val() === auth.uid && newData.child('submittedByVerifiedAccount').val() === true) || (auth != null && auth.uid === '46MRUizWh5Yl83XXk4CBuI3TUZc2')",
+
+        ".validate": "newData.hasChildren(['level', 'topic', 'proposedQuestion', 'reason', 'status', 'submittedAt', 'source', 'submittedByUid', 'submittedByVerifiedAccount']) && (data.exists() || newData.child('status').val() === 'pendingReview')",
+
+        "level": {
+          ".validate": "newData.isString() && (newData.val() === 'national' || newData.val() === 'state' || newData.val() === 'local' || newData.val() === 'community')"
+        },
+
+        "topic": {
+          ".validate": "newData.isString() && newData.val().length >= 3 && newData.val().length <= 150"
+        },
+
+        "proposedQuestion": {
+          ".validate": "newData.isString() && newData.val().length >= 10 && newData.val().length <= 500"
+        },
+
+        "reason": {
+          ".validate": "newData.isString() && newData.val().length >= 10 && newData.val().length <= 750"
+        },
+
+        "status": {
+          ".validate": "newData.isString() && (newData.val() === 'pendingReview' || newData.val() === 'underReview' || newData.val() === 'approved')"
+        },
+
+        "submittedAt": {
+          ".validate": "newData.isString() && newData.val().length >= 20 && newData.val().length <= 40"
+        },
+
+        "source": {
+          ".validate": "newData.isString() && newData.val() === 'contactPage'"
+        },
+
+        "submittedByUid": {
+          ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 128 && auth != null && newData.val() === auth.uid"
+        },
+
+        "submittedByVerifiedAccount": {
+          ".validate": "newData.isBoolean() && auth != null && auth.token.email_verified === true && newData.val() === true"
+        },
+
+        "reviewedAt": {
+          ".validate": "!newData.exists() || (auth != null && auth.uid === '46MRUizWh5Yl83XXk4CBuI3TUZc2' && newData.isString())"
+        },
+
+        "reviewedBy": {
+          ".validate": "!newData.exists() || (auth != null && auth.uid === '46MRUizWh5Yl83XXk4CBuI3TUZc2' && newData.isString() && newData.val() === '46MRUizWh5Yl83XXk4CBuI3TUZc2')"
+        },
+
+        "$other": {
+          ".validate": false
+        }
+      }
+    },
+
+    "contactMessages": {
+      ".read": "auth != null && auth.uid === '46MRUizWh5Yl83XXk4CBuI3TUZc2'",
+
+      "$messageId": {
+        ".write": "(auth != null && auth.token.email_verified === true && !data.exists() && newData.exists() && newData.child('submittedByUid').val() === auth.uid && newData.child('submittedByVerifiedAccount').val() === true) || (auth != null && auth.uid === '46MRUizWh5Yl83XXk4CBuI3TUZc2')",
+
+        ".validate": "newData.hasChildren(['name', 'email', 'category', 'message', 'status', 'submittedAt', 'source', 'submittedByUid', 'submittedByVerifiedAccount']) && (data.exists() || newData.child('status').val() === 'new')",
+
+        "name": {
+          ".validate": "newData.isString() && newData.val().length >= 2 && newData.val().length <= 100"
+        },
+
+        "email": {
+          ".validate": "newData.isString() && newData.val().length >= 5 && newData.val().length <= 150"
+        },
+
+        "category": {
+          ".validate": "newData.isString() && (newData.val() === 'general' || newData.val() === 'problem' || newData.val() === 'account' || newData.val() === 'feedback' || newData.val() === 'privacy' || newData.val() === 'other')"
+        },
+
+        "message": {
+          ".validate": "newData.isString() && newData.val().length >= 10 && newData.val().length <= 1500"
+        },
+
+        "status": {
+          ".validate": "newData.isString() && (newData.val() === 'new' || newData.val() === 'underReview' || newData.val() === 'resolved' || newData.val() === 'archived')"
+        },
+
+        "submittedAt": {
+          ".validate": "newData.isString() && newData.val().length >= 20 && newData.val().length <= 40"
+        },
+
+        "source": {
+          ".validate": "newData.isString() && newData.val() === 'contactPage'"
+        },
+
+        "submittedByUid": {
+          ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 128 && auth != null && newData.val() === auth.uid"
+        },
+
+        "submittedByVerifiedAccount": {
+          ".validate": "newData.isBoolean() && auth != null && auth.token.email_verified === true && newData.val() === true"
+        },
+
+        "$other": {
+          ".validate": false
+        }
+      }
+    },
+
+    "userProfiles": {
+      "$uid": {
+        ".read": "auth != null && auth.uid === $uid",
+
+        ".write": "auth != null && auth.uid === $uid",
+
+        ".validate": "newData.hasChildren(['uid', 'displayName', 'zipCode', 'birthday', 'ageGroup', 'participantType', 'agreementAccepted', 'agreementAcceptedAt', 'emailVerified', 'accountStatus', 'createdAt', 'updatedAt', 'profileVersion']) && newData.child('uid').val() === auth.uid",
+
+        "uid": {
+          ".validate": "newData.isString() && newData.val() === auth.uid"
+        },
+
+        "displayName": {
+          ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 60"
+        },
+
+        "zipCode": {
+          ".validate": "newData.isString() && newData.val().matches(/^\\d{5}$/)"
+        },
+
+        "birthday": {
+          ".validate": "newData.isString() && newData.val().matches(/^\\d{4}-\\d{2}-\\d{2}$/)"
+        },
+
+        "ageGroup": {
+          ".validate": "newData.isString() && (newData.val() === 'youth' || newData.val() === 'adult')"
+        },
+
+        "participantType": {
+          ".validate": "newData.isString() && ((newData.parent().child('ageGroup').val() === 'youth' && newData.val() === 'youthParticipant') || (newData.parent().child('ageGroup').val() === 'adult' && newData.val() === 'verifiedParticipant'))"
+        },
+
+        "agreementAccepted": {
+          ".validate": "newData.isBoolean() && newData.val() === true"
+        },
+
+        "agreementAcceptedAt": {
+          ".validate": "newData.isString()"
+        },
+
+        "emailVerified": {
+          ".validate": "newData.isBoolean() && newData.val() === (auth.token.email_verified === true)"
+        },
+
+        "accountStatus": {
+          ".validate": "newData.isString() && ((auth.token.email_verified === true && newData.val() === 'verified') || (auth.token.email_verified !== true && newData.val() === 'pendingVerification'))"
+        },
+
+        "createdAt": {
+          ".validate": "newData.isString()"
+        },
+
+        "updatedAt": {
+          ".validate": "newData.isString()"
+        },
+
+        "profileVersion": {
+          ".validate": "newData.isString() && newData.val().length > 0"
+        },
+
+        "$other": {
+          ".validate": false
+        }
+      }
+    },
+
+    "userActivity": {
+      "$uid": {
+        ".read": "auth != null && auth.uid === $uid && auth.token.email_verified === true",
+
+        ".write": "auth != null && auth.uid === $uid && auth.token.email_verified === true",
+
+        "nationalPriorities": {
+          "$submissionId": {
+            ".validate": "newData.hasChildren(['submittedAt', 'ratings'])",
+
+            "submittedAt": {
+              ".validate": "newData.isString()"
+            },
+
+            "ratings": {
+              ".validate": "newData.hasChildren(['economy', 'healthcare', 'education', 'housing', 'immigration', 'publicSafety', 'nationalSecurity', 'environment', 'governmentAccountability', 'childrenFamilies'])",
+
+              "economy": {
+                ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 10"
+              },
+
+              "healthcare": {
+                ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 10"
+              },
+
+              "education": {
+                ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 10"
+              },
+
+              "housing": {
+                ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 10"
+              },
+
+              "immigration": {
+                ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 10"
+              },
+
+              "publicSafety": {
+                ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 10"
+              },
+
+              "nationalSecurity": {
+                ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 10"
+              },
+
+              "environment": {
+                ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 10"
+              },
+
+              "governmentAccountability": {
+                ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 10"
+              },
+
+              "childrenFamilies": {
+                ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 10"
+              },
+
+              "$other": {
+                ".validate": false
+              }
+            },
+
+            "$other": {
+              ".validate": false
+            }
+          }
+        },
+
+        "civicPulse": {
+          "presidentialApproval": {
+            "$submissionId": {
+              ".validate": "newData.hasChildren(['response', 'submittedAt', 'tracker', 'trackerVersion'])",
+
+              "response": {
+                ".validate": "newData.isString() && (newData.val() === 'Strongly Approve' || newData.val() === 'Approve' || newData.val() === 'Neutral' || newData.val() === 'Disapprove' || newData.val() === 'Strongly Disapprove')"
+              },
+
+              "submittedAt": {
+                ".validate": "newData.isString()"
+              },
+
+              "tracker": {
+                ".validate": "newData.isString() && newData.val() === 'presidentialApproval'"
+              },
+
+              "trackerVersion": {
+                ".validate": "newData.isString() && newData.val() === '2.1'"
+              },
+
+              "$other": {
+                ".validate": false
+              }
+            }
+          },
+
+          "countryDirection": {
+            "$submissionId": {
+              ".validate": "newData.hasChildren(['response', 'submittedAt', 'tracker', 'trackerVersion'])",
+
+              "response": {
+                ".validate": "newData.isString() && (newData.val() === 'Right Direction' || newData.val() === 'Wrong Track')"
+              },
+
+              "submittedAt": {
+                ".validate": "newData.isString()"
+              },
+
+              "tracker": {
+                ".validate": "newData.isString() && newData.val() === 'countryDirection'"
+              },
+
+              "trackerVersion": {
+                ".validate": "newData.isString() && newData.val() === '1.1'"
+              },
+
+              "$other": {
+                ".validate": false
+              }
+            }
+          },
+
+          "nationalConfidence": {
+            "$submissionId": {
+              ".validate": "newData.hasChildren(['ratings', 'submittedAt', 'tracker', 'trackerVersion'])",
+
+              "ratings": {
+                ".validate": "newData.hasChildren(['government', 'congress', 'court', 'economy', 'media', 'democracy'])",
+
+                "government": {
+                  ".validate": "newData.isNumber() && (newData.val() === 20 || newData.val() === 40 || newData.val() === 60 || newData.val() === 80 || newData.val() === 100)"
+                },
+
+                "congress": {
+                  ".validate": "newData.isNumber() && (newData.val() === 20 || newData.val() === 40 || newData.val() === 60 || newData.val() === 80 || newData.val() === 100)"
+                },
+
+                "court": {
+                  ".validate": "newData.isNumber() && (newData.val() === 20 || newData.val() === 40 || newData.val() === 60 || newData.val() === 80 || newData.val() === 100)"
+                },
+
+                "economy": {
+                  ".validate": "newData.isNumber() && (newData.val() === 20 || newData.val() === 40 || newData.val() === 60 || newData.val() === 80 || newData.val() === 100)"
+                },
+
+                "media": {
+                  ".validate": "newData.isNumber() && (newData.val() === 20 || newData.val() === 40 || newData.val() === 60 || newData.val() === 80 || newData.val() === 100)"
+                },
+
+                "democracy": {
+                  ".validate": "newData.isNumber() && (newData.val() === 20 || newData.val() === 40 || newData.val() === 60 || newData.val() === 80 || newData.val() === 100)"
+                },
+
+                "$other": {
+                  ".validate": false
+                }
+              },
+
+              "submittedAt": {
+                ".validate": "newData.isString()"
+              },
+
+              "tracker": {
+                ".validate": "newData.isString() && newData.val() === 'nationalConfidence'"
+              },
+
+              "trackerVersion": {
+                ".validate": "newData.isString() && newData.val() === '1.1'"
+              },
+
+              "$other": {
+                ".validate": false
+              }
+            }
+          },
+
+          "$other": {
+            ".validate": false
+          }
+        },
+
+        "simulations": {
+          "$simulationId": {
+            ".validate": "($simulationId === 'congress' || $simulationId === 'president' || $simulationId === 'court' || $simulationId === 'governor' || $simulationId === 'mayor' || $simulationId === 'campaign') && newData.hasChildren(['completed', 'lastGrade', 'runs', 'lastCompletedAt'])",
+
+            "completed": {
+              ".validate": "newData.isBoolean() && newData.val() === true"
+            },
+
+            "lastGrade": {
+              ".validate": "newData.isString() && (newData.val() === 'A+' || newData.val() === 'A' || newData.val() === 'A−' || newData.val() === 'B+' || newData.val() === 'B' || newData.val() === 'B−' || newData.val() === 'C+' || newData.val() === 'C' || newData.val() === 'Needs Improvement')"
+            },
+
+            "runs": {
+              ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 10000"
+            },
+
+            "lastCompletedAt": {
+              ".validate": "newData.isString() && newData.val().length >= 20 && newData.val().length <= 40"
+            },
+
+            "lastResult": {
+              ".validate": "!newData.exists() || (newData.isString() && newData.val().length <= 2000)"
+            },
+
+            "$other": {
+              ".validate": false
+            }
+          }
+        },
+
+        "$other": {
+          ".validate": false
+        }
+      }
+    },
+
+    "civicPulse": {
+      ".read": "auth != null",
+
+      "presidentialApproval": {
+        "responses": {
+          "$responseId": {
+            ".write": "auth != null && auth.token.email_verified === true && newData.exists()",
+
+            ".validate": "newData.hasChildren(['response']) && newData.child('response').isString() && (newData.child('response').val() === 'Strongly Approve' || newData.child('response').val() === 'Approve' || newData.child('response').val() === 'Neutral' || newData.child('response').val() === 'Disapprove' || newData.child('response').val() === 'Strongly Disapprove')"
+          }
+        }
+      },
+
+      "countryDirection": {
+        "responses": {
+          "$responseId": {
+            ".write": "auth != null && auth.token.email_verified === true && newData.exists()",
+
+            ".validate": "newData.hasChildren(['response']) && newData.child('response').isString() && (newData.child('response').val() === 'Right Direction' || newData.child('response').val() === 'Wrong Track')"
+          }
+        }
+      },
+
+      "nationalConfidence": {
+        "responses": {
+          "$responseId": {
+            ".write": "auth != null && auth.token.email_verified === true && newData.exists()",
+
+            ".validate": "newData.hasChildren(['ratings'])",
+
+            "ratings": {
+              ".validate": "newData.hasChildren(['government', 'congress', 'court', 'economy', 'media', 'democracy'])",
+
+              "government": {
+                ".validate": "newData.isNumber() && (newData.val() === 20 || newData.val() === 40 || newData.val() === 60 || newData.val() === 80 || newData.val() === 100)"
+              },
+
+              "congress": {
+                ".validate": "newData.isNumber() && (newData.val() === 20 || newData.val() === 40 || newData.val() === 60 || newData.val() === 80 || newData.val() === 100)"
+              },
+
+              "court": {
+                ".validate": "newData.isNumber() && (newData.val() === 20 || newData.val() === 40 || newData.val() === 60 || newData.val() === 80 || newData.val() === 100)"
+              },
+
+              "economy": {
+                ".validate": "newData.isNumber() && (newData.val() === 20 || newData.val() === 40 || newData.val() === 60 || newData.val() === 80 || newData.val() === 100)"
+              },
+
+              "media": {
+                ".validate": "newData.isNumber() && (newData.val() === 20 || newData.val() === 40 || newData.val() === 60 || newData.val() === 80 || newData.val() === 100)"
+              },
+
+              "democracy": {
+                ".validate": "newData.isNumber() && (newData.val() === 20 || newData.val() === 40 || newData.val() === 60 || newData.val() === 80 || newData.val() === 100)"
+              },
+
+              "$other": {
+                ".validate": false
+              }
+            }
+          }
+        }
+      },
+
+      "history": {
+        ".read": "auth != null",
+
+        "$date": {
+          ".write": "auth != null && auth.uid === '46MRUizWh5Yl83XXk4CBuI3TUZc2'",
+
+          ".validate": "newData.hasChildren(['date', 'capturedAt', 'presidentialApproval', 'countryDirection', 'economicConfidence', 'institutionalConfidence', 'approvalResponses', 'directionResponses', 'confidenceResponses'])",
+
+          "date": {
+            ".validate": "newData.isString()"
+          },
+
+          "capturedAt": {
+            ".validate": "newData.isString()"
+          },
+
+          "presidentialApproval": {
+            ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 100"
+          },
+
+          "countryDirection": {
+            ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 100"
+          },
+
+          "economicConfidence": {
+            ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 100"
+          },
+
+          "institutionalConfidence": {
+            ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 100"
+          },
+
+          "approvalResponses": {
+            ".validate": "newData.isNumber() && newData.val() >= 0"
+          },
+
+          "directionResponses": {
+            ".validate": "newData.isNumber() && newData.val() >= 0"
+          },
+
+          "confidenceResponses": {
+            ".validate": "newData.isNumber() && newData.val() >= 0"
+          }
+        }
+      }
+    }
+  }
+}

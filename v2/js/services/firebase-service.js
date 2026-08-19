@@ -88,13 +88,18 @@ MONTHLY TRACKERS
 ==================================================
 */
 
-const monthlyTrackerNames = [
-
-    "nationalPriorities",
+const weeklyTrackerNames = [
 
     "presidentialApproval",
 
-    "countryDirection",
+    "countryDirection"
+
+];
+
+
+const monthlyTrackerNames = [
+
+    "nationalPriorities",
 
     "nationalConfidence"
 
@@ -118,17 +123,17 @@ No manual reset is required.
 
 export function getCurrentVotingPeriod() {
 
-    const now =
-        new Date();
+    const easternParts =
+        getEasternDateParts();
 
 
     const year =
-        now.getFullYear();
+        easternParts.year;
 
 
     const month =
         String(
-            now.getMonth() + 1
+            easternParts.month
         ).padStart(
             2,
             "0"
@@ -136,6 +141,233 @@ export function getCurrentVotingPeriod() {
 
 
     return `${year}-${month}`;
+
+}
+
+    /*
+==================================================
+CURRENT WEEKLY VOTING PERIOD
+MONDAY 12:00 AM EASTERN
+==================================================
+*/
+
+export function getCurrentWeeklyVotingPeriod() {
+
+    const easternParts =
+        getEasternDateParts();
+
+
+    const weekdayIndexes = {
+        Sunday: 0,
+        Monday: 1,
+        Tuesday: 2,
+        Wednesday: 3,
+        Thursday: 4,
+        Friday: 5,
+        Saturday: 6
+    };
+
+
+    const weekdayIndex =
+        weekdayIndexes[
+            easternParts.weekday
+        ];
+
+
+    const daysSinceMonday =
+        (
+            weekdayIndex + 6
+        ) % 7;
+
+
+    const easternCalendarDate =
+        new Date(
+            Date.UTC(
+                easternParts.year,
+                easternParts.month - 1,
+                easternParts.day
+            )
+        );
+
+
+    easternCalendarDate.setUTCDate(
+        easternCalendarDate.getUTCDate() -
+        daysSinceMonday
+    );
+
+
+    const year =
+        easternCalendarDate.getUTCFullYear();
+
+
+    const month =
+        String(
+            easternCalendarDate.getUTCMonth() + 1
+        ).padStart(
+            2,
+            "0"
+        );
+
+
+    const day =
+        String(
+            easternCalendarDate.getUTCDate()
+        ).padStart(
+            2,
+            "0"
+        );
+
+
+    return `${year}-${month}-${day}`;
+
+}
+
+
+/*
+==================================================
+CURRENT WEEKLY VOTING PERIOD LABEL
+==================================================
+*/
+
+export function getCurrentWeeklyVotingPeriodLabel() {
+
+    const period =
+        getCurrentWeeklyVotingPeriod();
+
+
+    const [
+        year,
+        month,
+        day
+    ] =
+        period
+            .split("-")
+            .map(
+                Number
+            );
+
+
+    const monday =
+        new Date(
+            Date.UTC(
+                year,
+                month - 1,
+                day
+            )
+        );
+
+
+    const sunday =
+        new Date(
+            monday
+        );
+
+
+    sunday.setUTCDate(
+        sunday.getUTCDate() + 6
+    );
+
+
+    const formatter =
+        new Intl.DateTimeFormat(
+            "en-US",
+            {
+                month: "short",
+                day: "numeric",
+                timeZone: "UTC"
+            }
+        );
+
+
+    return (
+        `${formatter.format(monday)} – ` +
+        `${formatter.format(sunday)}`
+    );
+
+}
+
+
+/*
+==================================================
+EASTERN DATE PARTS
+==================================================
+*/
+
+function getEasternDateParts() {
+
+    const formatter =
+        new Intl.DateTimeFormat(
+            "en-US",
+            {
+                timeZone:
+                    "America/New_York",
+
+                weekday:
+                    "long",
+
+                year:
+                    "numeric",
+
+                month:
+                    "numeric",
+
+                day:
+                    "numeric"
+            }
+        );
+
+
+    const parts =
+        formatter.formatToParts(
+            new Date()
+        );
+
+
+    const values =
+        {};
+
+
+    parts.forEach(
+        part => {
+
+            if (
+                part.type !==
+                "literal"
+            ) {
+
+                values[
+                    part.type
+                ] =
+                    part.value;
+
+            }
+
+        }
+    );
+
+
+    return {
+
+        year:
+            Number(
+                values.year
+            ),
+
+        month:
+            Number(
+                values.month
+            ),
+
+        day:
+            Number(
+                values.day
+            ),
+
+        weekday:
+            values.weekday
+
+    };
+
 
 }
 
@@ -148,18 +380,42 @@ VOTING PERIOD LABEL
 
 export function getCurrentVotingPeriodLabel() {
 
-    const now =
-        new Date();
+    const votingPeriod =
+        getCurrentVotingPeriod();
 
 
-    return now.toLocaleDateString(
+    const [
+        year,
+        month
+    ] =
+        votingPeriod
+            .split("-")
+            .map(
+                Number
+            );
+
+
+    const periodDate =
+        new Date(
+            Date.UTC(
+                year,
+                month - 1,
+                1
+            )
+        );
+
+
+    return periodDate.toLocaleDateString(
         "en-US",
         {
             month:
                 "long",
 
             year:
-                "numeric"
+                "numeric",
+
+            timeZone:
+                "UTC"
         }
     );
 
@@ -230,6 +486,33 @@ function validateMonthlyTracker(
 
 }
 
+/*
+==================================================
+VALIDATE WEEKLY TRACKER
+==================================================
+*/
+
+function validateWeeklyTracker(
+    tracker
+) {
+
+    if (
+        !weeklyTrackerNames.includes(
+            tracker
+        )
+    ) {
+
+        throw new Error(
+            "Invalid weekly voting tracker."
+        );
+
+    }
+
+
+    return tracker;
+
+}
+
 
 /*
 ==================================================
@@ -285,6 +568,60 @@ function getMonthlyParticipantReference(
 
 }
 
+/*
+==================================================
+WEEKLY PARTICIPANT REFERENCE
+
+Structure:
+
+weeklyVotes/
+    YYYY-MM-DD/
+        tracker/
+            Firebase UID
+==================================================
+*/
+
+function getWeeklyParticipantReference(
+    tracker,
+    userId = ""
+) {
+
+    const validatedTracker =
+        validateWeeklyTracker(
+            tracker
+        );
+
+
+    const user =
+        auth.currentUser;
+
+
+    const uid =
+        userId ||
+        user?.uid ||
+        "";
+
+
+    if (!uid) {
+
+        throw new Error(
+            "A signed-in participant is required."
+        );
+
+    }
+
+
+    const votingPeriod =
+        getCurrentWeeklyVotingPeriod();
+
+
+    return ref(
+        database,
+        `weeklyVotes/${votingPeriod}/${validatedTracker}/${uid}`
+    );
+
+}
+
 
 /*
 ==================================================
@@ -317,6 +654,44 @@ export async function hasParticipatedThisMonth(
     const snapshot =
         await get(
             monthlyReference
+        );
+
+
+    return snapshot.exists();
+
+}
+
+/*
+==================================================
+HAS PARTICIPATED THIS WEEK
+==================================================
+*/
+
+export async function hasParticipatedThisWeek(
+    tracker
+) {
+
+    const user =
+        auth.currentUser;
+
+
+    if (!user) {
+
+        return false;
+
+    }
+
+
+    const weeklyReference =
+        getWeeklyParticipantReference(
+            tracker,
+            user.uid
+        );
+
+
+    const snapshot =
+        await get(
+            weeklyReference
         );
 
 
@@ -471,6 +846,123 @@ export async function getMonthlyParticipationStatus(
 
             reason:
                 "alreadyParticipatedThisMonth",
+
+            alreadyParticipated:
+                true,
+
+            votingPeriod,
+
+            votingPeriodLabel
+
+        };
+
+    }
+
+
+    return {
+
+        eligible:
+            true,
+
+        reason:
+            "eligible",
+
+        alreadyParticipated:
+            false,
+
+        votingPeriod,
+
+        votingPeriodLabel
+
+    };
+
+}
+
+/*
+==================================================
+WEEKLY PARTICIPATION STATUS
+==================================================
+*/
+
+export async function getWeeklyParticipationStatus(
+    tracker
+) {
+
+    const user =
+        auth.currentUser;
+
+
+    const votingPeriod =
+        getCurrentWeeklyVotingPeriod();
+
+
+    const votingPeriodLabel =
+        getCurrentWeeklyVotingPeriodLabel();
+
+
+    if (!user) {
+
+        return {
+
+            eligible:
+                false,
+
+            reason:
+                "signedOut",
+
+            alreadyParticipated:
+                false,
+
+            votingPeriod,
+
+            votingPeriodLabel
+
+        };
+
+    }
+
+
+    if (
+        !user.emailVerified
+    ) {
+
+        return {
+
+            eligible:
+                false,
+
+            reason:
+                "emailNotVerified",
+
+            alreadyParticipated:
+                false,
+
+            votingPeriod,
+
+            votingPeriodLabel
+
+        };
+
+    }
+
+
+    const alreadyParticipated =
+        await hasParticipatedThisWeek(
+            tracker
+        );
+
+
+    if (
+        alreadyParticipated
+    ) {
+
+        return {
+
+            eligible:
+                false,
+
+            reason:
+                "alreadyParticipatedThisWeek",
 
             alreadyParticipated:
                 true,
@@ -2087,6 +2579,214 @@ async function safelySavePrivateCivicPulseHistory(
     }
 
 }
+
+/*
+==================================================
+ATOMIC WEEKLY CIVIC PULSE WRITE
+==================================================
+*/
+
+async function saveWeeklyCivicPulseResponse(
+    tracker,
+    responseData,
+    publicPath,
+    participantId = ""
+) {
+
+    const user =
+        getVerifiedCurrentUser();
+
+
+    const validatedTracker =
+        validateWeeklyTracker(
+            tracker
+        );
+
+
+    const votingPeriod =
+        getCurrentWeeklyVotingPeriod();
+
+
+    const weeklyReference =
+        getWeeklyParticipantReference(
+            validatedTracker,
+            user.uid
+        );
+
+
+    const existingSnapshot =
+        await get(
+            weeklyReference
+        );
+
+
+    if (
+        existingSnapshot.exists()
+    ) {
+
+        const error =
+            new Error(
+                `You have already participated in ${getCurrentWeeklyVotingPeriodLabel()}. Voting will reopen automatically next Monday.`
+            );
+
+
+        error.code =
+            "already-participated-this-week";
+
+
+        throw error;
+
+    }
+
+
+    const cleanedParticipantId =
+        validateParticipantId(
+            participantId
+        );
+
+
+    let publicResponseId;
+
+
+    if (
+        cleanedParticipantId
+    ) {
+
+        publicResponseId =
+            `${votingPeriod}-${cleanedParticipantId}`;
+
+    } else {
+
+        const temporaryReference =
+            push(
+                ref(
+                    database,
+                    publicPath
+                )
+            );
+
+
+        publicResponseId =
+            temporaryReference.key;
+
+    }
+
+
+    if (
+        !publicResponseId
+    ) {
+
+        throw new Error(
+            "A public response ID could not be created."
+        );
+
+    }
+
+
+    const privateHistoryReference =
+        push(
+            ref(
+                database,
+                `userActivity/${user.uid}/civicPulse/${validatedTracker}`
+            )
+        );
+
+
+    const historyId =
+        privateHistoryReference.key;
+
+
+    if (
+        !historyId
+    ) {
+
+        throw new Error(
+            "A private history record could not be created."
+        );
+
+    }
+
+
+    const updates =
+        {};
+
+
+    updates[
+        `weeklyVotes/${votingPeriod}/${validatedTracker}/${user.uid}`
+    ] = {
+
+        ...responseData,
+
+        votingPeriod,
+
+        votingCadence:
+            "weekly"
+
+    };
+
+
+    updates[
+        `${publicPath}/${publicResponseId}`
+    ] = {
+
+        ...responseData,
+
+        votingPeriod,
+
+        votingCadence:
+            "weekly",
+
+        ...(cleanedParticipantId
+            ? {
+                participantId:
+                    cleanedParticipantId
+            }
+            : {})
+
+    };
+
+
+    updates[
+        `userActivity/${user.uid}/civicPulse/${validatedTracker}/${historyId}`
+    ] = {
+
+        ...responseData,
+
+        votingPeriod,
+
+        votingCadence:
+            "weekly"
+
+    };
+
+
+    await update(
+        ref(
+            database
+        ),
+        updates
+    );
+
+
+    return {
+
+        id:
+            publicResponseId,
+
+        participantId:
+            cleanedParticipantId,
+
+        votingPeriod,
+
+        votingCadence:
+            "weekly",
+
+        ...responseData
+
+    };
+
+}
+
 /*
 ==================================================
 ATOMIC MONTHLY CIVIC PULSE WRITE
@@ -2391,17 +3091,17 @@ export async function submitPresidentialApproval(
     };
 
 
-    return saveMonthlyCivicPulseResponse(
+    return saveWeeklyCivicPulseResponse(
 
-        "presidentialApproval",
+    "presidentialApproval",
 
-        responseData,
+    responseData,
 
-        "civicPulse/presidentialApproval/responses",
+    "civicPulse/presidentialApproval/responses",
 
-        participantId
+    participantId
 
-    );
+);
 
 }
 
@@ -2455,17 +3155,17 @@ export async function submitCountryDirection(
     };
 
 
-    return saveMonthlyCivicPulseResponse(
+    return saveWeeklyCivicPulseResponse(
 
-        "countryDirection",
+    "countryDirection",
 
-        responseData,
+    responseData,
 
-        "civicPulse/countryDirection/responses",
+    "civicPulse/countryDirection/responses",
 
-        participantId
+    participantId
 
-    );
+);
 
 }
 
@@ -2837,27 +3537,42 @@ function recordBelongsToCurrentVotingPeriod(
     }
 
 
-    const currentPeriod =
-        getCurrentVotingPeriod();
+    const tracker =
+        typeof record.tracker ===
+            "string"
+            ? record.tracker
+            : "";
+
+
+    const votingPeriod =
+        typeof record.votingPeriod ===
+            "string"
+            ? record.votingPeriod
+            : "";
 
 
     /*
     ----------------------------------------------
-    NEW MONTHLY RECORDS
-
-    Civic Pulse responses now contain votingPeriod
-    directly.
+    WEEKLY TRACKERS
     ----------------------------------------------
     */
 
     if (
-        typeof record.votingPeriod ===
-            "string"
+        weeklyTrackerNames.includes(
+            tracker
+        )
     ) {
 
+        if (!votingPeriod) {
+
+            return false;
+
+        }
+
+
         return (
-            record.votingPeriod ===
-            currentPeriod
+            votingPeriod ===
+            getCurrentWeeklyVotingPeriod()
         );
 
     }
@@ -2865,14 +3580,38 @@ function recordBelongsToCurrentVotingPeriod(
 
     /*
     ----------------------------------------------
-    NATIONAL PRIORITIES
+    MONTHLY TRACKERS
+    ----------------------------------------------
+    */
 
-    The existing public National Priorities rules
-    do not yet store votingPeriod.
+    if (
+        monthlyTrackerNames.includes(
+            tracker
+        )
+    ) {
 
-    We determine its month from submittedAt while
-    the private monthlyVotes record remains the
-    actual duplicate-vote protection.
+        if (!votingPeriod) {
+
+            return false;
+
+        }
+
+
+        return (
+            votingPeriod ===
+            getCurrentVotingPeriod()
+        );
+
+    }
+
+
+    /*
+    ----------------------------------------------
+    NATIONAL PRIORITIES LEGACY RECORDS
+
+    Older public National Priorities records may
+    not contain votingPeriod, so fall back to
+    submittedAt.
     ----------------------------------------------
     */
 
@@ -2922,10 +3661,13 @@ function recordBelongsToCurrentVotingPeriod(
 
     return (
         submittedPeriod ===
-        currentPeriod
+        getCurrentVotingPeriod()
     );
 
 }
+
+
+    
 
 
 /*
@@ -3108,6 +3850,65 @@ export function getMonthlyParticipationMessage(
 
             return (
                 `You have already participated in ${status.votingPeriodLabel}. Voting will reopen automatically next month.`
+            );
+
+
+        case "signedOut":
+
+            return (
+                "Sign in to participate."
+            );
+
+
+        case "emailNotVerified":
+
+            return (
+                "Verify your email before participating."
+            );
+
+
+        case "eligible":
+
+            return "";
+
+
+        default:
+
+            return (
+                "Participation is currently unavailable."
+            );
+
+    }
+
+}
+
+/*
+==================================================
+WEEKLY PARTICIPATION MESSAGE
+==================================================
+*/
+
+export function getWeeklyParticipationMessage(
+    status
+) {
+
+    if (
+        !status
+    ) {
+
+        return "";
+
+    }
+
+
+    switch (
+        status.reason
+    ) {
+
+        case "alreadyParticipatedThisWeek":
+
+            return (
+                `You have already participated in ${status.votingPeriodLabel}. Voting will reopen automatically next Monday.`
             );
 
 
