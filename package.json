@@ -1,0 +1,24 @@
+{
+  "name": "civic-horizon-index",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KurtS2548/civic-horizon-index.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/KurtS2548/civic-horizon-index/issues"
+  },
+  "homepage": "https://github.com/KurtS2548/civic-horizon-index#readme",
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}

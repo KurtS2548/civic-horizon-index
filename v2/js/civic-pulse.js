@@ -3,7 +3,7 @@
 CIVIC HORIZON INDEX V2
 CIVIC PULSE
 
-LIVE FIREBASE + MONTHLY VOTING + HISTORY
+LIVE FIREBASE + WEEKLY/MONTHLY VOTING + HISTORY
 ==================================================
 */
 
@@ -20,8 +20,12 @@ import {
 
     getMonthlyParticipationStatus,
     getMonthlyParticipationMessage,
+    getWeeklyParticipationStatus,
+    getWeeklyParticipationMessage,
     getCurrentVotingPeriod,
-    getCurrentVotingPeriodLabel
+    getCurrentVotingPeriodLabel,
+    getCurrentWeeklyVotingPeriod,
+    getCurrentWeeklyVotingPeriodLabel
 
 } from "./services/firebase-service.js";
 
@@ -54,20 +58,12 @@ const participantIdStorageKey =
 
 /*
 These keys now include the voting period.
-
-Example:
-
-civicPulseUserApprovalVote-2026-08
-civicPulseUserApprovalVote-2026-09
-
-That prevents an August browser selection from appearing
-as the participant's September selection.
 */
 
 function getApprovalSelectionStorageKey() {
 
     return (
-        `civicPulseUserApprovalVote-${getCurrentVotingPeriod()}`
+        `civicPulseUserApprovalVote-${getCurrentWeeklyVotingPeriod()}`
     );
 
 }
@@ -76,7 +72,7 @@ function getApprovalSelectionStorageKey() {
 function getDirectionSelectionStorageKey() {
 
     return (
-        `civicPulseUserDirectionVote-${getCurrentVotingPeriod()}`
+        `civicPulseUserDirectionVote-${getCurrentWeeklyVotingPeriod()}`
     );
 
 }
@@ -157,12 +153,6 @@ async function initializeCivicPulsePage() {
     initializeHeader();
 
 
-    /*
-    ----------------------------------------------
-    INSTALL INTERACTION HANDLERS FIRST
-    ----------------------------------------------
-    */
-
     initializeApprovalVoting();
 
     initializeDirectionVoting();
@@ -170,41 +160,14 @@ async function initializeCivicPulsePage() {
     initializeConfidenceVoting();
 
 
-    /*
-    ----------------------------------------------
-    RESTORE THIS MONTH'S LOCAL DISPLAY ONLY
-    ----------------------------------------------
-    */
-
     restoreLocalSelections();
 
-
-    /*
-    ----------------------------------------------
-    LIVE PUBLIC RESULTS
-    ----------------------------------------------
-    */
 
     initializeLiveSubscriptions();
 
 
-    /*
-    ----------------------------------------------
-    PUBLIC HISTORY
-    ----------------------------------------------
-    */
-
     initializeHistorySubscription();
 
-
-    /*
-    ----------------------------------------------
-    AUTH + MONTHLY ACCESS
-
-    Firebase must finish restoring the saved session
-    before we decide whether the visitor is signed in.
-    ----------------------------------------------
-    */
 
     initializeCivicPulseVotingAccess();
 
@@ -428,15 +391,11 @@ function initializeHistorySubscription() {
 
 /*
 ==================================================
-CIVIC PULSE AUTH + MONTHLY ACCESS
+CIVIC PULSE AUTH + WEEKLY/MONTHLY ACCESS
 ==================================================
 */
 
 function initializeCivicPulseVotingAccess() {
-
-    /*
-    Start locked while Firebase restores the session.
-    */
 
     setAllCivicPulseVotingDisabled(
         true
@@ -561,12 +520,6 @@ REFRESH ALL THREE TRACKERS
 
 async function refreshAllCivicPulseVotingAccess() {
 
-    /*
-    ----------------------------------------------
-    GENERAL ACCOUNT ELIGIBILITY
-    ----------------------------------------------
-    */
-
     const eligibility =
         await getCurrentUserVotingEligibility();
 
@@ -591,27 +544,19 @@ async function refreshAllCivicPulseVotingAccess() {
 
 
     /*
-    ----------------------------------------------
-    MONTHLY STATUS
-
-    Each tracker is independent.
-
-    A participant can therefore have:
-
-    Presidential Approval       completed
-    Country Direction           open
-    National Confidence         open
-    ----------------------------------------------
+    Presidential Approval = weekly
+    Country Direction = weekly
+    National Confidence = monthly
     */
 
     const results =
         await Promise.all([
 
-            getMonthlyParticipationStatus(
+            getWeeklyParticipationStatus(
                 "presidentialApproval"
             ),
 
-            getMonthlyParticipationStatus(
+            getWeeklyParticipationStatus(
                 "countryDirection"
             ),
 
@@ -634,12 +579,12 @@ async function refreshAllCivicPulseVotingAccess() {
         results[2];
 
 
-    applyApprovalMonthlyAccess(
+    applyApprovalWeeklyAccess(
         results[0]
     );
 
 
-    applyDirectionMonthlyAccess(
+    applyDirectionWeeklyAccess(
         results[1]
     );
 
@@ -653,11 +598,11 @@ async function refreshAllCivicPulseVotingAccess() {
 
 /*
 ==================================================
-APPROVAL MONTHLY ACCESS
+APPROVAL WEEKLY ACCESS
 ==================================================
 */
 
-function applyApprovalMonthlyAccess(
+function applyApprovalWeeklyAccess(
     status
 ) {
 
@@ -673,12 +618,12 @@ function applyApprovalMonthlyAccess(
 
     if (
         status?.reason ===
-        "alreadyParticipatedThisMonth"
+        "alreadyParticipatedThisWeek"
     ) {
 
         setText(
             "pulseApprovalMessage",
-            getMonthlyParticipationMessage(
+            getWeeklyParticipationMessage(
                 status
             )
         );
@@ -693,7 +638,7 @@ function applyApprovalMonthlyAccess(
 
         setText(
             "pulseApprovalMessage",
-            `Voting is open for ${getCurrentVotingPeriodLabel()}.`
+            `Voting is open for ${getCurrentWeeklyVotingPeriodLabel()}.`
         );
 
 
@@ -704,21 +649,19 @@ function applyApprovalMonthlyAccess(
 
     setText(
         "pulseApprovalMessage",
-        getMonthlyParticipationMessage(
+        getWeeklyParticipationMessage(
             status
         )
     );
 
 }
-
-
 /*
 ==================================================
-DIRECTION MONTHLY ACCESS
+DIRECTION WEEKLY ACCESS
 ==================================================
 */
 
-function applyDirectionMonthlyAccess(
+function applyDirectionWeeklyAccess(
     status
 ) {
 
@@ -734,12 +677,12 @@ function applyDirectionMonthlyAccess(
 
     if (
         status?.reason ===
-        "alreadyParticipatedThisMonth"
+        "alreadyParticipatedThisWeek"
     ) {
 
         setText(
             "directionVoteMessage",
-            getMonthlyParticipationMessage(
+            getWeeklyParticipationMessage(
                 status
             )
         );
@@ -754,7 +697,7 @@ function applyDirectionMonthlyAccess(
 
         setText(
             "directionVoteMessage",
-            `Voting is open for ${getCurrentVotingPeriodLabel()}.`
+            `Voting is open for ${getCurrentWeeklyVotingPeriodLabel()}.`
         );
 
 
@@ -765,7 +708,7 @@ function applyDirectionMonthlyAccess(
 
     setText(
         "directionVoteMessage",
-        getMonthlyParticipationMessage(
+        getWeeklyParticipationMessage(
             status
         )
     );
@@ -868,27 +811,40 @@ async function confirmCivicPulseVotingEligibility(
         }
 
 
-        const monthlyStatus =
-            await getMonthlyParticipationStatus(
-                tracker
-            );
+        const isWeeklyTracker =
+            tracker === "presidentialApproval" ||
+            tracker === "countryDirection";
+
+
+        const participationStatus =
+            isWeeklyTracker
+                ? await getWeeklyParticipationStatus(
+                    tracker
+                )
+                : await getMonthlyParticipationStatus(
+                    tracker
+                );
 
 
         pulseState.votingAccess[
             tracker
         ] =
-            monthlyStatus;
+            participationStatus;
 
 
         if (
-            !monthlyStatus?.eligible
+            !participationStatus?.eligible
         ) {
 
             setText(
                 messageElementId,
-                getMonthlyParticipationMessage(
-                    monthlyStatus
-                )
+                isWeeklyTracker
+                    ? getWeeklyParticipationMessage(
+                        participationStatus
+                    )
+                    : getMonthlyParticipationMessage(
+                        participationStatus
+                    )
             );
 
 
@@ -1147,6 +1103,8 @@ function getParticipantId() {
     return participantId;
 
 }
+
+
 /*
 ==================================================
 PRESIDENTIAL APPROVAL VOTING
@@ -1189,7 +1147,7 @@ function initializeApprovalVoting() {
 
                         if (!eligible) {
 
-                            applyApprovalMonthlyAccess(
+                            applyApprovalWeeklyAccess(
                                 pulseState.votingAccess
                                     .presidentialApproval
                             );
@@ -1234,19 +1192,19 @@ function initializeApprovalVoting() {
                             restoreApprovalSelection();
 
 
-                            const monthlyStatus =
-                                await getMonthlyParticipationStatus(
+                            const weeklyStatus =
+                                await getWeeklyParticipationStatus(
                                     "presidentialApproval"
                                 );
 
 
                             pulseState.votingAccess
                                 .presidentialApproval =
-                                monthlyStatus;
+                                weeklyStatus;
 
 
-                            applyApprovalMonthlyAccess(
-                                monthlyStatus
+                            applyApprovalWeeklyAccess(
+                                weeklyStatus
                             );
 
                         } catch (error) {
@@ -1259,22 +1217,22 @@ function initializeApprovalVoting() {
 
                             if (
                                 error?.code ===
-                                "already-participated-this-month"
+                                "already-participated-this-week"
                             ) {
 
-                                const monthlyStatus =
-                                    await getMonthlyParticipationStatus(
+                                const weeklyStatus =
+                                    await getWeeklyParticipationStatus(
                                         "presidentialApproval"
                                     );
 
 
                                 pulseState.votingAccess
                                     .presidentialApproval =
-                                    monthlyStatus;
+                                    weeklyStatus;
 
 
-                                applyApprovalMonthlyAccess(
-                                    monthlyStatus
+                                applyApprovalWeeklyAccess(
+                                    weeklyStatus
                                 );
 
 
@@ -1290,19 +1248,19 @@ function initializeApprovalVoting() {
                             );
 
 
-                            const monthlyStatus =
-                                await getMonthlyParticipationStatus(
+                            const weeklyStatus =
+                                await getWeeklyParticipationStatus(
                                     "presidentialApproval"
                                 );
 
 
                             pulseState.votingAccess
                                 .presidentialApproval =
-                                monthlyStatus;
+                                weeklyStatus;
 
 
-                            applyApprovalMonthlyAccess(
-                                monthlyStatus
+                            applyApprovalWeeklyAccess(
+                                weeklyStatus
                             );
 
                         }
@@ -1524,8 +1482,6 @@ function setApprovalButtonsDisabled(
         );
 
 }
-
-
 /*
 ==================================================
 COUNTRY DIRECTION VOTING
@@ -1568,7 +1524,7 @@ function initializeDirectionVoting() {
 
                         if (!eligible) {
 
-                            applyDirectionMonthlyAccess(
+                            applyDirectionWeeklyAccess(
                                 pulseState.votingAccess
                                     .countryDirection
                             );
@@ -1613,19 +1569,19 @@ function initializeDirectionVoting() {
                             restoreDirectionSelection();
 
 
-                            const monthlyStatus =
-                                await getMonthlyParticipationStatus(
+                            const weeklyStatus =
+                                await getWeeklyParticipationStatus(
                                     "countryDirection"
                                 );
 
 
                             pulseState.votingAccess
                                 .countryDirection =
-                                monthlyStatus;
+                                weeklyStatus;
 
 
-                            applyDirectionMonthlyAccess(
-                                monthlyStatus
+                            applyDirectionWeeklyAccess(
+                                weeklyStatus
                             );
 
                         } catch (error) {
@@ -1638,22 +1594,22 @@ function initializeDirectionVoting() {
 
                             if (
                                 error?.code ===
-                                "already-participated-this-month"
+                                "already-participated-this-week"
                             ) {
 
-                                const monthlyStatus =
-                                    await getMonthlyParticipationStatus(
+                                const weeklyStatus =
+                                    await getWeeklyParticipationStatus(
                                         "countryDirection"
                                     );
 
 
                                 pulseState.votingAccess
                                     .countryDirection =
-                                    monthlyStatus;
+                                    weeklyStatus;
 
 
-                                applyDirectionMonthlyAccess(
-                                    monthlyStatus
+                                applyDirectionWeeklyAccess(
+                                    weeklyStatus
                                 );
 
 
@@ -1669,19 +1625,19 @@ function initializeDirectionVoting() {
                             );
 
 
-                            const monthlyStatus =
-                                await getMonthlyParticipationStatus(
+                            const weeklyStatus =
+                                await getWeeklyParticipationStatus(
                                     "countryDirection"
                                 );
 
 
                             pulseState.votingAccess
                                 .countryDirection =
-                                monthlyStatus;
+                                weeklyStatus;
 
 
-                            applyDirectionMonthlyAccess(
-                                monthlyStatus
+                            applyDirectionWeeklyAccess(
+                                weeklyStatus
                             );
 
                         }

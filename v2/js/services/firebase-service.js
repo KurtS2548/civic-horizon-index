@@ -2683,29 +2683,14 @@ async function saveWeeklyCivicPulseResponse(
     }
 
 
-    const privateHistoryReference =
-        push(
-            ref(
-                database,
-                `userActivity/${user.uid}/civicPulse/${validatedTracker}`
-            )
-        );
+    /*
+    ==================================================
+    CRITICAL WEEKLY VOTE
 
-
-    const historyId =
-        privateHistoryReference.key;
-
-
-    if (
-        !historyId
-    ) {
-
-        throw new Error(
-            "A private history record could not be created."
-        );
-
-    }
-
+    Only the duplicate-vote lock and anonymous
+    public response are part of this atomic write.
+    ==================================================
+    */
 
     const updates =
         {};
@@ -2746,25 +2731,26 @@ async function saveWeeklyCivicPulseResponse(
     };
 
 
-    updates[
-        `userActivity/${user.uid}/civicPulse/${validatedTracker}/${historyId}`
-    ] = {
-
-        ...responseData,
-
-        votingPeriod,
-
-        votingCadence:
-            "weekly"
-
-    };
-
-
     await update(
         ref(
             database
         ),
         updates
+    );
+
+
+    /*
+    ==================================================
+    PRIVATE HISTORY
+
+    History is intentionally saved AFTER the vote.
+    A history error must never undo a valid vote.
+    ==================================================
+    */
+
+    await safelySavePrivateCivicPulseHistory(
+        validatedTracker,
+        responseData
     );
 
 
@@ -3003,12 +2989,12 @@ async function saveMonthlyCivicPulseResponse(
     */
 
     updates[
-        `userActivity/${user.uid}/civicPulse/${validatedTracker}/${historyId}`
-    ] = {
+    `userActivity/${user.uid}/civicPulse/${validatedTracker}/${historyId}`
+] = {
 
-        ...responseData
+    ...responseData
 
-    };
+};
 
 
     await update(
