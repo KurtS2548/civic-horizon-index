@@ -161,24 +161,25 @@
 
             ".write": "auth != null && auth.uid === $uid && auth.token.email_verified === true && !data.exists() && newData.exists()",
 
-            ".validate": "($tracker === 'nationalPriorities' || $tracker === 'nationalConfidence') && newData.hasChildren(['submittedAt', 'votingPeriod']) && newData.child('submittedAt').isString() && newData.child('votingPeriod').isString() && newData.child('votingPeriod').val() === $period"}
+            ".validate": "($tracker === 'nationalPriorities' || $tracker === 'nationalConfidence') && newData.hasChildren(['submittedAt', 'votingPeriod']) && newData.child('submittedAt').isString() && newData.child('votingPeriod').isString() && newData.child('votingPeriod').val() === $period"
+          }
         }
       }
     },
-      
-      "weeklyVotes": {
-  "$period": {
-    "$tracker": {
-      "$uid": {
-        ".read": "auth != null && auth.uid === $uid",
 
-        ".write": "auth != null && auth.uid === $uid && auth.token.email_verified === true && !data.exists() && newData.exists()",
+    "weeklyVotes": {
+      "$period": {
+        "$tracker": {
+          "$uid": {
+            ".read": "auth != null && auth.uid === $uid",
 
-        ".validate": "($tracker === 'presidentialApproval' || $tracker === 'countryDirection') && newData.hasChildren(['submittedAt', 'votingPeriod']) && newData.child('submittedAt').isString() && newData.child('votingPeriod').isString() && newData.child('votingPeriod').val() === $period"
+            ".write": "auth != null && auth.uid === $uid && auth.token.email_verified === true && !data.exists() && newData.exists()",
+
+            ".validate": "($tracker === 'presidentialApproval' || $tracker === 'countryDirection') && newData.hasChildren(['submittedAt', 'votingPeriod']) && newData.child('submittedAt').isString() && newData.child('votingPeriod').isString() && newData.child('votingPeriod').val() === $period"
+          }
+        }
       }
-    }
-  }
-},
+    },
 
     "pollSuggestions": {
       ".read": "auth != null && auth.uid === '46MRUizWh5Yl83XXk4CBuI3TUZc2'",
@@ -566,6 +567,112 @@
 
         "$other": {
           ".validate": false
+        }
+      }
+    },
+
+    "congressionalApprovalVotes": {
+      "$period": {
+        "$memberId": {
+          "$uid": {
+            ".read": "auth != null && auth.uid === $uid",
+
+            ".write": "auth != null && auth.uid === $uid && auth.token.email_verified === true && !data.exists() && newData.exists()",
+
+            ".validate": "newData.hasChildren(['memberId', 'seatKey', 'stateCode', 'chamber', 'response', 'submittedAt', 'votingPeriod', 'publicResponseId']) && newData.child('memberId').val() === $memberId && newData.child('votingPeriod').val() === $period",
+
+            "memberId": {
+              ".validate": "newData.isString() && newData.val() === $memberId && newData.val().matches(/^[a-z0-9-]+$/)"
+            },
+
+            "seatKey": {
+              ".validate": "newData.isString() && newData.val().matches(/^[a-z0-9-]+$/)"
+            },
+
+            "stateCode": {
+              ".validate": "newData.isString() && newData.val().matches(/^[A-Z]{2}$/)"
+            },
+
+            "chamber": {
+              ".validate": "newData.isString() && (newData.val() === 'senate' || newData.val() === 'house')"
+            },
+
+            "district": {
+              ".validate": "!newData.exists() || (newData.isString() && newData.val().length > 0 && newData.val().length <= 20)"
+            },
+
+            "response": {
+              ".validate": "newData.isString() && (newData.val() === 'Strongly Approve' || newData.val() === 'Approve' || newData.val() === 'Neutral' || newData.val() === 'Disapprove' || newData.val() === 'Strongly Disapprove')"
+            },
+
+            "submittedAt": {
+              ".validate": "newData.isString() && newData.val().length >= 20 && newData.val().length <= 40"
+            },
+
+            "votingPeriod": {
+              ".validate": "newData.isString() && newData.val() === $period && newData.val().matches(/^\\d{4}-\\d{2}$/)"
+            },
+
+            "publicResponseId": {
+              ".validate": "newData.isString() && newData.val().length >= 8 && newData.val().length <= 128 && newData.val().matches(/^[a-zA-Z0-9-]+$/)"
+            },
+
+            "$other": {
+              ".validate": false
+            }
+          }
+        }
+      }
+    },
+
+    "congressionalApproval": {
+      ".read": "auth != null",
+
+      "$memberId": {
+        "responses": {
+          "$period": {
+            "$responseId": {
+              ".write": "auth != null && auth.token.email_verified === true && !data.exists() && newData.exists() && root.child('congressionalApprovalVotes').child($period).child($memberId).child(auth.uid).exists() && root.child('congressionalApprovalVotes').child($period).child($memberId).child(auth.uid).child('publicResponseId').val() === $responseId && root.child('congressionalApprovalVotes').child($period).child($memberId).child(auth.uid).child('memberId').val() === newData.child('memberId').val() && root.child('congressionalApprovalVotes').child($period).child($memberId).child(auth.uid).child('seatKey').val() === newData.child('seatKey').val() && root.child('congressionalApprovalVotes').child($period).child($memberId).child(auth.uid).child('stateCode').val() === newData.child('stateCode').val() && root.child('congressionalApprovalVotes').child($period).child($memberId).child(auth.uid).child('chamber').val() === newData.child('chamber').val() && root.child('congressionalApprovalVotes').child($period).child($memberId).child(auth.uid).child('response').val() === newData.child('response').val() && root.child('congressionalApprovalVotes').child($period).child($memberId).child(auth.uid).child('votingPeriod').val() === newData.child('votingPeriod').val()",
+
+              ".validate": "newData.hasChildren(['memberId', 'seatKey', 'stateCode', 'chamber', 'response', 'submittedAt', 'votingPeriod']) && newData.child('memberId').val() === $memberId && newData.child('votingPeriod').val() === $period",
+
+              "memberId": {
+                ".validate": "newData.isString() && newData.val() === $memberId && newData.val().matches(/^[a-z0-9-]+$/)"
+              },
+
+              "seatKey": {
+                ".validate": "newData.isString() && newData.val().matches(/^[a-z0-9-]+$/)"
+              },
+
+              "stateCode": {
+                ".validate": "newData.isString() && newData.val().matches(/^[A-Z]{2}$/)"
+              },
+
+              "chamber": {
+                ".validate": "newData.isString() && (newData.val() === 'senate' || newData.val() === 'house')"
+              },
+
+              "district": {
+                ".validate": "!newData.exists() || (newData.isString() && newData.val().length > 0 && newData.val().length <= 20)"
+              },
+
+              "response": {
+                ".validate": "newData.isString() && (newData.val() === 'Strongly Approve' || newData.val() === 'Approve' || newData.val() === 'Neutral' || newData.val() === 'Disapprove' || newData.val() === 'Strongly Disapprove')"
+              },
+
+              "submittedAt": {
+                ".validate": "newData.isString() && newData.val().length >= 20 && newData.val().length <= 40"
+              },
+
+              "votingPeriod": {
+                ".validate": "newData.isString() && newData.val() === $period && newData.val().matches(/^\\d{4}-\\d{2}$/)"
+              },
+
+              "$other": {
+                ".validate": false
+              }
+            }
+          }
         }
       }
     },

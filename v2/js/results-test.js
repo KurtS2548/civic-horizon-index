@@ -11,6 +11,7 @@ RESULTS CENTER TEST INITIALIZATION
 COMPONENT LOADING
 ==================================================
 */
+
 async function loadComponent(
     containerId,
     componentPath
@@ -34,7 +35,9 @@ async function loadComponent(
     try {
 
         const response =
-            await fetch(componentPath);
+            await fetch(
+                componentPath
+            );
 
         if (!response.ok) {
 
@@ -100,26 +103,26 @@ async function initializeResultsPage() {
             "resultsOverviewContainer",
             "components/results-overview.html"
         ),
+
         loadComponent(
-    "resultsPrioritiesContainer",
-    "components/results-priorities.html"
-),
-loadComponent(
-    "resultsPulseContainer",
-    "components/results-pulse.html"
-),
-loadComponent(
-    "resultsMapContainer",
-    "components/results-map.html"
-),
-loadComponent(
-    "resultsCommunityContainer",
-    "components/results-community.html"
-),
-loadComponent(
-    "resultsApprovalContainer",
-    "components/results-approval.html"
-),
+            "resultsPrioritiesContainer",
+            "components/results-priorities.html"
+        ),
+
+        loadComponent(
+            "resultsParticipationContainer",
+            "components/results-participation.html"
+        ),
+
+        loadComponent(
+            "resultsCommunityContainer",
+            "components/results-community.html"
+        ),
+
+        loadComponent(
+            "resultsApprovalContainer",
+            "components/results-approval.html"
+        ),
 
         loadComponent(
             "footerContainer",
@@ -127,6 +130,7 @@ loadComponent(
         )
 
     ]);
+
 
     initializeHeader();
 
@@ -150,6 +154,7 @@ async function initializeLiveResultsData() {
                 "./results-controller.js"
             );
 
+
         if (
             typeof controllerModule
                 .initializeResultsController !==
@@ -162,7 +167,8 @@ async function initializeLiveResultsData() {
 
         }
 
-        controllerModule
+
+        await controllerModule
             .initializeResultsController();
 
     } catch (error) {
@@ -172,7 +178,54 @@ async function initializeLiveResultsData() {
             error
         );
 
+
         showResultsFallback();
+
+
+        /*
+        ----------------------------------------------
+        DISPLAY STARTUP ERROR ON PAGE
+        ----------------------------------------------
+        */
+
+        const errorBox =
+            document.createElement(
+                "div"
+            );
+
+
+        errorBox.style.cssText = `
+            margin: 16px auto;
+            max-width: 1100px;
+            padding: 18px;
+            background: #fff3f2;
+            border: 2px solid #c0392b;
+            border-radius: 10px;
+            color: #8a1f17;
+            font-family: Arial, sans-serif;
+            line-height: 1.5;
+        `;
+
+
+        errorBox.innerHTML = `
+            <strong>
+                Results Center startup error
+            </strong>
+            <br>
+            ${String(
+                error?.message ||
+                error
+            )}
+        `;
+
+
+        document
+            .querySelector(
+                ".results-page"
+            )
+            ?.prepend(
+                errorBox
+            );
 
     }
 
@@ -253,10 +306,12 @@ function initializeHeader() {
                         "open"
                     );
 
+
                 menuButton.setAttribute(
                     "aria-expanded",
                     String(isOpen)
                 );
+
 
                 menuButton.setAttribute(
                     "aria-label",
@@ -265,8 +320,11 @@ function initializeHeader() {
                         : "Open navigation menu"
                 );
 
+
                 if (!isOpen) {
+
                     closeDropdowns();
+
                 }
 
             }
@@ -284,21 +342,28 @@ function initializeHeader() {
 
                     event.stopPropagation();
 
+
                     const group =
                         button.closest(
                             ".navigation-group"
                         );
 
+
                     if (!group) {
+
                         return;
+
                     }
+
 
                     const isOpen =
                         group.classList.contains(
                             "open"
                         );
 
+
                     closeDropdowns();
+
 
                     if (!isOpen) {
 
@@ -343,12 +408,17 @@ function initializeHeader() {
         event => {
 
             if (
-                event.key !== "Escape"
+                event.key !==
+                "Escape"
             ) {
+
                 return;
+
             }
 
+
             closeDropdowns();
+
 
             if (
                 navigation &&
@@ -360,6 +430,7 @@ function initializeHeader() {
                 navigation.classList.remove(
                     "open"
                 );
+
 
                 if (menuButton) {
 
@@ -397,6 +468,7 @@ function initializeHeader() {
                     "open"
                 );
 
+
                 if (menuButton) {
 
                     menuButton.setAttribute(
@@ -410,6 +482,7 @@ function initializeHeader() {
                     );
 
                 }
+
 
                 closeDropdowns();
 
@@ -440,10 +513,12 @@ function closeDropdowns() {
                     "open"
                 );
 
+
                 const button =
                     group.querySelector(
                         ".navigation-group__button"
                     );
+
 
                 if (button) {
 
@@ -475,6 +550,7 @@ function setText(
         document.getElementById(
             elementId
         );
+
 
     if (element) {
 

@@ -1,231 +1,266 @@
-<section class="results-approval">
+<section class="results-pulse">
 
-    <div class="results-approval__container">
+    <div class="results-pulse__container">
 
-        <!-- SECTION HEADER -->
-
-        <header class="results-approval__heading">
+        <header class="results-pulse__heading">
 
             <div>
 
-                <p class="results-approval__eyebrow">
-                    Presidential Approval
+                <p class="results-pulse__eyebrow">
+                    Civic Pulse
                 </p>
 
                 <h2>
-                    Presidential Approval Tracker
+                    Presidential approval at a glance
                 </h2>
 
                 <p>
-                    See how participants currently assess the
-                    president's job performance.
+                    A live summary of how Civic Horizon Index
+                    participants rate the current president’s
+                    job performance.
                 </p>
 
             </div>
 
-            <div class="results-approval__status">
 
-                <span class="results-approval__status-dot"></span>
-
-                <div>
-                    <strong>Ongoing Tracker</strong>
-                    <small>Results update as votes are submitted</small>
-                </div>
-
-            </div>
+            <a
+                href="civic-pulse.html"
+                class="results-pulse__link"
+            >
+                Explore Civic Pulse →
+            </a>
 
         </header>
 
 
-        <!-- MAIN RESULTS PANEL -->
+        <div class="results-pulse__panel">
 
-        <div class="approval-results">
+            <div class="results-pulse__summary">
 
-            <!-- LEFT SIDE -->
-
-            <div class="approval-results__main">
-
-                <div class="approval-results__question">
+                <article class="pulse-summary-card">
 
                     <span>
-                        Current Question
+                        Approval
                     </span>
 
-                    <h3>
-                        Do you approve or disapprove of the way
-                        the president is handling the job?
-                    </h3>
+                    <strong id="resultsApprovalPercent">
+                        0.0%
+                    </strong>
 
-                </div>
-
-
-                <!-- APPROVE -->
-
-                <div class="approval-result-row">
-
-                    <div class="approval-result-row__top">
-
-                        <strong>
-                            Approve
-                        </strong>
-
-                        <span id="approvalApprovePercent">
-                            —
-                        </span>
-
-                    </div>
-
-                    <div class="approval-result-bar">
-
-                        <div
-                            class="approval-result-bar__fill approval-result-bar__fill--approve"
-                            id="approvalApproveBar"
-                            style="width: 0%;"
-                        ></div>
-
-                    </div>
-
-                    <small id="approvalApproveVotes">
-                        0 votes
+                    <small>
+                        Approve and strongly approve
                     </small>
 
-                </div>
+                </article>
 
 
-                <!-- DISAPPROVE -->
+                <article class="pulse-summary-card">
 
-                <div class="approval-result-row">
+                    <span>
+                        Neutral
+                    </span>
 
-                    <div class="approval-result-row__top">
+                    <strong id="resultsNeutralPercent">
+                        0.0%
+                    </strong>
 
-                        <strong>
-                            Disapprove
-                        </strong>
-
-                        <span id="approvalDisapprovePercent">
-                            —
-                        </span>
-
-                    </div>
-
-                    <div class="approval-result-bar">
-
-                        <div
-                            class="approval-result-bar__fill approval-result-bar__fill--disapprove"
-                            id="approvalDisapproveBar"
-                            style="width: 0%;"
-                        ></div>
-
-                    </div>
-
-                    <small id="approvalDisapproveVotes">
-                        0 votes
+                    <small>
+                        Neutral responses
                     </small>
 
-                </div>
+                </article>
 
 
-                <!-- UNSURE -->
+                <article class="pulse-summary-card">
 
-                <div class="approval-result-row">
+                    <span>
+                        Disapproval
+                    </span>
 
-                    <div class="approval-result-row__top">
+                    <strong id="resultsDisapprovalPercent">
+                        0.0%
+                    </strong>
 
-                        <strong>
-                            Unsure / Neutral
-                        </strong>
-
-                        <span id="approvalNeutralPercent">
-                            —
-                        </span>
-
-                    </div>
-
-                    <div class="approval-result-bar">
-
-                        <div
-                            class="approval-result-bar__fill approval-result-bar__fill--neutral"
-                            id="approvalNeutralBar"
-                            style="width: 0%;"
-                        ></div>
-
-                    </div>
-
-                    <small id="approvalNeutralVotes">
-                        0 votes
+                    <small>
+                        Disapprove and strongly disapprove
                     </small>
 
-                </div>
+                </article>
 
             </div>
 
 
-            <!-- RIGHT SIDE SUMMARY -->
+            <div class="results-pulse__distribution">
 
-            <aside class="approval-summary">
-
-                <p class="approval-summary__label">
-                    Current Snapshot
-                </p>
-
-                <div class="approval-summary__score">
-
-                    <strong id="approvalHeadlinePercent">
-                        —
-                    </strong>
-
-                    <span>
-                        Approve
-                    </span>
-
-                </div>
-
-
-                <div class="approval-summary__stats">
+                <div class="results-pulse__distribution-heading">
 
                     <div>
 
-                        <span>
-                            Total Responses
-                        </span>
+                        <p>
+                            Full Distribution
+                        </p>
 
-                        <strong id="approvalTotalResponses">
+                        <h3>
+                            All approval responses
+                        </h3>
+
+                    </div>
+
+
+                    <div class="results-pulse__response-count">
+
+                        <strong id="resultsPulseTotal">
                             0
                         </strong>
 
-                    </div>
-
-
-                    <div>
-
                         <span>
-                            Net Approval
+                            Responses
                         </span>
 
-                        <strong id="approvalNetScore">
-                            —
-                        </strong>
-
                     </div>
 
                 </div>
 
 
-                <div class="approval-summary__note">
+                <div class="results-pulse__bars">
 
-                    <strong>
-                        About this tracker
-                    </strong>
+                    <div class="results-pulse-row">
 
-                    <p>
-                        This is an ongoing Civic Horizon Index
-                        participant poll. It is not intended to
-                        represent a scientific national opinion poll.
-                    </p>
+                        <div class="results-pulse-row__heading">
+
+                            <span>
+                                Strongly Approve
+                            </span>
+
+                            <strong id="resultsStronglyApprovePercent">
+                                0.0%
+                            </strong>
+
+                        </div>
+
+                        <div class="results-pulse-row__track">
+
+                            <div
+                                class="results-pulse-row__bar"
+                                id="resultsStronglyApproveBar"
+                                style="width: 0%"
+                            ></div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="results-pulse-row">
+
+                        <div class="results-pulse-row__heading">
+
+                            <span>
+                                Approve
+                            </span>
+
+                            <strong id="resultsApprovePercent">
+                                0.0%
+                            </strong>
+
+                        </div>
+
+                        <div class="results-pulse-row__track">
+
+                            <div
+                                class="results-pulse-row__bar"
+                                id="resultsApproveBar"
+                                style="width: 0%"
+                            ></div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="results-pulse-row">
+
+                        <div class="results-pulse-row__heading">
+
+                            <span>
+                                Neutral
+                            </span>
+
+                            <strong id="resultsNeutralDetailedPercent">
+                                0.0%
+                            </strong>
+
+                        </div>
+
+                        <div class="results-pulse-row__track">
+
+                            <div
+                                class="results-pulse-row__bar"
+                                id="resultsNeutralBar"
+                                style="width: 0%"
+                            ></div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="results-pulse-row">
+
+                        <div class="results-pulse-row__heading">
+
+                            <span>
+                                Disapprove
+                            </span>
+
+                            <strong id="resultsDisapprovePercent">
+                                0.0%
+                            </strong>
+
+                        </div>
+
+                        <div class="results-pulse-row__track">
+
+                            <div
+                                class="results-pulse-row__bar"
+                                id="resultsDisapproveBar"
+                                style="width: 0%"
+                            ></div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="results-pulse-row">
+
+                        <div class="results-pulse-row__heading">
+
+                            <span>
+                                Strongly Disapprove
+                            </span>
+
+                            <strong id="resultsStronglyDisapprovePercent">
+                                0.0%
+                            </strong>
+
+                        </div>
+
+                        <div class="results-pulse-row__track">
+
+                            <div
+                                class="results-pulse-row__bar"
+                                id="resultsStronglyDisapproveBar"
+                                style="width: 0%"
+                            ></div>
+
+                        </div>
+
+                    </div>
 
                 </div>
 
-            </aside>
+            </div>
 
         </div>
 

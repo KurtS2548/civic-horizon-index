@@ -5,36 +5,6 @@ RESULTS CENTER CONTROLLER
 ==================================================
 */
 
-import {
-    initializeResultsOverviewController,
-    destroyResultsOverviewController
-} from "./controllers/results-overview-controller.js";
-
-import {
-    initializeResultsPrioritiesController,
-    destroyResultsPrioritiesController
-} from "./controllers/results-priorities-controller.js";
-
-import {
-    initializeResultsPulseController,
-    destroyResultsPulseController
-} from "./controllers/results-pulse-controller.js";
-
-import {
-    initializeResultsApprovalController,
-    destroyResultsApprovalController
-} from "./controllers/results-approval-controller.js";
-
-import {
-    initializeResultsMapController,
-    destroyResultsMapController
-} from "./controllers/results-map-controller.js";
-
-import {
-    initializeResultsCommunityController,
-    destroyResultsCommunityController
-} from "./controllers/results-community-controller.js";
-
 
 /*
 ==================================================
@@ -42,7 +12,76 @@ CONTROLLER STATE
 ==================================================
 */
 
-let resultsControllerInitialized = false;
+let resultsControllerInitialized =
+    false;
+
+const loadedControllers =
+    [];
+
+
+/*
+==================================================
+SAFE CONTROLLER LOADER
+==================================================
+*/
+
+async function loadController(
+    name,
+    modulePath,
+    initializeName,
+    destroyName
+) {
+
+    try {
+
+        const module =
+            await import(
+                modulePath
+            );
+
+
+        const initializeFunction =
+            module[
+                initializeName
+            ];
+
+
+        const destroyFunction =
+            module[
+                destroyName
+            ];
+
+
+        if (
+            typeof initializeFunction !==
+            "function"
+        ) {
+
+            throw new Error(
+                `${initializeName} was not found in ${modulePath}`
+            );
+
+        }
+
+
+        initializeFunction();
+
+
+        loadedControllers.push({
+            name,
+            destroyFunction
+        });
+
+    } catch (error) {
+
+        console.error(
+            `${name} could not initialize:`,
+            error
+        );
+
+    }
+
+}
 
 
 /*
@@ -51,25 +90,114 @@ PUBLIC INITIALIZATION
 ==================================================
 */
 
-export function initializeResultsController() {
+export async function initializeResultsController() {
 
-    if (resultsControllerInitialized) {
+    if (
+        resultsControllerInitialized
+    ) {
+
         return;
+
     }
 
-    resultsControllerInitialized = true;
 
-    initializeResultsOverviewController();
+    resultsControllerInitialized =
+        true;
 
-    initializeResultsPrioritiesController();
 
-    initializeResultsPulseController();
+    /*
+    ----------------------------------------------
+    RESULTS OVERVIEW
+    ----------------------------------------------
+    */
 
-    initializeResultsApprovalController();
+    await loadController(
 
-    initializeResultsMapController();
+        "Results Overview",
 
-    initializeResultsCommunityController();
+        "./controllers/results-overview-controller.js",
+
+        "initializeResultsOverviewController",
+
+        "destroyResultsOverviewController"
+
+    );
+
+
+    /*
+    ----------------------------------------------
+    NATIONAL PRIORITIES
+    ----------------------------------------------
+    */
+
+    await loadController(
+
+        "National Priorities",
+
+        "./controllers/results-priorities-controller.js",
+
+        "initializeResultsPrioritiesController",
+
+        "destroyResultsPrioritiesController"
+
+    );
+
+
+    /*
+    ----------------------------------------------
+    PRESIDENTIAL APPROVAL
+    ----------------------------------------------
+    */
+
+    await loadController(
+
+        "Presidential Approval",
+
+        "./controllers/results-pulse-controller.js",
+
+        "initializeResultsPulseController",
+
+        "destroyResultsPulseController"
+
+    );
+
+
+    /*
+    ----------------------------------------------
+    PARTICIPATION ACROSS AMERICA
+    ----------------------------------------------
+    */
+
+    await loadController(
+
+        "Participation Across America",
+
+        "./controllers/results-participation-controller.js",
+
+        "initializeResultsParticipationController",
+
+        "destroyResultsParticipationController"
+
+    );
+
+
+    /*
+    ----------------------------------------------
+    COMMUNITY RESULTS
+    ----------------------------------------------
+    */
+
+    await loadController(
+
+        "Community Results",
+
+        "./controllers/results-community-controller.js",
+
+        "initializeResultsCommunityController",
+
+        "destroyResultsCommunityController"
+
+    );
 
 }
 
@@ -82,23 +210,42 @@ PUBLIC CLEANUP
 
 export function destroyResultsController() {
 
-    if (!resultsControllerInitialized) {
-        return;
-    }
+    loadedControllers
+        .forEach(
+            controller => {
 
-    destroyResultsOverviewController();
+                try {
 
-    destroyResultsPrioritiesController();
+                    if (
+                        typeof controller
+                            .destroyFunction ===
+                        "function"
+                    ) {
 
-    destroyResultsPulseController();
+                        controller
+                            .destroyFunction();
 
-    destroyResultsApprovalController();
+                    }
 
-    destroyResultsMapController();
+                } catch (error) {
 
-    destroyResultsCommunityController();
+                    console.error(
+                        `${controller.name} cleanup failed:`,
+                        error
+                    );
 
-    resultsControllerInitialized = false;
+                }
+
+            }
+        );
+
+
+    loadedControllers.length =
+        0;
+
+
+    resultsControllerInitialized =
+        false;
 
 }
 
