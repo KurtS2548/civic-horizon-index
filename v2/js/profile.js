@@ -1,4 +1,4 @@
-/*
+﻿/*
 ==================================================
 CIVIC HORIZON INDEX V2
 MY CIVIC DASHBOARD CONTROLLER
@@ -12,9 +12,18 @@ import {
 
     getCurrentUserVotingEligibility,
 
-    updateCurrentUserZipCode
+    updateCurrentUserZipCode,
+
+    updateCurrentUserMunicipality
 
 } from "./services/auth-service.js";
+
+
+import {
+
+    getCurrentParticipantJurisdiction
+
+} from "./services/participant-jurisdiction-service.js";
 
 
 import {
@@ -442,9 +451,7 @@ async function renderDashboard() {
         );
 
     }
-
-
-    /*
+        /*
     ----------------------------------------------
     PRIVATE CIVIC PULSE HISTORY
     ----------------------------------------------
@@ -676,9 +683,462 @@ function renderAccountInformation() {
         )
     );
 
+
+    renderMunicipalitySelector();
+
 }
 
 
+/*
+==================================================
+MUNICIPALITY SELECTOR
+==================================================
+*/
+
+async function renderMunicipalitySelector() {
+
+    let container =
+        document.getElementById(
+            "profileMunicipalitySection"
+        );
+
+
+    if (!container) {
+
+        const zipInput =
+            document.getElementById(
+                "profileZipInput"
+            );
+
+
+        const zipForm =
+            zipInput?.closest(
+                "form"
+            );
+
+
+        if (!zipForm) {
+
+            return;
+
+        }
+
+
+        container =
+            document.createElement(
+                "div"
+            );
+
+
+        container.id =
+            "profileMunicipalitySection";
+
+
+        container.className =
+            "profile-municipality";
+
+
+        zipForm.insertAdjacentElement(
+            "afterend",
+            container
+        );
+
+    }
+
+
+    container.innerHTML = `
+
+        <p class="profile-municipality__loading">
+            Checking municipality...
+        </p>
+
+    `;
+
+
+    try {
+
+        const jurisdiction =
+            await getCurrentParticipantJurisdiction();
+
+
+        const municipalities =
+            Array.isArray(
+                jurisdiction?.municipalities
+            )
+                ? jurisdiction.municipalities
+                : [];
+
+
+        const geoidMap =
+            jurisdiction?.municipalityGeoids &&
+            typeof jurisdiction.municipalityGeoids ===
+                "object"
+                ? jurisdiction.municipalityGeoids
+                : {};
+
+
+        if (
+            municipalities.length ===
+            0
+        ) {
+
+            container.innerHTML = `
+
+                <div class="profile-municipality__status">
+
+                    <strong>
+                        Municipality unavailable
+                    </strong>
+
+                    <p>
+                        Local voting will remain read only until
+                        your municipality can be confirmed.
+                    </p>
+
+                </div>
+
+            `;
+
+
+            return;
+
+        }
+
+
+        /*
+        ----------------------------------------------
+        SINGLE MUNICIPALITY
+        ----------------------------------------------
+        */
+
+        if (
+            municipalities.length ===
+            1
+        ) {
+
+            const municipalityName =
+                municipalities[
+                    0
+                ];
+
+
+            const municipalityGeoid =
+                String(
+                    geoidMap[
+                        municipalityName
+                    ] ||
+                    ""
+                ).trim();
+
+
+            if (
+                municipalityGeoid &&
+                currentProfile?.municipalityGeoid !==
+                    municipalityGeoid
+            ) {
+
+                await updateCurrentUserMunicipality(
+                    municipalityGeoid,
+                    municipalityName
+                );
+
+
+                currentProfile =
+                    await getCurrentUserProfile();
+
+            }
+
+
+            container.innerHTML = `
+
+                <div class="profile-municipality__status">
+
+                    <span>
+                        Municipality
+                    </span>
+
+                    <strong>
+                        ${escapeHtml(
+                            municipalityName
+                        )}
+                    </strong>
+
+                    <p>
+                        Confirmed from your ZIP code.
+                    </p>
+
+                </div>
+
+            `;
+
+
+            return;
+
+        }
+
+
+        /*
+        ----------------------------------------------
+        MULTIPLE MUNICIPALITIES
+        ----------------------------------------------
+        */
+
+        const currentGeoid =
+            String(
+                currentProfile?.municipalityGeoid ||
+                ""
+            ).trim();
+
+
+        const options =
+            municipalities
+                .map(
+                    municipalityName => {
+
+                        const geoid =
+                            String(
+                                geoidMap[
+                                    municipalityName
+                                ] ||
+                                ""
+                            ).trim();
+
+
+                        if (!geoid) {
+
+                            return "";
+
+                        }
+
+
+                        const selected =
+                            geoid ===
+                            currentGeoid
+                                ? "selected"
+                                : "";
+
+
+                        return `
+
+                            <option
+                                value="${escapeHtml(
+                                    geoid
+                                )}"
+                                data-name="${escapeHtml(
+                                    municipalityName
+                                )}"
+                                ${selected}
+                            >
+                                ${escapeHtml(
+                                    municipalityName
+                                )}
+                            </option>
+
+                        `;
+
+                    }
+                )
+                .join("");
+
+
+        container.innerHTML = `
+
+            <div class="profile-municipality__field">
+
+                <label for="profileMunicipalitySelect">
+                    Municipality
+                </label>
+
+                <select id="profileMunicipalitySelect">
+
+                    <option value="">
+                        Select your municipality
+                    </option>
+
+                    ${options}
+
+                </select>
+
+                <button
+                    type="button"
+                    id="profileMunicipalitySaveButton"
+                >
+                    Save Municipality
+                </button>
+
+                <p id="profileMunicipalityMessage">
+
+                    ${
+                        currentProfile?.municipalityName
+                            ? `Current municipality: ${escapeHtml(
+                                currentProfile.municipalityName
+                            )}`
+                            : "Choose the municipality where you live."
+                    }
+
+                </p>
+
+            </div>
+
+        `;
+
+
+        document
+            .getElementById(
+                "profileMunicipalitySaveButton"
+            )
+            ?.addEventListener(
+                "click",
+                handleMunicipalitySave
+            );
+
+    } catch (error) {
+
+        console.error(
+            "Municipality selector could not be loaded:",
+            error
+        );
+
+
+        container.innerHTML = `
+
+            <div class="profile-municipality__status">
+
+                <strong>
+                    Municipality unavailable
+                </strong>
+
+                <p>
+                    Local voting is temporarily unavailable.
+                </p>
+
+            </div>
+
+        `;
+
+    }
+
+}
+
+
+/*
+==================================================
+SAVE MUNICIPALITY
+==================================================
+*/
+
+async function handleMunicipalitySave() {
+
+    const select =
+        document.getElementById(
+            "profileMunicipalitySelect"
+        );
+
+
+    const button =
+        document.getElementById(
+            "profileMunicipalitySaveButton"
+        );
+
+
+    const message =
+        document.getElementById(
+            "profileMunicipalityMessage"
+        );
+
+
+    if (
+        !select ||
+        !button ||
+        !message
+    ) {
+
+        return;
+
+    }
+
+
+    const municipalityGeoid =
+        String(
+            select.value ||
+            ""
+        ).trim();
+
+
+    const selectedOption =
+        select.options[
+            select.selectedIndex
+        ];
+
+
+    const municipalityName =
+        String(
+            selectedOption
+                ?.dataset
+                ?.name ||
+            ""
+        ).trim();
+
+
+    if (
+        !municipalityGeoid ||
+        !municipalityName
+    ) {
+
+        message.textContent =
+            "Choose your municipality first.";
+
+
+        return;
+
+    }
+
+
+    setButtonBusy(
+        button,
+        true,
+        "Saving..."
+    );
+
+
+    try {
+
+        await updateCurrentUserMunicipality(
+            municipalityGeoid,
+            municipalityName
+        );
+
+
+        currentProfile =
+            await getCurrentUserProfile();
+
+
+        message.textContent =
+            `Municipality saved: ${municipalityName}`;
+
+
+    } catch (error) {
+
+        console.error(
+            "Municipality update failed:",
+            error
+        );
+
+
+        message.textContent =
+            "Municipality could not be saved.";
+
+    } finally {
+
+        setButtonBusy(
+            button,
+            false,
+            "Save Municipality"
+        );
+
+    }
+
+}
 /*
 ==================================================
 PRIORITY SUBMISSION COUNT
@@ -1117,7 +1577,7 @@ function renderPriorityComparison() {
                             personalValue
                         )
                             ? `${personalValue.toFixed(1)} / 10`
-                            : "—"
+                            : "â€”"
                     )
                 );
 
@@ -1156,8 +1616,6 @@ function renderPriorityComparison() {
         );
 
 }
-
-
 /*
 ==================================================
 CIVIC PULSE HISTORY
@@ -1641,12 +2099,6 @@ function renderCivicPulseTrendSection() {
         "";
 
 
-    /*
-    ----------------------------------------------
-    PRESIDENTIAL APPROVAL TREND
-    ----------------------------------------------
-    */
-
     if (
         presidentialApprovalHistory.length >=
         2
@@ -1662,12 +2114,6 @@ function renderCivicPulseTrendSection() {
 
     }
 
-
-    /*
-    ----------------------------------------------
-    COUNTRY DIRECTION TREND
-    ----------------------------------------------
-    */
 
     if (
         countryDirectionHistory.length >=
@@ -1794,8 +2240,6 @@ function createTrendCard(
     return card;
 
 }
-
-
 /*
 ==================================================
 PRESIDENTIAL APPROVAL TREND
@@ -2375,8 +2819,6 @@ function destroyDirectionTrendChart() {
         null;
 
 }
-
-
 /*
 ==================================================
 CONFIDENCE AVERAGE
@@ -2925,8 +3367,6 @@ function renderRecentActivity() {
     );
 
 }
-
-
 /*
 ==================================================
 PROFILE AGE GROUP
@@ -2995,7 +3435,7 @@ function getAgeGroupLabel(
         "youth"
     ) {
 
-        return "Age 13–17";
+        return "Age 13â€“17";
 
     }
 
@@ -3134,7 +3574,7 @@ function formatComparisonAverage(
             0
     ) {
 
-        return "—";
+        return "â€”";
 
     }
 
@@ -3350,8 +3790,6 @@ function formatParticipantType(
     return "Participant";
 
 }
-
-
 /*
 ==================================================
 BIRTHDAY FORMAT
@@ -3606,7 +4044,7 @@ function renderProfileError() {
 
     setText(
         "profileZipCode",
-        "—"
+        "â€”"
     );
 
 
@@ -3618,13 +4056,13 @@ function renderProfileError() {
 
     setText(
         "profilePrioritySubmissionCount",
-        "—"
+        "â€”"
     );
 
 
     setText(
         "profileRecentActivityCount",
-        "—"
+        "â€”"
     );
 
 
@@ -3807,8 +4245,6 @@ async function handleSignOut() {
     }
 
 }
-
-
 /*
 ==================================================
 HEADER
@@ -4057,6 +4493,44 @@ function setButtonBusy(
 
     button.textContent =
         text;
+
+}
+
+
+/*
+==================================================
+HTML ESCAPE
+==================================================
+*/
+
+function escapeHtml(
+    value
+) {
+
+    return String(
+        value ??
+        ""
+    )
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
 
 }
 

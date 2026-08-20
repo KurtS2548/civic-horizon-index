@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/KurtS2548/civic-horizon-index#readme",
   "dependencies": {
+    "@svg-maps/usa.states-territories": "^2.0.0",
     "express": "^5.2.1"
   }
 }

@@ -288,8 +288,7 @@
         }
       }
     },
-
-    "userProfiles": {
+        "userProfiles": {
       "$uid": {
         ".read": "auth != null && auth.uid === $uid",
 
@@ -306,7 +305,7 @@
         },
 
         "zipCode": {
-          ".validate": "newData.isString() && newData.val().matches(/^\\d{5}$/)"
+          ".validate": "newData.isString() && newData.val().matches(/^\\d{5}$/) && (!data.exists() || newData.val() === data.val())"
         },
 
         "birthday": {
@@ -346,12 +345,24 @@
         },
 
         "profileVersion": {
-          ".validate": "newData.isString() && newData.val().length > 0"
-        },
+  ".validate": "newData.isString() && newData.val().length > 0"
+},
 
-        "$other": {
-          ".validate": false
-        }
+"municipalityGeoid": {
+  ".validate": "!newData.exists() || (newData.isString() && newData.val().matches(/^\\d{10}$/) && root.child('geographicEligibility').child('zips').child(newData.parent().child('zipCode').val()).child('municipalities').child(newData.val()).exists())"
+},
+
+"municipalityName": {
+  ".validate": "!newData.exists() || (newData.isString() && newData.val().length > 0 && newData.val().length <= 120 && newData.parent().child('municipalityGeoid').exists() && root.child('geographicEligibility').child('zips').child(newData.parent().child('zipCode').val()).child('municipalities').child(newData.parent().child('municipalityGeoid').val()).child('name').val() === newData.val())"
+},
+
+"municipalityConfirmedAt": {
+  ".validate": "!newData.exists() || (newData.isString() && newData.val().length >= 20 && newData.val().length <= 40 && newData.parent().child('municipalityGeoid').exists())"
+},
+
+"$other": {
+  ".validate": false
+}
       }
     },
 
@@ -571,15 +582,21 @@
       }
     },
 
+    "geographicEligibility": {
+      ".read": "auth != null",
+
+      ".write": "auth != null && auth.uid === '46MRUizWh5Yl83XXk4CBuI3TUZc2'"
+    },
+
     "congressionalApprovalVotes": {
       "$period": {
         "$memberId": {
           "$uid": {
             ".read": "auth != null && auth.uid === $uid",
 
-            ".write": "auth != null && auth.uid === $uid && auth.token.email_verified === true && !data.exists() && newData.exists()",
+            ".write": "auth != null && auth.uid === $uid && auth.token.email_verified === true && !data.exists() && newData.exists() && root.child('userProfiles').child($uid).child('zipCode').isString() && root.child('geographicEligibility').child('zips').child(root.child('userProfiles').child($uid).child('zipCode').val()).exists() && root.child('geographicEligibility').child('zips').child(root.child('userProfiles').child($uid).child('zipCode').val()).child('stateCode').val() === newData.child('stateCode').val() && ((newData.child('chamber').val() === 'senate' && !newData.child('district').exists()) || (newData.child('chamber').val() === 'house' && newData.child('district').exists() && root.child('geographicEligibility').child('zips').child(root.child('userProfiles').child($uid).child('zipCode').val()).child('districtAmbiguous').val() === false && root.child('geographicEligibility').child('zips').child(root.child('userProfiles').child($uid).child('zipCode').val()).child('congressionalDistrict').val() === newData.child('district').val()))",
 
-            ".validate": "newData.hasChildren(['memberId', 'seatKey', 'stateCode', 'chamber', 'response', 'submittedAt', 'votingPeriod', 'publicResponseId']) && newData.child('memberId').val() === $memberId && newData.child('votingPeriod').val() === $period",
+            ".validate": "newData.hasChildren(['memberId', 'seatKey', 'stateCode', 'chamber', 'response', 'submittedAt', 'votingPeriod', 'publicResponseId']) && newData.child('memberId').val() === $memberId && newData.child('votingPeriod').val() === $period && ((newData.child('chamber').val() === 'senate' && !newData.child('district').exists()) || (newData.child('chamber').val() === 'house' && newData.child('district').exists()))",
 
             "memberId": {
               ".validate": "newData.isString() && newData.val() === $memberId && newData.val().matches(/^[a-z0-9-]+$/)"
@@ -666,6 +683,95 @@
 
               "votingPeriod": {
                 ".validate": "newData.isString() && newData.val() === $period && newData.val().matches(/^\\d{4}-\\d{2}$/)"
+              },
+
+              "$other": {
+                ".validate": false
+              }
+            }
+          }
+        }
+      }
+    },
+        "weeklyGovernorVotes": {
+      "$period": {
+        "$governorId": {
+          "$uid": {
+            ".read": "auth != null && auth.uid === $uid",
+
+            ".write": "auth != null && auth.uid === $uid && auth.token.email_verified === true && !data.exists() && newData.exists() && root.child('userProfiles').child($uid).child('zipCode').isString() && root.child('geographicEligibility').child('zips').child(root.child('userProfiles').child($uid).child('zipCode').val()).exists() && root.child('geographicEligibility').child('zips').child(root.child('userProfiles').child($uid).child('zipCode').val()).child('stateCode').val() === newData.child('stateCode').val()",
+
+            ".validate": "newData.hasChildren(['governorId', 'seatKey', 'stateCode', 'response', 'submittedAt', 'votingPeriod', 'publicResponseId']) && newData.child('governorId').val() === $governorId && newData.child('votingPeriod').val() === $period",
+
+            "governorId": {
+              ".validate": "newData.isString() && newData.val() === $governorId && newData.val().matches(/^[a-z0-9-]+$/)"
+            },
+
+            "seatKey": {
+              ".validate": "newData.isString() && newData.val().matches(/^[a-z0-9-]+$/)"
+            },
+
+            "stateCode": {
+              ".validate": "newData.isString() && newData.val().matches(/^[A-Z]{2}$/)"
+            },
+
+            "response": {
+              ".validate": "newData.isString() && (newData.val() === 'Strongly Approve' || newData.val() === 'Approve' || newData.val() === 'Neutral' || newData.val() === 'Disapprove' || newData.val() === 'Strongly Disapprove')"
+            },
+
+            "submittedAt": {
+              ".validate": "newData.isString() && newData.val().length >= 20 && newData.val().length <= 40"
+            },
+
+            "votingPeriod": {
+              ".validate": "newData.isString() && newData.val() === $period && newData.val().matches(/^\\d{4}-W\\d{2}$/)"
+            },
+
+            "publicResponseId": {
+              ".validate": "newData.isString() && newData.val().length >= 8 && newData.val().length <= 128 && newData.val().matches(/^[a-zA-Z0-9-]+$/)"
+            },
+
+            "$other": {
+              ".validate": false
+            }
+          }
+        }
+      }
+    },
+
+    "governorApproval": {
+      ".read": "auth != null",
+
+      "$governorId": {
+        "responses": {
+          "$period": {
+            "$responseId": {
+              ".write": "auth != null && auth.token.email_verified === true && !data.exists() && newData.exists() && root.child('weeklyGovernorVotes').child($period).child($governorId).child(auth.uid).exists() && root.child('weeklyGovernorVotes').child($period).child($governorId).child(auth.uid).child('publicResponseId').val() === $responseId && root.child('weeklyGovernorVotes').child($period).child($governorId).child(auth.uid).child('governorId').val() === newData.child('governorId').val() && root.child('weeklyGovernorVotes').child($period).child($governorId).child(auth.uid).child('seatKey').val() === newData.child('seatKey').val() && root.child('weeklyGovernorVotes').child($period).child($governorId).child(auth.uid).child('stateCode').val() === newData.child('stateCode').val() && root.child('weeklyGovernorVotes').child($period).child($governorId).child(auth.uid).child('response').val() === newData.child('response').val() && root.child('weeklyGovernorVotes').child($period).child($governorId).child(auth.uid).child('votingPeriod').val() === newData.child('votingPeriod').val()",
+
+              ".validate": "newData.hasChildren(['governorId', 'seatKey', 'stateCode', 'response', 'submittedAt', 'votingPeriod']) && newData.child('governorId').val() === $governorId && newData.child('votingPeriod').val() === $period",
+
+              "governorId": {
+                ".validate": "newData.isString() && newData.val() === $governorId && newData.val().matches(/^[a-z0-9-]+$/)"
+              },
+
+              "seatKey": {
+                ".validate": "newData.isString() && newData.val().matches(/^[a-z0-9-]+$/)"
+              },
+
+              "stateCode": {
+                ".validate": "newData.isString() && newData.val().matches(/^[A-Z]{2}$/)"
+              },
+
+              "response": {
+                ".validate": "newData.isString() && (newData.val() === 'Strongly Approve' || newData.val() === 'Approve' || newData.val() === 'Neutral' || newData.val() === 'Disapprove' || newData.val() === 'Strongly Disapprove')"
+              },
+
+              "submittedAt": {
+                ".validate": "newData.isString() && newData.val().length >= 20 && newData.val().length <= 40"
+              },
+
+              "votingPeriod": {
+                ".validate": "newData.isString() && newData.val() === $period && newData.val().matches(/^\\d{4}-W\\d{2}$/)"
               },
 
               "$other": {

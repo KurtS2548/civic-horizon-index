@@ -917,11 +917,115 @@ export async function updateCurrentUserZipCode(
 
 
     await update(
+    profileReference,
+    {
+
+        zipCode:
+            cleanZipCode,
+
+        municipalityGeoid:
+            null,
+
+        municipalityName:
+            null,
+
+        municipalityConfirmedAt:
+            null,
+
+        updatedAt:
+            new Date().toISOString()
+
+    }
+);
+
+
+    return cleanZipCode;
+
+}
+
+/*
+==================================================
+UPDATE MUNICIPALITY
+==================================================
+*/
+
+export async function updateCurrentUserMunicipality(
+    municipalityGeoid,
+    municipalityName
+) {
+
+    const user =
+        auth.currentUser;
+
+
+    if (!user) {
+
+        throw new Error(
+            "You must be signed in first."
+        );
+
+    }
+
+
+    const cleanGeoid =
+        String(
+            municipalityGeoid || ""
+        ).trim();
+
+
+    const cleanName =
+        String(
+            municipalityName || ""
+        ).trim();
+
+
+    if (
+        !/^\d{10}$/.test(
+            cleanGeoid
+        )
+    ) {
+
+        throw new Error(
+            "A valid municipality is required."
+        );
+
+    }
+
+
+    if (!cleanName) {
+
+        throw new Error(
+            "A municipality name is required."
+        );
+
+    }
+
+
+    await getIdToken(
+        user,
+        true
+    );
+
+
+    const profileReference =
+        ref(
+            database,
+            `userProfiles/${user.uid}`
+        );
+
+
+    await update(
         profileReference,
         {
 
-            zipCode:
-                cleanZipCode,
+            municipalityGeoid:
+                cleanGeoid,
+
+            municipalityName:
+                cleanName,
+
+            municipalityConfirmedAt:
+                new Date().toISOString(),
 
             updatedAt:
                 new Date().toISOString()
@@ -930,7 +1034,15 @@ export async function updateCurrentUserZipCode(
     );
 
 
-    return cleanZipCode;
+    return {
+
+        municipalityGeoid:
+            cleanGeoid,
+
+        municipalityName:
+            cleanName
+
+    };
 
 }
 

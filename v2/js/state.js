@@ -3,39 +3,94 @@
 CIVIC HORIZON INDEX V2
 STATE CIVIC PROFILE
 ==================================================
+
+Public officials are presented in individual cards.
+
+APPROVAL CADENCE
+
+Governor:
+- Weekly
+
+U.S. Senators:
+- Monthly
+
+U.S. Representatives:
+- Monthly
+
+Mayor:
+- Monthly later
+
+GEOGRAPHIC ELIGIBILITY
+
+Governor / Senator:
+- Participant ZIP must resolve to the state
+
+U.S. Representative:
+- Participant ZIP must uniquely resolve to the
+  congressional district
+
+Browsing public officials NEVER changes voting
+eligibility.
+==================================================
 */
 
 
 /*
 ==================================================
-CONGRESSIONAL DATA SERVICE
+PUBLIC OFFICIAL DATA
 ==================================================
 */
 
 import {
 
-    getStateCongressionalDelegation
+    getStatePublicOfficials
 
-} from "./services/congress-service.js";
+} from "./services/public-official-data-service.js";
 
 
 /*
 ==================================================
-CONGRESSIONAL APPROVAL SERVICE
+CONGRESSIONAL APPROVAL
 ==================================================
 */
 
 import {
 
     getCongressionalApprovalStatus,
-
     getMyCongressionalApprovalVote,
-
     submitCongressionalApproval,
-
     subscribeToCongressionalApproval
 
 } from "./services/congressional-approval-service.js";
+
+
+/*
+==================================================
+GOVERNOR APPROVAL
+==================================================
+*/
+
+import {
+
+    getGovernorApprovalStatus,
+    getMyGovernorApprovalVote,
+    submitGovernorApproval,
+    subscribeToGovernorApproval
+
+} from "./services/governor-approval-service.js";
+
+
+/*
+==================================================
+PARTICIPANT JURISDICTION
+==================================================
+*/
+
+import {
+
+    getCurrentParticipantJurisdiction
+
+} from "./services/participant-jurisdiction-service.js";
 
 
 /*
@@ -61,7 +116,7 @@ import {
 
 /*
 ==================================================
-STATE DATA
+STATE NAMES
 ==================================================
 */
 
@@ -123,21 +178,29 @@ const states = {
 
 /*
 ==================================================
-APPROVAL TEST STATE
+PAGE STATE
 ==================================================
 */
 
-let unsubscribeSenatorOneResults =
+let participantJurisdiction =
     null;
 
 
-let unsubscribeSenatorOneAuth =
-    null;
+const activeSubscriptions =
+    [];
+
+
+const governorSubscriptions =
+    [];
+
+
+let houseCardSubscriptions =
+    [];
 
 
 /*
 ==================================================
-PAGE INITIALIZATION
+INITIALIZE PAGE
 ==================================================
 */
 
@@ -160,14 +223,15 @@ async function initializeStatePage() {
 
     initializeHeader();
 
-    initializeStateProfile();
+
+    await initializeStateProfile();
 
 }
 
 
 /*
 ==================================================
-COMPONENT LOADING
+LOAD COMPONENT
 ==================================================
 */
 
@@ -200,7 +264,7 @@ async function loadComponent(
         if (!response.ok) {
 
             throw new Error(
-                `Component request failed: ${response.status}`
+                `Could not load ${componentPath}`
             );
 
         }
@@ -215,7 +279,6 @@ async function loadComponent(
     } catch (error) {
 
         console.error(
-            `Could not load ${componentPath}:`,
             error
         );
 
@@ -233,7 +296,7 @@ STATE PROFILE
 ==================================================
 */
 
-function initializeStateProfile() {
+async function initializeStateProfile() {
 
     const url =
         new URL(
@@ -276,24 +339,41 @@ function initializeStateProfile() {
 
     setText(
         "statePageDescription",
-        `Explore Civic Horizon Index participation, results, congressional representatives, approval ratings, public records, and future local civic information for ${stateName}.`
+        `Explore Civic Horizon Index participation, results, public officials, approval ratings, official records, and civic information for ${stateName}.`
     );
 
 
-    initializeStateOverview(
+    initializeStateOverview();
+
+
+    /*
+    ----------------------------------------------
+    PARTICIPANT GEOGRAPHY
+
+    Public information stays readable regardless
+    of voting eligibility.
+    ----------------------------------------------
+    */
+
+    participantJurisdiction =
+        await getCurrentParticipantJurisdiction();
+
+
+    /*
+    ----------------------------------------------
+    OLD STANDALONE APPROVAL SECTION
+
+    Approval voting now belongs inside the
+    individual public-official cards.
+    ----------------------------------------------
+    */
+
+    hideLegacyApprovalSection();
+
+
+    initializePublicOfficials(
         stateCode,
         stateName
-    );
-
-
-    initializeCongressionalDelegation(
-        stateCode,
-        stateName
-    );
-
-
-    initializeCongressionalApproval(
-        stateCode
     );
 
 }
@@ -305,10 +385,7 @@ STATE OVERVIEW
 ==================================================
 */
 
-function initializeStateOverview(
-    stateCode,
-    stateName
-) {
+function initializeStateOverview() {
 
     setText(
         "stateOverviewParticipants",
@@ -333,28 +410,34 @@ function initializeStateOverview(
         "Coming soon"
     );
 
-
-    window.CivicHorizonStateProfile = {
-
-        stateCode,
-
-        stateName
-
-    };
-
 }
 
 
 /*
 ==================================================
-CONGRESSIONAL DELEGATION
+PUBLIC OFFICIALS
 ==================================================
 */
 
-function initializeCongressionalDelegation(
+function initializePublicOfficials(
     stateCode,
     stateName
 ) {
+
+    clearSubscriptions(
+        activeSubscriptions
+    );
+
+
+    clearSubscriptions(
+        governorSubscriptions
+    );
+
+
+    clearSubscriptions(
+        houseCardSubscriptions
+    );
+
 
     const container =
         document.getElementById(
@@ -369,37 +452,39 @@ function initializeCongressionalDelegation(
     }
 
 
-    const delegation =
-        getStateCongressionalDelegation(
+    const officials =
+        getStatePublicOfficials(
             stateCode
         );
 
 
+    const governor =
+        officials?.governor ||
+        null;
+
+
     const senators =
         Array.isArray(
-            delegation.senators
+            officials?.senators
         )
-            ? delegation.senators
+            ? officials.senators
             : [];
 
 
     const representatives =
         Array.isArray(
-            delegation.representatives
+            officials?.representatives
         )
-            ? delegation.representatives
+            ? officials.representatives
             : [];
 
 
-    /*
-    ----------------------------------------------
-    NO CONGRESSIONAL DATA
-    ----------------------------------------------
-    */
-
     if (
-        senators.length === 0 &&
-        representatives.length === 0
+        !governor &&
+        senators.length ===
+            0 &&
+        representatives.length ===
+            0
     ) {
 
         container.innerHTML = `
@@ -407,15 +492,12 @@ function initializeCongressionalDelegation(
             <div class="state-placeholder-card">
 
                 <strong>
-                    ${escapeHtml(
-                        stateName
-                    )} congressional
-                    data is being prepared
+                    Public official information is being prepared
                 </strong>
 
                 <p>
-                    Current congressional information has not yet
-                    been added for this state.
+                    Verified public-official information has not
+                    yet been added for this state.
                 </p>
 
             </div>
@@ -428,52 +510,73 @@ function initializeCongressionalDelegation(
     }
 
 
+    container.innerHTML = `
+
+        ${
+            createGovernorSection(
+                governor,
+                stateName
+            )
+        }
+
+        ${
+            createSenateSection(
+                senators,
+                stateName
+            )
+        }
+
+        ${
+            createHouseSection(
+                representatives,
+                stateName
+            )
+        }
+
+    `;
+
+
     /*
     ----------------------------------------------
-    SENATE
+    GOVERNOR
     ----------------------------------------------
     */
 
-    const senateMarkup =
-        senators.length > 0
-            ? `
+    if (
+        governor
+    ) {
 
-                <section class="state-delegation-group">
+        initializeGovernorCard(
+            governor
+        );
 
-                    <header class="state-delegation-group__heading">
-
-                        <span>
-                            U.S. Senate
-                        </span>
-
-                        <h3>
-                            ${escapeHtml(
-                                stateName
-                            )} Senators
-                        </h3>
-
-                    </header>
+    }
 
 
-                    <div class="state-delegation-grid">
+    /*
+    ----------------------------------------------
+    SENATORS
+    ----------------------------------------------
+    */
 
-                        ${
-                            senators
-                                .map(
-                                    member =>
-                                        createCongressionalMemberCard(
-                                            member
-                                        )
-                                )
-                                .join("")
-                        }
+    senators.forEach(
+        senator => {
 
-                    </div>
+            initializeCongressionalCard(
+                senator,
+                {
+                    votingEligible:
+                        canVoteForStateOfficial(
+                            senator
+                        ),
 
-                </section>
+                    subscriptionBucket:
+                        activeSubscriptions
+                }
+            );
 
-            `
-            : "";
+        }
+    );
 
 
     /*
@@ -482,32 +585,12 @@ function initializeCongressionalDelegation(
     ----------------------------------------------
     */
 
-    const houseMarkup =
-        representatives.length > 0
-            ? createHouseExplorer(
-                representatives,
-                stateName
-            )
-            : "";
-
-
-    container.innerHTML =
-        senateMarkup +
-        houseMarkup;
-
-
-    /*
-    ----------------------------------------------
-    START HOUSE SELECTOR
-    ----------------------------------------------
-    */
-
     if (
         representatives.length >
         0
     ) {
 
-        initializeHouseDistrictSelector(
+        initializeHouseExplorer(
             representatives
         );
 
@@ -518,16 +601,156 @@ function initializeCongressionalDelegation(
 
 /*
 ==================================================
-HOUSE EXPLORER
+GOVERNOR SECTION
 ==================================================
 */
 
-function createHouseExplorer(
+function createGovernorSection(
+    governor,
+    stateName
+) {
+
+    if (!governor) {
+
+        return "";
+
+    }
+
+
+    return `
+
+        <section class="state-delegation-group state-delegation-group--governor">
+
+            <header class="state-delegation-group__heading">
+
+                <span>
+                    State Executive
+                </span>
+
+                <h3>
+                    Governor of ${escapeHtml(
+                        stateName
+                    )}
+                </h3>
+
+            </header>
+
+
+            <div class="state-delegation-grid">
+
+                ${
+                    createOfficialCard(
+                        governor,
+                        {
+                            showVoting:
+                                true,
+
+                            cadenceLabel:
+                                "Weekly approval"
+                        }
+                    )
+                }
+
+            </div>
+
+        </section>
+
+    `;
+
+}
+
+
+/*
+==================================================
+SENATE SECTION
+==================================================
+*/
+
+function createSenateSection(
+    senators,
+    stateName
+) {
+
+    if (
+        senators.length ===
+        0
+    ) {
+
+        return "";
+
+    }
+
+
+    return `
+
+        <section class="state-delegation-group">
+
+            <header class="state-delegation-group__heading">
+
+                <span>
+                    U.S. Senate
+                </span>
+
+                <h3>
+                    ${escapeHtml(
+                        stateName
+                    )} Senators
+                </h3>
+
+            </header>
+
+
+            <div class="state-delegation-grid">
+
+                ${
+                    senators
+                        .map(
+                            official =>
+                                createOfficialCard(
+                                    official,
+                                    {
+                                        showVoting:
+                                            true,
+
+                                        cadenceLabel:
+                                            "Monthly approval"
+                                    }
+                                )
+                        )
+                        .join("")
+                }
+
+            </div>
+
+        </section>
+
+    `;
+
+}
+
+
+/*
+==================================================
+HOUSE SECTION
+==================================================
+*/
+
+function createHouseSection(
     representatives,
     stateName
 ) {
 
-    const sortedRepresentatives =
+    if (
+        representatives.length ===
+        0
+    ) {
+
+        return "";
+
+    }
+
+
+    const sorted =
         [...representatives]
             .sort(
                 compareDistricts
@@ -535,30 +758,26 @@ function createHouseExplorer(
 
 
     const options =
-        sortedRepresentatives
+        sorted
             .map(
-                member => {
+                official => {
 
-                    const district =
-                        member.district;
-
-
-                    const label =
-                        district ===
+                    const districtLabel =
+                        official.district ===
                         "At-Large"
                             ? "At-Large District"
-                            : `District ${district}`;
+                            : `District ${official.district}`;
 
 
                     return `
 
                         <option
                             value="${escapeHtml(
-                                district
+                                official.district
                             )}"
                         >
                             ${escapeHtml(
-                                label
+                                districtLabel
                             )}
                         </option>
 
@@ -571,7 +790,7 @@ function createHouseExplorer(
 
     return `
 
-        <section class="state-delegation-group">
+        <section class="state-delegation-group state-delegation-group--house">
 
             <header class="state-delegation-group__heading">
 
@@ -586,8 +805,8 @@ function createHouseExplorer(
                 </h3>
 
                 <p>
-                    Choose a congressional district to view
-                    the representative serving that district.
+                    Choose a district to view its representative.
+                    Voting is available only for your ZIP-matched district.
                 </p>
 
             </header>
@@ -597,17 +816,21 @@ function createHouseExplorer(
 
                 <div class="state-house-explorer__selector">
 
-                    <label
-                        for="stateHouseDistrictSelect"
-                    >
+                    <label for="stateHouseDistrictSelect">
                         Congressional District
                     </label>
 
-                    <select
-                        id="stateHouseDistrictSelect"
-                    >
-                        ${options}
-                    </select>
+
+                    <div class="state-select-wrap">
+
+                        <select
+                            id="stateHouseDistrictSelect"
+                            class="state-house-explorer__select"
+                        >
+                            ${options}
+                        </select>
+
+                    </div>
 
                 </div>
 
@@ -615,8 +838,7 @@ function createHouseExplorer(
                 <div
                     id="stateHouseRepresentativeCard"
                     class="state-house-explorer__card"
-                >
-                </div>
+                ></div>
 
             </div>
 
@@ -629,11 +851,878 @@ function createHouseExplorer(
 
 /*
 ==================================================
-HOUSE DISTRICT SELECTOR
+CREATE OFFICIAL CARD
 ==================================================
 */
 
-function initializeHouseDistrictSelector(
+function createOfficialCard(
+    official,
+    options = {}
+) {
+
+    const showVoting =
+        options.showVoting ===
+        true;
+
+
+    const cadenceLabel =
+        String(
+            options.cadenceLabel ||
+            ""
+        );
+
+
+    const party =
+        normalizeParty(
+            official.party
+        );
+
+
+    const partyLabel =
+        official.partyLabel ||
+        createPartyLabel(
+            party
+        );
+
+
+    const officeLabel =
+        createCompactOfficeLabel(
+            official
+        );
+
+
+    return `
+
+        <article
+            class="state-official-card"
+            data-official-card="${escapeHtml(
+                official.id
+            )}"
+        >
+
+            <header class="state-official-card__header">
+
+                <div class="state-official-card__identity">
+
+                    <span class="state-official-card__office">
+                        ${escapeHtml(
+                            officeLabel
+                        )}
+                    </span>
+
+
+                    <div class="state-official-card__name-row">
+
+                        <h4>
+                            ${escapeHtml(
+                                official.name
+                            )}
+                        </h4>
+
+
+                        ${
+                            party
+                                ? `
+
+                                    <span
+                                        class="state-party-badge state-party-badge--${escapeHtml(
+                                            party.toLowerCase()
+                                        )}"
+                                        title="${escapeHtml(
+                                            partyLabel
+                                        )}"
+                                        aria-label="${escapeHtml(
+                                            partyLabel
+                                        )}"
+                                    >
+                                        ${escapeHtml(
+                                            party
+                                        )}
+                                    </span>
+
+                                `
+                                : ""
+                        }
+
+                    </div>
+
+                </div>
+
+            </header>
+
+
+            <div class="state-official-card__facts">
+
+                <div>
+
+                    <span>
+                        Serving Since
+                    </span>
+
+                    <strong>
+                        ${escapeHtml(
+                            official.servingSinceLabel ||
+                            "Unavailable"
+                        )}
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Time in Office
+                    </span>
+
+                    <strong>
+                        ${escapeHtml(
+                            official
+                                ?.timeInOffice
+                                ?.label ||
+                            "Unavailable"
+                        )}
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Current Term Began
+                    </span>
+
+                    <strong>
+                        ${escapeHtml(
+                            official.currentTermBeganLabel ||
+                            "Unavailable"
+                        )}
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            ${
+                showVoting
+                    ? createApprovalArea(
+                        official,
+                        cadenceLabel
+                    )
+                    : ""
+            }
+
+
+            ${
+                createCardSourceFooter(
+                    official
+                )
+            }
+
+        </article>
+
+    `;
+
+}
+
+
+/*
+==================================================
+APPROVAL AREA
+==================================================
+*/
+
+function createApprovalArea(
+    official,
+    cadenceLabel
+) {
+
+    return `
+
+        <div
+            class="state-official-approval"
+            data-approval-area="${escapeHtml(
+                official.id
+            )}"
+        >
+
+            <div class="state-official-approval__results">
+
+                <div>
+
+                    <span>
+                        Approval
+                    </span>
+
+                    <strong
+                        data-approval-percent
+                    >
+                        —
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Responses
+                    </span>
+
+                    <strong
+                        data-approval-responses
+                    >
+                        —
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="state-official-approval__vote">
+
+                <div>
+
+                    <p class="state-official-approval__label">
+                        Rate job performance
+                    </p>
+
+                    ${
+                        cadenceLabel
+                            ? `
+
+                                <span
+                                    class="state-official-approval__cadence"
+                                >
+                                    ${escapeHtml(
+                                        cadenceLabel
+                                    )}
+                                </span>
+
+                            `
+                            : ""
+                    }
+
+                </div>
+
+
+                <div class="state-official-approval__options">
+
+                    ${
+                        createApprovalButton(
+                            "Strongly Approve"
+                        )
+                    }
+
+                    ${
+                        createApprovalButton(
+                            "Approve"
+                        )
+                    }
+
+                    ${
+                        createApprovalButton(
+                            "Neutral"
+                        )
+                    }
+
+                    ${
+                        createApprovalButton(
+                            "Disapprove"
+                        )
+                    }
+
+                    ${
+                        createApprovalButton(
+                            "Strongly Disapprove"
+                        )
+                    }
+
+                </div>
+
+
+                <p
+                    class="state-official-approval__message"
+                    data-approval-message
+                >
+                    Checking voting eligibility...
+                </p>
+
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+
+/*
+==================================================
+APPROVAL BUTTON
+==================================================
+*/
+
+function createApprovalButton(
+    response
+) {
+
+    return `
+
+        <button
+            type="button"
+            class="state-official-approval__button"
+            data-response="${escapeHtml(
+                response
+            )}"
+            disabled
+        >
+            ${escapeHtml(
+                response
+            )}
+        </button>
+
+    `;
+
+}
+
+
+/*
+==================================================
+SOURCE FOOTER
+==================================================
+*/
+
+function createCardSourceFooter(
+    official
+) {
+
+    const sources =
+        Array.isArray(
+            official.sources
+        )
+            ? official.sources
+            : [];
+
+
+    if (
+        sources.length ===
+        0
+    ) {
+
+        return "";
+
+    }
+
+
+    const primarySource =
+        sources[
+            0
+        ];
+
+
+    if (
+        !primarySource?.sourceUrl
+    ) {
+
+        return "";
+
+    }
+
+
+    return `
+
+        <footer class="state-official-card__source">
+
+            <a
+                href="${escapeHtml(
+                    primarySource.sourceUrl
+                )}"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                Source:
+                ${escapeHtml(
+                    primarySource.sourceName ||
+                    "Official source"
+                )}
+            </a>
+
+        </footer>
+
+    `;
+
+}
+
+
+/*
+==================================================
+GOVERNOR CARD
+==================================================
+*/
+
+function initializeGovernorCard(
+    governor
+) {
+
+    const card =
+        findOfficialCard(
+            governor.id
+        );
+
+
+    if (!card) {
+
+        return;
+
+    }
+
+
+    const approvalElements =
+        getApprovalElements(
+            card
+        );
+
+
+    if (!approvalElements) {
+
+        return;
+
+    }
+
+
+    const {
+
+        approvalPercent,
+        responseCount,
+        message,
+        buttons
+
+    } =
+        approvalElements;
+
+
+    /*
+    ----------------------------------------------
+    LIVE WEEKLY RESULTS
+    ----------------------------------------------
+    */
+
+    const resultUnsubscribe =
+        subscribeToGovernorApproval(
+
+            governor.id,
+
+            summary => {
+
+                approvalPercent.textContent =
+                    formatPercentage(
+                        summary
+                            ?.approvalPercentage
+                    );
+
+
+                responseCount.textContent =
+                    formatNumber(
+                        summary
+                            ?.totalResponses
+                    );
+
+            },
+
+            error => {
+
+                console.error(
+                    "Governor approval results could not be loaded:",
+                    error
+                );
+
+
+                approvalPercent.textContent =
+                    "—";
+
+
+                responseCount.textContent =
+                    "—";
+
+            }
+
+        );
+
+
+    governorSubscriptions.push(
+        resultUnsubscribe
+    );
+
+
+    /*
+    ----------------------------------------------
+    ZIP STATE ELIGIBILITY
+    ----------------------------------------------
+    */
+
+    if (
+        !canVoteForStateOfficial(
+            governor
+        )
+    ) {
+
+        disableButtons(
+            buttons
+        );
+
+
+        message.textContent =
+            "Read only — Governor voting is limited to residents of this state.";
+
+
+        return;
+
+    }
+
+
+    /*
+    ----------------------------------------------
+    AUTH
+    ----------------------------------------------
+    */
+
+    const authUnsubscribe =
+        onAuthStateChanged(
+            auth,
+            async user => {
+
+                disableButtons(
+                    buttons
+                );
+
+
+                clearButtonSelections(
+                    buttons
+                );
+
+
+                if (!user) {
+
+                    message.textContent =
+                        "Sign in to participate.";
+
+                    return;
+
+                }
+
+
+                if (
+                    !user.emailVerified
+                ) {
+
+                    message.textContent =
+                        "Verify your email before participating.";
+
+                    return;
+
+                }
+
+
+                await refreshGovernorVotingStatus(
+                    governor,
+                    buttons,
+                    message
+                );
+
+            }
+        );
+
+
+    governorSubscriptions.push(
+        authUnsubscribe
+    );
+
+
+    /*
+    ----------------------------------------------
+    VOTE BUTTONS
+    ----------------------------------------------
+    */
+
+    buttons.forEach(
+        button => {
+
+            button.addEventListener(
+                "click",
+                async () => {
+
+                    await submitGovernorVote(
+                        governor,
+                        button,
+                        buttons,
+                        message
+                    );
+
+                }
+            );
+
+        }
+    );
+
+}
+
+
+/*
+==================================================
+GOVERNOR STATUS
+==================================================
+*/
+
+async function refreshGovernorVotingStatus(
+    governor,
+    buttons,
+    message
+) {
+
+    try {
+
+        const status =
+            await getGovernorApprovalStatus(
+                governor
+            );
+
+
+        clearButtonSelections(
+            buttons
+        );
+
+
+        if (
+            status.eligible
+        ) {
+
+            enableButtons(
+                buttons
+            );
+
+
+            message.textContent =
+                "Voting is open for this week.";
+
+
+            return;
+
+        }
+
+
+        disableButtons(
+            buttons
+        );
+
+
+        if (
+            status.reason ===
+            "alreadyParticipatedThisWeek"
+        ) {
+
+            const existingVote =
+                await getMyGovernorApprovalVote(
+                    governor.id
+                );
+
+
+            if (
+                existingVote
+                    ?.response
+            ) {
+
+                highlightResponse(
+                    buttons,
+                    existingVote.response
+                );
+
+            }
+
+
+            message.textContent =
+                "Your Governor rating has already been recorded for this week. Voting reopens next week.";
+
+
+            return;
+
+        }
+
+
+        if (
+            status.reason ===
+            "outsideJurisdiction"
+        ) {
+
+            message.textContent =
+                "Read only — Governor voting is limited to residents of this state.";
+
+
+            return;
+
+        }
+
+
+        if (
+            status.reason ===
+            "emailNotVerified"
+        ) {
+
+            message.textContent =
+                "Verify your email before participating.";
+
+
+            return;
+
+        }
+
+
+        if (
+            status.reason ===
+            "signedOut"
+        ) {
+
+            message.textContent =
+                "Sign in to participate.";
+
+
+            return;
+
+        }
+
+
+        message.textContent =
+            "Governor voting is currently unavailable.";
+
+    } catch (error) {
+
+        console.error(
+            "Governor approval status could not be loaded:",
+            error
+        );
+
+
+        disableButtons(
+            buttons
+        );
+
+
+        message.textContent =
+            "Governor voting is temporarily unavailable.";
+
+    }
+
+}
+
+
+/*
+==================================================
+SUBMIT GOVERNOR VOTE
+==================================================
+*/
+
+async function submitGovernorVote(
+    governor,
+    selectedButton,
+    buttons,
+    message
+) {
+
+    const response =
+        selectedButton
+            ?.dataset
+            ?.response;
+
+
+    if (!response) {
+
+        return;
+
+    }
+
+
+    disableButtons(
+        buttons
+    );
+
+
+    message.textContent =
+        "Saving your weekly rating...";
+
+
+    try {
+
+        await submitGovernorApproval(
+            governor,
+            response
+        );
+
+
+        clearButtonSelections(
+            buttons
+        );
+
+
+        highlightResponse(
+            buttons,
+            response
+        );
+
+
+        message.textContent =
+            "Your Governor rating has been recorded. Voting reopens next week.";
+
+    } catch (error) {
+
+        console.error(
+            "Governor approval vote failed:",
+            error
+        );
+
+
+        if (
+            error?.code ===
+            "already-participated-this-week"
+        ) {
+
+            await refreshGovernorVotingStatus(
+                governor,
+                buttons,
+                message
+            );
+
+
+            return;
+
+        }
+
+
+        message.textContent =
+            error?.message ||
+            "Your Governor rating could not be recorded.";
+
+
+        await refreshGovernorVotingStatus(
+            governor,
+            buttons,
+            message
+        );
+
+    }
+
+}
+
+
+/*
+==================================================
+HOUSE EXPLORER
+==================================================
+*/
+
+function initializeHouseExplorer(
     representatives
 ) {
 
@@ -659,24 +1748,56 @@ function initializeHouseDistrictSelector(
     }
 
 
-    const sortedRepresentatives =
-        [...representatives]
-            .sort(
-                compareDistricts
-            );
+    /*
+    ----------------------------------------------
+    DEFAULT TO PARTICIPANT DISTRICT
+    ----------------------------------------------
+    */
+
+    const participantDistrict =
+        participantJurisdiction
+            ?.eligibility
+            ?.congressionalDistrict
+            ? participantJurisdiction
+                .congressionalDistrict
+            : "";
+
+
+    if (
+        participantDistrict &&
+        representatives.some(
+            official =>
+                String(
+                    official.district
+                ) ===
+                String(
+                    participantDistrict
+                )
+        )
+    ) {
+
+        select.value =
+            participantDistrict;
+
+    }
 
 
     function renderSelectedRepresentative() {
+
+        clearSubscriptions(
+            houseCardSubscriptions
+        );
+
 
         const selectedDistrict =
             select.value;
 
 
-        const representative =
-            sortedRepresentatives.find(
-                member =>
+        const official =
+            representatives.find(
+                item =>
                     String(
-                        member.district
+                        item.district
                     ) ===
                     String(
                         selectedDistrict
@@ -684,7 +1805,7 @@ function initializeHouseDistrictSelector(
             );
 
 
-        if (!representative) {
+        if (!official) {
 
             cardContainer.innerHTML = `
 
@@ -693,11 +1814,6 @@ function initializeHouseDistrictSelector(
                     <strong>
                         Representative unavailable
                     </strong>
-
-                    <p>
-                        Representative information for this
-                        district could not be found.
-                    </p>
 
                 </div>
 
@@ -710,9 +1826,30 @@ function initializeHouseDistrictSelector(
 
 
         cardContainer.innerHTML =
-            createCongressionalMemberCard(
-                representative
+            createOfficialCard(
+                official,
+                {
+                    showVoting:
+                        true,
+
+                    cadenceLabel:
+                        "Monthly approval"
+                }
             );
+
+
+        initializeCongressionalCard(
+            official,
+            {
+                votingEligible:
+                    canVoteForHouseOfficial(
+                        official
+                    ),
+
+                subscriptionBucket:
+                    houseCardSubscriptions
+            }
+        );
 
     }
 
@@ -730,455 +1867,151 @@ function initializeHouseDistrictSelector(
 
 /*
 ==================================================
-DISTRICT SORTING
+CONGRESSIONAL CARD
 ==================================================
 */
 
-function compareDistricts(
-    firstMember,
-    secondMember
+function initializeCongressionalCard(
+    official,
+    options = {}
 ) {
 
-    const firstDistrict =
-        firstMember.district;
-
-
-    const secondDistrict =
-        secondMember.district;
-
-
-    if (
-        firstDistrict ===
-        "At-Large"
-    ) {
-
-        return -1;
-
-    }
-
-
-    if (
-        secondDistrict ===
-        "At-Large"
-    ) {
-
-        return 1;
-
-    }
-
-
-    return (
-        Number(
-            firstDistrict
-        ) -
-        Number(
-            secondDistrict
-        )
-    );
-
-}
-
-
-/*
-==================================================
-CONGRESSIONAL MEMBER CARD
-==================================================
-*/
-
-function createCongressionalMemberCard(
-    member
-) {
-
-    const timeInOffice =
-        member?.timeInOffice?.label ||
-        "Unavailable";
-
-
-    const districtLabel =
-        member.chamber ===
-            "house"
-            ? member.district ===
-                "At-Large"
-                ? "At-Large District"
-                : `District ${escapeHtml(
-                    member.district
-                )}`
-            : "U.S. Senate";
-
-
-    return `
-
-        <article class="state-member-card">
-
-            <div class="state-member-card__heading">
-
-                <span class="state-member-card__office">
-                    ${escapeHtml(
-                        districtLabel
-                    )}
-                </span>
-
-                <h4>
-                    ${escapeHtml(
-                        member.name
-                    )}
-                </h4>
-
-            </div>
-
-
-            <div class="state-member-card__details">
-
-                <div>
-
-                    <span>
-                        Serving Since
-                    </span>
-
-                    <strong>
-                        ${escapeHtml(
-                            member.servingSinceLabel
-                        )}
-                    </strong>
-
-                </div>
-
-
-                <div>
-
-                    <span>
-                        Time in Current Office
-                    </span>
-
-                    <strong>
-                        ${escapeHtml(
-                            timeInOffice
-                        )}
-                    </strong>
-
-                </div>
-
-
-                <div>
-
-                    <span>
-                        Current Term Began
-                    </span>
-
-                    <strong>
-                        ${escapeHtml(
-                            member.currentTermBeganLabel
-                        )}
-                    </strong>
-
-                </div>
-
-            </div>
-
-        </article>
-
-    `;
-
-}
-
-
-/*
-==================================================
-CONGRESSIONAL APPROVAL
-==================================================
-*/
-
-function initializeCongressionalApproval(
-    stateCode
-) {
-
-    destroyCongressionalApprovalTest();
-
-
-    const delegation =
-        getStateCongressionalDelegation(
-            stateCode
+    const card =
+        findOfficialCard(
+            official.id
         );
 
 
-    const senators =
-        Array.isArray(
-            delegation.senators
-        )
-            ? delegation.senators
-            : [];
-
-
-    /*
-    ----------------------------------------------
-    RESET ALL APPROVAL CONTROLS
-    ----------------------------------------------
-    */
-
-    disableAllCongressionalApprovalButtons();
-
-
-    clearCongressionalSelections();
-
-
-    /*
-    ----------------------------------------------
-    SENATOR ONE
-    ----------------------------------------------
-    */
-
-    if (
-        senators[
-            0
-        ]
-    ) {
-
-        setText(
-            "stateSenatorOneName",
-            senators[
-                0
-            ].name
-        );
-
-    } else {
-
-        setText(
-            "stateSenatorOneName",
-            "Senator information unavailable"
-        );
-
-    }
-
-
-    /*
-    ----------------------------------------------
-    SENATOR TWO
-    ----------------------------------------------
-    */
-
-    if (
-        senators[
-            1
-        ]
-    ) {
-
-        setText(
-            "stateSenatorTwoName",
-            senators[
-                1
-            ].name
-        );
-
-    } else {
-
-        setText(
-            "stateSenatorTwoName",
-            "Senator information unavailable"
-        );
-
-    }
-
-
-    /*
-    ----------------------------------------------
-    INITIAL RESULT VALUES
-    ----------------------------------------------
-    */
-
-    setText(
-        "stateSenatorOneApproval",
-        "0.0%"
-    );
-
-
-    setText(
-        "stateSenatorOneResponses",
-        "0"
-    );
-
-
-    setText(
-        "stateSenatorTwoApproval",
-        "—"
-    );
-
-
-    setText(
-        "stateSenatorTwoResponses",
-        "—"
-    );
-
-
-    /*
-    ----------------------------------------------
-    HOUSE APPROVAL
-
-    House voting remains disabled until the
-    participant's district is connected to profile
-    data.
-    ----------------------------------------------
-    */
-
-    setText(
-        "stateHouseDistrict",
-        "Your Congressional District"
-    );
-
-
-    setText(
-        "stateHouseRepresentativeName",
-        "District identification coming soon"
-    );
-
-
-    setText(
-        "stateHouseApprovalPercent",
-        "—"
-    );
-
-
-    setText(
-        "stateHouseApprovalResponses",
-        "—"
-    );
-
-
-    setText(
-        "stateSenatorTwoMessage",
-        "This approval tracker will open after the first senator test is confirmed."
-    );
-
-
-    setText(
-        "stateHouseApprovalMessage",
-        "Your congressional district must be identified before House approval voting is available."
-    );
-
-
-    /*
-    ----------------------------------------------
-    FIRST SENATOR LIVE TEST
-    ----------------------------------------------
-    */
-
-    if (
-        senators[
-            0
-        ]
-    ) {
-
-        initializeFirstSenatorApprovalTest(
-            senators[
-                0
-            ]
-        );
-
-    } else {
-
-        setText(
-            "stateSenatorOneMessage",
-            "Senator approval information is unavailable."
-        );
-
-    }
-
-}
-
-
-/*
-==================================================
-FIRST SENATOR LIVE TEST
-==================================================
-*/
-
-function initializeFirstSenatorApprovalTest(
-    member
-) {
-
-    const optionContainer =
-        document.querySelector(
-            '[data-member-slot="senator-one"]'
-        );
-
-
-    if (!optionContainer) {
-
-        console.error(
-            "Senator one approval controls were not found."
-        );
-
+    if (!card) {
 
         return;
 
     }
 
 
-    const buttons =
-        Array.from(
-            optionContainer.querySelectorAll(
-                "button[data-response]"
-            )
+    const approvalElements =
+        getApprovalElements(
+            card
         );
 
 
-    if (
-        buttons.length ===
-        0
-    ) {
-
-        console.error(
-            "Senator one approval buttons were not found."
-        );
-
+    if (!approvalElements) {
 
         return;
 
     }
 
 
+    const {
+
+        approvalPercent,
+        responseCount,
+        message,
+        buttons
+
+    } =
+        approvalElements;
+
+
+    const votingEligible =
+        options.votingEligible ===
+        true;
+
+
+    const bucket =
+        options.subscriptionBucket ||
+        activeSubscriptions;
+
+
     /*
     ----------------------------------------------
-    CLICK HANDLERS
+    LIVE RESULTS
     ----------------------------------------------
     */
 
-    buttons.forEach(
-        button => {
+    const resultUnsubscribe =
+        subscribeToCongressionalApproval(
 
-            button.addEventListener(
-                "click",
-                async () => {
+            official.id,
 
-                    await submitFirstSenatorVote(
-                        member,
-                        button,
-                        buttons
+            summary => {
+
+                approvalPercent.textContent =
+                    formatPercentage(
+                        summary
+                            ?.approvalPercentage
                     );
 
-                }
-            );
 
-        }
+                responseCount.textContent =
+                    formatNumber(
+                        summary
+                            ?.totalResponses
+                    );
+
+            },
+
+            error => {
+
+                console.error(
+                    "Congressional approval results could not be loaded:",
+                    error
+                );
+
+
+                approvalPercent.textContent =
+                    "—";
+
+
+                responseCount.textContent =
+                    "—";
+
+            }
+
+        );
+
+
+    bucket.push(
+        resultUnsubscribe
     );
 
 
     /*
     ----------------------------------------------
-    AUTH READY
-
-    Waiting for Firebase Auth prevents the page
-    from briefly treating a valid logged-in user
-    as signed out while authentication restores.
+    OUTSIDE JURISDICTION
     ----------------------------------------------
     */
 
-    unsubscribeSenatorOneAuth =
+    if (
+        !votingEligible
+    ) {
+
+        disableButtons(
+            buttons
+        );
+
+
+        message.textContent =
+            getReadOnlyMessage(
+                official
+            );
+
+
+        return;
+
+    }
+
+
+    /*
+    ----------------------------------------------
+    AUTH
+    ----------------------------------------------
+    */
+
+    const authUnsubscribe =
         onAuthStateChanged(
             auth,
             async user => {
-
-                stopSenatorOneResultsSubscription();
-
 
                 disableButtons(
                     buttons
@@ -1192,11 +2025,8 @@ function initializeFirstSenatorApprovalTest(
 
                 if (!user) {
 
-                    setText(
-                        "stateSenatorOneMessage",
-                        "Sign in to participate in monthly Congressional Approval."
-                    );
-
+                    message.textContent =
+                        "Sign in to participate.";
 
                     return;
 
@@ -1207,126 +2037,75 @@ function initializeFirstSenatorApprovalTest(
                     !user.emailVerified
                 ) {
 
-                    setText(
-                        "stateSenatorOneMessage",
-                        "Verify your email before participating in Congressional Approval."
-                    );
-
+                    message.textContent =
+                        "Verify your email before participating.";
 
                     return;
 
                 }
 
 
-                /*
-                --------------------------------------
-                LIVE CURRENT-MONTH RESULTS
-                --------------------------------------
-                */
-
-                startSenatorOneResultsSubscription(
-                    member
-                );
-
-
-                /*
-                --------------------------------------
-                MONTHLY ELIGIBILITY
-                --------------------------------------
-                */
-
-                await refreshFirstSenatorVotingStatus(
-                    member,
-                    buttons
+                await refreshCongressionalVotingStatus(
+                    official,
+                    buttons,
+                    message
                 );
 
             }
         );
+
+
+    bucket.push(
+        authUnsubscribe
+    );
+
+
+    /*
+    ----------------------------------------------
+    BUTTONS
+    ----------------------------------------------
+    */
+
+    buttons.forEach(
+        button => {
+
+            button.addEventListener(
+                "click",
+                async () => {
+
+                    await submitCongressionalVote(
+                        official,
+                        button,
+                        buttons,
+                        message
+                    );
+
+                }
+            );
+
+        }
+    );
 
 }
 
 
 /*
 ==================================================
-START SENATOR ONE RESULT SUBSCRIPTION
+CONGRESSIONAL STATUS
 ==================================================
 */
 
-function startSenatorOneResultsSubscription(
-    member
-) {
-
-    stopSenatorOneResultsSubscription();
-
-
-    unsubscribeSenatorOneResults =
-        subscribeToCongressionalApproval(
-
-            member.id,
-
-            summary => {
-
-                setText(
-                    "stateSenatorOneApproval",
-                    formatPercentage(
-                        summary
-                            ?.approvalPercentage
-                    )
-                );
-
-
-                setText(
-                    "stateSenatorOneResponses",
-                    formatNumber(
-                        summary
-                            ?.totalResponses
-                    )
-                );
-
-            },
-
-            error => {
-
-                console.error(
-                    "Congressional approval result subscription failed:",
-                    error
-                );
-
-
-                setText(
-                    "stateSenatorOneApproval",
-                    "—"
-                );
-
-
-                setText(
-                    "stateSenatorOneResponses",
-                    "—"
-                );
-
-            }
-
-        );
-
-}
-
-
-/*
-==================================================
-REFRESH FIRST SENATOR STATUS
-==================================================
-*/
-
-async function refreshFirstSenatorVotingStatus(
-    member,
-    buttons
+async function refreshCongressionalVotingStatus(
+    official,
+    buttons,
+    message
 ) {
 
     try {
 
         const status =
             await getCongressionalApprovalStatus(
-                member.id
+                official.id
             );
 
 
@@ -1344,10 +2123,8 @@ async function refreshFirstSenatorVotingStatus(
             );
 
 
-            setText(
-                "stateSenatorOneMessage",
-                `Voting is open for ${status.votingPeriodLabel}. You may rate this senator once this month.`
-            );
+            message.textContent =
+                `Voting is open for ${status.votingPeriodLabel}.`;
 
 
             return;
@@ -1367,7 +2144,7 @@ async function refreshFirstSenatorVotingStatus(
 
             const existingVote =
                 await getMyCongressionalApprovalVote(
-                    member.id
+                    official.id
                 );
 
 
@@ -1384,10 +2161,8 @@ async function refreshFirstSenatorVotingStatus(
             }
 
 
-            setText(
-                "stateSenatorOneMessage",
-                `Your ${status.votingPeriodLabel} rating has already been recorded. Voting will reopen automatically next month.`
-            );
+            message.textContent =
+                `Your ${status.votingPeriodLabel} rating has already been recorded. Voting reopens next month.`;
 
 
             return;
@@ -1400,10 +2175,8 @@ async function refreshFirstSenatorVotingStatus(
             "emailNotVerified"
         ) {
 
-            setText(
-                "stateSenatorOneMessage",
-                "Verify your email before participating in Congressional Approval."
-            );
+            message.textContent =
+                "Verify your email before participating.";
 
 
             return;
@@ -1411,15 +2184,13 @@ async function refreshFirstSenatorVotingStatus(
         }
 
 
-        setText(
-            "stateSenatorOneMessage",
-            "Sign in to participate in monthly Congressional Approval."
-        );
+        message.textContent =
+            "Voting is currently unavailable.";
 
     } catch (error) {
 
         console.error(
-            "Congressional approval eligibility check failed:",
+            "Congressional approval status could not be loaded:",
             error
         );
 
@@ -1429,10 +2200,8 @@ async function refreshFirstSenatorVotingStatus(
         );
 
 
-        setText(
-            "stateSenatorOneMessage",
-            "Congressional Approval voting is temporarily unavailable."
-        );
+        message.textContent =
+            "Voting is temporarily unavailable.";
 
     }
 
@@ -1441,14 +2210,15 @@ async function refreshFirstSenatorVotingStatus(
 
 /*
 ==================================================
-SUBMIT FIRST SENATOR VOTE
+SUBMIT CONGRESSIONAL VOTE
 ==================================================
 */
 
-async function submitFirstSenatorVote(
-    member,
+async function submitCongressionalVote(
+    official,
     selectedButton,
-    buttons
+    buttons,
+    message
 ) {
 
     const response =
@@ -1469,22 +2239,22 @@ async function submitFirstSenatorVote(
     );
 
 
-    clearButtonSelections(
-        buttons
-    );
-
-
-    setText(
-        "stateSenatorOneMessage",
-        "Saving your monthly rating..."
-    );
+    message.textContent =
+        "Saving your monthly rating...";
 
 
     try {
 
         await submitCongressionalApproval(
-            member,
+            createCongressionalApprovalMember(
+                official
+            ),
             response
+        );
+
+
+        clearButtonSelections(
+            buttons
         );
 
 
@@ -1494,10 +2264,8 @@ async function submitFirstSenatorVote(
         );
 
 
-        setText(
-            "stateSenatorOneMessage",
-            "Your rating has been recorded. Voting will reopen automatically next month."
-        );
+        message.textContent =
+            "Your rating has been recorded. Voting reopens next month.";
 
     } catch (error) {
 
@@ -1512,9 +2280,10 @@ async function submitFirstSenatorVote(
             "already-participated-this-month"
         ) {
 
-            await refreshFirstSenatorVotingStatus(
-                member,
-                buttons
+            await refreshCongressionalVotingStatus(
+                official,
+                buttons,
+                message
             );
 
 
@@ -1523,16 +2292,15 @@ async function submitFirstSenatorVote(
         }
 
 
-        setText(
-            "stateSenatorOneMessage",
+        message.textContent =
             error?.message ||
-            "Your rating could not be recorded."
-        );
+            "Your rating could not be recorded.";
 
 
-        await refreshFirstSenatorVotingStatus(
-            member,
-            buttons
+        await refreshCongressionalVotingStatus(
+            official,
+            buttons,
+            message
         );
 
     }
@@ -1542,24 +2310,501 @@ async function submitFirstSenatorVote(
 
 /*
 ==================================================
-DISABLE ALL APPROVAL BUTTONS
+CONGRESSIONAL MEMBER FORMAT
 ==================================================
 */
 
-function disableAllCongressionalApprovalButtons() {
+function createCongressionalApprovalMember(
+    official
+) {
 
-    document
-        .querySelectorAll(
-            "[data-congressional-approval-options] button"
+    const chamber =
+        official.officeType ===
+            "senator"
+            ? "senate"
+            : "house";
+
+
+    const member = {
+
+        id:
+            official.id,
+
+        seatKey:
+            official.seatKey,
+
+        stateCode:
+            official.stateCode,
+
+        chamber
+
+    };
+
+
+    if (
+        chamber ===
+        "house"
+    ) {
+
+        member.district =
+            official.district;
+
+    }
+
+
+    return member;
+
+}
+
+
+/*
+==================================================
+STATE ELIGIBILITY
+==================================================
+*/
+
+function canVoteForStateOfficial(
+    official
+) {
+
+    if (
+        !participantJurisdiction
+            ?.eligibility
+            ?.state
+    ) {
+
+        return false;
+
+    }
+
+
+    return (
+        participantJurisdiction.stateCode ===
+        official.stateCode
+    );
+
+}
+
+
+/*
+==================================================
+HOUSE ELIGIBILITY
+==================================================
+*/
+
+function canVoteForHouseOfficial(
+    official
+) {
+
+    if (
+        !participantJurisdiction
+            ?.eligibility
+            ?.congressionalDistrict
+    ) {
+
+        return false;
+
+    }
+
+
+    return (
+
+        participantJurisdiction.stateCode ===
+            official.stateCode &&
+
+        String(
+            participantJurisdiction
+                .congressionalDistrict
+        ) ===
+        String(
+            official.district
         )
-        .forEach(
-            button => {
 
-                button.disabled =
+    );
+
+}
+
+
+/*
+==================================================
+READ ONLY MESSAGE
+==================================================
+*/
+
+function getReadOnlyMessage(
+    official
+) {
+
+    if (
+        official.officeType ===
+        "representative"
+    ) {
+
+        if (
+            participantJurisdiction
+                ?.districtAmbiguous
+        ) {
+
+            return (
+                "Read only — your ZIP overlaps more than one congressional district."
+            );
+
+        }
+
+
+        if (
+            !participantJurisdiction
+                ?.eligibility
+                ?.congressionalDistrict
+        ) {
+
+            return (
+                "Read only — your congressional district could not be uniquely confirmed."
+            );
+
+        }
+
+
+        return (
+            "Read only — voting is limited to constituents of this district."
+        );
+
+    }
+
+
+    if (
+        official.officeType ===
+            "senator" ||
+        official.officeType ===
+            "governor"
+    ) {
+
+        return (
+            "Read only — voting is limited to residents of this state."
+        );
+
+    }
+
+
+    if (
+        official.officeType ===
+        "mayor"
+    ) {
+
+        return (
+            "Read only — voting is limited to residents of this municipality."
+        );
+
+    }
+
+
+    return (
+        "Read only — voting is limited to eligible constituents."
+    );
+
+}
+
+
+/*
+==================================================
+FIND OFFICIAL CARD
+==================================================
+*/
+
+function findOfficialCard(
+    officialId
+) {
+
+    return document.querySelector(
+        `[data-official-card="${cssEscape(
+            officialId
+        )}"]`
+    );
+
+}
+
+
+/*
+==================================================
+APPROVAL ELEMENTS
+==================================================
+*/
+
+function getApprovalElements(
+    card
+) {
+
+    const approvalArea =
+        card.querySelector(
+            "[data-approval-area]"
+        );
+
+
+    if (!approvalArea) {
+
+        return null;
+
+    }
+
+
+    const approvalPercent =
+        approvalArea.querySelector(
+            "[data-approval-percent]"
+        );
+
+
+    const responseCount =
+        approvalArea.querySelector(
+            "[data-approval-responses]"
+        );
+
+
+    const message =
+        approvalArea.querySelector(
+            "[data-approval-message]"
+        );
+
+
+    const buttons =
+        Array.from(
+            approvalArea.querySelectorAll(
+                "button[data-response]"
+            )
+        );
+
+
+    if (
+        !approvalPercent ||
+        !responseCount ||
+        !message ||
+        buttons.length ===
+            0
+    ) {
+
+        return null;
+
+    }
+
+
+    return {
+
+        approvalPercent,
+        responseCount,
+        message,
+        buttons
+
+    };
+
+}
+
+
+/*
+==================================================
+HIDE OLD APPROVAL SECTION
+==================================================
+*/
+
+function hideLegacyApprovalSection() {
+
+    const legacyElements = [
+
+        document.getElementById(
+            "stateSenatorOneName"
+        ),
+
+        document.getElementById(
+            "stateSenatorTwoName"
+        ),
+
+        document.getElementById(
+            "stateHouseApprovalPercent"
+        )
+
+    ]
+        .filter(
+            Boolean
+        );
+
+
+    legacyElements.forEach(
+        element => {
+
+            const section =
+                element.closest(
+                    "section"
+                );
+
+
+            if (
+                section
+            ) {
+
+                section.hidden =
                     true;
 
             }
+
+        }
+    );
+
+}
+
+
+/*
+==================================================
+PARTY
+==================================================
+*/
+
+function normalizeParty(
+    value
+) {
+
+    const party =
+        String(
+            value ||
+            ""
+        )
+            .trim()
+            .toUpperCase();
+
+
+    if (
+        party ===
+            "D" ||
+        party ===
+            "R" ||
+        party ===
+            "I"
+    ) {
+
+        return party;
+
+    }
+
+
+    if (
+        party ===
+        "OTHER"
+    ) {
+
+        return "O";
+
+    }
+
+
+    return "";
+
+}
+
+
+function createPartyLabel(
+    party
+) {
+
+    if (
+        party ===
+        "D"
+    ) {
+
+        return "Democratic";
+
+    }
+
+
+    if (
+        party ===
+        "R"
+    ) {
+
+        return "Republican";
+
+    }
+
+
+    if (
+        party ===
+        "I"
+    ) {
+
+        return "Independent";
+
+    }
+
+
+    return "Other";
+
+}
+
+
+/*
+==================================================
+OFFICE LABEL
+==================================================
+*/
+
+function createCompactOfficeLabel(
+    official
+) {
+
+    if (
+        official.officeType ===
+        "senator"
+    ) {
+
+        return "U.S. Senator";
+
+    }
+
+
+    if (
+        official.officeType ===
+        "representative"
+    ) {
+
+        if (
+            official.district ===
+            "At-Large"
+        ) {
+
+            return (
+                "U.S. Representative · At-Large"
+            );
+
+        }
+
+
+        return (
+            `U.S. Representative · District ${official.district}`
         );
+
+    }
+
+
+    if (
+        official.officeType ===
+        "governor"
+    ) {
+
+        return "Governor";
+
+    }
+
+
+    if (
+        official.officeType ===
+        "mayor"
+    ) {
+
+        return "Mayor";
+
+    }
+
+
+    return (
+        official.officeLabel ||
+        "Public Official"
+    );
 
 }
 
@@ -1627,14 +2872,10 @@ function highlightResponse(
     buttons.forEach(
         button => {
 
-            const isSelected =
-                button.dataset.response ===
-                response;
-
-
             button.classList.toggle(
                 "is-selected",
-                isSelected
+                button.dataset.response ===
+                    response
             );
 
         }
@@ -1645,72 +2886,76 @@ function highlightResponse(
 
 /*
 ==================================================
-CLEAR ALL APPROVAL SELECTIONS
+CLEAR SUBSCRIPTIONS
 ==================================================
 */
 
-function clearCongressionalSelections() {
+function clearSubscriptions(
+    bucket
+) {
 
-    document
-        .querySelectorAll(
-            "[data-congressional-approval-options] button"
-        )
-        .forEach(
-            button => {
+    while (
+        bucket.length >
+        0
+    ) {
 
-                button.classList.remove(
-                    "is-selected"
-                );
+        const unsubscribe =
+            bucket.pop();
 
-            }
-        );
+
+        if (
+            typeof unsubscribe ===
+            "function"
+        ) {
+
+            unsubscribe();
+
+        }
+
+    }
 
 }
 
 
 /*
 ==================================================
-APPROVAL CLEANUP
+DISTRICT SORT
 ==================================================
 */
 
-function stopSenatorOneResultsSubscription() {
+function compareDistricts(
+    first,
+    second
+) {
 
     if (
-        typeof
-        unsubscribeSenatorOneResults ===
-        "function"
+        first.district ===
+        "At-Large"
     ) {
 
-        unsubscribeSenatorOneResults();
+        return -1;
 
     }
 
 
-    unsubscribeSenatorOneResults =
-        null;
-
-}
-
-
-function destroyCongressionalApprovalTest() {
-
-    stopSenatorOneResultsSubscription();
-
-
     if (
-        typeof
-        unsubscribeSenatorOneAuth ===
-        "function"
+        second.district ===
+        "At-Large"
     ) {
 
-        unsubscribeSenatorOneAuth();
+        return 1;
 
     }
 
 
-    unsubscribeSenatorOneAuth =
-        null;
+    return (
+        Number(
+            first.district
+        ) -
+        Number(
+            second.district
+        )
+    );
 
 }
 
@@ -1735,70 +2980,15 @@ function showInvalidState() {
 
     setText(
         "statePageDescription",
-        "Please return to the State Explorer and choose a valid state."
+        "Return to the State Explorer and choose a valid state."
     );
-
-
-    const overviewElements = [
-
-        "stateOverviewParticipants",
-
-        "stateOverviewPriority",
-
-        "stateOverviewScore",
-
-        "stateOverviewCommunityActivity"
-
-    ];
-
-
-    overviewElements.forEach(
-        elementId => {
-
-            setText(
-                elementId,
-                "—"
-            );
-
-        }
-    );
-
-
-    const representatives =
-        document.getElementById(
-            "stateRepresentatives"
-        );
-
-
-    if (
-        representatives
-    ) {
-
-        representatives.innerHTML = `
-
-            <div class="state-placeholder-card">
-
-                <strong>
-                    State not found
-                </strong>
-
-                <p>
-                    Please return to the State Explorer
-                    and choose a valid state.
-                </p>
-
-            </div>
-
-        `;
-
-    }
 
 }
 
 
 /*
 ==================================================
-STATE NORMALIZATION
+STATE CODE
 ==================================================
 */
 
@@ -1836,7 +3026,7 @@ function normalizeStateCode(
 
 /*
 ==================================================
-TEXT HELPER
+TEXT
 ==================================================
 */
 
@@ -1868,9 +3058,39 @@ function setText(
 
 /*
 ==================================================
-FORMAT NUMBER
+FORMAT
 ==================================================
 */
+
+function formatPercentage(
+    value
+) {
+
+    const number =
+        Number(
+            value
+        );
+
+
+    if (
+        !Number.isFinite(
+            number
+        )
+    ) {
+
+        return "0.0%";
+
+    }
+
+
+    return (
+        `${number.toFixed(
+            1
+        )}%`
+    );
+
+}
+
 
 function formatNumber(
     value
@@ -1901,41 +3121,7 @@ function formatNumber(
 
 /*
 ==================================================
-FORMAT PERCENTAGE
-==================================================
-*/
-
-function formatPercentage(
-    value
-) {
-
-    const percentage =
-        Number(
-            value
-        );
-
-
-    if (
-        !Number.isFinite(
-            percentage
-        )
-    ) {
-
-        return "0.0%";
-
-    }
-
-
-    return `${percentage.toFixed(
-        1
-    )}%`;
-
-}
-
-
-/*
-==================================================
-HTML ESCAPING
+HTML ESCAPE
 ==================================================
 */
 
@@ -1973,7 +3159,42 @@ function escapeHtml(
 
 /*
 ==================================================
-HEADER INTERACTIONS
+CSS ESCAPE
+==================================================
+*/
+
+function cssEscape(
+    value
+) {
+
+    if (
+        window.CSS &&
+        typeof window.CSS.escape ===
+        "function"
+    ) {
+
+        return window.CSS.escape(
+            String(
+                value
+            )
+        );
+
+    }
+
+
+    return String(
+        value
+    ).replace(
+        /["\\]/g,
+        "\\$&"
+    );
+
+}
+
+
+/*
+==================================================
+HEADER
 ==================================================
 */
 
@@ -2028,7 +3249,9 @@ function initializeHeader() {
                 );
 
 
-                if (!isOpen) {
+                if (
+                    !isOpen
+                ) {
 
                     closeDropdowns();
 
@@ -2072,7 +3295,9 @@ function initializeHeader() {
                     closeDropdowns();
 
 
-                    if (!isOpen) {
+                    if (
+                        !isOpen
+                    ) {
 
                         group.classList.add(
                             "open"
@@ -2116,88 +3341,9 @@ function initializeHeader() {
         event => {
 
             if (
-                event.key !==
+                event.key ===
                 "Escape"
             ) {
-
-                return;
-
-            }
-
-
-            closeDropdowns();
-
-
-            if (
-                navigation &&
-                navigation.classList.contains(
-                    "open"
-                )
-            ) {
-
-                navigation.classList.remove(
-                    "open"
-                );
-
-
-                if (
-                    menuButton
-                ) {
-
-                    menuButton.setAttribute(
-                        "aria-expanded",
-                        "false"
-                    );
-
-
-                    menuButton.setAttribute(
-                        "aria-label",
-                        "Open navigation menu"
-                    );
-
-                }
-
-            }
-
-        }
-    );
-
-
-    window.addEventListener(
-        "resize",
-        () => {
-
-            if (
-                window.innerWidth >
-                    980 &&
-                navigation &&
-                navigation.classList.contains(
-                    "open"
-                )
-            ) {
-
-                navigation.classList.remove(
-                    "open"
-                );
-
-
-                if (
-                    menuButton
-                ) {
-
-                    menuButton.setAttribute(
-                        "aria-expanded",
-                        "false"
-                    );
-
-
-                    menuButton.setAttribute(
-                        "aria-label",
-                        "Open navigation menu"
-                    );
-
-                }
-
 
                 closeDropdowns();
 
@@ -2211,7 +3357,7 @@ function initializeHeader() {
 
 /*
 ==================================================
-DROPDOWN HELPERS
+CLOSE DROPDOWNS
 ==================================================
 */
 
@@ -2254,7 +3400,7 @@ function closeDropdowns() {
 
 /*
 ==================================================
-PAGE CLEANUP
+CLEANUP
 ==================================================
 */
 
@@ -2262,7 +3408,19 @@ window.addEventListener(
     "beforeunload",
     () => {
 
-        destroyCongressionalApprovalTest();
+        clearSubscriptions(
+            activeSubscriptions
+        );
+
+
+        clearSubscriptions(
+            governorSubscriptions
+        );
+
+
+        clearSubscriptions(
+            houseCardSubscriptions
+        );
 
     }
 );
@@ -2270,7 +3428,7 @@ window.addEventListener(
 
 /*
 ==================================================
-START PAGE
+START
 ==================================================
 */
 
