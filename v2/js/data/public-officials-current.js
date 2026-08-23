@@ -1341,7 +1341,107 @@ export const currentPublicOfficials = {
         ==============================================
         */
 
-        mayors: []
+        mayors: [
+
+    {
+        id:
+            "nj-lincoln-park-mayor-david-runfeldt",
+
+        personKey:
+            "david-runfeldt",
+
+        seatKey:
+            "nj-lincoln-park-mayor",
+
+        name:
+            "David A. Runfeldt",
+
+        party:
+            "OTHER",
+
+        officeType:
+            "mayor",
+
+        stateCode:
+            "NJ",
+
+        municipality:
+            "Lincoln Park borough",
+
+        municipalityGeoid:
+            "3402740290",
+
+        servingSince:
+            "",
+
+        currentTermBegan:
+            "",
+
+        jurisdiction: {
+
+            type:
+                "municipality",
+
+            stateCode:
+                "NJ",
+
+            municipality:
+                "Lincoln Park borough",
+
+            municipalityGeoid:
+                "3402740290"
+
+        },
+
+        sources: [
+
+            {
+                fact:
+                    "officeholder",
+
+                sourceName:
+                    "Borough of Lincoln Park",
+
+                sourceUrl:
+                    "https://www.lincolnpark.org/130/Mayors-Office",
+
+                verifiedAt:
+                    "2026-08-21"
+            }
+
+        ],
+
+        officialRecord: {
+
+            recordType:
+                "Municipal government record",
+
+            sourceName:
+                "Borough of Lincoln Park",
+
+            sourceUrl:
+                "https://www.lincolnpark.org/"
+        },
+
+        financialChange: {
+
+            percentageLow:
+                null,
+
+            percentageHigh:
+                null,
+
+            methodologyUrl:
+                "",
+
+            sources:
+                []
+
+        }
+
+        }
+
+        ]
 
     }
 

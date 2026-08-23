@@ -43,10 +43,10 @@ PUBLIC OFFICIAL DATA
 
 import {
 
-    getStatePublicOfficials
+    getStatePublicOfficials,
+    getMayorByMunicipalityGeoid
 
 } from "./services/public-official-data-service.js";
-
 
 /*
 ==================================================
@@ -78,6 +78,22 @@ import {
     subscribeToGovernorApproval
 
 } from "./services/governor-approval-service.js";
+
+/*
+==================================================
+MAYOR APPROVAL
+==================================================
+*/
+
+import {
+
+    getMayorApprovalStatus,
+    getMyMayorApprovalVote,
+    submitMayorApproval,
+    subscribeToMayorApproval
+
+} from "./services/mayor-approval-service.js";
+
 
 
 /*
@@ -191,6 +207,10 @@ const activeSubscriptions =
 
 
 const governorSubscriptions =
+    [];
+
+
+const mayorSubscriptions =
     [];
 
 
@@ -435,6 +455,11 @@ function initializePublicOfficials(
 
 
     clearSubscriptions(
+        mayorSubscriptions
+    );
+
+
+    clearSubscriptions(
         houseCardSubscriptions
     );
 
@@ -477,6 +502,20 @@ function initializePublicOfficials(
         )
             ? officials.representatives
             : [];
+
+
+     const mayor =
+    participantJurisdiction
+        ?.eligibility
+        ?.municipality &&
+    participantJurisdiction
+        ?.municipalityGeoid
+        ? getMayorByMunicipalityGeoid(
+            stateCode,
+            participantJurisdiction
+                .municipalityGeoid
+        )
+        : null;
 
 
     if (
@@ -533,10 +572,10 @@ function initializePublicOfficials(
             )
         }
 
-    `;
+            `;
 
 
-    /*
+/*
     ----------------------------------------------
     GOVERNOR
     ----------------------------------------------
@@ -597,6 +636,12 @@ function initializePublicOfficials(
     }
 
 }
+
+        
+
+
+    
+    
 
 
 /*
@@ -848,6 +893,78 @@ function createHouseSection(
 
 }
 
+
+/*
+==================================================
+MAYOR SECTION
+==================================================
+*/
+
+function createMayorSection(
+    mayor,
+    stateName
+) {
+
+    if (!mayor) {
+
+        return "";
+
+    }
+
+
+    const municipalityName =
+        mayor.municipalityName ||
+        mayor.cityName ||
+        mayor.municipality ||
+        "Your Municipality";
+
+
+    return `
+
+        <section class="state-delegation-group state-delegation-group--mayor">
+
+            <header class="state-delegation-group__heading">
+
+                <span>
+                    Local Government
+                </span>
+
+                <h3>
+                    Mayor of ${escapeHtml(
+                        municipalityName
+                    )}
+                </h3>
+
+                <p>
+                    Local leadership for your verified municipality in
+                    ${escapeHtml(stateName)}.
+                </p>
+
+            </header>
+
+
+            <div class="state-delegation-grid">
+
+                ${
+                    createOfficialCard(
+                        mayor,
+                        {
+                            showVoting:
+                                true,
+
+                            cadenceLabel:
+                                "Monthly approval"
+                        }
+                    )
+                }
+
+            </div>
+
+        </section>
+
+    `;
+
+}
 
 /*
 ==================================================
@@ -1718,6 +1835,464 @@ async function submitGovernorVote(
 
 /*
 ==================================================
+MAYOR CARD
+==================================================
+*/
+
+function initializeMayorCard(
+    mayor
+) {
+
+    const card =
+        findOfficialCard(
+            mayor.id
+        );
+
+
+    if (!card) {
+
+        return;
+
+    }
+
+
+    const approvalElements =
+        getApprovalElements(
+            card
+        );
+
+
+    if (!approvalElements) {
+
+        return;
+
+    }
+
+
+    const {
+
+        approvalPercent,
+        responseCount,
+        message,
+        buttons
+
+    } =
+        approvalElements;
+
+
+    /*
+    ----------------------------------------------
+    LIVE MONTHLY RESULTS
+    ----------------------------------------------
+    */
+
+    const resultUnsubscribe =
+        subscribeToMayorApproval(
+
+            mayor.id,
+
+            summary => {
+
+                approvalPercent.textContent =
+                    formatPercentage(
+                        summary
+                            ?.approvalPercentage
+                    );
+
+
+                responseCount.textContent =
+                    formatNumber(
+                        summary
+                            ?.totalResponses
+                    );
+
+            },
+
+            error => {
+
+                console.error(
+                    "Mayor approval results could not be loaded:",
+                    error
+                );
+
+
+                approvalPercent.textContent =
+                    "—";
+
+
+                responseCount.textContent =
+                    "—";
+
+            }
+
+        );
+
+
+    mayorSubscriptions.push(
+        resultUnsubscribe
+    );
+
+
+    /*
+    ----------------------------------------------
+    MUNICIPALITY ELIGIBILITY
+    ----------------------------------------------
+    */
+
+    if (
+        !canVoteForMayor(
+            mayor
+        )
+    ) {
+
+        disableButtons(
+            buttons
+        );
+
+
+        message.textContent =
+            "Read only — Mayor voting is limited to residents of this municipality.";
+
+
+        return;
+
+    }
+
+
+    /*
+    ----------------------------------------------
+    AUTH
+    ----------------------------------------------
+    */
+
+    const authUnsubscribe =
+        onAuthStateChanged(
+            auth,
+            async user => {
+
+                disableButtons(
+                    buttons
+                );
+
+
+                clearButtonSelections(
+                    buttons
+                );
+
+
+                if (!user) {
+
+                    message.textContent =
+                        "Sign in to participate.";
+
+                    return;
+
+                }
+
+
+                if (
+                    !user.emailVerified
+                ) {
+
+                    message.textContent =
+                        "Verify your email before participating.";
+
+                    return;
+
+                }
+
+
+                await refreshMayorVotingStatus(
+                    mayor,
+                    buttons,
+                    message
+                );
+
+            }
+        );
+
+
+    mayorSubscriptions.push(
+        authUnsubscribe
+    );
+
+
+    /*
+    ----------------------------------------------
+    VOTE BUTTONS
+    ----------------------------------------------
+    */
+
+    buttons.forEach(
+        button => {
+
+            button.addEventListener(
+                "click",
+                async () => {
+
+                    await submitMayorVote(
+                        mayor,
+                        button,
+                        buttons,
+                        message
+                    );
+
+                }
+            );
+
+        }
+    );
+
+}
+
+
+/*
+==================================================
+MAYOR STATUS
+==================================================
+*/
+
+async function refreshMayorVotingStatus(
+    mayor,
+    buttons,
+    message
+) {
+
+    try {
+
+        const status =
+            await getMayorApprovalStatus(
+                mayor
+            );
+
+
+        clearButtonSelections(
+            buttons
+        );
+
+
+        if (
+            status.eligible
+        ) {
+
+            enableButtons(
+                buttons
+            );
+
+
+            message.textContent =
+                `Voting is open for ${status.votingPeriodLabel}.`;
+
+
+            return;
+
+        }
+
+
+        disableButtons(
+            buttons
+        );
+
+
+        if (
+            status.reason ===
+            "alreadyParticipatedThisMonth"
+        ) {
+
+            const existingVote =
+                await getMyMayorApprovalVote(
+                    mayor.id
+                );
+
+
+            if (
+                existingVote
+                    ?.response
+            ) {
+
+                highlightResponse(
+                    buttons,
+                    existingVote.response
+                );
+
+            }
+
+
+            message.textContent =
+                `Your ${status.votingPeriodLabel} Mayor rating has already been recorded. Voting reopens next month.`;
+
+
+            return;
+
+        }
+
+
+        if (
+            status.reason ===
+            "outsideJurisdiction"
+        ) {
+
+            message.textContent =
+                "Read only — Mayor voting is limited to residents of this municipality.";
+
+
+            return;
+
+        }
+
+
+        if (
+            status.reason ===
+            "emailNotVerified"
+        ) {
+
+            message.textContent =
+                "Verify your email before participating.";
+
+
+            return;
+
+        }
+
+
+        if (
+            status.reason ===
+            "signedOut"
+        ) {
+
+            message.textContent =
+                "Sign in to participate.";
+
+
+            return;
+
+        }
+
+
+        message.textContent =
+            "Mayor voting is currently unavailable.";
+
+    } catch (error) {
+
+        console.error(
+            "Mayor approval status could not be loaded:",
+            error
+        );
+
+
+        disableButtons(
+            buttons
+        );
+
+
+        message.textContent =
+            "Mayor voting is temporarily unavailable.";
+
+    }
+
+}
+
+
+/*
+==================================================
+SUBMIT MAYOR VOTE
+==================================================
+*/
+
+async function submitMayorVote(
+    mayor,
+    selectedButton,
+    buttons,
+    message
+) {
+
+    const response =
+        selectedButton
+            ?.dataset
+            ?.response;
+
+
+    if (!response) {
+
+        return;
+
+    }
+
+
+    disableButtons(
+        buttons
+    );
+
+
+    message.textContent =
+        "Saving your monthly Mayor rating...";
+
+
+    try {
+
+        await submitMayorApproval(
+            mayor,
+            response
+        );
+
+
+        clearButtonSelections(
+            buttons
+        );
+
+
+        highlightResponse(
+            buttons,
+            response
+        );
+
+
+        message.textContent =
+            "Your Mayor rating has been recorded. Voting reopens next month.";
+
+    } catch (error) {
+
+        console.error(
+            "Mayor approval vote failed:",
+            error
+        );
+
+
+        if (
+            error?.code ===
+            "already-participated-this-month"
+        ) {
+
+            await refreshMayorVotingStatus(
+                mayor,
+                buttons,
+                message
+            );
+
+
+            return;
+
+        }
+
+
+        message.textContent =
+            error?.message ||
+            "Your Mayor rating could not be recorded.";
+
+
+        await refreshMayorVotingStatus(
+            mayor,
+            buttons,
+            message
+        );
+
+    }
+
+}
+
+
+/*
+==================================================
 HOUSE EXPLORER
 ==================================================
 */
@@ -2381,6 +2956,66 @@ function canVoteForStateOfficial(
     return (
         participantJurisdiction.stateCode ===
         official.stateCode
+    );
+
+}
+
+
+/*
+==================================================
+MAYOR ELIGIBILITY
+==================================================
+*/
+
+function canVoteForMayor(
+    mayor
+) {
+
+    if (
+        !participantJurisdiction
+            ?.eligibility
+            ?.municipality ||
+        !participantJurisdiction
+            ?.municipalityGeoid
+    ) {
+
+        return false;
+
+    }
+
+
+    const participantGeoid =
+        String(
+            participantJurisdiction
+                .municipalityGeoid
+        );
+
+
+    const mayorGeoid =
+        String(
+            mayor
+                ?.municipalityGeoid ||
+            mayor
+                ?.geoid ||
+            ""
+        );
+
+
+    if (!mayorGeoid) {
+
+        return false;
+
+    }
+
+
+    return (
+
+        participantJurisdiction.stateCode ===
+            mayor.stateCode &&
+
+        participantGeoid ===
+            mayorGeoid
+
     );
 
 }
@@ -3415,6 +4050,11 @@ window.addEventListener(
 
         clearSubscriptions(
             governorSubscriptions
+        );
+
+
+        clearSubscriptions(
+            mayorSubscriptions
         );
 
 

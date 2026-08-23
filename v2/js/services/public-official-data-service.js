@@ -275,6 +275,63 @@ export function getMayorByMunicipality(
 
 }
 
+/*
+==================================================
+GET MAYOR BY MUNICIPALITY GEOID
+==================================================
+*/
+
+export function getMayorByMunicipalityGeoid(
+    stateCode,
+    municipalityGeoid
+) {
+
+    const normalizedStateCode =
+        normalizeStateCode(
+            stateCode
+        );
+
+
+    const normalizedMunicipalityGeoid =
+        String(
+            municipalityGeoid || ""
+        ).trim();
+
+
+    if (
+        !normalizedStateCode ||
+        !/^\d{10}$/.test(
+            normalizedMunicipalityGeoid
+        )
+    ) {
+
+        return null;
+
+    }
+
+
+    const mayors =
+        getStateMayors(
+            normalizedStateCode
+        );
+
+
+    return (
+        mayors.find(
+            official =>
+                String(
+                    official.municipalityGeoid ||
+                    official.jurisdiction
+                        ?.municipalityGeoid ||
+                    ""
+                ).trim() ===
+                normalizedMunicipalityGeoid
+        ) ||
+        null
+    );
+
+}
+
 
 /*
 ==================================================

@@ -160,6 +160,14 @@ export function normalizePublicOfficial(
         );
 
 
+    const municipalityGeoid =
+        normalizeMunicipalityGeoid(
+            official.municipalityGeoid ||
+            official.jurisdiction
+                ?.municipalityGeoid
+        );
+
+
     const servingSince =
         normalizeDate(
             official.servingSince
@@ -178,7 +186,8 @@ export function normalizePublicOfficial(
             officeType,
             stateCode,
             district,
-            municipality
+            municipality,
+            municipalityGeoid
         );
 
 
@@ -232,6 +241,8 @@ export function normalizePublicOfficial(
         district,
 
         municipality,
+
+        municipalityGeoid,
 
         jurisdiction,
 
@@ -389,7 +400,8 @@ function normalizeJurisdiction(
     officeType,
     stateCode,
     district,
-    municipality
+    municipality,
+    municipalityGeoid
 ) {
 
     const suppliedJurisdiction =
@@ -435,6 +447,14 @@ function normalizeJurisdiction(
                 suppliedJurisdiction.municipality
             ) ||
             municipality ||
+            "",
+
+        municipalityGeoid:
+            normalizeMunicipalityGeoid(
+                suppliedJurisdiction
+                    .municipalityGeoid
+            ) ||
+            municipalityGeoid ||
             ""
 
     };
@@ -1428,6 +1448,38 @@ function normalizeDistrict(
     return String(
         number
     );
+
+}
+
+
+/*
+==================================================
+MUNICIPALITY GEOID
+==================================================
+*/
+
+function normalizeMunicipalityGeoid(
+    value
+) {
+
+    const geoid =
+        String(
+            value || ""
+        ).trim();
+
+
+    if (
+        !/^\d{10}$/.test(
+            geoid
+        )
+    ) {
+
+        return "";
+
+    }
+
+
+    return geoid;
 
 }
 

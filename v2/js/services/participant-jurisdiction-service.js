@@ -662,7 +662,7 @@ MUNICIPALITY VOTING ELIGIBILITY
 
 export async function canCurrentParticipantVoteInMunicipality(
     stateCode,
-    municipality
+    municipalityGeoid
 ) {
 
     const participant =
@@ -675,15 +675,15 @@ export async function canCurrentParticipantVoteInMunicipality(
         );
 
 
-    const requiredMunicipality =
-        normalizeComparisonText(
-            municipality
+    const requiredMunicipalityGeoid =
+        normalizeMunicipalityGeoid(
+            municipalityGeoid
         );
 
 
     if (
         !requiredState ||
-        !requiredMunicipality ||
+        !requiredMunicipalityGeoid ||
         !participant
             .eligibility
             .municipality
@@ -694,13 +694,26 @@ export async function canCurrentParticipantVoteInMunicipality(
     }
 
 
+    const participantMunicipalityGeoid =
+        normalizeMunicipalityGeoid(
+            participant.municipalityGeoid
+        );
+
+
+    if (
+        !participantMunicipalityGeoid
+    ) {
+
+        return false;
+
+    }
+
+
     return (
         participant.stateCode ===
             requiredState &&
-        normalizeComparisonText(
-            participant.municipality
-        ) ===
-            requiredMunicipality
+        participantMunicipalityGeoid ===
+            requiredMunicipalityGeoid
     );
 
 }
@@ -859,7 +872,7 @@ export async function getCurrentParticipantOfficialEligibility(
     }
 
 
-    /*
+        /*
     ----------------------------------------------
     MUNICIPALITY
     ----------------------------------------------
@@ -886,15 +899,36 @@ export async function getCurrentParticipantOfficialEligibility(
         }
 
 
+        const participantMunicipalityGeoid =
+            normalizeMunicipalityGeoid(
+                participant.municipalityGeoid
+            );
+
+
+        const officialMunicipalityGeoid =
+            normalizeMunicipalityGeoid(
+                jurisdiction.municipalityGeoid
+            );
+
+
+        if (
+            !participantMunicipalityGeoid ||
+            !officialMunicipalityGeoid
+        ) {
+
+            return createEligibilityResult(
+                false,
+                "Read only — this municipality could not be securely verified."
+            );
+
+        }
+
+
         const eligible =
             participant.stateCode ===
                 jurisdiction.stateCode &&
-            normalizeComparisonText(
-                participant.municipality
-            ) ===
-            normalizeComparisonText(
-                jurisdiction.municipality
-            );
+            participantMunicipalityGeoid ===
+                officialMunicipalityGeoid;
 
 
         return createEligibilityResult(
@@ -908,9 +942,7 @@ export async function getCurrentParticipantOfficialEligibility(
         );
 
     }
-
-
-    return createEligibilityResult(
+        return createEligibilityResult(
         false,
         "Voting eligibility could not be determined."
     );
@@ -1171,6 +1203,37 @@ function normalizeDistrict(
     return String(
         districtNumber
     );
+
+}
+
+/*
+==================================================
+MUNICIPALITY GEOID
+==================================================
+*/
+
+function normalizeMunicipalityGeoid(
+    value
+) {
+
+    const geoid =
+        String(
+            value || ""
+        ).trim();
+
+
+    if (
+        !/^\d{10}$/.test(
+            geoid
+        )
+    ) {
+
+        return "";
+
+    }
+
+
+    return geoid;
 
 }
 

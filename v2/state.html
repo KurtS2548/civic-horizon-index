@@ -332,16 +332,15 @@
                     <div>
 
                         <p class="state-section__eyebrow">
-                            Congressional Delegation
+                            PUBLIC OFFICIALS
                         </p>
 
                         <h2>
-                            Your U.S. senators and representatives
+                            Your elected officials
                         </h2>
 
                         <p>
-                            View factual public information about the
-                            members of Congress serving this state.
+                            View factual public information about the governor, U.S. senators, and U.S. representatives serving this state.
                         </p>
 
                     </div>
@@ -1041,10 +1040,45 @@
 
     <!-- STATE PROFILE APPLICATION -->
 
-    <script
-        type="module"
-        src="js/state.js"
-    ></script>
+    <script type="module">
+
+    import("./js/state.js")
+        .catch(error => {
+
+            const message =
+                document.createElement(
+                    "div"
+                );
+
+            message.style.cssText = `
+                position: fixed;
+                left: 12px;
+                right: 12px;
+                bottom: 12px;
+                z-index: 99999;
+                padding: 16px;
+                background: white;
+                border: 3px solid red;
+                color: black;
+                font-family: monospace;
+                white-space: pre-wrap;
+            `;
+
+            message.textContent =
+                "STATE.JS ERROR:\n\n" +
+                (
+                    error?.stack ||
+                    error?.message ||
+                    String(error)
+                );
+
+            document.body.appendChild(
+                message
+            );
+
+        });
+
+</script>
 
     <script
         type="module"
