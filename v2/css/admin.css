@@ -2595,3 +2595,927 @@ RESPONSIVE
     }
 
 }
+/* ==================================================
+   ADMIN CENTER POLISH
+   AUGUST 2026
+================================================== */
+
+
+/* ==================================================
+   GLOBAL ADMIN SPACING
+================================================== */
+
+.admin-page {
+    background: #f4f7fa;
+}
+
+
+.admin-section {
+    padding: 64px 0;
+}
+
+
+.admin-section + .admin-section {
+    border-top: 1px solid #e2e8ef;
+}
+
+
+.admin-section__heading {
+    max-width: 820px;
+    margin-bottom: 28px;
+}
+
+
+.admin-section__heading h2 {
+    font-size: clamp(1.8rem, 3vw, 2.35rem);
+}
+
+
+.admin-section__heading > p:last-child {
+    max-width: 720px;
+    margin-top: 10px;
+}
+
+
+/* ==================================================
+   HERO
+================================================== */
+
+.admin-hero {
+    padding: 58px 0;
+}
+
+
+.admin-hero__container {
+    gap: 42px;
+}
+
+
+.admin-hero__content h1 {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+}
+
+
+.admin-hero__content > p:last-child {
+    margin-top: 16px;
+}
+
+
+.admin-hero__status {
+    padding: 22px;
+    border-radius: 14px;
+}
+
+
+/* ==================================================
+   COMMON ADMIN CARD SURFACE
+================================================== */
+
+.admin-panel,
+.admin-state-questions,
+.admin-poll-editor,
+.admin-suggestion-card {
+    border: 1px solid #dbe3eb;
+    border-radius: 16px;
+    background: #ffffff;
+    box-shadow: 0 10px 28px rgba(16, 42, 67, 0.06);
+}
+
+
+/* ==================================================
+   OVERVIEW
+================================================== */
+
+.admin-overview-grid {
+    gap: 14px;
+}
+
+
+.admin-overview-card {
+    min-height: 145px;
+    padding: 21px;
+    border-radius: 14px;
+}
+
+
+.admin-overview-card__value {
+    margin-top: 9px;
+    font-size: 1.8rem;
+}
+
+
+/* ==================================================
+   FORM CONTROLS
+================================================== */
+
+.admin-page input,
+.admin-page select,
+.admin-page textarea {
+    border: 1px solid #bccbd8;
+    border-radius: 10px;
+    background: #ffffff;
+    color: #102a43;
+    font-family: "Inter", sans-serif;
+}
+
+
+.admin-page input:focus,
+.admin-page select:focus,
+.admin-page textarea:focus {
+    border-color: #1f5f99;
+    outline: 3px solid rgba(31, 95, 153, 0.12);
+}
+
+
+.admin-page select {
+    min-height: 46px;
+    padding: 10px 38px 10px 13px;
+}
+
+
+.admin-page textarea {
+    width: 100%;
+    padding: 13px 14px;
+    line-height: 1.55;
+}
+
+
+/* ==================================================
+   STATE QUESTIONS
+================================================== */
+
+.admin-state-questions {
+    overflow: hidden;
+}
+
+
+.admin-state-questions__controls {
+    display: grid;
+    gap: 8px;
+    padding: 22px 24px;
+    border-bottom: 1px solid #e3eaf0;
+    background: #f8fafc;
+}
+
+
+.admin-state-questions__controls label {
+    color: #334e68;
+    font-size: 0.78rem;
+    font-weight: 800;
+}
+
+
+.admin-state-questions__controls select {
+    width: min(100%, 360px);
+}
+
+
+.admin-state-questions__editor {
+    display: grid;
+    gap: 10px;
+    padding: 24px;
+    border-bottom: 1px solid #e3eaf0;
+    background: #ffffff;
+}
+
+
+.admin-state-questions__editor[hidden] {
+    display: none;
+}
+
+
+.admin-state-questions__editor label {
+    color: #334e68;
+    font-size: 0.8rem;
+    font-weight: 800;
+}
+
+
+.admin-state-questions__editor textarea {
+    min-height: 96px;
+    resize: vertical;
+}
+
+
+#adminAddStateQuestionButton {
+    justify-self: start;
+    min-height: 42px;
+    padding: 10px 18px;
+    border: 0;
+    border-radius: 9px;
+    background: #1f5f99;
+    color: #ffffff;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.8rem;
+    font-weight: 800;
+}
+
+
+#adminAddStateQuestionButton:hover:not(:disabled) {
+    background: #174f7f;
+}
+
+
+#adminAddStateQuestionButton:disabled {
+    cursor: default;
+    opacity: 0.6;
+}
+
+
+.admin-state-questions__list {
+    padding: 24px;
+}
+
+
+.admin-state-question-group > strong {
+    display: block;
+    margin-bottom: 16px;
+    color: #102a43;
+    font-family: "Merriweather", Georgia, serif;
+    font-size: 1.25rem;
+}
+
+
+.admin-state-question-items {
+    display: grid;
+    gap: 14px;
+}
+
+
+.admin-state-question-item {
+    padding: 18px;
+    border: 1px solid #dde5ec;
+    border-radius: 12px;
+    background: #fbfcfd;
+}
+
+
+.admin-state-question-item > span {
+    display: block;
+    margin-bottom: 7px;
+    color: #1f5f99;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+
+.admin-state-question-item > p {
+    margin: 0;
+    color: #243b53;
+    font-size: 0.95rem;
+    font-weight: 600;
+    line-height: 1.55;
+}
+
+
+.admin-state-question-item > small {
+    display: inline-flex;
+    margin-top: 10px;
+    padding: 4px 8px;
+    border-radius: 999px;
+    background: #edf4fb;
+    color: #315e8a;
+    font-size: 0.68rem;
+    font-weight: 800;
+}
+
+
+.admin-state-question-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 15px;
+}
+
+
+.admin-state-question-actions button {
+    min-height: 36px;
+    padding: 8px 12px;
+    border: 1px solid #bcccdc;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #334e68;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.72rem;
+    font-weight: 800;
+}
+
+
+.admin-state-question-actions button:hover:not(:disabled) {
+    border-color: #1f5f99;
+    color: #1f5f99;
+}
+
+
+.admin-state-question-actions button:last-child {
+    border-color: #ddb4b4;
+    color: #9b2c2c;
+}
+
+
+.admin-state-question-actions button:last-child:hover:not(:disabled) {
+    border-color: #c53030;
+    background: #fff5f5;
+}
+
+
+/* ==================================================
+   PLACEHOLDER CARDS
+================================================== */
+
+.admin-placeholder-card {
+    padding: 30px;
+    border: 1px dashed #cbd7e1;
+    border-radius: 12px;
+    background: #f9fbfd;
+    text-align: center;
+}
+
+
+.admin-placeholder-card strong {
+    color: #123f73;
+}
+
+
+.admin-placeholder-card p {
+    margin: 7px 0 0;
+    color: #6b7b8b;
+    line-height: 1.55;
+}
+
+
+/* ==================================================
+   COMMUNITY POLLS
+================================================== */
+
+.admin-polls-toolbar {
+    padding: 18px 22px;
+}
+
+
+.admin-poll-row {
+    padding: 18px 22px;
+}
+
+
+.admin-poll-row h4 {
+    margin-top: 8px;
+}
+
+
+.admin-poll-row__actions {
+    min-width: 0;
+}
+
+
+/* ==================================================
+   POLL SUGGESTIONS
+================================================== */
+
+.admin-suggestions {
+    padding: 64px 0;
+}
+
+
+.admin-suggestion-card {
+    border-radius: 15px;
+}
+
+
+.admin-suggestion-card__header {
+    padding: 21px 23px;
+}
+
+
+.admin-suggestion-card__content {
+    gap: 16px;
+    padding: 22px 23px;
+}
+
+
+.admin-suggestion-card__section {
+    padding: 16px;
+}
+
+
+.admin-suggestion-card__actions {
+    padding: 18px 23px;
+}
+
+
+/* ==================================================
+   CONSISTENT BUTTON FEEL
+================================================== */
+
+.admin-page button {
+    transition:
+        background-color 160ms ease,
+        border-color 160ms ease,
+        color 160ms ease,
+        box-shadow 160ms ease,
+        transform 160ms ease;
+}
+
+
+.admin-page button:hover:not(:disabled) {
+    transform: translateY(-1px);
+}
+
+
+.admin-page button:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+
+/* ==================================================
+   MOBILE
+================================================== */
+
+@media (max-width: 760px) {
+
+    .admin-section {
+        padding: 48px 0;
+    }
+
+
+    .admin-section__heading {
+        margin-bottom: 22px;
+    }
+
+
+    .admin-state-questions__controls,
+    .admin-state-questions__editor,
+    .admin-state-questions__list {
+        padding: 18px;
+    }
+
+
+    .admin-state-questions__controls select {
+        width: 100%;
+    }
+
+
+    #adminAddStateQuestionButton {
+        width: 100%;
+        justify-self: stretch;
+    }
+
+
+    .admin-state-question-actions {
+        display: grid;
+        grid-template-columns: 1fr;
+    }
+
+
+    .admin-state-question-actions button {
+        width: 100%;
+    }
+
+
+    .admin-poll-row {
+        padding: 17px 18px;
+    }
+
+}
+
+
+@media (max-width: 520px) {
+
+    .admin-hero {
+        padding: 48px 0;
+    }
+
+
+    .admin-overview-grid {
+        grid-template-columns: 1fr;
+    }
+
+
+    .admin-placeholder-card {
+        padding: 24px 18px;
+    }
+
+}/* ==================================================
+   COMMUNITY POLL DELETE BUTTON
+================================================== */
+
+.admin-poll-action--delete {
+    border-color: #d9a5a5;
+    background: #ffffff;
+    color: #a12b2b;
+}
+
+
+.admin-poll-action--delete:hover:not(:disabled) {
+    border-color: #b42323;
+    background: #fff5f5;
+    color: #8f1f1f;
+}
+
+
+.admin-poll-action--delete:disabled {
+    cursor: default;
+    opacity: 0.6;
+}
+/* ==================================================
+   STATE QUESTION SUMMARY
+================================================== */
+
+.admin-state-question-summary {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+
+.admin-state-question-summary > div {
+    padding: 16px 18px;
+    border: 1px solid #dce5ed;
+    border-radius: 12px;
+    background: #f8fafc;
+}
+
+
+.admin-state-question-summary span {
+    display: block;
+    margin-bottom: 5px;
+    color: #6b7b8b;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+
+.admin-state-question-summary strong {
+    display: block;
+    color: #123f73;
+    font-size: 1.15rem;
+}
+
+
+/* ==================================================
+   STATE QUESTION CARD HEADER
+================================================== */
+
+.admin-state-question-item__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 10px;
+}
+
+
+.admin-state-question-item__number {
+    color: #1f5f99;
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+
+.admin-state-question-item__status {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 26px;
+    padding: 4px 9px;
+    border-radius: 999px;
+    font-size: 0.67rem;
+    font-weight: 800;
+}
+
+
+.admin-state-question-item__status.is-active {
+    background: #e9f7ef;
+    color: #247447;
+}
+
+
+.admin-state-question-item__status.is-inactive {
+    background: #f0f3f6;
+    color: #687686;
+}
+
+
+/* ==================================================
+   STATE QUESTION DELETE BUTTON
+================================================== */
+
+.admin-state-question-delete {
+    border-color: #d9a5a5 !important;
+    color: #a12b2b !important;
+}
+
+
+.admin-state-question-delete:hover:not(:disabled) {
+    border-color: #b42323 !important;
+    background: #fff5f5 !important;
+    color: #8f1f1f !important;
+}
+
+
+/* ==================================================
+   MOBILE
+================================================== */
+
+@media (max-width: 650px) {
+
+    .admin-state-question-summary {
+        grid-template-columns: 1fr 1fr;
+    }
+
+
+    .admin-state-question-summary > div:first-child {
+        grid-column: 1 / -1;
+    }
+
+}
+/* ==================================================
+   ADMIN WORK AREA ORGANIZATION
+================================================== */
+
+#adminPollSuggestionsContainer,
+#adminCommunityPollsContainer,
+#adminStateQuestionsContainer,
+#adminCreatePollContainer {
+    position: relative;
+}
+
+
+#adminPollSuggestionsContainer::before,
+#adminCommunityPollsContainer::before,
+#adminStateQuestionsContainer::before,
+#adminCreatePollContainer::before {
+    content: "";
+    display: block;
+    height: 1px;
+    margin: 0 auto;
+    background: #dfe6ed;
+    max-width: 1180px;
+}
+
+
+/* ==================================================
+   SECTION BREATHING ROOM
+================================================== */
+
+#adminPollSuggestionsContainer > *,
+#adminCommunityPollsContainer > *,
+#adminStateQuestionsContainer > *,
+#adminCreatePollContainer > * {
+    scroll-margin-top: 90px;
+}
+
+
+/* ==================================================
+   SECTION HEADING EMPHASIS
+================================================== */
+
+.admin-section__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    min-height: 26px;
+    margin-bottom: 8px;
+    padding: 4px 9px;
+    border-radius: 999px;
+    background: #edf4fb;
+    color: #1f5f99;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+}
+
+
+.admin-section__heading h2 {
+    margin-top: 0;
+    margin-bottom: 8px;
+}
+
+
+.admin-section__heading p {
+    max-width: 700px;
+}
+
+
+/* ==================================================
+   WORK AREA CARD FEEL
+================================================== */
+
+.admin-section__container {
+    position: relative;
+}
+
+
+.admin-section__container::after {
+    content: "";
+    position: absolute;
+    inset: auto 0 -32px 0;
+    height: 1px;
+    background: transparent;
+}
+
+
+/* ==================================================
+   BETTER LONG-PAGE SCANNING
+================================================== */
+
+.admin-page {
+    scroll-behavior: smooth;
+}
+
+
+.admin-panel,
+.admin-state-questions,
+.admin-poll-editor,
+.admin-suggestion-card {
+    overflow: hidden;
+}
+
+
+/* ==================================================
+   MOBILE
+================================================== */
+
+@media (max-width: 760px) {
+
+    #adminPollSuggestionsContainer::before,
+    #adminCommunityPollsContainer::before,
+    #adminStateQuestionsContainer::before,
+    #adminCreatePollContainer::before {
+        max-width: calc(100% - 32px);
+    }
+
+}
+/* ==================================================
+   ADMIN QUICK NAVIGATION
+================================================== */
+
+.admin-quick-nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 18px 24px;
+    border-top: 1px solid #dfe6ed;
+    border-bottom: 1px solid #dfe6ed;
+    background: #ffffff;
+}
+
+
+.admin-quick-nav a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 40px;
+    padding: 9px 15px;
+    border: 1px solid #c8d5e0;
+    border-radius: 999px;
+    background: #ffffff;
+    color: #234e70;
+    font-size: 0.78rem;
+    font-weight: 800;
+    text-decoration: none;
+    transition:
+        background-color 160ms ease,
+        border-color 160ms ease,
+        color 160ms ease,
+        transform 160ms ease;
+}
+
+
+.admin-quick-nav a:hover {
+    border-color: #1f5f99;
+    background: #edf4fb;
+    color: #1f5f99;
+    transform: translateY(-1px);
+}
+
+
+.admin-quick-nav a:focus-visible {
+    outline: 3px solid rgba(31, 95, 153, 0.18);
+    outline-offset: 2px;
+}
+
+
+/* ==================================================
+   MOBILE
+================================================== */
+
+@media (max-width: 650px) {
+
+    .admin-quick-nav {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        padding: 16px;
+    }
+
+
+    .admin-quick-nav a {
+        width: 100%;
+    }
+
+}
+
+
+@media (max-width: 420px) {
+
+    .admin-quick-nav {
+        grid-template-columns: 1fr;
+    }
+
+}
+/* ==================================================
+   SUGGESTION AUTOMATIC REVIEW STATUS
+================================================== */
+
+.admin-suggestion-card__review-status {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 26px;
+    padding: 4px 9px;
+    border-radius: 999px;
+    font-size: 0.67rem;
+    font-weight: 800;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+}
+
+
+/* LOOKS GOOD */
+
+.admin-suggestion-card__review-status.looks-good {
+    border: 1px solid #b8dec7;
+    background: #eaf7ef;
+    color: #247447;
+}
+
+
+/* NEEDS ATTENTION */
+
+.admin-suggestion-card__review-status.needs-attention {
+    border: 1px solid #e3c38b;
+    background: #fff7e7;
+    color: #8a5a0a;
+}
+
+
+/* ==================================================
+   REVIEW INFORMATION
+================================================== */
+
+.admin-suggestion-card__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 18px;
+    margin-top: 14px;
+}
+
+
+.admin-suggestion-card__meta span {
+    display: inline-flex;
+    align-items: center;
+    color: #687686;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+
+.admin-suggestion-card__meta span + span {
+    color: #7b5a20;
+}
+
+
+/* ==================================================
+   MOBILE
+================================================== */
+
+@media (max-width: 650px) {
+
+    .admin-suggestion-card__badges {
+        gap: 6px;
+    }
+
+
+    .admin-suggestion-card__review-status {
+        font-size: 0.62rem;
+    }
+
+
+    .admin-suggestion-card__meta {
+        flex-direction: column;
+        gap: 5px;
+    }
+
+}

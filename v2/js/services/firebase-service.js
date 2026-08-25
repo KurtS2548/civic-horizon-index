@@ -20,16 +20,12 @@ import {
 import {
 
     ref,
-
     onValue,
-
     push,
-
     set,
-
     get,
-
-    update
+    update,
+    remove
 
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
@@ -3439,6 +3435,38 @@ export async function updateDatabasePath(
             path
         ),
         updates
+    );
+
+}
+
+/*
+==================================================
+DELETE DATABASE PATH
+==================================================
+*/
+
+export async function deleteDatabasePath(
+    path
+) {
+
+    if (
+        !path ||
+        typeof path !==
+            "string"
+    ) {
+
+        throw new Error(
+            "A valid Firebase database path is required."
+        );
+
+    }
+
+
+    await remove(
+        ref(
+            database,
+            path
+        )
     );
 
 }

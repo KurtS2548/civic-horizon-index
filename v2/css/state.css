@@ -14,8 +14,7 @@ Clean, compact styling for:
 - Party badges
 - Approval voting
 - House district selector
-- Representative records
-- Local civic explorer
+
 
 Brand:
 
@@ -157,21 +156,7 @@ BACK LINK
 ==================================================
 */
 
-.state-back {
-
-    max-width:
-        1180px;
-
-    margin:
-        0 auto;
-
-    padding:
-        24px 24px 0;
-
-}
-
-
-.state-back a {
+.state-hero__back {
 
     display:
         inline-flex;
@@ -182,8 +167,11 @@ BACK LINK
     gap:
         8px;
 
+    margin:
+        0 0 24px;
+
     color:
-        var(--state-blue);
+        var(--state-white);
 
     font-size:
         0.9rem;
@@ -197,11 +185,8 @@ BACK LINK
 }
 
 
-.state-back a:hover {
-
-    text-decoration:
-        underline;
-
+.state-hero__back:hover {
+    text-decoration: underline;
 }
 
 
@@ -1528,197 +1513,7 @@ HOUSE EXPLORER
 }
 
 
-/*
-==================================================
-RECORDS
-==================================================
-*/
 
-.state-record-grid {
-
-    display:
-        grid;
-
-    grid-template-columns:
-        repeat(
-            2,
-            minmax(
-                0,
-                1fr
-            )
-        );
-
-    gap:
-        15px;
-
-}
-
-
-.state-record-grid article {
-
-    padding:
-        20px;
-
-    border:
-        1px solid
-        var(--state-border);
-
-    border-radius:
-        13px;
-
-    background:
-        var(--state-white);
-
-}
-
-
-.state-record-grid span {
-
-    display:
-        block;
-
-    margin-bottom:
-        7px;
-
-    color:
-        var(--state-gold);
-
-    font-size:
-        0.7rem;
-
-    font-weight:
-        800;
-
-    letter-spacing:
-        0.06em;
-
-    text-transform:
-        uppercase;
-
-}
-
-
-.state-record-grid h3 {
-
-    margin:
-        0;
-
-    color:
-        var(--state-blue-dark);
-
-    font-size:
-        1rem;
-
-}
-
-
-.state-record-grid p {
-
-    margin:
-        8px 0 0;
-
-    color:
-        var(--state-muted);
-
-    font-size:
-        0.88rem;
-
-    line-height:
-        1.6;
-
-}
-
-
-/*
-==================================================
-LOCAL
-==================================================
-*/
-
-.state-local-grid {
-
-    display:
-        grid;
-
-    grid-template-columns:
-        repeat(
-            2,
-            minmax(
-                0,
-                1fr
-            )
-        );
-
-    gap:
-        15px;
-
-}
-
-
-.state-local-grid article {
-
-    padding:
-        20px;
-
-    border:
-        1px solid
-        var(--state-border);
-
-    border-radius:
-        13px;
-
-    background:
-        var(--state-white);
-
-}
-
-
-.state-local-grid span {
-
-    color:
-        var(--state-gold);
-
-    font-size:
-        0.7rem;
-
-    font-weight:
-        800;
-
-    letter-spacing:
-        0.06em;
-
-    text-transform:
-        uppercase;
-
-}
-
-
-.state-local-grid h3 {
-
-    margin:
-        7px 0 0;
-
-    color:
-        var(--state-blue-dark);
-
-}
-
-
-.state-local-grid p {
-
-    margin:
-        8px 0 0;
-
-    color:
-        var(--state-muted);
-
-    font-size:
-        0.88rem;
-
-    line-height:
-        1.6;
-
-}
 
 
 /*
@@ -1790,18 +1585,7 @@ TRANSPARENCY
 }
 
 
-/*
-==================================================
-LEGACY APPROVAL
-==================================================
 
-The old standalone Congressional Approval section
-is hidden by state.js.
-
-This prevents any flash of duplicate cards while
-the page initializes.
-==================================================
-*/
 
 [hidden] {
 
@@ -1890,12 +1674,6 @@ PHONE
         650px
 ) {
 
-    .state-back {
-
-        padding:
-            18px 18px 0;
-
-    }
 
 
     .state-hero {
@@ -2070,13 +1848,7 @@ PHONE
     }
 
 
-    .state-record-grid,
-    .state-local-grid {
-
-        grid-template-columns:
-            1fr;
-
-    }
+    
 
 
     .state-transparency {
@@ -2121,6 +1893,232 @@ VERY SMALL PHONE
         grid-column:
             auto;
 
+    }
+
+}
+/* ==================================================
+   STATE PROFILE HERO
+   ================================================== */
+
+.state-hero__identity {
+    display: block;
+}
+
+.state-hero__identity-copy {
+    min-width: 0;
+}
+
+.state-hero__nickname {
+    margin: 7px 0 0;
+    color: var(--state-gold);
+    font-family: "Merriweather", Georgia, serif;
+    font-size: 1rem;
+    font-style: italic;
+    font-weight: 600;
+}
+
+
+
+
+
+
+
+/* ==================================================
+   STATE PROFILE MOBILE
+   ================================================== */
+
+@media (max-width: 650px) {
+
+
+    
+
+    .state-hero__nickname {
+        font-size: 0.9rem;
+    }
+
+    
+
+}
+/* ==================================================
+   STATE QUESTIONS
+================================================== */
+
+.state-questions {
+    display: grid;
+    gap: 20px;
+}
+
+
+.state-question-card {
+    background: #ffffff;
+    border: 1px solid #dfe5ec;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 8px 22px rgba(15, 42, 68, 0.06);
+}
+
+
+.state-question-card__number {
+    display: inline-block;
+    margin-bottom: 10px;
+    color: #6b7785;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+
+.state-question-card h3 {
+    margin: 0 0 22px;
+    color: #17395c;
+    font-size: 1.15rem;
+    line-height: 1.5;
+}
+
+
+/* ==================================================
+   RESULTS
+================================================== */
+
+.state-question-card__results {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+
+.state-question-card__results > div {
+    padding: 14px 10px;
+    background: #f7f9fb;
+    border: 1px solid #e4e9ef;
+    border-radius: 10px;
+    text-align: center;
+}
+
+
+.state-question-card__results span {
+    display: block;
+    margin-bottom: 5px;
+    color: #687686;
+    font-size: 0.78rem;
+    font-weight: 600;
+}
+
+
+.state-question-card__results strong {
+    display: block;
+    color: #17395c;
+    font-size: 1.05rem;
+}
+
+
+/* ==================================================
+   RESPONSE BUTTONS
+================================================== */
+
+.state-question-card__options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+
+.state-question-card__options button {
+    min-width: 100px;
+    padding: 11px 18px;
+    background: #ffffff;
+    border: 1px solid #17395c;
+    border-radius: 9px;
+    color: #17395c;
+    font-family: inherit;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        border-color 0.2s ease;
+}
+
+
+.state-question-card__options button:hover:not(:disabled) {
+    background: #17395c;
+    color: #ffffff;
+}
+
+
+.state-question-card__options button.is-selected {
+    background: #17395c;
+    border-color: #17395c;
+    color: #ffffff;
+}
+
+
+.state-question-card__options button:disabled {
+    cursor: default;
+    opacity: 0.65;
+}
+
+
+.state-question-card__options button.is-selected:disabled {
+    opacity: 1;
+}
+
+
+/* ==================================================
+   STATUS MESSAGE
+================================================== */
+
+.state-question-card__message {
+    margin: 14px 0 0;
+    color: #657384;
+    font-size: 0.86rem;
+    line-height: 1.5;
+}
+
+
+/* ==================================================
+   MOBILE
+================================================== */
+
+@media (max-width: 700px) {
+
+    .state-question-card {
+        padding: 18px;
+    }
+
+
+    .state-question-card__results {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+
+    .state-question-card__options {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+
+    .state-question-card__options button {
+        min-width: 0;
+        width: 100%;
+        padding: 11px 8px;
+    }
+
+}
+
+
+@media (max-width: 420px) {
+
+    .state-question-card__results {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+
+    .state-question-card__options {
+        grid-template-columns: 1fr;
     }
 
 }

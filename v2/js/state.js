@@ -17,8 +17,6 @@ U.S. Senators:
 U.S. Representatives:
 - Monthly
 
-Mayor:
-- Monthly later
 
 GEOGRAPHIC ELIGIBILITY
 
@@ -43,8 +41,7 @@ PUBLIC OFFICIAL DATA
 
 import {
 
-    getStatePublicOfficials,
-    getMayorByMunicipalityGeoid
+    getStatePublicOfficials
 
 } from "./services/public-official-data-service.js";
 
@@ -79,21 +76,6 @@ import {
 
 } from "./services/governor-approval-service.js";
 
-/*
-==================================================
-MAYOR APPROVAL
-==================================================
-*/
-
-import {
-
-    getMayorApprovalStatus,
-    getMyMayorApprovalVote,
-    submitMayorApproval,
-    subscribeToMayorApproval
-
-} from "./services/mayor-approval-service.js";
-
 
 
 /*
@@ -108,6 +90,29 @@ import {
 
 } from "./services/participant-jurisdiction-service.js";
 
+/*
+==================================================
+STATE QUESTIONS
+==================================================
+*/
+
+import {
+
+    subscribeToStateQuestions
+
+} from "./services/state-question-service.js";
+
+/*
+==================================================
+STATE QUESTION PARTICIPATION
+==================================================
+*/
+
+import {
+
+    initializeStateQuestionParticipation
+
+} from "./controllers/state-question-participation-controller.js";
 
 /*
 ==================================================
@@ -192,6 +197,62 @@ const states = {
 };
 
 
+const stateNicknames = {
+    AL: "The Yellowhammer State",
+    AK: "The Last Frontier",
+    AZ: "The Grand Canyon State",
+    AR: "The Natural State",
+    CA: "The Golden State",
+    CO: "The Centennial State",
+    CT: "The Constitution State",
+    DE: "The First State",
+    FL: "The Sunshine State",
+    GA: "The Peach State",
+    HI: "The Aloha State",
+    ID: "The Gem State",
+    IL: "The Prairie State",
+    IN: "The Hoosier State",
+    IA: "The Hawkeye State",
+    KS: "The Sunflower State",
+    KY: "The Bluegrass State",
+    LA: "The Pelican State",
+    ME: "The Pine Tree State",
+    MD: "The Old Line State",
+    MA: "The Bay State",
+    MI: "The Great Lakes State",
+    MN: "The North Star State",
+    MS: "The Magnolia State",
+    MO: "The Show-Me State",
+    MT: "The Treasure State",
+    NE: "The Cornhusker State",
+    NV: "The Silver State",
+    NH: "The Granite State",
+    NJ: "The Garden State",
+    NM: "The Land of Enchantment",
+    NY: "The Empire State",
+    NC: "The Tar Heel State",
+    ND: "The Peace Garden State",
+    OH: "The Buckeye State",
+    OK: "The Sooner State",
+    OR: "The Beaver State",
+    PA: "The Keystone State",
+    RI: "The Ocean State",
+    SC: "The Palmetto State",
+    SD: "The Mount Rushmore State",
+    TN: "The Volunteer State",
+    TX: "The Lone Star State",
+    UT: "The Beehive State",
+    VT: "The Green Mountain State",
+    VA: "The Old Dominion",
+    WA: "The Evergreen State",
+    WV: "The Mountain State",
+    WI: "The Badger State",
+    WY: "The Equality State"
+};
+
+
+
+
 /*
 ==================================================
 PAGE STATE
@@ -209,9 +270,6 @@ const activeSubscriptions =
 const governorSubscriptions =
     [];
 
-
-const mayorSubscriptions =
-    [];
 
 
 let houseCardSubscriptions =
@@ -358,9 +416,18 @@ async function initializeStateProfile() {
 
 
     setText(
-        "statePageDescription",
-        `Explore Civic Horizon Index participation, results, public officials, approval ratings, official records, and civic information for ${stateName}.`
-    );
+    "statePageNickname",
+    stateNicknames[stateCode] || ""
+);
+
+
+    setText(
+    "statePageDescription",
+    `Explore Civic Horizon Index participation, public officials, approval ratings, and civic information for ${stateName}.`
+);
+
+
+    
 
 
     initializeStateOverview();
@@ -379,21 +446,163 @@ async function initializeStateProfile() {
         await getCurrentParticipantJurisdiction();
 
 
-    /*
-    ----------------------------------------------
-    OLD STANDALONE APPROVAL SECTION
 
-    Approval voting now belongs inside the
-    individual public-official cards.
-    ----------------------------------------------
-    */
-
-    hideLegacyApprovalSection();
+        initializePublicOfficials(
+    stateCode,
+    stateName
+);
 
 
-    initializePublicOfficials(
+const stateQuestionUnsubscribe =
+    initializeStateQuestionParticipation(
         stateCode,
-        stateName
+        stateName,
+        participantJurisdiction
+    );
+
+
+if (
+    typeof stateQuestionUnsubscribe ===
+    "function"
+) {
+
+    activeSubscriptions.push(
+        stateQuestionUnsubscribe
+    );
+
+}
+
+}
+
+/*
+==================================================
+STATE QUESTIONS
+==================================================
+*/
+
+function initializeStateQuestions(
+    stateCode,
+    stateName
+) {
+
+    const container =
+        document.getElementById(
+            "stateQuestions"
+        );
+
+    const heading =
+        document.getElementById(
+            "stateQuestionsHeading"
+        );
+
+
+    if (!container) {
+
+        return;
+
+    }
+
+
+    if (heading) {
+
+        heading.textContent =
+            `What ${stateName} participants are being asked`;
+
+    }
+
+
+    subscribeToStateQuestions(
+
+        stateCode,
+
+        questions => {
+
+            const activeQuestions =
+                questions.filter(
+                    question =>
+                        question.active === true
+                );
+
+
+            if (
+                activeQuestions.length === 0
+            ) {
+
+                container.innerHTML = `
+
+                    <div class="state-placeholder-card">
+
+                        <strong>
+                            No active ${escapeHtml(stateName)} questions
+                        </strong>
+
+                        <p>
+                            New state-specific questions will appear here
+                            when they are available.
+                        </p>
+
+                    </div>
+
+                `;
+
+                return;
+
+            }
+
+
+            container.innerHTML =
+                activeQuestions
+                    .map(
+                        (
+                            question,
+                            index
+                        ) => `
+
+                            <article class="state-question-card">
+
+                                <span class="state-question-card__number">
+                                    Question ${index + 1}
+                                </span>
+
+                                <h3>
+                                    ${escapeHtml(question.question)}
+                                </h3>
+
+                            </article>
+
+                        `
+                    )
+                    .join("");
+
+        },
+
+        error => {
+
+            console.error(
+                "State questions could not be loaded:",
+                error
+            );
+
+
+            container.innerHTML = `
+
+                <div class="state-placeholder-card">
+
+                    <strong>
+                        State questions unavailable
+                    </strong>
+
+                    <p>
+                        State-specific questions could not be loaded
+                        right now.
+                    </p>
+
+                </div>
+
+            `;
+
+        }
+
     );
 
 }
@@ -405,6 +614,9 @@ STATE OVERVIEW
 ==================================================
 */
 
+
+
+
 function initializeStateOverview() {
 
     setText(
@@ -414,9 +626,9 @@ function initializeStateOverview() {
 
 
     setText(
-        "stateOverviewPriority",
-        "Coming soon"
-    );
+    "stateOverviewPriority",
+    "Awaiting responses"
+);
 
 
     setText(
@@ -426,9 +638,9 @@ function initializeStateOverview() {
 
 
     setText(
-        "stateOverviewCommunityActivity",
-        "Coming soon"
-    );
+    "stateOverviewCommunityActivity",
+    "Awaiting responses"
+);
 
 }
 
@@ -453,10 +665,6 @@ function initializePublicOfficials(
         governorSubscriptions
     );
 
-
-    clearSubscriptions(
-        mayorSubscriptions
-    );
 
 
     clearSubscriptions(
@@ -504,18 +712,7 @@ function initializePublicOfficials(
             : [];
 
 
-     const mayor =
-    participantJurisdiction
-        ?.eligibility
-        ?.municipality &&
-    participantJurisdiction
-        ?.municipalityGeoid
-        ? getMayorByMunicipalityGeoid(
-            stateCode,
-            participantJurisdiction
-                .municipalityGeoid
-        )
-        : null;
+     
 
 
     if (
@@ -894,77 +1091,7 @@ function createHouseSection(
 }
 
 
-/*
-==================================================
-MAYOR SECTION
-==================================================
-*/
 
-function createMayorSection(
-    mayor,
-    stateName
-) {
-
-    if (!mayor) {
-
-        return "";
-
-    }
-
-
-    const municipalityName =
-        mayor.municipalityName ||
-        mayor.cityName ||
-        mayor.municipality ||
-        "Your Municipality";
-
-
-    return `
-
-        <section class="state-delegation-group state-delegation-group--mayor">
-
-            <header class="state-delegation-group__heading">
-
-                <span>
-                    Local Government
-                </span>
-
-                <h3>
-                    Mayor of ${escapeHtml(
-                        municipalityName
-                    )}
-                </h3>
-
-                <p>
-                    Local leadership for your verified municipality in
-                    ${escapeHtml(stateName)}.
-                </p>
-
-            </header>
-
-
-            <div class="state-delegation-grid">
-
-                ${
-                    createOfficialCard(
-                        mayor,
-                        {
-                            showVoting:
-                                true,
-
-                            cadenceLabel:
-                                "Monthly approval"
-                        }
-                    )
-                }
-
-            </div>
-
-        </section>
-
-    `;
-
-}
 
 /*
 ==================================================
@@ -1833,462 +1960,6 @@ async function submitGovernorVote(
 }
 
 
-/*
-==================================================
-MAYOR CARD
-==================================================
-*/
-
-function initializeMayorCard(
-    mayor
-) {
-
-    const card =
-        findOfficialCard(
-            mayor.id
-        );
-
-
-    if (!card) {
-
-        return;
-
-    }
-
-
-    const approvalElements =
-        getApprovalElements(
-            card
-        );
-
-
-    if (!approvalElements) {
-
-        return;
-
-    }
-
-
-    const {
-
-        approvalPercent,
-        responseCount,
-        message,
-        buttons
-
-    } =
-        approvalElements;
-
-
-    /*
-    ----------------------------------------------
-    LIVE MONTHLY RESULTS
-    ----------------------------------------------
-    */
-
-    const resultUnsubscribe =
-        subscribeToMayorApproval(
-
-            mayor.id,
-
-            summary => {
-
-                approvalPercent.textContent =
-                    formatPercentage(
-                        summary
-                            ?.approvalPercentage
-                    );
-
-
-                responseCount.textContent =
-                    formatNumber(
-                        summary
-                            ?.totalResponses
-                    );
-
-            },
-
-            error => {
-
-                console.error(
-                    "Mayor approval results could not be loaded:",
-                    error
-                );
-
-
-                approvalPercent.textContent =
-                    "—";
-
-
-                responseCount.textContent =
-                    "—";
-
-            }
-
-        );
-
-
-    mayorSubscriptions.push(
-        resultUnsubscribe
-    );
-
-
-    /*
-    ----------------------------------------------
-    MUNICIPALITY ELIGIBILITY
-    ----------------------------------------------
-    */
-
-    if (
-        !canVoteForMayor(
-            mayor
-        )
-    ) {
-
-        disableButtons(
-            buttons
-        );
-
-
-        message.textContent =
-            "Read only — Mayor voting is limited to residents of this municipality.";
-
-
-        return;
-
-    }
-
-
-    /*
-    ----------------------------------------------
-    AUTH
-    ----------------------------------------------
-    */
-
-    const authUnsubscribe =
-        onAuthStateChanged(
-            auth,
-            async user => {
-
-                disableButtons(
-                    buttons
-                );
-
-
-                clearButtonSelections(
-                    buttons
-                );
-
-
-                if (!user) {
-
-                    message.textContent =
-                        "Sign in to participate.";
-
-                    return;
-
-                }
-
-
-                if (
-                    !user.emailVerified
-                ) {
-
-                    message.textContent =
-                        "Verify your email before participating.";
-
-                    return;
-
-                }
-
-
-                await refreshMayorVotingStatus(
-                    mayor,
-                    buttons,
-                    message
-                );
-
-            }
-        );
-
-
-    mayorSubscriptions.push(
-        authUnsubscribe
-    );
-
-
-    /*
-    ----------------------------------------------
-    VOTE BUTTONS
-    ----------------------------------------------
-    */
-
-    buttons.forEach(
-        button => {
-
-            button.addEventListener(
-                "click",
-                async () => {
-
-                    await submitMayorVote(
-                        mayor,
-                        button,
-                        buttons,
-                        message
-                    );
-
-                }
-            );
-
-        }
-    );
-
-}
-
-
-/*
-==================================================
-MAYOR STATUS
-==================================================
-*/
-
-async function refreshMayorVotingStatus(
-    mayor,
-    buttons,
-    message
-) {
-
-    try {
-
-        const status =
-            await getMayorApprovalStatus(
-                mayor
-            );
-
-
-        clearButtonSelections(
-            buttons
-        );
-
-
-        if (
-            status.eligible
-        ) {
-
-            enableButtons(
-                buttons
-            );
-
-
-            message.textContent =
-                `Voting is open for ${status.votingPeriodLabel}.`;
-
-
-            return;
-
-        }
-
-
-        disableButtons(
-            buttons
-        );
-
-
-        if (
-            status.reason ===
-            "alreadyParticipatedThisMonth"
-        ) {
-
-            const existingVote =
-                await getMyMayorApprovalVote(
-                    mayor.id
-                );
-
-
-            if (
-                existingVote
-                    ?.response
-            ) {
-
-                highlightResponse(
-                    buttons,
-                    existingVote.response
-                );
-
-            }
-
-
-            message.textContent =
-                `Your ${status.votingPeriodLabel} Mayor rating has already been recorded. Voting reopens next month.`;
-
-
-            return;
-
-        }
-
-
-        if (
-            status.reason ===
-            "outsideJurisdiction"
-        ) {
-
-            message.textContent =
-                "Read only — Mayor voting is limited to residents of this municipality.";
-
-
-            return;
-
-        }
-
-
-        if (
-            status.reason ===
-            "emailNotVerified"
-        ) {
-
-            message.textContent =
-                "Verify your email before participating.";
-
-
-            return;
-
-        }
-
-
-        if (
-            status.reason ===
-            "signedOut"
-        ) {
-
-            message.textContent =
-                "Sign in to participate.";
-
-
-            return;
-
-        }
-
-
-        message.textContent =
-            "Mayor voting is currently unavailable.";
-
-    } catch (error) {
-
-        console.error(
-            "Mayor approval status could not be loaded:",
-            error
-        );
-
-
-        disableButtons(
-            buttons
-        );
-
-
-        message.textContent =
-            "Mayor voting is temporarily unavailable.";
-
-    }
-
-}
-
-
-/*
-==================================================
-SUBMIT MAYOR VOTE
-==================================================
-*/
-
-async function submitMayorVote(
-    mayor,
-    selectedButton,
-    buttons,
-    message
-) {
-
-    const response =
-        selectedButton
-            ?.dataset
-            ?.response;
-
-
-    if (!response) {
-
-        return;
-
-    }
-
-
-    disableButtons(
-        buttons
-    );
-
-
-    message.textContent =
-        "Saving your monthly Mayor rating...";
-
-
-    try {
-
-        await submitMayorApproval(
-            mayor,
-            response
-        );
-
-
-        clearButtonSelections(
-            buttons
-        );
-
-
-        highlightResponse(
-            buttons,
-            response
-        );
-
-
-        message.textContent =
-            "Your Mayor rating has been recorded. Voting reopens next month.";
-
-    } catch (error) {
-
-        console.error(
-            "Mayor approval vote failed:",
-            error
-        );
-
-
-        if (
-            error?.code ===
-            "already-participated-this-month"
-        ) {
-
-            await refreshMayorVotingStatus(
-                mayor,
-                buttons,
-                message
-            );
-
-
-            return;
-
-        }
-
-
-        message.textContent =
-            error?.message ||
-            "Your Mayor rating could not be recorded.";
-
-
-        await refreshMayorVotingStatus(
-            mayor,
-            buttons,
-            message
-        );
-
-    }
-
-}
 
 
 /*
@@ -2961,65 +2632,6 @@ function canVoteForStateOfficial(
 }
 
 
-/*
-==================================================
-MAYOR ELIGIBILITY
-==================================================
-*/
-
-function canVoteForMayor(
-    mayor
-) {
-
-    if (
-        !participantJurisdiction
-            ?.eligibility
-            ?.municipality ||
-        !participantJurisdiction
-            ?.municipalityGeoid
-    ) {
-
-        return false;
-
-    }
-
-
-    const participantGeoid =
-        String(
-            participantJurisdiction
-                .municipalityGeoid
-        );
-
-
-    const mayorGeoid =
-        String(
-            mayor
-                ?.municipalityGeoid ||
-            mayor
-                ?.geoid ||
-            ""
-        );
-
-
-    if (!mayorGeoid) {
-
-        return false;
-
-    }
-
-
-    return (
-
-        participantJurisdiction.stateCode ===
-            mayor.stateCode &&
-
-        participantGeoid ===
-            mayorGeoid
-
-    );
-
-}
-
 
 /*
 ==================================================
@@ -3121,16 +2733,6 @@ function getReadOnlyMessage(
     }
 
 
-    if (
-        official.officeType ===
-        "mayor"
-    ) {
-
-        return (
-            "Read only — voting is limited to residents of this municipality."
-        );
-
-    }
 
 
     return (
@@ -3233,56 +2835,8 @@ function getApprovalElements(
 }
 
 
-/*
-==================================================
-HIDE OLD APPROVAL SECTION
-==================================================
-*/
-
-function hideLegacyApprovalSection() {
-
-    const legacyElements = [
-
-        document.getElementById(
-            "stateSenatorOneName"
-        ),
-
-        document.getElementById(
-            "stateSenatorTwoName"
-        ),
-
-        document.getElementById(
-            "stateHouseApprovalPercent"
-        )
-
-    ]
-        .filter(
-            Boolean
-        );
 
 
-    legacyElements.forEach(
-        element => {
-
-            const section =
-                element.closest(
-                    "section"
-                );
-
-
-            if (
-                section
-            ) {
-
-                section.hidden =
-                    true;
-
-            }
-
-        }
-    );
-
-}
 
 
 /*
@@ -3426,14 +2980,6 @@ function createCompactOfficeLabel(
     }
 
 
-    if (
-        official.officeType ===
-        "mayor"
-    ) {
-
-        return "Mayor";
-
-    }
 
 
     return (
@@ -4052,10 +3598,6 @@ window.addEventListener(
             governorSubscriptions
         );
 
-
-        clearSubscriptions(
-            mayorSubscriptions
-        );
 
 
         clearSubscriptions(

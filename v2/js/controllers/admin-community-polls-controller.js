@@ -8,7 +8,8 @@ ADMIN COMMUNITY POLLS CONTROLLER
 import {
     subscribeToCommunitySurveys,
     subscribeToCommunityVotes,
-    updateDatabasePath
+    updateDatabasePath,
+    deleteDatabasePath
 } from "../services/firebase-service.js";
 
 
@@ -271,18 +272,139 @@ async function handlePollActionClick(
 
 
     if (
-        action ===
-        "edit"
+    action ===
+    "edit"
+) {
+
+    openPollEditor(
+        pollId
+    );
+
+    return;
+
+}
+
+
+if (
+    action ===
+    "delete"
+) {
+
+    await deletePoll(
+        pollId,
+        button
+    );
+
+}
+
+}
+
+/*
+==================================================
+DELETE INACTIVE POLL
+==================================================
+*/
+
+async function deletePoll(
+    pollId,
+    button
+) {
+
+    const poll =
+        surveys.find(
+            item =>
+                String(item.id) ===
+                String(pollId)
+        );
+
+
+    if (!poll) {
+
+        return;
+
+    }
+
+
+    /*
+    Only inactive polls can be deleted.
+    */
+
+    if (
+        poll.active ===
+        true
     ) {
 
-        openPollEditor(
-            pollId
+        window.alert(
+            "Deactivate this poll before deleting it."
         );
+
+        return;
+
+    }
+
+
+    const question =
+        String(
+            poll.question ||
+            "this community poll"
+        );
+
+
+    const confirmed =
+        window.confirm(
+            `Permanently delete "${question}"?\n\nThis cannot be undone.`
+        );
+
+
+    if (!confirmed) {
+
+        return;
+
+    }
+
+
+    const originalText =
+        button.textContent;
+
+
+    button.disabled =
+        true;
+
+
+    button.textContent =
+        "Deleting...";
+
+
+    try {
+
+        await deleteDatabasePath(
+            `createdSurveys/${pollId}`
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Community poll deletion failed:",
+            error
+        );
+
+
+        window.alert(
+            "The community poll could not be deleted."
+        );
+
+
+        button.disabled =
+            false;
+
+
+        button.textContent =
+            originalText;
 
     }
 
 }
-
 
 /*
 ==================================================
@@ -646,18 +768,37 @@ function createPollRow(
 
 
                 <button
-                    type="button"
-                    class="
-                        admin-poll-action
-                        ${actionClass}
-                    "
-                    data-action="${actionName}"
-                    data-poll-id="${pollId}"
-                >
-                    ${actionText}
-                </button>
+    type="button"
+    class="
+        admin-poll-action
+        ${actionClass}
+    "
+    data-action="${actionName}"
+    data-poll-id="${pollId}"
+>
+    ${actionText}
+</button>
 
-            </div>
+
+${
+    !isActive
+        ? `
+            <button
+                type="button"
+                class="
+                    admin-poll-action
+                    admin-poll-action--delete
+                "
+                data-action="delete"
+                data-poll-id="${pollId}"
+            >
+                Delete
+            </button>
+        `
+        : ""
+}
+
+</div>
 
         </article>
     `;

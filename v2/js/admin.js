@@ -31,6 +31,9 @@ let adminControllerStarted =
 let pollSuggestionsStarted =
     false;
 
+let stateQuestionsStarted =
+    false;
+
 let unauthorizedSignOutRunning =
     false;
 
@@ -743,9 +746,63 @@ async function showAuthenticatedAdmin(
             true;
 
     }
+    
+    if (
+    !stateQuestionsStarted
+) {
+
+    await startStateQuestionsController();
+
+    stateQuestionsStarted =
+        true;
 
 }
 
+}
+
+/*
+==================================================
+START STATE QUESTIONS CONTROLLER
+==================================================
+*/
+
+async function startStateQuestionsController() {
+
+    try {
+
+        const controllerModule =
+            await import(
+                "./controllers/admin-state-questions-controller.js"
+            );
+
+
+        if (
+            typeof controllerModule
+                .initializeAdminStateQuestions !==
+            "function"
+        ) {
+
+            throw new Error(
+                "State Questions controller initialization function was not found."
+            );
+
+        }
+
+
+        controllerModule
+            .initializeAdminStateQuestions();
+
+
+    } catch (error) {
+
+        console.error(
+            "State Questions manager could not start:",
+            error
+        );
+
+    }
+
+}
 
 /*
 ==================================================
@@ -813,6 +870,11 @@ async function loadAdminComponents() {
         loadComponent(
             "adminCommunityPollsContainer",
             "components/admin-community-polls.html"
+        ),
+
+        loadComponent(
+            "adminStateQuestionsContainer",
+            "components/admin-state-questions.html"
         ),
 
         loadComponent(

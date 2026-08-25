@@ -229,6 +229,16 @@ function initializeFilters() {
 
     document
         .getElementById(
+            "adminSuggestionReviewFilter"
+        )
+        ?.addEventListener(
+            "change",
+            renderSuggestions
+        );
+
+
+    document
+        .getElementById(
             "adminSuggestionSearch"
         )
         ?.addEventListener(
@@ -265,6 +275,15 @@ function getFilteredSuggestions() {
         "all";
 
 
+    const review =
+        document
+            .getElementById(
+                "adminSuggestionReviewFilter"
+            )
+            ?.value ||
+        "all";
+
+
     const search =
         String(
 
@@ -280,75 +299,164 @@ function getFilteredSuggestions() {
             .toLowerCase();
 
 
-    return suggestions.filter(
-        suggestion => {
-
-            if (
-                status !==
-                    "all" &&
-                suggestion.status !==
-                    status
-            ) {
-
-                return false;
-
-            }
-
-
-            if (
-                level !==
-                    "all" &&
-                suggestion.level !==
-                    level
-            ) {
-
-                return false;
-
-            }
-
-
-            if (
-                search
-            ) {
-
-                const searchableText =
-                    [
-
-                        suggestion.topic,
-
-                        suggestion
-                            .proposedQuestion,
-
-                        suggestion.reason,
-
-                        suggestion.level,
-
-                        suggestion.status
-
-                    ]
-                        .join(
-                            " "
-                        )
-                        .toLowerCase();
-
+    const filtered =
+        suggestions.filter(
+            suggestion => {
 
                 if (
-                    !searchableText.includes(
-                        search
-                    )
+                    status !==
+                        "all" &&
+                    suggestion.status !==
+                        status
                 ) {
 
                     return false;
 
                 }
 
+
+                if (
+                    level !==
+                        "all" &&
+                    suggestion.level !==
+                        level
+                ) {
+
+                    return false;
+
+                }
+
+
+                if (
+                    review !==
+                    "all"
+                ) {
+
+                    const reviewCheck =
+                        getSuggestionReviewCheck(
+                            suggestion
+                        );
+
+
+                    if (
+                        review ===
+                            "needsAttention" &&
+                        !reviewCheck.needsAttention
+                    ) {
+
+                        return false;
+
+                    }
+
+
+                    if (
+                        review ===
+                            "looksGood" &&
+                        reviewCheck.needsAttention
+                    ) {
+
+                        return false;
+
+                    }
+
+                }
+
+
+                if (search) {
+
+                    const searchableText =
+                        [
+
+                            suggestion.topic,
+
+                            suggestion
+                                .proposedQuestion,
+
+                            suggestion.reason,
+
+                            suggestion.level,
+
+                            suggestion.status
+
+                        ]
+                            .join(
+                                " "
+                            )
+                            .toLowerCase();
+
+
+                    if (
+                        !searchableText.includes(
+                            search
+                        )
+                    ) {
+
+                        return false;
+
+                    }
+
+                }
+
+
+                return true;
+
+            }
+        );
+
+
+    /*
+    ==================================================
+    REVIEW PRIORITY
+
+    Needs Attention items appear first.
+
+    Within each group, newest submissions remain first.
+    ==================================================
+    */
+
+    filtered.sort(
+        (
+            suggestionA,
+            suggestionB
+        ) => {
+
+            const reviewA =
+                getSuggestionReviewCheck(
+                    suggestionA
+                );
+
+            const reviewB =
+                getSuggestionReviewCheck(
+                    suggestionB
+                );
+
+
+            if (
+                reviewA.needsAttention !==
+                reviewB.needsAttention
+            ) {
+
+                return reviewA.needsAttention
+                    ? -1
+                    : 1;
+
             }
 
 
-            return true;
+            return (
+                getTimestamp(
+                    suggestionB
+                ) -
+                getTimestamp(
+                    suggestionA
+                )
+            );
 
         }
     );
+
+
+    return filtered;
 
 }
 
@@ -468,6 +576,210 @@ function renderSuggestions() {
 
 }
 
+/*
+==================================================
+AUTOMATIC REVIEW CHECK
+==================================================
+*/
+
+function getSuggestionReviewCheck(
+    suggestion
+) {
+
+    const issues =
+        [];
+
+
+    const topic =
+        String(
+            suggestion?.topic ||
+            ""
+        )
+            .trim();
+
+
+    const question =
+        String(
+            suggestion?.proposedQuestion ||
+            ""
+        )
+            .trim();
+
+
+    const reason =
+        String(
+            suggestion?.reason ||
+            ""
+        )
+            .trim();
+
+
+    /*
+    ----------------------------------------------
+    UNVERIFIED ACCOUNT
+    ----------------------------------------------
+    */
+
+    if (
+        suggestion
+            ?.submittedByVerifiedAccount !==
+        true
+    ) {
+
+        issues.push(
+            "Unverified account"
+        );
+
+    }
+
+
+    /*
+    ----------------------------------------------
+    MISSING / VERY SHORT QUESTION
+    ----------------------------------------------
+    */
+
+    if (
+        question.length <
+        10
+    ) {
+
+        issues.push(
+            "Question needs more detail"
+        );
+
+    }
+
+
+    /*
+    ----------------------------------------------
+    VERY SHORT EXPLANATION
+    ----------------------------------------------
+    */
+
+    if (
+        reason.length <
+        15
+    ) {
+
+        issues.push(
+            "Reason needs more detail"
+        );
+
+    }
+
+
+    /*
+    ----------------------------------------------
+    POSSIBLE DUPLICATE
+    ----------------------------------------------
+    */
+
+    const normalizedQuestion =
+        normalizeSuggestionText(
+            question
+        );
+
+
+    if (
+        normalizedQuestion
+    ) {
+
+        const duplicateFound =
+            suggestions.some(
+                otherSuggestion => {
+
+                    if (
+                        String(
+                            otherSuggestion?.id ||
+                            ""
+                        ) ===
+                        String(
+                            suggestion?.id ||
+                            ""
+                        )
+                    ) {
+
+                        return false;
+
+                    }
+
+
+                    const otherQuestion =
+                        normalizeSuggestionText(
+                            otherSuggestion
+                                ?.proposedQuestion
+                        );
+
+
+                    return (
+                        otherQuestion &&
+                        otherQuestion ===
+                        normalizedQuestion
+                    );
+
+                }
+            );
+
+
+        if (
+            duplicateFound
+        ) {
+
+            issues.push(
+                "Possible duplicate"
+            );
+
+        }
+
+    }
+
+
+    /*
+    ----------------------------------------------
+    RESULT
+    ----------------------------------------------
+    */
+
+    return {
+
+        needsAttention:
+            issues.length >
+            0,
+
+        issues
+
+    };
+
+}
+
+
+/*
+==================================================
+NORMALIZE SUGGESTION TEXT
+==================================================
+*/
+
+function normalizeSuggestionText(
+    value
+) {
+
+    return String(
+        value ||
+        ""
+    )
+        .trim()
+        .toLowerCase()
+        .replace(
+            /[^a-z0-9\s]/g,
+            ""
+        )
+        .replace(
+            /\s+/g,
+            " "
+        );
+
+}
 
 /*
 ==================================================
@@ -545,6 +857,37 @@ function createSuggestionCard(
             .submittedByVerifiedAccount ===
         true;
 
+        const reviewCheck =
+    getSuggestionReviewCheck(
+        suggestion
+    );
+
+
+const reviewStatusClass =
+    reviewCheck.needsAttention
+        ? "needs-attention"
+        : "looks-good";
+
+
+const reviewStatusText =
+    reviewCheck.needsAttention
+        ? "Needs Attention"
+        : "Looks Good";
+
+
+const reviewIssueText =
+    reviewCheck.issues.length >
+    0
+        ? reviewCheck.issues
+            .map(
+                issue =>
+                    escapeHtml(
+                        issue
+                    )
+            )
+            .join(" · ")
+        : "No obvious issues found";
+
 
     return `
 
@@ -559,21 +902,32 @@ function createSuggestionCard(
 
                     <div class="admin-suggestion-card__badges">
 
-                        <span
-                            class="admin-suggestion-card__level"
-                        >
-                            ${level}
-                        </span>
+    <span
+        class="admin-suggestion-card__level"
+    >
+        ${level}
+    </span>
 
 
-                        <span
-                            class="admin-suggestion-card__status"
-                            data-status="${escapeHtml(status)}"
-                        >
-                            ${statusLabel}
-                        </span>
+    <span
+        class="admin-suggestion-card__status"
+        data-status="${escapeHtml(status)}"
+    >
+        ${statusLabel}
+    </span>
 
-                    </div>
+
+    <span
+        class="
+            admin-suggestion-card__review-status
+            ${reviewStatusClass}
+        "
+        title="${reviewIssueText}"
+    >
+        ${reviewStatusText}
+    </span>
+
+</div>
 
 
                     <h3>
@@ -629,19 +983,24 @@ function createSuggestionCard(
 
                 <div class="admin-suggestion-card__meta">
 
-                    <span>
+    <span>
 
-                        ${
-                            verifiedAccount
+        ${
+            verifiedAccount
 
-                                ? "Submitted by verified account"
+                ? "Submitted by verified account"
 
-                                : "Submitted without verified account"
-                        }
+                : "Submitted without verified account"
+        }
 
-                    </span>
+    </span>
 
-                </div>
+
+    <span>
+        ${reviewIssueText}
+    </span>
+
+</div>
 
             </div>
 

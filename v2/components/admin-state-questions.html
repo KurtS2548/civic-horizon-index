@@ -1,0 +1,95 @@
+<section class="admin-section">
+
+    <div class="admin-section__container">
+
+        <header class="admin-section__heading">
+
+            <div>
+
+                <p class="admin-section__eyebrow">
+                    State Questions
+                </p>
+
+                <h2>
+                    Manage state-specific questions
+                </h2>
+
+                <p>
+                    Choose a state to review and manage
+                    questions shown to participants in that state.
+                </p>
+
+            </div>
+
+        </header>
+
+
+        <div class="admin-state-questions">
+
+            <div class="admin-state-questions__controls">
+
+                <label for="adminStateQuestionState">
+                    State
+                </label>
+
+                <select id="adminStateQuestionState">
+
+                    <option value="">
+                        Choose a state
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div
+                class="admin-state-questions__editor"
+                id="adminStateQuestionEditor"
+                hidden
+            >
+
+                <label for="adminStateQuestionText">
+                    Question
+                </label>
+
+                <textarea
+                    id="adminStateQuestionText"
+                    rows="3"
+                    placeholder="Enter a state-specific question"
+                ></textarea>
+
+                <button
+                    type="button"
+                    id="adminAddStateQuestionButton"
+                >
+                    Add Question
+                </button>
+
+            </div>
+
+
+            <div
+                class="admin-state-questions__list"
+                id="adminStateQuestionsList"
+            >
+
+                <div class="admin-placeholder-card">
+
+                    <strong>
+                        Choose a state
+                    </strong>
+
+                    <p>
+                        State-specific questions will appear here.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
