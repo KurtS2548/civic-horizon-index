@@ -16,9 +16,9 @@ import {
 } from "./controllers/snapshot-controller.js";
 
 import {
-    initializeNationalPulseController,
-    destroyNationalPulseController
-} from "./controllers/national-pulse-controller.js";
+    initializeCivicOverviewController,
+    destroyCivicOverviewController
+} from "./controllers/civic-overview-controller.js";
 
 import {
     initializeNationalPrioritiesController,
@@ -37,7 +37,8 @@ CONTROLLER STATE
 ==================================================
 */
 
-let homepageControllerInitialized = false;
+let homepageControllerInitialized =
+    false;
 
 
 /*
@@ -48,17 +49,24 @@ PUBLIC INITIALIZATION
 
 export function initializeHomepageController() {
 
-    if (homepageControllerInitialized) {
+    if (
+        homepageControllerInitialized
+    ) {
+
         return;
+
     }
 
-    homepageControllerInitialized = true;
+
+    homepageControllerInitialized =
+        true;
+
 
     initializeHeroController();
 
     initializeSnapshotController();
-
-    initializeNationalPulseController();
+    
+    initializeCivicOverviewController();
 
     initializeNationalPrioritiesController();
 
@@ -75,21 +83,28 @@ PUBLIC CLEANUP
 
 export function destroyHomepageController() {
 
-    if (!homepageControllerInitialized) {
+    if (
+        !homepageControllerInitialized
+    ) {
+
         return;
+
     }
+
 
     destroyHeroController();
 
     destroySnapshotController();
 
-    destroyNationalPulseController();
+    destroyCivicOverviewController();
 
     destroyNationalPrioritiesController();
 
     destroyCommunityPollsController();
 
-    homepageControllerInitialized = false;
+
+    homepageControllerInitialized =
+        false;
 
 }
 

@@ -5,16 +5,16 @@
         <header class="snapshot__heading">
 
             <p class="snapshot__eyebrow">
-                Today’s Snapshot
+                National Snapshot
             </p>
 
             <h2>
-                What’s happening right now
+                Civic Horizon right now
             </h2>
 
             <p>
-                A quick view of current participation and activity
-                across Civic Horizon Index.
+                A quick look at participation, national priorities,
+                and current polling activity.
             </p>
 
         </header>
@@ -22,16 +22,16 @@
 
         <div class="snapshot__grid">
 
+
+            <!-- PARTICIPANTS -->
+
             <a
                 href="results.html"
                 class="stat-card"
             >
 
-                <span
-                    class="stat-card__icon"
-                    aria-hidden="true"
-                >
-                    👥
+                <span class="stat-card__label">
+                    Participants
                 </span>
 
                 <strong
@@ -41,57 +41,22 @@
                     0
                 </strong>
 
-                <span class="stat-card__label">
-                    National Participants
-                </span>
-
                 <span class="stat-card__note">
-                    Completed priority surveys
+                    National priority participants
                 </span>
 
             </a>
 
 
+            <!-- TOP PRIORITY -->
+
             <a
-                href="polls.html#community-polls"
+                href="results.html"
                 class="stat-card"
             >
-
-                <span
-                    class="stat-card__icon"
-                    aria-hidden="true"
-                >
-                    🗳️
-                </span>
-
-                <strong
-                    class="stat-card__value"
-                    id="snapshotActivePolls"
-                >
-                    0
-                </strong>
 
                 <span class="stat-card__label">
-                    Active Polls
-                </span>
-
-                <span class="stat-card__note">
-                    Community questions open now
-                </span>
-
-            </a>
-
-
-            <a
-                href="results.html#national-priorities"
-                class="stat-card"
-            >
-
-                <span
-                    class="stat-card__icon"
-                    aria-hidden="true"
-                >
-                    ⭐
+                    Top National Priority
                 </span>
 
                 <strong
@@ -101,27 +66,47 @@
                     Loading...
                 </strong>
 
-                <span class="stat-card__label">
-                    Top Priority
-                </span>
-
                 <span class="stat-card__note">
-                    Highest national average
+                    Highest average priority score
                 </span>
 
             </a>
 
 
+            <!-- ACTIVE POLLS -->
+
             <a
-                href="results.html#community-results"
+                href="polls.html#community-polls"
                 class="stat-card"
             >
 
-                <span
-                    class="stat-card__icon"
-                    aria-hidden="true"
+                <span class="stat-card__label">
+                    Active Civic Polls
+                </span>
+
+                <strong
+                    class="stat-card__value"
+                    id="snapshotActivePolls"
                 >
-                    📊
+                    0
+                </strong>
+
+                <span class="stat-card__note">
+                    Community questions open now
+                </span>
+
+            </a>
+
+
+            <!-- COMMUNITY VOTES -->
+
+            <a
+                href="results.html"
+                class="stat-card"
+            >
+
+                <span class="stat-card__label">
+                    Community Votes
                 </span>
 
                 <strong
@@ -131,15 +116,12 @@
                     0
                 </strong>
 
-                <span class="stat-card__label">
-                    Community Votes
-                </span>
-
                 <span class="stat-card__note">
-                    Responses across all community polls
+                    Votes across community polls
                 </span>
 
             </a>
+
 
         </div>
 

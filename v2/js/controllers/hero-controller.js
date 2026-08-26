@@ -1,13 +1,13 @@
 /*
 ==================================================
 CIVIC HORIZON INDEX V2
-HERO CONTROLLER
+HOMEPAGE HERO CONTROLLER
 ==================================================
 */
 
 import {
-    subscribeToNationalPrioritySummary
-} from "../services/priority-service.js";
+    subscribeToPresidentialApprovalSummary
+} from "../services/pulse-service.js";
 
 
 /*
@@ -16,9 +16,11 @@ CONTROLLER STATE
 ==================================================
 */
 
-let heroControllerInitialized = false;
+let heroControllerInitialized =
+    false;
 
-let unsubscribePrioritySummary = null;
+let unsubscribePresidentialApproval =
+    null;
 
 
 /*
@@ -29,30 +31,42 @@ PUBLIC INITIALIZATION
 
 export function initializeHeroController() {
 
-    if (heroControllerInitialized) {
+    if (
+        heroControllerInitialized
+    ) {
+
         return;
+
     }
 
-    heroControllerInitialized = true;
+
+    heroControllerInitialized =
+        true;
 
 
-    unsubscribePrioritySummary =
-        subscribeToNationalPrioritySummary(
+    unsubscribePresidentialApproval =
+        subscribeToPresidentialApprovalSummary(
+
             summary => {
 
-                renderHeroSummary(summary);
+                renderPresidentialPollSummary(
+                    summary
+                );
 
             },
+
             error => {
 
                 console.error(
-                    "Hero priority data error:",
+                    "Homepage Presidential Poll error:",
                     error
                 );
+
 
                 renderHeroError();
 
             }
+
         );
 
 }
@@ -60,50 +74,53 @@ export function initializeHeroController() {
 
 /*
 ==================================================
-HERO RENDERING
+PRESIDENTIAL POLL SUMMARY
 ==================================================
 */
 
-function renderHeroSummary(summary) {
+function renderPresidentialPollSummary(
+    summary
+) {
 
-    const participantCount =
-        Number(summary?.participantCount) || 0;
+    const approvalPercentage =
+        Number(
+            summary?.approvalPercentage
+        ) || 0;
 
-    const topIssue =
-        summary?.topIssue || null;
+
+    const disapprovalPercentage =
+        Number(
+            summary?.disapprovalPercentage
+        ) || 0;
+
+
+    const totalResponses =
+        Number(
+            summary?.totalResponses
+        ) || 0;
 
 
     setText(
-        "participantCount",
-        formatNumber(participantCount)
+        "homePresidentApproval",
+        formatPercentage(
+            approvalPercentage
+        )
     );
 
 
-    if (!topIssue) {
-
-        setText(
-            "topIssue",
-            "Waiting for responses"
-        );
-
-        setText(
-            "topScore",
-            "0.0 / 10"
-        );
-
-        return;
-
-    }
-
-
     setText(
-        "topIssue",
-        topIssue.name
+        "homePresidentDisapproval",
+        formatPercentage(
+            disapprovalPercentage
+        )
     );
 
+
     setText(
-        "topScore",
-        `${topIssue.average.toFixed(1)} / 10`
+        "homePresidentResponses",
+        formatNumber(
+            totalResponses
+        )
     );
 
 }
@@ -118,17 +135,19 @@ ERROR STATE
 function renderHeroError() {
 
     setText(
-        "participantCount",
+        "homePresidentApproval",
         "—"
     );
 
-    setText(
-        "topIssue",
-        "Results unavailable"
-    );
 
     setText(
-        "topScore",
+        "homePresidentDisapproval",
+        "—"
+    );
+
+
+    setText(
+        "homePresidentResponses",
         "—"
     );
 
@@ -147,16 +166,22 @@ function setText(
 ) {
 
     const element =
-        document.getElementById(elementId);
+        document.getElementById(
+            elementId
+        );
 
 
     if (!element) {
+
         return;
+
     }
 
 
     element.textContent =
-        String(value);
+        String(
+            value
+        );
 
 }
 
@@ -167,18 +192,55 @@ FORMAT HELPERS
 ==================================================
 */
 
-function formatNumber(value) {
+function formatNumber(
+    value
+) {
 
     const number =
-        Number(value);
+        Number(
+            value
+        );
 
 
-    if (!Number.isFinite(number)) {
+    if (
+        !Number.isFinite(
+            number
+        )
+    ) {
+
         return "0";
+
     }
 
 
-    return number.toLocaleString();
+    return number
+        .toLocaleString();
+
+}
+
+
+function formatPercentage(
+    value
+) {
+
+    const percentage =
+        Number(
+            value
+        );
+
+
+    if (
+        !Number.isFinite(
+            percentage
+        )
+    ) {
+
+        return "0.0%";
+
+    }
+
+
+    return `${percentage.toFixed(1)}%`;
 
 }
 
@@ -192,17 +254,20 @@ CLEANUP
 export function destroyHeroController() {
 
     if (
-        typeof unsubscribePrioritySummary ===
+        typeof unsubscribePresidentialApproval ===
         "function"
     ) {
 
-        unsubscribePrioritySummary();
+        unsubscribePresidentialApproval();
 
     }
 
 
-    unsubscribePrioritySummary = null;
+    unsubscribePresidentialApproval =
+        null;
 
-    heroControllerInitialized = false;
+
+    heroControllerInitialized =
+        false;
 
 }

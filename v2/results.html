@@ -15,7 +15,7 @@
 
     <meta
         name="description"
-        content="Explore live national priorities, civic sentiment, community polling, and state insights in the Civic Horizon Index National Results Center."
+        content="Explore live national priorities, Civic Pulse results, and community polling activity in the Civic Horizon Index National Results Center."
     >
 
     <title>
@@ -61,46 +61,54 @@
         rel="stylesheet"
         href="css/results.css"
     >
+
     <link
-    rel="stylesheet"
-    href="css/state-explorer.css"
->
-<link
-    rel="stylesheet"
-    href="css/results-approval.css"
->
-<link
-    rel="stylesheet"
-    href="css/results-polish.css"
->
+        rel="stylesheet"
+        href="css/results-polish.css"
+    >
 
 </head>
 
 
 <body>
 
+
     <!-- SHARED HEADER -->
 
     <div id="headerContainer"></div>
 
 
-    <!-- RESULTS CENTER -->
+    <!-- ==================================================
+         NATIONAL RESULTS CENTER
+    ================================================== -->
 
     <main class="results-page">
 
+
+        <!-- HERO -->
+
         <div id="resultsHeroContainer"></div>
+
+
+        <!-- NATIONAL SNAPSHOT -->
 
         <div id="resultsOverviewContainer"></div>
 
+
+        <!-- NATIONAL PRIORITIES -->
+
         <div id="resultsPrioritiesContainer"></div>
+
+
+        <!-- CIVIC PULSE SUMMARY -->
 
         <div id="resultsPulseContainer"></div>
 
-<div id="resultsApprovalContainer"></div>
 
-<div id="resultsParticipationContainer"></div>
+        <!-- COMMUNITY POLL ACTIVITY -->
 
-<div id="resultsCommunityContainer"></div>
+        <div id="resultsCommunityContainer"></div>
+
 
     </main>
 
@@ -113,13 +121,16 @@
     <!-- RESULTS CENTER APPLICATION -->
 
     <script
-    type="module"
-    src="js/results.js"
-></script>
-<script
-    type="module"
-    src="js/site-auth.js"
-></script>
+        type="module"
+        src="js/results.js"
+    ></script>
+
+    <script
+        type="module"
+        src="js/site-auth.js"
+    ></script>
+
+
 </body>
 
 </html>

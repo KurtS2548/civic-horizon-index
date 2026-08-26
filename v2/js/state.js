@@ -430,7 +430,7 @@ async function initializeStateProfile() {
     
 
 
-    initializeStateOverview();
+    
 
 
     /*
@@ -608,41 +608,7 @@ function initializeStateQuestions(
 }
 
 
-/*
-==================================================
-STATE OVERVIEW
-==================================================
-*/
 
-
-
-
-function initializeStateOverview() {
-
-    setText(
-        "stateOverviewParticipants",
-        "—"
-    );
-
-
-    setText(
-    "stateOverviewPriority",
-    "Awaiting responses"
-);
-
-
-    setText(
-        "stateOverviewScore",
-        "—"
-    );
-
-
-    setText(
-    "stateOverviewCommunityActivity",
-    "Awaiting responses"
-);
-
-}
 
 
 /*

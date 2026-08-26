@@ -1,7 +1,7 @@
 /*
 ==================================================
 CIVIC HORIZON INDEX V2
-RESULTS CENTER TEST INITIALIZATION
+NATIONAL RESULTS CENTER
 ==================================================
 */
 
@@ -11,6 +11,7 @@ RESULTS CENTER TEST INITIALIZATION
 COMPONENT LOADING
 ==================================================
 */
+
 async function loadComponent(
     containerId,
     componentPath
@@ -23,10 +24,6 @@ async function loadComponent(
 
     if (!container) {
 
-        console.error(
-            `Container not found: ${containerId}`
-        );
-
         return false;
 
     }
@@ -34,7 +31,9 @@ async function loadComponent(
     try {
 
         const response =
-            await fetch(componentPath);
+            await fetch(
+                componentPath
+            );
 
         if (!response.ok) {
 
@@ -63,6 +62,7 @@ async function loadComponent(
                     background: #fff0ef;
                     color: #a6271e;
                     text-align: center;
+                    border-radius: 12px;
                 "
             >
                 This section could not be loaded.
@@ -100,26 +100,21 @@ async function initializeResultsPage() {
             "resultsOverviewContainer",
             "components/results-overview.html"
         ),
+
         loadComponent(
-    "resultsPrioritiesContainer",
-    "components/results-priorities.html"
-),
-loadComponent(
-    "resultsPulseContainer",
-    "components/results-pulse.html"
-),
-loadComponent(
-    "resultsMapContainer",
-    "components/results-map.html"
-),
-loadComponent(
-    "resultsCommunityContainer",
-    "components/results-community.html"
-),
-loadComponent(
-    "resultsApprovalContainer",
-    "components/results-approval.html"
-),
+            "resultsPrioritiesContainer",
+            "components/results-priorities.html"
+        ),
+
+        loadComponent(
+            "resultsPulseContainer",
+            "components/results-pulse.html"
+        ),
+
+        loadComponent(
+            "resultsCommunityContainer",
+            "components/results-community.html"
+        ),
 
         loadComponent(
             "footerContainer",
@@ -128,7 +123,9 @@ loadComponent(
 
     ]);
 
+
     initializeHeader();
+
 
     await initializeLiveResultsData();
 
@@ -150,6 +147,7 @@ async function initializeLiveResultsData() {
                 "./results-controller.js"
             );
 
+
         if (
             typeof controllerModule
                 .initializeResultsController !==
@@ -162,6 +160,7 @@ async function initializeLiveResultsData() {
 
         }
 
+
         controllerModule
             .initializeResultsController();
 
@@ -171,6 +170,7 @@ async function initializeLiveResultsData() {
             "Results Center live data could not start:",
             error
         );
+
 
         showResultsFallback();
 
@@ -228,16 +228,24 @@ function initializeHeader() {
             "mobileMenuButton"
         );
 
+
     const navigation =
         document.getElementById(
             "primaryNavigation"
         );
+
 
     const dropdownButtons =
         document.querySelectorAll(
             ".navigation-group__button"
         );
 
+
+    /*
+    ----------------------------------------------
+    MOBILE MENU
+    ----------------------------------------------
+    */
 
     if (
         menuButton &&
@@ -253,10 +261,14 @@ function initializeHeader() {
                         "open"
                     );
 
+
                 menuButton.setAttribute(
                     "aria-expanded",
-                    String(isOpen)
+                    String(
+                        isOpen
+                    )
                 );
+
 
                 menuButton.setAttribute(
                     "aria-label",
@@ -265,8 +277,11 @@ function initializeHeader() {
                         : "Open navigation menu"
                 );
 
+
                 if (!isOpen) {
+
                     closeDropdowns();
+
                 }
 
             }
@@ -274,6 +289,12 @@ function initializeHeader() {
 
     }
 
+
+    /*
+    ----------------------------------------------
+    DESKTOP DROPDOWNS
+    ----------------------------------------------
+    */
 
     dropdownButtons.forEach(
         button => {
@@ -284,27 +305,35 @@ function initializeHeader() {
 
                     event.stopPropagation();
 
+
                     const group =
                         button.closest(
                             ".navigation-group"
                         );
 
+
                     if (!group) {
+
                         return;
+
                     }
+
 
                     const isOpen =
                         group.classList.contains(
                             "open"
                         );
 
+
                     closeDropdowns();
+
 
                     if (!isOpen) {
 
                         group.classList.add(
                             "open"
                         );
+
 
                         button.setAttribute(
                             "aria-expanded",
@@ -319,6 +348,12 @@ function initializeHeader() {
         }
     );
 
+
+    /*
+    ----------------------------------------------
+    CLOSE ON OUTSIDE CLICK
+    ----------------------------------------------
+    */
 
     document.addEventListener(
         "click",
@@ -338,17 +373,28 @@ function initializeHeader() {
     );
 
 
+    /*
+    ----------------------------------------------
+    ESCAPE KEY
+    ----------------------------------------------
+    */
+
     document.addEventListener(
         "keydown",
         event => {
 
             if (
-                event.key !== "Escape"
+                event.key !==
+                "Escape"
             ) {
+
                 return;
+
             }
 
+
             closeDropdowns();
+
 
             if (
                 navigation &&
@@ -361,12 +407,14 @@ function initializeHeader() {
                     "open"
                 );
 
+
                 if (menuButton) {
 
                     menuButton.setAttribute(
                         "aria-expanded",
                         "false"
                     );
+
 
                     menuButton.setAttribute(
                         "aria-label",
@@ -381,12 +429,19 @@ function initializeHeader() {
     );
 
 
+    /*
+    ----------------------------------------------
+    DESKTOP RESIZE
+    ----------------------------------------------
+    */
+
     window.addEventListener(
         "resize",
         () => {
 
             if (
-                window.innerWidth > 980 &&
+                window.innerWidth >
+                    980 &&
                 navigation &&
                 navigation.classList.contains(
                     "open"
@@ -397,6 +452,7 @@ function initializeHeader() {
                     "open"
                 );
 
+
                 if (menuButton) {
 
                     menuButton.setAttribute(
@@ -404,12 +460,14 @@ function initializeHeader() {
                         "false"
                     );
 
+
                     menuButton.setAttribute(
                         "aria-label",
                         "Open navigation menu"
                     );
 
                 }
+
 
                 closeDropdowns();
 
@@ -440,10 +498,12 @@ function closeDropdowns() {
                     "open"
                 );
 
+
                 const button =
                     group.querySelector(
                         ".navigation-group__button"
                     );
+
 
                 if (button) {
 
@@ -476,12 +536,18 @@ function setText(
             elementId
         );
 
-    if (element) {
 
-        element.textContent =
-            String(value);
+    if (!element) {
+
+        return;
 
     }
+
+
+    element.textContent =
+        String(
+            value
+        );
 
 }
 

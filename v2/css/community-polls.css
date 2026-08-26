@@ -1,11 +1,11 @@
 /* ==================================================
    CIVIC HORIZON INDEX V2
-   COMMUNITY POLLS
+   HOMEPAGE CIVIC POLLS
 ================================================== */
 
 .community-polls {
-    padding: 84px 0;
-    background: #f7f9fb;
+    padding: 76px 0;
+    background: #ffffff;
 }
 
 .community-polls__container {
@@ -23,7 +23,7 @@
     align-items: flex-end;
     justify-content: space-between;
     gap: 32px;
-    margin-bottom: 38px;
+    margin-bottom: 34px;
 }
 
 .community-polls__heading > div {
@@ -43,12 +43,12 @@
     margin: 0;
     color: #102a43;
     font-family: "Merriweather", Georgia, serif;
-    font-size: clamp(2rem, 4vw, 2.8rem);
+    font-size: clamp(2rem, 4vw, 2.75rem);
     line-height: 1.2;
 }
 
 .community-polls__heading > div > p:last-child {
-    margin: 16px 0 0;
+    margin: 15px 0 0;
     color: #627d98;
     line-height: 1.75;
 }
@@ -56,7 +56,7 @@
 .community-polls__view-all {
     flex-shrink: 0;
     color: #1f5f99;
-    font-size: 0.86rem;
+    font-size: 0.84rem;
     font-weight: 800;
     text-decoration: none;
 }
@@ -74,8 +74,12 @@
 
 .community-polls__grid {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 20px;
+    grid-template-columns:
+        repeat(
+            3,
+            minmax(0, 1fr)
+        );
+    gap: 18px;
 }
 
 
@@ -86,14 +90,17 @@
 .community-poll-card {
     display: flex;
     min-width: 0;
-    min-height: 265px;
-    padding: 24px;
+    min-height: 235px;
+    padding: 22px;
     flex-direction: column;
     border: 1px solid #d9e2ec;
     border-radius: 14px;
-    background: #ffffff;
+    background: #f8fafc;
     color: inherit;
     text-decoration: none;
+    box-shadow:
+        0 10px 24px
+        rgba(16, 42, 67, 0.05);
     transition:
         border-color 180ms ease,
         box-shadow 180ms ease,
@@ -103,10 +110,17 @@
 .community-poll-card:hover,
 .community-poll-card:focus-visible {
     border-color: #9fbdd4;
-    box-shadow: 0 16px 34px rgba(16, 42, 67, 0.09);
+    box-shadow:
+        0 14px 30px
+        rgba(16, 42, 67, 0.08);
     outline: none;
-    transform: translateY(-3px);
+    transform: translateY(-2px);
 }
+
+
+/* ==================================================
+   CARD TOP
+================================================== */
 
 .community-poll-card__top {
     display: flex;
@@ -118,12 +132,12 @@
 .community-poll-card__status {
     display: inline-flex;
     align-items: center;
-    min-height: 27px;
-    padding: 6px 10px;
+    min-height: 26px;
+    padding: 5px 9px;
     border-radius: 999px;
     background: #e7f7eb;
     color: #176b2c;
-    font-size: 0.67rem;
+    font-size: 0.64rem;
     font-weight: 800;
     letter-spacing: 0.05em;
     text-transform: uppercase;
@@ -131,17 +145,27 @@
 
 .community-poll-card__date {
     color: #7b8fa3;
-    font-size: 0.72rem;
+    font-size: 0.7rem;
     font-weight: 600;
 }
 
+
+/* ==================================================
+   CARD QUESTION
+================================================== */
+
 .community-poll-card h3 {
-    margin: 22px 0 0;
+    margin: 20px 0 0;
     color: #102a43;
     font-family: "Merriweather", Georgia, serif;
-    font-size: 1.15rem;
-    line-height: 1.55;
+    font-size: 1.08rem;
+    line-height: 1.5;
 }
+
+
+/* ==================================================
+   CARD FOOTER
+================================================== */
 
 .community-poll-card__footer {
     display: flex;
@@ -149,7 +173,7 @@
     justify-content: space-between;
     gap: 16px;
     margin-top: auto;
-    padding-top: 24px;
+    padding-top: 22px;
     border-top: 1px solid #e5ecf2;
 }
 
@@ -160,18 +184,18 @@
 
 .community-poll-card__votes strong {
     color: #243b53;
-    font-size: 1.05rem;
+    font-size: 1rem;
 }
 
 .community-poll-card__votes span {
     color: #7b8fa3;
-    font-size: 0.72rem;
+    font-size: 0.68rem;
     text-transform: uppercase;
 }
 
 .community-poll-card__action {
     color: #1f5f99;
-    font-size: 0.82rem;
+    font-size: 0.8rem;
     font-weight: 800;
 }
 
@@ -182,10 +206,10 @@
 
 .community-polls__empty {
     grid-column: 1 / -1;
-    padding: 48px 24px;
+    padding: 44px 24px;
     border: 1px dashed #bcccdc;
     border-radius: 14px;
-    background: #ffffff;
+    background: #f8fafc;
     text-align: center;
 }
 
@@ -211,7 +235,11 @@
 @media (max-width: 960px) {
 
     .community-polls__grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-columns:
+            repeat(
+                2,
+                minmax(0, 1fr)
+            );
     }
 
 }
@@ -239,16 +267,19 @@
 @media (max-width: 600px) {
 
     .community-polls {
-        padding: 64px 0;
+        padding: 62px 0;
     }
 
     .community-polls__container {
-        width: min(1180px, calc(100% - 32px));
+        width: min(
+            1180px,
+            calc(100% - 32px)
+        );
     }
 
     .community-poll-card {
-        min-height: 235px;
-        padding: 21px;
+        min-height: auto;
+        padding: 20px;
     }
 
 }

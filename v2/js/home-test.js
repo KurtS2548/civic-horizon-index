@@ -112,9 +112,11 @@ async function initializePage() {
         ),
 
         loadComponent(
-    "nationalPulseContainer",
-    "components/national-pulse.html"
-),
+            "civicOverviewContainer",
+            "components/civic-overview.html"
+        ),
+
+        
 
 loadComponent(
     "nationalPrioritiesContainer",
@@ -197,19 +199,29 @@ async function initializeLiveHomepageData() {
 function showLiveDataFallback() {
 
     setText(
-        "topIssue",
-        "Live results unavailable"
-    );
+    "homePresidentApproval",
+    "—"
+);
 
-    setText(
-        "topScore",
-        "—"
-    );
+setText(
+    "homePresidentDisapproval",
+    "—"
+);
 
-    setText(
-        "participantCount",
-        "—"
-    );
+setText(
+    "homePresidentResponses",
+    "—"
+);
+
+setText(
+    "homeCountryDirection",
+    "Unavailable"
+);
+
+setText(
+    "homeNationalConfidence",
+    "Unavailable"
+);
 
     setText(
         "snapshotParticipants",
@@ -231,45 +243,7 @@ function showLiveDataFallback() {
         "—"
     );
 
-    setText(
-        "pulseResponseCount",
-        "—"
-    );
 
-    setText(
-        "pulseUpdatedText",
-        "Live data unavailable"
-    );
-
-
-    const message =
-        document.getElementById(
-            "presidentialApprovalMessage"
-        );
-
-
-    if (message) {
-
-        message.textContent =
-            "Live voting is temporarily unavailable, but the page remains available for design review.";
-
-        message.dataset.messageType =
-            "error";
-
-    }
-
-
-    const submitButton =
-        document.querySelector(
-            ".pulse-poll__submit"
-        );
-
-
-    if (submitButton) {
-
-        submitButton.disabled = true;
-
-    }
 
 }
 

@@ -519,6 +519,54 @@ body {
         minmax(280px, 0.75fr);
 }
 
+/* ==================================================
+   PRESIDENT IDENTITY
+================================================== */
+
+.approval-poll__president {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 22px 30px;
+    border-bottom: 1px solid #d9e2ec;
+    background: #f8fafc;
+}
+
+.approval-poll__president > div {
+    display: grid;
+    gap: 6px;
+}
+
+.approval-poll__president > div > span {
+    color: #627d98;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+}
+
+.approval-poll__president strong {
+    color: #102a43;
+    font-family: "Merriweather", Georgia, serif;
+    font-size: 1.2rem;
+    line-height: 1.35;
+}
+
+.approval-poll__party {
+    display: inline-flex;
+    align-items: center;
+    min-height: 32px;
+    padding: 7px 12px;
+    border: 1px solid #d9e2ec;
+    border-radius: 999px;
+    background: #ffffff;
+    color: #334e68;
+    font-size: 0.74rem;
+    font-weight: 800;
+}
+
 
 /* ==================================================
    POLL FORM
@@ -1346,6 +1394,12 @@ body {
 
 
 @media (max-width: 600px) {
+
+    .approval-poll__president {
+    align-items: flex-start;
+    flex-direction: column;
+    padding: 20px 18px;
+    }
 
     .community-vote {
         padding-bottom: 64px;

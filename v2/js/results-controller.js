@@ -107,7 +107,7 @@ export async function initializeResultsController() {
 
     /*
     ----------------------------------------------
-    RESULTS OVERVIEW
+    NATIONAL SNAPSHOT
     ----------------------------------------------
     */
 
@@ -145,13 +145,13 @@ export async function initializeResultsController() {
 
     /*
     ----------------------------------------------
-    PRESIDENTIAL APPROVAL
+    CIVIC PULSE
     ----------------------------------------------
     */
 
     await loadController(
 
-        "Presidential Approval",
+        "Civic Pulse",
 
         "./controllers/results-pulse-controller.js",
 
@@ -164,26 +164,7 @@ export async function initializeResultsController() {
 
     /*
     ----------------------------------------------
-    PARTICIPATION ACROSS AMERICA
-    ----------------------------------------------
-    */
-
-    await loadController(
-
-        "Participation Across America",
-
-        "./controllers/results-participation-controller.js",
-
-        "initializeResultsParticipationController",
-
-        "destroyResultsParticipationController"
-
-    );
-
-
-    /*
-    ----------------------------------------------
-    COMMUNITY RESULTS
+    COMMUNITY POLL ACTIVITY
     ----------------------------------------------
     */
 

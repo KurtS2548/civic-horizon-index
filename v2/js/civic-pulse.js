@@ -1,23 +1,8 @@
-/*
-==================================================
-CIVIC HORIZON INDEX V2
-CIVIC PULSE
-
-LIVE FIREBASE + WEEKLY/MONTHLY VOTING + HISTORY
-==================================================
-*/
-
-
 import {
-
-    subscribeToPresidentialApproval,
     subscribeToCountryDirection,
     subscribeToNationalConfidence,
-
-    submitPresidentialApproval,
     submitCountryDirection,
     submitNationalConfidence,
-
     getMonthlyParticipationStatus,
     getMonthlyParticipationMessage,
     getWeeklyParticipationStatus,
@@ -26,47 +11,21 @@ import {
     getCurrentVotingPeriodLabel,
     getCurrentWeeklyVotingPeriod,
     getCurrentWeeklyVotingPeriodLabel
-
 } from "./services/firebase-service.js";
 
-
 import {
-
     subscribeToCivicPulseHistory
-
 } from "./services/civic-pulse-history-service.js";
 
-
 import {
-
     subscribeToAuthState,
     refreshCurrentUser,
     getCurrentUserVotingEligibility
-
 } from "./services/auth-service.js";
 
 
-/*
-==================================================
-LOCAL STORAGE KEYS
-==================================================
-*/
-
 const participantIdStorageKey =
     "civicPulseParticipantId";
-
-
-/*
-These keys now include the voting period.
-*/
-
-function getApprovalSelectionStorageKey() {
-
-    return (
-        `civicPulseUserApprovalVote-${getCurrentWeeklyVotingPeriod()}`
-    );
-
-}
 
 
 function getDirectionSelectionStorageKey() {
@@ -87,16 +46,7 @@ function getConfidenceSelectionStorageKey() {
 }
 
 
-/*
-==================================================
-STATE
-==================================================
-*/
-
 const pulseState = {
-
-    approvalResponses:
-        [],
 
     directionResponses:
         [],
@@ -108,9 +58,6 @@ const pulseState = {
         [],
 
     votingAccess: {
-
-        presidentialApproval:
-            null,
 
         countryDirection:
             null,
@@ -126,12 +73,6 @@ const pulseState = {
 let unsubscribeAuthState =
     null;
 
-
-/*
-==================================================
-INITIALIZE
-==================================================
-*/
 
 async function initializeCivicPulsePage() {
 
@@ -152,33 +93,20 @@ async function initializeCivicPulsePage() {
 
     initializeHeader();
 
-
-    initializeApprovalVoting();
-
     initializeDirectionVoting();
 
     initializeConfidenceVoting();
 
-
     restoreLocalSelections();
-
 
     initializeLiveSubscriptions();
 
-
     initializeHistorySubscription();
-
 
     initializeCivicPulseVotingAccess();
 
 }
 
-
-/*
-==================================================
-COMPONENT LOADING
-==================================================
-*/
 
 async function loadComponent(
     containerId,
@@ -236,47 +164,7 @@ async function loadComponent(
 }
 
 
-/*
-==================================================
-LIVE FIREBASE SUBSCRIPTIONS
-==================================================
-*/
-
 function initializeLiveSubscriptions() {
-
-    subscribeToPresidentialApproval(
-
-        responses => {
-
-            pulseState.approvalResponses =
-                Array.isArray(
-                    responses
-                )
-                    ? responses
-                    : [];
-
-
-            renderApprovalTracker();
-
-        },
-
-        error => {
-
-            console.error(
-                "Presidential Approval could not be loaded:",
-                error
-            );
-
-
-            setText(
-                "pulseApprovalParticipation",
-                "Live results are temporarily unavailable."
-            );
-
-        }
-
-    );
-
 
     subscribeToCountryDirection(
 
@@ -348,12 +236,6 @@ function initializeLiveSubscriptions() {
 }
 
 
-/*
-==================================================
-HISTORY SUBSCRIPTION
-==================================================
-*/
-
 function initializeHistorySubscription() {
 
     subscribeToCivicPulseHistory(
@@ -389,22 +271,10 @@ function initializeHistorySubscription() {
 }
 
 
-/*
-==================================================
-CIVIC PULSE AUTH + WEEKLY/MONTHLY ACCESS
-==================================================
-*/
-
 function initializeCivicPulseVotingAccess() {
 
     setAllCivicPulseVotingDisabled(
         true
-    );
-
-
-    setText(
-        "pulseApprovalMessage",
-        "Checking your participation access..."
     );
 
 
@@ -512,12 +382,6 @@ function initializeCivicPulseVotingAccess() {
 }
 
 
-/*
-==================================================
-REFRESH ALL THREE TRACKERS
-==================================================
-*/
-
 async function refreshAllCivicPulseVotingAccess() {
 
     const eligibility =
@@ -543,18 +407,8 @@ async function refreshAllCivicPulseVotingAccess() {
     }
 
 
-    /*
-    Presidential Approval = weekly
-    Country Direction = weekly
-    National Confidence = monthly
-    */
-
     const results =
         await Promise.all([
-
-            getWeeklyParticipationStatus(
-                "presidentialApproval"
-            ),
 
             getWeeklyParticipationStatus(
                 "countryDirection"
@@ -567,99 +421,25 @@ async function refreshAllCivicPulseVotingAccess() {
         ]);
 
 
-    pulseState.votingAccess.presidentialApproval =
+    pulseState.votingAccess.countryDirection =
         results[0];
 
 
-    pulseState.votingAccess.countryDirection =
+    pulseState.votingAccess.nationalConfidence =
         results[1];
 
 
-    pulseState.votingAccess.nationalConfidence =
-        results[2];
-
-
-    applyApprovalWeeklyAccess(
+    applyDirectionWeeklyAccess(
         results[0]
     );
 
 
-    applyDirectionWeeklyAccess(
+    applyConfidenceMonthlyAccess(
         results[1]
     );
 
-
-    applyConfidenceMonthlyAccess(
-        results[2]
-    );
-
 }
 
-
-/*
-==================================================
-APPROVAL WEEKLY ACCESS
-==================================================
-*/
-
-function applyApprovalWeeklyAccess(
-    status
-) {
-
-    const eligible =
-        status?.eligible ===
-        true;
-
-
-    setApprovalButtonsDisabled(
-        !eligible
-    );
-
-
-    if (
-        status?.reason ===
-        "alreadyParticipatedThisWeek"
-    ) {
-
-        setText(
-            "pulseApprovalMessage",
-            getWeeklyParticipationMessage(
-                status
-            )
-        );
-
-
-        return;
-
-    }
-
-
-    if (eligible) {
-
-        setText(
-            "pulseApprovalMessage",
-            `Voting is open for ${getCurrentWeeklyVotingPeriodLabel()}.`
-        );
-
-
-        return;
-
-    }
-
-
-    setText(
-        "pulseApprovalMessage",
-        getWeeklyParticipationMessage(
-            status
-        )
-    );
-
-}
-/*
-==================================================
-DIRECTION WEEKLY ACCESS
-==================================================
-*/
 
 function applyDirectionWeeklyAccess(
     status
@@ -716,12 +496,6 @@ function applyDirectionWeeklyAccess(
 }
 
 
-/*
-==================================================
-CONFIDENCE MONTHLY ACCESS
-==================================================
-*/
-
 function applyConfidenceMonthlyAccess(
     status
 ) {
@@ -777,12 +551,6 @@ function applyConfidenceMonthlyAccess(
 }
 
 
-/*
-==================================================
-CONFIRM INDIVIDUAL TRACKER ACCESS
-==================================================
-*/
-
 async function confirmCivicPulseVotingEligibility(
     tracker,
     messageElementId
@@ -812,8 +580,8 @@ async function confirmCivicPulseVotingEligibility(
 
 
         const isWeeklyTracker =
-            tracker === "presidentialApproval" ||
-            tracker === "countryDirection";
+            tracker ===
+            "countryDirection";
 
 
         const participationStatus =
@@ -878,20 +646,9 @@ async function confirmCivicPulseVotingEligibility(
 }
 
 
-/*
-==================================================
-DISABLE ALL CIVIC PULSE VOTING
-==================================================
-*/
-
 function setAllCivicPulseVotingDisabled(
     disabled
 ) {
-
-    setApprovalButtonsDisabled(
-        disabled
-    );
-
 
     setDirectionButtonsDisabled(
         disabled
@@ -904,12 +661,6 @@ function setAllCivicPulseVotingDisabled(
 
 }
 
-
-/*
-==================================================
-CONFIDENCE CONTROL STATE
-==================================================
-*/
 
 function setConfidenceControlsDisabled(
     disabled
@@ -947,12 +698,6 @@ function setConfidenceControlsDisabled(
 }
 
 
-/*
-==================================================
-BLOCKED MESSAGES
-==================================================
-*/
-
 function setCivicPulseBlockedMessages(
     reason
 ) {
@@ -961,12 +706,6 @@ function setCivicPulseBlockedMessages(
         getCivicPulseEligibilityMessage(
             reason
         );
-
-
-    setText(
-        "pulseApprovalMessage",
-        message
-    );
 
 
     setText(
@@ -982,12 +721,6 @@ function setCivicPulseBlockedMessages(
 
 }
 
-
-/*
-==================================================
-GENERAL ELIGIBILITY MESSAGE
-==================================================
-*/
 
 function getCivicPulseEligibilityMessage(
     reason
@@ -1051,12 +784,6 @@ function getCivicPulseEligibilityMessage(
 }
 
 
-/*
-==================================================
-PARTICIPANT ID
-==================================================
-*/
-
 function getParticipantId() {
 
     const existing =
@@ -1104,389 +831,6 @@ function getParticipantId() {
 
 }
 
-
-/*
-==================================================
-PRESIDENTIAL APPROVAL VOTING
-==================================================
-*/
-
-function initializeApprovalVoting() {
-
-    document
-        .querySelectorAll(
-            "[data-approval-vote]"
-        )
-        .forEach(
-            button => {
-
-                button.addEventListener(
-                    "click",
-                    async () => {
-
-                        const vote =
-                            button.dataset.approvalVote;
-
-
-                        if (
-                            vote !== "approve" &&
-                            vote !== "disapprove"
-                        ) {
-
-                            return;
-
-                        }
-
-
-                        const eligible =
-                            await confirmCivicPulseVotingEligibility(
-                                "presidentialApproval",
-                                "pulseApprovalMessage"
-                            );
-
-
-                        if (!eligible) {
-
-                            applyApprovalWeeklyAccess(
-                                pulseState.votingAccess
-                                    .presidentialApproval
-                            );
-
-
-                            return;
-
-                        }
-
-
-                        setApprovalButtonsDisabled(
-                            true
-                        );
-
-
-                        setText(
-                            "pulseApprovalMessage",
-                            "Saving your response..."
-                        );
-
-
-                        try {
-
-                            const firebaseResponse =
-                                vote === "approve"
-                                    ? "Approve"
-                                    : "Disapprove";
-
-
-                            await submitPresidentialApproval(
-                                firebaseResponse,
-                                getParticipantId()
-                            );
-
-
-                            setStoredValue(
-                                getApprovalSelectionStorageKey(),
-                                vote
-                            );
-
-
-                            restoreApprovalSelection();
-
-
-                            const weeklyStatus =
-                                await getWeeklyParticipationStatus(
-                                    "presidentialApproval"
-                                );
-
-
-                            pulseState.votingAccess
-                                .presidentialApproval =
-                                weeklyStatus;
-
-
-                            applyApprovalWeeklyAccess(
-                                weeklyStatus
-                            );
-
-                        } catch (error) {
-
-                            console.error(
-                                "Approval response could not be saved:",
-                                error
-                            );
-
-
-                            if (
-                                error?.code ===
-                                "already-participated-this-week"
-                            ) {
-
-                                const weeklyStatus =
-                                    await getWeeklyParticipationStatus(
-                                        "presidentialApproval"
-                                    );
-
-
-                                pulseState.votingAccess
-                                    .presidentialApproval =
-                                    weeklyStatus;
-
-
-                                applyApprovalWeeklyAccess(
-                                    weeklyStatus
-                                );
-
-
-                                return;
-
-                            }
-
-
-                            setText(
-                                "pulseApprovalMessage",
-                                error?.message ||
-                                "Your response could not be saved. Please try again."
-                            );
-
-
-                            const weeklyStatus =
-                                await getWeeklyParticipationStatus(
-                                    "presidentialApproval"
-                                );
-
-
-                            pulseState.votingAccess
-                                .presidentialApproval =
-                                weeklyStatus;
-
-
-                            applyApprovalWeeklyAccess(
-                                weeklyStatus
-                            );
-
-                        }
-
-                    }
-                );
-
-            }
-        );
-
-}
-
-
-/*
-==================================================
-APPROVAL RESULTS
-==================================================
-*/
-
-function renderApprovalTracker() {
-
-    let approve =
-        0;
-
-
-    let disapprove =
-        0;
-
-
-    let neutral =
-        0;
-
-
-    pulseState.approvalResponses
-        .forEach(
-            record => {
-
-                const response =
-                    String(
-                        record?.response ||
-                        ""
-                    );
-
-
-                if (
-                    response ===
-                        "Approve" ||
-                    response ===
-                        "Strongly Approve"
-                ) {
-
-                    approve +=
-                        1;
-
-                } else if (
-                    response ===
-                        "Disapprove" ||
-                    response ===
-                        "Strongly Disapprove"
-                ) {
-
-                    disapprove +=
-                        1;
-
-                } else if (
-                    response ===
-                    "Neutral"
-                ) {
-
-                    neutral +=
-                        1;
-
-                }
-
-            }
-        );
-
-
-    const decisiveResponses =
-        approve +
-        disapprove;
-
-
-    const totalResponses =
-        decisiveResponses +
-        neutral;
-
-
-    const approvePercent =
-        decisiveResponses > 0
-            ? Math.round(
-                (
-                    approve /
-                    decisiveResponses
-                ) * 100
-            )
-            : 0;
-
-
-    const disapprovePercent =
-        decisiveResponses > 0
-            ? 100 -
-                approvePercent
-            : 0;
-
-
-    setText(
-        "pulseApprovalPercent",
-        decisiveResponses > 0
-            ? `${approvePercent}%`
-            : "—"
-    );
-
-
-    setText(
-        "pulseDisapprovalPercent",
-        decisiveResponses > 0
-            ? `${disapprovePercent}%`
-            : "—"
-    );
-
-
-    setFillWidth(
-        "pulseApprovalFill",
-        approvePercent
-    );
-
-
-    setFillWidth(
-        "pulseDisapprovalFill",
-        disapprovePercent
-    );
-
-
-    setText(
-        "pulseApprovalSummary",
-        decisiveResponses > 0
-            ? `${approvePercent}% approve`
-            : "Awaiting responses"
-    );
-
-
-    if (
-        totalResponses >
-        0
-    ) {
-
-        const neutralText =
-            neutral > 0
-                ? ` ${neutral} neutral response${neutral === 1 ? "" : "s"} not included in the two-way percentage.`
-                : "";
-
-
-        setText(
-            "pulseApprovalParticipation",
-            `${totalResponses} total response${totalResponses === 1 ? "" : "s"}.${neutralText}`
-        );
-
-    } else {
-
-        setText(
-            "pulseApprovalParticipation",
-            "Awaiting responses."
-        );
-
-    }
-
-}
-
-
-/*
-==================================================
-APPROVAL BUTTON STATE
-==================================================
-*/
-
-function restoreApprovalSelection() {
-
-    const selectedVote =
-        getStoredValue(
-            getApprovalSelectionStorageKey()
-        );
-
-
-    document
-        .querySelectorAll(
-            "[data-approval-vote]"
-        )
-        .forEach(
-            button => {
-
-                button.classList.toggle(
-                    "is-selected",
-                    button.dataset.approvalVote ===
-                    selectedVote
-                );
-
-            }
-        );
-
-}
-
-
-function setApprovalButtonsDisabled(
-    disabled
-) {
-
-    document
-        .querySelectorAll(
-            "[data-approval-vote]"
-        )
-        .forEach(
-            button => {
-
-                button.disabled =
-                    disabled;
-
-            }
-        );
-
-}
-/*
-==================================================
-COUNTRY DIRECTION VOTING
-==================================================
-*/
 
 function initializeDirectionVoting() {
 
@@ -1651,12 +995,6 @@ function initializeDirectionVoting() {
 }
 
 
-/*
-==================================================
-COUNTRY DIRECTION RESULTS
-==================================================
-*/
-
 function renderDirectionTracker() {
 
     let right =
@@ -1772,12 +1110,6 @@ function renderDirectionTracker() {
 }
 
 
-/*
-==================================================
-DIRECTION BUTTON STATE
-==================================================
-*/
-
 function restoreDirectionSelection() {
 
     const selectedVote =
@@ -1823,11 +1155,7 @@ function setDirectionButtonsDisabled(
         );
 
 }
-/*
-==================================================
-CONFIDENCE SURVEY
-==================================================
-*/
+
 
 function initializeConfidenceVoting() {
 
@@ -1921,12 +1249,6 @@ function initializeConfidenceVoting() {
 
 }
 
-
-/*
-==================================================
-SAVE CONFIDENCE
-==================================================
-*/
 
 async function submitConfidenceSurvey() {
 
@@ -2114,12 +1436,6 @@ async function submitConfidenceSurvey() {
 
 }
 
-
-/*
-==================================================
-CONFIDENCE RESULTS
-==================================================
-*/
 
 function renderConfidenceTracker() {
 
@@ -2320,12 +1636,6 @@ function renderConfidenceTracker() {
 }
 
 
-/*
-==================================================
-CONFIDENCE SNAPSHOT
-==================================================
-*/
-
 function renderConfidenceSnapshot(
     averages,
     counts
@@ -2419,12 +1729,6 @@ function renderConfidenceSnapshot(
 }
 
 
-/*
-==================================================
-CONFIDENCE HELPERS
-==================================================
-*/
-
 function updateConfidenceMetric(
     valueId,
     fillId,
@@ -2446,12 +1750,6 @@ function updateConfidenceMetric(
 
 }
 
-
-/*
-==================================================
-RESTORE CONFIDENCE SELECTIONS
-==================================================
-*/
 
 function restoreConfidenceSelections() {
 
@@ -2542,12 +1840,6 @@ function restoreConfidenceSelections() {
 }
 
 
-/*
-==================================================
-CONFIDENCE LABEL
-==================================================
-*/
-
 function getConfidenceLabel(
     value
 ) {
@@ -2581,12 +1873,6 @@ function getConfidenceLabel(
 
 }
 
-
-/*
-==================================================
-CONFIDENCE USER VALUE ID
-==================================================
-*/
 
 function getConfidenceUserValueId(
     category
@@ -2622,26 +1908,14 @@ function getConfidenceUserValueId(
 }
 
 
-/*
-==================================================
-RESTORE LOCAL SELECTIONS
-==================================================
-*/
-
 function restoreLocalSelections() {
-
-    restoreApprovalSelection();
 
     restoreDirectionSelection();
 
     restoreConfidenceSelections();
 
 }
-/*
-==================================================
-PUBLIC HISTORY DISPLAY
-==================================================
-*/
+
 
 function renderCivicPulseHistory() {
 
@@ -2649,56 +1923,16 @@ function renderCivicPulseHistory() {
         pulseState.history;
 
 
-    const trendCards =
-        document.querySelectorAll(
-            ".civic-pulse-trend-card"
-        );
-
-
-    const approvalContainer =
-        trendCards[
-            0
-        ]
-            ?.querySelector(
-                ".civic-pulse-trend-placeholder"
-            );
-
-
     const confidenceContainer =
-        trendCards[
-            1
-        ]
-            ?.querySelector(
-                ".civic-pulse-trend-placeholder"
-            );
+        document.querySelector(
+            ".civic-pulse-trend-card .civic-pulse-trend-placeholder"
+        );
 
 
     if (
         history.length ===
         0
     ) {
-
-        if (
-            approvalContainer
-        ) {
-
-            approvalContainer.innerHTML = `
-                <div class="civic-pulse-history-empty">
-
-                    <strong>
-                        Building the trend
-                    </strong>
-
-                    <p>
-                        Presidential Approval history will appear as daily
-                        Civic Pulse snapshots are collected.
-                    </p>
-
-                </div>
-            `;
-
-        }
-
 
         if (
             confidenceContainer
@@ -2727,12 +1961,6 @@ function renderCivicPulseHistory() {
     }
 
 
-    renderApprovalHistory(
-        approvalContainer,
-        history
-    );
-
-
     renderConfidenceHistory(
         confidenceContainer,
         history
@@ -2740,81 +1968,6 @@ function renderCivicPulseHistory() {
 
 }
 
-
-/*
-==================================================
-APPROVAL HISTORY
-==================================================
-*/
-
-function renderApprovalHistory(
-    container,
-    history
-) {
-
-    if (!container) {
-
-        return;
-
-    }
-
-
-    const recentHistory =
-        history.slice(
-            -14
-        );
-
-
-    container.innerHTML =
-        recentHistory
-            .map(
-                record => {
-
-                    const value =
-                        clampPercent(
-                            record.presidentialApproval
-                        );
-
-
-                    return `
-                        <div class="civic-pulse-history-row">
-
-                            <span class="civic-pulse-history-date">
-                                ${escapeHtml(
-                                    formatHistoryDate(
-                                        record.date
-                                    )
-                                )}
-                            </span>
-
-                            <div class="civic-pulse-history-track">
-
-                                <div
-                                    class="civic-pulse-history-fill"
-                                    style="width: ${value}%;"
-                                ></div>
-
-                            </div>
-
-                            <strong>
-                                ${value}%
-                            </strong>
-
-                        </div>
-                    `;
-
-                }
-            )
-            .join("");
-
-}
-
-
-/*
-==================================================
-CONFIDENCE HISTORY
-==================================================
-*/
 
 function renderConfidenceHistory(
     container,
@@ -2879,12 +2032,6 @@ function renderConfidenceHistory(
 }
 
 
-/*
-==================================================
-HISTORY ERROR
-==================================================
-*/
-
 function renderHistoryUnavailable() {
 
     document
@@ -2914,12 +2061,6 @@ function renderHistoryUnavailable() {
 
 }
 
-
-/*
-==================================================
-HISTORY DATE
-==================================================
-*/
 
 function formatHistoryDate(
     value
@@ -2955,22 +2096,18 @@ function formatHistoryDate(
         .toLocaleDateString(
             undefined,
             {
+
                 month:
                     "short",
 
                 day:
                     "numeric"
+
             }
         );
 
 }
 
-
-/*
-==================================================
-PERCENTAGE
-==================================================
-*/
 
 function clampPercent(
     value
@@ -2990,12 +2127,6 @@ function clampPercent(
 
 }
 
-
-/*
-==================================================
-BAR WIDTH
-==================================================
-*/
 
 function setFillWidth(
     elementId,
@@ -3022,12 +2153,6 @@ function setFillWidth(
 
 }
 
-
-/*
-==================================================
-LOCAL STORAGE
-==================================================
-*/
 
 function getStoredValue(
     key
@@ -3079,12 +2204,6 @@ function setStoredValue(
 
 }
 
-
-/*
-==================================================
-HEADER
-==================================================
-*/
 
 function initializeHeader() {
 
@@ -3226,12 +2345,6 @@ function initializeHeader() {
 }
 
 
-/*
-==================================================
-DROPDOWNS
-==================================================
-*/
-
 function closeDropdowns() {
 
     document
@@ -3269,12 +2382,6 @@ function closeDropdowns() {
 }
 
 
-/*
-==================================================
-DOM
-==================================================
-*/
-
 function setText(
     elementId,
     value
@@ -3299,12 +2406,6 @@ function setText(
 
 }
 
-
-/*
-==================================================
-ESCAPE HTML
-==================================================
-*/
 
 function escapeHtml(
     value
@@ -3337,12 +2438,6 @@ function escapeHtml(
 }
 
 
-/*
-==================================================
-CLEANUP
-==================================================
-*/
-
 function cleanupCivicPulsePage() {
 
     if (
@@ -3361,22 +2456,10 @@ function cleanupCivicPulsePage() {
 }
 
 
-/*
-==================================================
-PAGE EXIT
-==================================================
-*/
-
 window.addEventListener(
     "pagehide",
     cleanupCivicPulsePage
 );
 
-
-/*
-==================================================
-START
-==================================================
-*/
 
 initializeCivicPulsePage();

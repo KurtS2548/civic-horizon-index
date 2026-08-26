@@ -1,0 +1,180 @@
+/* ==================================================
+   CIVIC HORIZON INDEX V2
+   HOMEPAGE CIVIC OVERVIEW
+================================================== */
+
+.civic-overview {
+    padding: 78px 0;
+    background: #ffffff;
+}
+
+.civic-overview__container {
+    width: min(1180px, calc(100% - 48px));
+    margin: 0 auto;
+}
+
+
+/* ==================================================
+   HEADING
+================================================== */
+
+.civic-overview__heading {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 36px;
+    margin-bottom: 34px;
+}
+
+.civic-overview__heading > div {
+    max-width: 760px;
+}
+
+.civic-overview__eyebrow {
+    margin: 0 0 10px;
+    color: #1f5f99;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.civic-overview__heading h2 {
+    margin: 0;
+    color: #102a43;
+    font-family: "Merriweather", Georgia, serif;
+    font-size: clamp(2rem, 4vw, 2.75rem);
+    line-height: 1.2;
+}
+
+.civic-overview__heading > div > p:last-child {
+    margin: 15px 0 0;
+    color: #627d98;
+    line-height: 1.75;
+}
+
+.civic-overview__link {
+    flex-shrink: 0;
+    color: #1f5f99;
+    font-size: 0.84rem;
+    font-weight: 800;
+    text-decoration: none;
+}
+
+.civic-overview__link:hover,
+.civic-overview__link:focus-visible {
+    text-decoration: underline;
+    outline: none;
+}
+
+
+/* ==================================================
+   GRID
+================================================== */
+
+.civic-overview__grid {
+    display: grid;
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(0, 1fr)
+        );
+    gap: 18px;
+}
+
+
+/* ==================================================
+   CARDS
+================================================== */
+
+.civic-overview-card {
+    display: flex;
+    min-width: 0;
+    min-height: 220px;
+    padding: 28px;
+    flex-direction: column;
+    border: 1px solid #d9e2ec;
+    border-radius: 16px;
+    background: #f8fafc;
+    box-shadow:
+        0 12px 30px
+        rgba(16, 42, 67, 0.06);
+}
+
+.civic-overview-card__label {
+    color: #1f5f99;
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.civic-overview-card__value {
+    display: block;
+    margin-top: 14px;
+    color: #102a43;
+    font-family: "Merriweather", Georgia, serif;
+    font-size: clamp(1.55rem, 3vw, 2.1rem);
+    line-height: 1.3;
+}
+
+.civic-overview-card p {
+    margin: 14px 0 0;
+    color: #627d98;
+    font-size: 0.88rem;
+    line-height: 1.7;
+}
+
+.civic-overview-card a {
+    margin-top: auto;
+    padding-top: 22px;
+    color: #1f5f99;
+    font-size: 0.8rem;
+    font-weight: 800;
+    text-decoration: none;
+}
+
+.civic-overview-card a:hover,
+.civic-overview-card a:focus-visible {
+    text-decoration: underline;
+    outline: none;
+}
+
+
+/* ==================================================
+   RESPONSIVE
+================================================== */
+
+@media (max-width: 760px) {
+
+    .civic-overview__heading {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .civic-overview__grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .civic-overview {
+        padding: 62px 0;
+    }
+
+    .civic-overview__container {
+        width: min(
+            1180px,
+            calc(100% - 32px)
+        );
+    }
+
+    .civic-overview-card {
+        min-height: auto;
+        padding: 22px;
+    }
+
+}

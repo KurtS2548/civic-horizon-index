@@ -12,57 +12,15 @@ import {
 
 /*
 ==================================================
-ELEMENT MAP
-==================================================
-*/
-
-const resultElements = {
-    "Strongly Approve": {
-        percentId:
-            "resultsStronglyApprovePercent",
-        barId:
-            "resultsStronglyApproveBar"
-    },
-
-    "Approve": {
-        percentId:
-            "resultsApprovePercent",
-        barId:
-            "resultsApproveBar"
-    },
-
-    "Neutral": {
-        percentId:
-            "resultsNeutralDetailedPercent",
-        barId:
-            "resultsNeutralBar"
-    },
-
-    "Disapprove": {
-        percentId:
-            "resultsDisapprovePercent",
-        barId:
-            "resultsDisapproveBar"
-    },
-
-    "Strongly Disapprove": {
-        percentId:
-            "resultsStronglyDisapprovePercent",
-        barId:
-            "resultsStronglyDisapproveBar"
-    }
-};
-
-
-/*
-==================================================
 CONTROLLER STATE
 ==================================================
 */
 
-let resultsPulseControllerInitialized = false;
+let resultsPulseControllerInitialized =
+    false;
 
-let unsubscribePulseSummary = null;
+let unsubscribePulseSummary =
+    null;
 
 
 /*
@@ -73,20 +31,30 @@ PUBLIC INITIALIZATION
 
 export function initializeResultsPulseController() {
 
-    if (resultsPulseControllerInitialized) {
+    if (
+        resultsPulseControllerInitialized
+    ) {
+
         return;
+
     }
 
-    resultsPulseControllerInitialized = true;
+
+    resultsPulseControllerInitialized =
+        true;
 
 
     unsubscribePulseSummary =
         subscribeToPresidentialApprovalSummary(
+
             summary => {
 
-                renderPulseSummary(summary);
+                renderPulseSummary(
+                    summary
+                );
 
             },
+
             error => {
 
                 console.error(
@@ -94,9 +62,11 @@ export function initializeResultsPulseController() {
                     error
                 );
 
+
                 renderPulseError();
 
             }
+
         );
 
 }
@@ -117,33 +87,32 @@ function renderPulseSummary(
             summary?.totalResponses
         ) || 0;
 
+
     const approvalPercentage =
         Number(
             summary?.approvalPercentage
         ) || 0;
+
 
     const neutralPercentage =
         Number(
             summary?.neutralPercentage
         ) || 0;
 
+
     const disapprovalPercentage =
         Number(
             summary?.disapprovalPercentage
         ) || 0;
 
-    const results =
-        Array.isArray(
-            summary?.results
-        )
-            ? summary.results
-            : [];
-
 
     setText(
         "resultsPulseTotal",
-        formatNumber(totalResponses)
+        formatNumber(
+            totalResponses
+        )
     );
+
 
     setText(
         "resultsApprovalPercent",
@@ -152,6 +121,7 @@ function renderPulseSummary(
         )
     );
 
+
     setText(
         "resultsNeutralPercent",
         formatPercentage(
@@ -159,47 +129,13 @@ function renderPulseSummary(
         )
     );
 
+
     setText(
         "resultsDisapprovalPercent",
         formatPercentage(
             disapprovalPercentage
         )
     );
-
-
-    results.forEach(result => {
-
-        const elementMap =
-            resultElements[
-                result.response
-            ];
-
-
-        if (!elementMap) {
-            return;
-        }
-
-
-        const percentage =
-            Number(
-                result.percentage
-            ) || 0;
-
-
-        setText(
-            elementMap.percentId,
-            formatPercentage(
-                percentage
-            )
-        );
-
-
-        setBarWidth(
-            elementMap.barId,
-            percentage
-        );
-
-    });
 
 }
 
@@ -217,39 +153,23 @@ function renderPulseError() {
         "—"
     );
 
+
     setText(
         "resultsApprovalPercent",
         "—"
     );
+
 
     setText(
         "resultsNeutralPercent",
         "—"
     );
 
+
     setText(
         "resultsDisapprovalPercent",
         "—"
     );
-
-
-    Object
-        .values(
-            resultElements
-        )
-        .forEach(elementMap => {
-
-            setText(
-                elementMap.percentId,
-                "—"
-            );
-
-            setBarWidth(
-                elementMap.barId,
-                0
-            );
-
-        });
 
 }
 
@@ -272,44 +192,16 @@ function setText(
 
 
     if (!element) {
+
         return;
+
     }
 
 
     element.textContent =
-        String(value);
-
-}
-
-
-function setBarWidth(
-    elementId,
-    percentage
-) {
-
-    const element =
-        document.getElementById(
-            elementId
+        String(
+            value
         );
-
-
-    if (!element) {
-        return;
-    }
-
-
-    const safePercentage =
-        Math.max(
-            0,
-            Math.min(
-                100,
-                Number(percentage) || 0
-            )
-        );
-
-
-    element.style.width =
-        `${safePercentage}%`;
 
 }
 
@@ -325,15 +217,24 @@ function formatNumber(
 ) {
 
     const number =
-        Number(value);
+        Number(
+            value
+        );
 
 
-    if (!Number.isFinite(number)) {
+    if (
+        !Number.isFinite(
+            number
+        )
+    ) {
+
         return "0";
+
     }
 
 
-    return number.toLocaleString();
+    return number
+        .toLocaleString();
 
 }
 
@@ -343,15 +244,27 @@ function formatPercentage(
 ) {
 
     const percentage =
-        Number(value);
+        Number(
+            value
+        );
 
 
-    if (!Number.isFinite(percentage)) {
+    if (
+        !Number.isFinite(
+            percentage
+        )
+    ) {
+
         return "0.0%";
+
     }
 
 
-    return `${percentage.toFixed(1)}%`;
+    return (
+        `${percentage.toFixed(
+            1
+        )}%`
+    );
 
 }
 
@@ -374,8 +287,11 @@ export function destroyResultsPulseController() {
     }
 
 
-    unsubscribePulseSummary = null;
+    unsubscribePulseSummary =
+        null;
 
-    resultsPulseControllerInitialized = false;
+
+    resultsPulseControllerInitialized =
+        false;
 
 }

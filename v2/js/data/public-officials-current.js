@@ -2968,12 +2968,45 @@ export const currentPublicOfficials = {
         U.S. HOUSE
         ==============================================
 
-        CA-01 VACANT
         CA-14 VACANT
         ==============================================
         */
 
         representatives: [
+
+                        {
+                id: "ca-01-james-gallagher",
+                personKey: "james-gallagher",
+                seatKey: "ca-house-01",
+                name: "James Gallagher",
+                party: "R",
+                officeType: "representative",
+                stateCode: "CA",
+                district: "1",
+                servingSince: "2026-06-10",
+                currentTermBegan: "2026-06-10",
+
+                jurisdiction: {
+                    type: "congressional-district",
+                    stateCode: "CA",
+                    district: "1"
+                },
+
+                sources: [],
+
+                officialRecord: {
+                    recordType: "House voting record",
+                    sourceName: "U.S. House Clerk",
+                    sourceUrl: "https://clerk.house.gov/Votes"
+                },
+
+                financialChange: {
+                    percentageLow: null,
+                    percentageHigh: null,
+                    methodologyUrl: "",
+                    sources: []
+                }
+            },
 
             {
                 id: "ca-02-jared-huffman",
