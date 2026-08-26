@@ -7,12 +7,17 @@ STATE QUESTION SERVICE
 Firebase structure:
 
 stateQuestions/
+
     NJ/
+
         questionId/
+
             question
             active
+            order
             createdAt
             updatedAt
+
 ==================================================
 */
 
@@ -28,6 +33,7 @@ import {
 
     ref,
     push,
+    get,
     set,
     update,
     remove,
@@ -128,6 +134,67 @@ export async function createStateQuestion(
         );
 
 
+    /*
+    Determine the next explicit order.
+
+    Older questions may not yet have an order field.
+    They remain fully compatible and will continue to
+    appear before newly ordered questions until the
+    admin intentionally reorders the state list.
+    */
+
+    const snapshot =
+        await get(
+            stateReference
+        );
+
+
+    let highestOrder =
+        0;
+
+
+    if (
+        snapshot.exists()
+    ) {
+
+        snapshot.forEach(
+            childSnapshot => {
+
+                const value =
+                    childSnapshot.val() ||
+                    {};
+
+
+                const existingOrder =
+                    Number(
+                        value.order
+                    );
+
+
+                if (
+                    Number.isFinite(
+                        existingOrder
+                    ) &&
+                    existingOrder >
+                    highestOrder
+                ) {
+
+                    highestOrder =
+                        existingOrder;
+
+                }
+
+            }
+        );
+
+    }
+
+
+    const nextOrder =
+        highestOrder +
+        1;
+
+
     const questionReference =
         push(
             stateReference
@@ -157,6 +224,9 @@ export async function createStateQuestion(
 
         active:
             true,
+
+        order:
+            nextOrder,
 
         createdAt:
             timestamp,
@@ -254,22 +324,7 @@ export function subscribeToStateQuestions(
 
 
             questions.sort(
-                (
-                    first,
-                    second
-                ) => {
-
-                    return String(
-                        second.createdAt ||
-                        ""
-                    ).localeCompare(
-                        String(
-                            first.createdAt ||
-                            ""
-                        )
-                    );
-
-                }
+                compareStateQuestions
             );
 
 
@@ -281,6 +336,109 @@ export function subscribeToStateQuestions(
 
         errorCallback
 
+    );
+
+}
+
+
+/*
+==================================================
+QUESTION SORTING
+==================================================
+*/
+
+function compareStateQuestions(
+    first,
+    second
+) {
+
+    const firstOrder =
+        Number(
+            first.order
+        );
+
+
+    const secondOrder =
+        Number(
+            second.order
+        );
+
+
+    const firstHasOrder =
+        Number.isFinite(
+            firstOrder
+        );
+
+
+    const secondHasOrder =
+        Number.isFinite(
+            secondOrder
+        );
+
+
+    /*
+    Both questions have an explicit order.
+    */
+
+    if (
+        firstHasOrder &&
+        secondHasOrder
+    ) {
+
+        if (
+            firstOrder !==
+            secondOrder
+        ) {
+
+            return (
+                firstOrder -
+                secondOrder
+            );
+
+        }
+
+    }
+
+
+    /*
+    Legacy questions without an order remain ahead
+    of newly ordered questions until the administrator
+    intentionally reorders the complete list.
+    */
+
+    if (
+        !firstHasOrder &&
+        secondHasOrder
+    ) {
+
+        return -1;
+
+    }
+
+
+    if (
+        firstHasOrder &&
+        !secondHasOrder
+    ) {
+
+        return 1;
+
+    }
+
+
+    /*
+    Legacy fallback:
+    oldest question first.
+    */
+
+    return String(
+        first.createdAt ||
+        ""
+    ).localeCompare(
+        String(
+            second.createdAt ||
+            ""
+        )
     );
 
 }
@@ -361,6 +519,23 @@ export async function updateStateQuestion(
 
 
     if (
+        Object.prototype
+            .hasOwnProperty
+            .call(
+                updates,
+                "order"
+            )
+    ) {
+
+        recordUpdates.order =
+            validateOrder(
+                updates.order
+            );
+
+    }
+
+
+    if (
         Object.keys(
             recordUpdates
         ).length ===
@@ -408,6 +583,137 @@ export async function updateStateQuestion(
 
 /*
 ==================================================
+REORDER STATE QUESTIONS
+==================================================
+*/
+
+export async function reorderStateQuestions(
+    stateCode,
+    questionIds
+) {
+
+    const cleanStateCode =
+        validateStateCode(
+            stateCode
+        );
+
+
+    if (
+        !Array.isArray(
+            questionIds
+        ) ||
+        questionIds.length ===
+        0
+    ) {
+
+        throw new Error(
+            "A state question order is required."
+        );
+
+    }
+
+
+    const cleanQuestionIds =
+        questionIds.map(
+            questionId =>
+                validateQuestionId(
+                    questionId
+                )
+        );
+
+
+    const uniqueQuestionIds =
+        new Set(
+            cleanQuestionIds
+        );
+
+
+    if (
+        uniqueQuestionIds.size !==
+        cleanQuestionIds.length
+    ) {
+
+        throw new Error(
+            "Duplicate state question IDs are not allowed."
+        );
+
+    }
+
+
+    const timestamp =
+        new Date()
+            .toISOString();
+
+
+    const updates =
+        {};
+
+
+    cleanQuestionIds.forEach(
+        (
+            questionId,
+            index
+        ) => {
+
+            const order =
+                index +
+                1;
+
+
+            updates[
+                `stateQuestions/${cleanStateCode}/${questionId}/order`
+            ] =
+                order;
+
+
+            updates[
+                `stateQuestions/${cleanStateCode}/${questionId}/updatedAt`
+            ] =
+                timestamp;
+
+        }
+    );
+
+
+    await update(
+        ref(
+            database
+        ),
+        updates
+    );
+
+
+    return cleanQuestionIds.map(
+        (
+            questionId,
+            index
+        ) => {
+
+            return {
+
+                id:
+                    questionId,
+
+                stateCode:
+                    cleanStateCode,
+
+                order:
+                    index +
+                    1,
+
+                updatedAt:
+                    timestamp
+
+            };
+
+        }
+    );
+
+}
+
+
+/*
+==================================================
 DELETE STATE QUESTION
 ==================================================
 */
@@ -430,10 +736,12 @@ export async function deleteStateQuestion(
 
 
     await remove(
+
         ref(
             database,
             `stateQuestions/${cleanStateCode}/${cleanQuestionId}`
         )
+
     );
 
 }
@@ -525,6 +833,44 @@ function validateQuestion(
 
 /*
 ==================================================
+ORDER VALIDATION
+==================================================
+*/
+
+function validateOrder(
+    order
+) {
+
+    const cleanOrder =
+        Number(
+            order
+        );
+
+
+    if (
+        !Number.isInteger(
+            cleanOrder
+        ) ||
+        cleanOrder <
+        1 ||
+        cleanOrder >
+        1000
+    ) {
+
+        throw new Error(
+            "A valid state question order is required."
+        );
+
+    }
+
+
+    return cleanOrder;
+
+}
+
+
+/*
+==================================================
 QUESTION ID VALIDATION
 ==================================================
 */
@@ -543,7 +889,7 @@ function validateQuestionId(
 
     if (
         !cleanQuestionId ||
-        /[.#$\[\]\/]/.test(
+        /[.#$[\]\/]/.test(
             cleanQuestionId
         )
     ) {

@@ -6,6 +6,13 @@ SIMULATION CENTER
 */
 
 
+import {
+
+    getAllSimulationProgress
+
+} from "./services/simulation-progress-service.js";
+
+
 /*
 ==================================================
 SIMULATION DEFINITIONS
@@ -211,6 +218,16 @@ const simulations = [
 
 /*
 ==================================================
+CURRENT ACCOUNT RECORDS
+==================================================
+*/
+
+let accountSimulationProgress =
+    {};
+
+
+/*
+==================================================
 COMPONENT LOADING
 ==================================================
 */
@@ -344,7 +361,54 @@ async function initializeSimulationsPage() {
 
     initializeHeader();
 
-    updateSimulationProgress();
+
+    await updateSimulationProgress();
+
+}
+
+
+/*
+==================================================
+LOAD ACCOUNT PROGRESS
+==================================================
+*/
+
+async function loadAccountSimulationProgress() {
+
+    try {
+
+        const progress =
+            await getAllSimulationProgress();
+
+
+        if (
+            progress &&
+            typeof progress ===
+                "object"
+        ) {
+
+            accountSimulationProgress =
+                progress;
+
+        } else {
+
+            accountSimulationProgress =
+                {};
+
+        }
+
+    } catch (error) {
+
+        console.warn(
+            "Account simulation progress could not be loaded. Using local browser progress as a fallback.",
+            error
+        );
+
+
+        accountSimulationProgress =
+            {};
+
+    }
 
 }
 
@@ -355,20 +419,24 @@ SIMULATION PROGRESS
 ==================================================
 */
 
-function updateSimulationProgress() {
+async function updateSimulationProgress() {
+
+    await loadAccountSimulationProgress();
+
+
+    const records =
+        simulations.map(
+            simulation =>
+                getResolvedSimulationRecord(
+                    simulation
+                )
+        );
+
 
     const completedCount =
-        simulations.filter(
-            simulation => {
-
-                return (
-                    getStoredValue(
-                        simulation.completedKey
-                    ) ===
-                    "true"
-                );
-
-            }
+        records.filter(
+            record =>
+                record.completed
         ).length;
 
 
@@ -424,9 +492,207 @@ function updateSimulationProgress() {
     }
 
 
-    updateOverviewRecord();
+    updateOverviewRecord(
+        records
+    );
 
-    updateAllSimulationRecords();
+
+    updateAllSimulationRecords(
+        records
+    );
+
+}
+
+
+/*
+==================================================
+RESOLVE ONE SIMULATION RECORD
+==================================================
+*/
+
+function getResolvedSimulationRecord(
+    simulation
+) {
+
+    const accountRecord =
+        accountSimulationProgress[
+            simulation.id
+        ];
+
+
+    if (
+        isUsableAccountRecord(
+            accountRecord
+        )
+    ) {
+
+        return normalizeAccountRecord(
+            simulation,
+            accountRecord
+        );
+
+    }
+
+
+    return getLocalSimulationRecord(
+        simulation
+    );
+
+}
+
+
+/*
+==================================================
+ACCOUNT RECORD VALIDATION
+==================================================
+*/
+
+function isUsableAccountRecord(
+    record
+) {
+
+    return Boolean(
+        record &&
+        typeof record ===
+            "object" &&
+        (
+            record.completed ===
+                true ||
+            Number(
+                record.runs ||
+                0
+            ) >
+                0 ||
+            String(
+                record.lastGrade ||
+                ""
+            ).trim()
+        )
+    );
+
+}
+
+
+/*
+==================================================
+NORMALIZE ACCOUNT RECORD
+==================================================
+*/
+
+function normalizeAccountRecord(
+    simulation,
+    record
+) {
+
+    const rawRuns =
+        Number(
+            record.runs ||
+            0
+        );
+
+
+    const runs =
+        Number.isFinite(
+            rawRuns
+        )
+            ? Math.max(
+                0,
+                rawRuns
+            )
+            : 0;
+
+
+    const grade =
+        String(
+            record.lastGrade ||
+            ""
+        ).trim() ||
+        "—";
+
+
+    const completed =
+        record.completed ===
+            true ||
+        runs >
+            0;
+
+
+    const lastCompletedAt =
+        normalizeCompletionDate(
+            record.lastCompletedAt
+        );
+
+
+    return {
+
+        simulation,
+
+        source:
+            "account",
+
+        completed,
+
+        grade,
+
+        runs,
+
+        lastCompletedAt
+
+    };
+
+}
+
+
+/*
+==================================================
+LOCAL STORAGE FALLBACK RECORD
+==================================================
+*/
+
+function getLocalSimulationRecord(
+    simulation
+) {
+
+    const completed =
+        getStoredValue(
+            simulation.completedKey
+        ) ===
+        "true";
+
+
+    const grade =
+        getStoredValue(
+            simulation.gradeKey
+        ) ||
+        "—";
+
+
+    const runs =
+        getLocalSimulationRuns(
+            simulation
+        );
+
+
+    return {
+
+        simulation,
+
+        source:
+            "local",
+
+        completed:
+            completed ||
+            runs >
+                0,
+
+        grade,
+
+        runs,
+
+        lastCompletedAt:
+            null
+
+    };
 
 }
 
@@ -437,39 +703,16 @@ OVERVIEW RECORD
 ==================================================
 */
 
-function updateOverviewRecord() {
+function updateOverviewRecord(
+    records
+) {
 
     const completedRecords =
-        simulations
-            .map(
-                simulation => {
-
-                    const runs =
-                        getSimulationRuns(
-                            simulation
-                        );
-
-
-                    return {
-
-                        simulation,
-
-                        runs,
-
-                        grade:
-                            getStoredValue(
-                                simulation.gradeKey
-                            ) ||
-                            "—"
-
-                    };
-
-                }
-            )
-            .filter(
-                record =>
-                    record.runs > 0
-            );
+        records.filter(
+            record =>
+                record.runs >
+                0
+        );
 
 
     const totalRuns =
@@ -495,17 +738,10 @@ function updateOverviewRecord() {
     );
 
 
-    /*
-    The overview uses the most recently listed
-    completed simulation record available in
-    local storage. Individual role cards always
-    retain their own latest grades.
-    */
-
     const latestRecord =
-        completedRecords[
-            completedRecords.length - 1
-        ];
+        getLatestSimulationRecord(
+            completedRecords
+        );
 
 
     setText(
@@ -520,17 +756,121 @@ function updateOverviewRecord() {
 
 /*
 ==================================================
+LATEST COMPLETION
+==================================================
+*/
+
+function getLatestSimulationRecord(
+    records
+) {
+
+    const datedRecords =
+        records
+            .filter(
+                record =>
+                    record.lastCompletedAt
+            )
+            .sort(
+                (
+                    recordA,
+                    recordB
+                ) => {
+
+                    return (
+                        recordB.lastCompletedAt -
+                        recordA.lastCompletedAt
+                    );
+
+                }
+            );
+
+
+    if (
+        datedRecords.length >
+        0
+    ) {
+
+        return datedRecords[0];
+
+    }
+
+
+    /*
+    Local-storage records created before account-based
+    progress did not include completion timestamps.
+
+    If no Firebase timestamp exists yet, use the last
+    available legacy record only as a fallback.
+    */
+
+    return (
+        records[
+            records.length - 1
+        ] ||
+        null
+    );
+
+}
+
+
+/*
+==================================================
+COMPLETION DATE
+==================================================
+*/
+
+function normalizeCompletionDate(
+    value
+) {
+
+    if (
+        !value
+    ) {
+
+        return null;
+
+    }
+
+
+    const timestamp =
+        Date.parse(
+            String(
+                value
+            )
+        );
+
+
+    if (
+        !Number.isFinite(
+            timestamp
+        )
+    ) {
+
+        return null;
+
+    }
+
+
+    return timestamp;
+
+}
+
+
+/*
+==================================================
 ALL ROLE RECORDS
 ==================================================
 */
 
-function updateAllSimulationRecords() {
+function updateAllSimulationRecords(
+    records
+) {
 
-    simulations.forEach(
-        simulation => {
+    records.forEach(
+        record => {
 
             updateSimulationRecord(
-                simulation
+                record
             );
 
         }
@@ -546,40 +886,25 @@ INDIVIDUAL ROLE RECORD
 */
 
 function updateSimulationRecord(
-    simulation
+    recordData
 ) {
 
-    const completed =
-        getStoredValue(
-            simulation.completedKey
-        ) ===
-        "true";
-
-
-    const grade =
-        getStoredValue(
-            simulation.gradeKey
-        ) ||
-        "—";
-
-
-    const runs =
-        getSimulationRuns(
-            simulation
-        );
+    const simulation =
+        recordData.simulation;
 
 
     setText(
         simulation.gradeId,
-        runs > 0
-            ? grade
+        recordData.runs >
+            0
+            ? recordData.grade
             : "—"
     );
 
 
     setText(
         simulation.runsId,
-        runs
+        recordData.runs
     );
 
 
@@ -594,7 +919,7 @@ function updateSimulationRecord(
     ) {
 
         record.hidden =
-            runs ===
+            recordData.runs ===
             0;
 
     }
@@ -611,7 +936,7 @@ function updateSimulationRecord(
     ) {
 
         button.textContent =
-            completed
+            recordData.completed
                 ? simulation.completedButtonText
                 : simulation.defaultButtonText;
 
@@ -622,11 +947,11 @@ function updateSimulationRecord(
 
 /*
 ==================================================
-RUN COUNT
+LOCAL RUN COUNT
 ==================================================
 */
 
-function getSimulationRuns(
+function getLocalSimulationRuns(
     simulation
 ) {
 
@@ -668,38 +993,47 @@ function getSimulationAchievement(
     completedCount
 ) {
 
-    const achievements = {
+    if (
+        completedCount ===
+        0
+    ) {
 
-        0:
-            "New Public Servant",
+        return "Getting Started";
 
-        1:
-            "Civic Decision Maker",
-
-        2:
-            "Public Leadership Explorer",
-
-        3:
-            "Government Strategist",
-
-        4:
-            "Experienced Public Servant",
-
-        5:
-            "Civic Leadership Scholar",
-
-        6:
-            "Civic Simulation Graduate"
-
-    };
+    }
 
 
-    return (
-        achievements[
-            completedCount
-        ] ||
-        "New Public Servant"
-    );
+    if (
+        completedCount <=
+        2
+    ) {
+
+        return "Exploring Government";
+
+    }
+
+
+    if (
+        completedCount <=
+        4
+    ) {
+
+        return "Making Progress";
+
+    }
+
+
+    if (
+        completedCount ===
+        5
+    ) {
+
+        return "Almost Complete";
+
+    }
+
+
+    return "Simulation Series Complete";
 
 }
 
@@ -1020,7 +1354,7 @@ window.addEventListener(
     "pageshow",
     () => {
 
-        updateSimulationProgress();
+        void updateSimulationProgress();
 
     }
 );
@@ -1032,4 +1366,4 @@ START PAGE
 ==================================================
 */
 
-initializeSimulationsPage();
+void initializeSimulationsPage();

@@ -1,0 +1,325 @@
+<section
+    class="admin-section admin-contact-messages"
+    id="adminContactMessagesSection"
+>
+
+    <div class="admin-section__header">
+
+        <div>
+
+            <p class="admin-section__eyebrow">
+                PARTICIPANT SUPPORT
+            </p>
+
+            <h2>
+                Contact Messages
+            </h2>
+
+            <p class="admin-section__description">
+                Review participant questions, account issues,
+                technical problems, privacy concerns, and feedback.
+            </p>
+
+        </div>
+
+
+        <div class="admin-contact-messages__summary">
+
+            <div class="admin-contact-messages__summary-item">
+
+                <span>
+                    New
+                </span>
+
+                <strong id="adminContactNewCount">
+                    0
+                </strong>
+
+            </div>
+
+
+            <div class="admin-contact-messages__summary-item">
+
+                <span>
+                    Under Review
+                </span>
+
+                <strong id="adminContactReviewCount">
+                    0
+                </strong>
+
+            </div>
+
+
+            <div class="admin-contact-messages__summary-item">
+
+                <span>
+                    Resolved
+                </span>
+
+                <strong id="adminContactResolvedCount">
+                    0
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!--
+    ==================================================
+    WORKFLOW
+    ==================================================
+    -->
+
+    <div class="admin-contact-messages__workflow">
+
+        <div class="admin-contact-messages__workflow-step">
+
+            <span>
+                1
+            </span>
+
+            <strong>
+                New
+            </strong>
+
+            <p>
+                Messages that have not been reviewed yet.
+            </p>
+
+        </div>
+
+
+        <div class="admin-contact-messages__workflow-arrow">
+            →
+        </div>
+
+
+        <div class="admin-contact-messages__workflow-step">
+
+            <span>
+                2
+            </span>
+
+            <strong>
+                Under Review
+            </strong>
+
+            <p>
+                Messages that need follow-up or investigation.
+            </p>
+
+        </div>
+
+
+        <div class="admin-contact-messages__workflow-arrow">
+            →
+        </div>
+
+
+        <div class="admin-contact-messages__workflow-step">
+
+            <span>
+                3
+            </span>
+
+            <strong>
+                Resolved
+            </strong>
+
+            <p>
+                Issues that have been handled.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!--
+    ==================================================
+    FILTERS
+    ==================================================
+    -->
+
+    <div class="admin-contact-messages__toolbar">
+
+        <div class="admin-contact-messages__filter">
+
+            <label for="adminContactStatusFilter">
+                Status
+            </label>
+
+            <select id="adminContactStatusFilter">
+
+                <option
+                    value="new"
+                    selected
+                >
+                    New
+                </option>
+
+                <option value="underReview">
+                    Under Review
+                </option>
+
+                <option value="resolved">
+                    Resolved
+                </option>
+
+                <option value="archived">
+                    Archived
+                </option>
+
+                <option value="all">
+                    All Messages
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="admin-contact-messages__filter">
+
+            <label for="adminContactCategoryFilter">
+                Category
+            </label>
+
+            <select id="adminContactCategoryFilter">
+
+                <option value="all">
+                    All Categories
+                </option>
+
+                <option value="problem">
+                    Problems
+                </option>
+
+                <option value="account">
+                    Account
+                </option>
+
+                <option value="privacy">
+                    Privacy
+                </option>
+
+                <option value="general">
+                    General
+                </option>
+
+                <option value="feedback">
+                    Feedback
+                </option>
+
+                <option value="other">
+                    Accessibility / Other
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="admin-contact-messages__search">
+
+            <label for="adminContactSearch">
+                Search
+            </label>
+
+            <input
+                type="search"
+                id="adminContactSearch"
+                placeholder="Search name, email, or message"
+            >
+
+        </div>
+
+    </div>
+
+
+    <!--
+    ==================================================
+    MESSAGE
+    ==================================================
+    -->
+
+    <div
+        class="admin-contact-messages__message"
+        id="adminContactMessagesMessage"
+        aria-live="polite"
+    ></div>
+
+
+    <!--
+    ==================================================
+    MESSAGE LIST
+    ==================================================
+    -->
+
+    <div
+        class="admin-contact-messages__list"
+        id="adminContactMessagesList"
+    >
+
+        <div class="admin-contact-messages__empty">
+
+            <p>
+                Loading contact messages...
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!--
+    ==================================================
+    EMPTY STATE
+    ==================================================
+    -->
+
+    <template id="adminContactMessagesEmptyTemplate">
+
+        <div class="admin-contact-messages__empty">
+
+            <h3>
+                No messages found
+            </h3>
+
+            <p>
+                There are no contact messages matching
+                the current filters.
+            </p>
+
+        </div>
+
+    </template>
+
+
+    <!--
+    ==================================================
+    ADMIN NOTE
+    ==================================================
+    -->
+
+    <div class="admin-contact-messages__note">
+
+        <strong>
+            Keep the queue simple
+        </strong>
+
+        <p>
+            New messages should be reviewed first.
+            Move messages to Under Review only when
+            follow-up is needed. Mark completed issues
+            Resolved, and use Archive for older messages
+            that no longer need to remain in the active queue.
+        </p>
+
+    </div>
+
+</section>

@@ -3,6 +3,24 @@
    STATE EXPLORER
 ================================================== */
 
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    background: #ffffff;
+    color: #243b53;
+    font-family: "Inter", sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+
 .states-page {
     background: #ffffff;
 }

@@ -11,7 +11,8 @@ import {
     createStateQuestion,
     subscribeToStateQuestions,
     updateStateQuestion,
-    deleteStateQuestion
+    deleteStateQuestion,
+    reorderStateQuestions
 
 } from "../services/state-question-service.js";
 
@@ -76,6 +77,10 @@ let activeStateSubscription =
     null;
 
 
+let currentQuestions =
+    [];
+
+
 /*
 ==================================================
 INITIALIZE
@@ -89,20 +94,24 @@ export function initializeAdminStateQuestions() {
             "adminStateQuestionState"
         );
 
+
     const list =
         document.getElementById(
             "adminStateQuestionsList"
         );
+
 
     const editor =
         document.getElementById(
             "adminStateQuestionEditor"
         );
 
+
     const questionInput =
         document.getElementById(
             "adminStateQuestionText"
         );
+
 
     const addButton =
         document.getElementById(
@@ -136,12 +145,18 @@ export function initializeAdminStateQuestions() {
             stopActiveSubscription();
 
 
+            currentQuestions =
+                [];
+
+
             if (
                 !stateCode ||
                 !states[stateCode]
             ) {
 
-                if (editor) {
+                if (
+                    editor
+                ) {
 
                     editor.hidden =
                         true;
@@ -159,7 +174,9 @@ export function initializeAdminStateQuestions() {
             }
 
 
-            if (editor) {
+            if (
+                editor
+            ) {
 
                 editor.hidden =
                     false;
@@ -167,7 +184,9 @@ export function initializeAdminStateQuestions() {
             }
 
 
-            if (questionInput) {
+            if (
+                questionInput
+            ) {
 
                 questionInput.value =
                     "";
@@ -188,10 +207,18 @@ export function initializeAdminStateQuestions() {
 
                     questions => {
 
+                        currentQuestions =
+                            Array.isArray(
+                                questions
+                            )
+                                ? questions
+                                : [];
+
+
                         renderStateQuestions(
                             list,
                             stateCode,
-                            questions
+                            currentQuestions
                         );
 
                     },
@@ -202,6 +229,10 @@ export function initializeAdminStateQuestions() {
                             "State questions could not be loaded:",
                             error
                         );
+
+
+                        currentQuestions =
+                            [];
 
 
                         renderLoadError(
@@ -229,6 +260,7 @@ export function initializeAdminStateQuestions() {
                 const stateCode =
                     select.value;
 
+
                 const question =
                     questionInput
                         .value
@@ -245,7 +277,9 @@ export function initializeAdminStateQuestions() {
                 }
 
 
-                if (!question) {
+                if (
+                    !question
+                ) {
 
                     questionInput.focus();
 
@@ -276,7 +310,6 @@ export function initializeAdminStateQuestions() {
 
                     questionInput.focus();
 
-
                 } catch (error) {
 
                     console.error(
@@ -289,7 +322,6 @@ export function initializeAdminStateQuestions() {
                         error?.message ||
                         "The state question could not be added."
                     );
-
 
                 } finally {
 
@@ -318,7 +350,9 @@ export function initializeAdminStateQuestions() {
                 );
 
 
-            if (!button) {
+            if (
+                !button
+            ) {
 
                 return;
 
@@ -329,9 +363,11 @@ export function initializeAdminStateQuestions() {
                 button.dataset
                     .stateQuestionAction;
 
+
             const questionId =
                 button.dataset
                     .questionId;
+
 
             const stateCode =
                 select.value;
@@ -372,6 +408,42 @@ export function initializeAdminStateQuestions() {
                 await handleToggleQuestion(
                     stateCode,
                     questionId,
+                    button
+                );
+
+
+                return;
+
+            }
+
+
+            if (
+                action ===
+                "move-up"
+            ) {
+
+                await handleMoveQuestion(
+                    stateCode,
+                    questionId,
+                    -1,
+                    button
+                );
+
+
+                return;
+
+            }
+
+
+            if (
+                action ===
+                "move-down"
+            ) {
+
+                await handleMoveQuestion(
+                    stateCode,
+                    questionId,
+                    1,
                     button
                 );
 
@@ -438,7 +510,9 @@ async function handleEditQuestion(
         updatedQuestion.trim();
 
 
-    if (!cleanQuestion) {
+    if (
+        !cleanQuestion
+    ) {
 
         return;
 
@@ -460,7 +534,6 @@ async function handleEditQuestion(
             }
         );
 
-
     } catch (error) {
 
         console.error(
@@ -473,7 +546,6 @@ async function handleEditQuestion(
             error?.message ||
             "The state question could not be updated."
         );
-
 
     } finally {
 
@@ -517,7 +589,6 @@ async function handleToggleQuestion(
             }
         );
 
-
     } catch (error) {
 
         console.error(
@@ -531,8 +602,117 @@ async function handleToggleQuestion(
             "The question status could not be updated."
         );
 
-
     } finally {
+
+        button.disabled =
+            false;
+
+    }
+
+}
+
+
+/*
+==================================================
+MOVE QUESTION
+==================================================
+*/
+
+async function handleMoveQuestion(
+    stateCode,
+    questionId,
+    direction,
+    button
+) {
+
+    const currentIndex =
+        currentQuestions.findIndex(
+            item =>
+                item.id ===
+                questionId
+        );
+
+
+    if (
+        currentIndex ===
+        -1
+    ) {
+
+        return;
+
+    }
+
+
+    const targetIndex =
+        currentIndex +
+        direction;
+
+
+    if (
+        targetIndex <
+            0 ||
+        targetIndex >=
+            currentQuestions.length
+    ) {
+
+        return;
+
+    }
+
+
+    const reorderedQuestions =
+        [
+            ...currentQuestions
+        ];
+
+
+    const [
+        movedQuestion
+    ] =
+        reorderedQuestions.splice(
+            currentIndex,
+            1
+        );
+
+
+    reorderedQuestions.splice(
+        targetIndex,
+        0,
+        movedQuestion
+    );
+
+
+    const orderedIds =
+        reorderedQuestions.map(
+            item =>
+                item.id
+        );
+
+
+    try {
+
+        button.disabled =
+            true;
+
+
+        await reorderStateQuestions(
+            stateCode,
+            orderedIds
+        );
+
+    } catch (error) {
+
+        console.error(
+            "State question order could not be updated:",
+            error
+        );
+
+
+        window.alert(
+            error?.message ||
+            "The question order could not be updated."
+        );
+
 
         button.disabled =
             false;
@@ -560,7 +740,9 @@ async function handleDeleteQuestion(
         );
 
 
-    if (!confirmed) {
+    if (
+        !confirmed
+    ) {
 
         return;
 
@@ -581,7 +763,6 @@ async function handleDeleteQuestion(
             stateCode,
             questionId
         );
-
 
     } catch (error) {
 
@@ -847,7 +1028,8 @@ function renderStateQuestions(
                                 index
                             ) => createQuestionItem(
                                 item,
-                                index
+                                index,
+                                cleanQuestions.length
                             )
                         )
                         .join("")
@@ -932,12 +1114,24 @@ QUESTION ITEM
 
 function createQuestionItem(
     item,
-    index
+    index,
+    totalQuestions
 ) {
 
     const isActive =
         item.active ===
         true;
+
+
+    const isFirst =
+        index ===
+        0;
+
+
+    const isLast =
+        index ===
+        totalQuestions -
+        1;
 
 
     return `
@@ -977,6 +1171,26 @@ function createQuestionItem(
 
 
             <div class="admin-state-question-actions">
+
+                <button
+                    type="button"
+                    data-state-question-action="move-up"
+                    data-question-id="${escapeHtml(item.id)}"
+                    ${isFirst ? "disabled" : ""}
+                >
+                    ↑ Move Up
+                </button>
+
+
+                <button
+                    type="button"
+                    data-state-question-action="move-down"
+                    data-question-id="${escapeHtml(item.id)}"
+                    ${isLast ? "disabled" : ""}
+                >
+                    ↓ Move Down
+                </button>
+
 
                 <button
                     type="button"
@@ -1114,7 +1328,8 @@ function escapeHtml(
 ) {
 
     return String(
-        value ?? ""
+        value ??
+        ""
     )
         .replace(
             /&/g,

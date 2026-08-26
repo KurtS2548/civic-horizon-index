@@ -2892,7 +2892,7 @@ function renderScenario() {
     ) {
 
         scenarioProgress.textContent =
-            `Decision ${currentScenarioIndex + 1} of ${getEstimatedDecisionCount()}`;
+    `Decision ${currentScenarioIndex + 1}`;
 
     }
 

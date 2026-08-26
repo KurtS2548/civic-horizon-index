@@ -35,12 +35,16 @@
       },
 
       "updatedAt": {
-        ".validate": "newData.isString() && newData.val().length >= 20 && newData.val().length <= 40"
-      },
+    ".validate": "newData.isString() && newData.val().length >= 20 && newData.val().length <= 40"
+},
 
-      "$other": {
-        ".validate": false
-      }
+"order": {
+    ".validate": "!newData.exists() || (newData.isNumber() && newData.val() >= 1 && newData.val() <= 1000)"
+},
+
+"$other": {
+    ".validate": false
+}
     }
   }
 },
@@ -326,7 +330,7 @@
         },
 
         "source": {
-          ".validate": "newData.isString() && newData.val() === 'contactPage'"
+          ".validate": "newData.isString() && newData.val() === 'profilePage'"
         },
 
         "submittedByUid": {
@@ -392,12 +396,20 @@
         },
 
         "submittedByVerifiedAccount": {
-          ".validate": "newData.isBoolean() && auth != null && auth.token.email_verified === true && newData.val() === true"
-        },
+  ".validate": "newData.isBoolean() && auth != null && auth.token.email_verified === true && newData.val() === true"
+},
 
-        "$other": {
-          ".validate": false
-        }
+"reviewedAt": {
+  ".validate": "!newData.exists() || (auth != null && auth.uid === '46MRUizWh5Yl83XXk4CBuI3TUZc2' && newData.isString() && newData.val().length >= 20 && newData.val().length <= 40)"
+},
+
+"reviewedBy": {
+  ".validate": "!newData.exists() || (auth != null && auth.uid === '46MRUizWh5Yl83XXk4CBuI3TUZc2' && newData.isString() && newData.val() === '46MRUizWh5Yl83XXk4CBuI3TUZc2')"
+},
+
+"$other": {
+  ".validate": false
+}
       }
     },
         "userProfiles": {
@@ -683,6 +695,24 @@
 
             "lastResult": {
               ".validate": "!newData.exists() || (newData.isString() && newData.val().length <= 2000)"
+            },
+
+            "$other": {
+              ".validate": false
+            }
+          }
+        },
+
+              "pollSuggestions": {
+          "$suggestionId": {
+            ".validate": "newData.hasChildren(['questionKey', 'submittedAt'])",
+
+            "questionKey": {
+              ".validate": "newData.isString() && newData.val().length >= 10 && newData.val().length <= 500"
+            },
+
+            "submittedAt": {
+              ".validate": "newData.isString() && newData.val().length >= 20 && newData.val().length <= 40"
             },
 
             "$other": {

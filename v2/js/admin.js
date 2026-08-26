@@ -33,6 +33,9 @@ let pollSuggestionsStarted =
 
 let stateQuestionsStarted =
     false;
+ 
+let contactMessagesStarted =
+    false;
 
 let unauthorizedSignOutRunning =
     false;
@@ -758,6 +761,67 @@ async function showAuthenticatedAdmin(
 
 }
 
+    /*
+    ----------------------------------------------
+    CONTACT MESSAGES CONTROLLER
+    ----------------------------------------------
+    */
+
+    if (
+        !contactMessagesStarted
+    ) {
+
+        await startContactMessagesController();
+
+        contactMessagesStarted =
+            true;
+
+    }
+
+}
+
+/*
+==================================================
+START CONTACT MESSAGES CONTROLLER
+==================================================
+*/
+
+async function startContactMessagesController() {
+
+    try {
+
+        const controllerModule =
+            await import(
+                "./controllers/admin-contact-messages-controller.js"
+            );
+
+
+        if (
+            typeof controllerModule
+                .initializeAdminContactMessages !==
+            "function"
+        ) {
+
+            throw new Error(
+                "Contact Messages controller initialization function was not found."
+            );
+
+        }
+
+
+        controllerModule
+            .initializeAdminContactMessages();
+
+
+    } catch (error) {
+
+        console.error(
+            "Contact Messages manager could not start:",
+            error
+        );
+
+    }
+
 }
 
 /*
@@ -870,6 +934,11 @@ async function loadAdminComponents() {
         loadComponent(
             "adminCommunityPollsContainer",
             "components/admin-community-polls.html"
+        ),
+
+        loadComponent(
+            "adminContactMessagesContainer",
+            "components/admin-contact-messages.html"
         ),
 
         loadComponent(

@@ -334,25 +334,43 @@ function getAcademyRank(
     completedCount
 ) {
 
-    const ranks = {
+    if (
+        completedCount === 0
+    ) {
 
-        0: "New Civic Explorer",
-        1: "Civic Explorer I",
-        2: "Civic Explorer II",
-        3: "Civic Explorer III",
-        4: "Civic Scholar I",
-        5: "Civic Scholar II",
-        6: "Civic Scholar III",
-        7: "Constitution Scholar",
-        8: "Civic Academy Graduate"
+        return "Getting Started";
 
-    };
+    }
 
 
-    return (
-        ranks[completedCount] ||
-        "New Civic Explorer"
-    );
+    if (
+        completedCount <= 3
+    ) {
+
+        return "Building Foundations";
+
+    }
+
+
+    if (
+        completedCount <= 6
+    ) {
+
+        return "Making Progress";
+
+    }
+
+
+    if (
+        completedCount === 7
+    ) {
+
+        return "Almost Complete";
+
+    }
+
+
+    return "Learning Path Complete";
 
 }
 

@@ -1,6 +1,6 @@
 /* ==================================================
    CIVIC HORIZON INDEX V2
-   ABOUT PAGE
+   METHODOLOGY PAGE
 ================================================== */
 
 *,
@@ -21,16 +21,16 @@ body {
     -webkit-font-smoothing: antialiased;
 }
 
-.about-page {
+.methodology-page {
     min-height: 65vh;
 }
 
 
 /* ==================================================
-   ABOUT HERO
+   HERO
 ================================================== */
 
-.about-hero {
+.methodology-hero {
     padding: 78px 0;
     background:
         linear-gradient(
@@ -42,7 +42,7 @@ body {
     color: #ffffff;
 }
 
-.about-hero__container {
+.methodology-hero__container {
     display: grid;
     grid-template-columns:
         minmax(0, 1.25fr)
@@ -53,12 +53,12 @@ body {
     margin: 0 auto;
 }
 
-.about-hero__content {
+.methodology-hero__content {
     max-width: 760px;
     padding-top: 8px;
 }
 
-.about-hero__eyebrow {
+.methodology-hero__eyebrow {
     margin: 0 0 14px;
     color: #efc75d;
     font-size: 0.72rem;
@@ -67,16 +67,16 @@ body {
     text-transform: uppercase;
 }
 
-.about-hero__content h1 {
+.methodology-hero__content h1 {
     margin: 0;
     color: #ffffff;
     font-family: "Merriweather", Georgia, serif;
-    font-size: clamp(2.7rem, 6vw, 4.6rem);
+    font-size: clamp(2.7rem, 6vw, 4.5rem);
     line-height: 1.06;
     letter-spacing: -0.035em;
 }
 
-.about-hero__content > p:last-child {
+.methodology-hero__content > p:last-child {
     max-width: 700px;
     margin: 22px 0 0;
     color: #d0e1ed;
@@ -89,7 +89,7 @@ body {
    HERO CARD
 ================================================== */
 
-.about-hero__card {
+.methodology-hero__card {
     display: flex;
     min-width: 0;
     padding: 28px;
@@ -101,7 +101,7 @@ body {
     backdrop-filter: blur(8px);
 }
 
-.about-hero__card > span {
+.methodology-hero__card > span {
     color: #efc75d;
     font-size: 0.68rem;
     font-weight: 800;
@@ -109,15 +109,15 @@ body {
     text-transform: uppercase;
 }
 
-.about-hero__card strong {
+.methodology-hero__card strong {
     margin-top: 12px;
     color: #ffffff;
     font-family: "Merriweather", Georgia, serif;
-    font-size: 1.3rem;
+    font-size: 1.25rem;
     line-height: 1.45;
 }
 
-.about-hero__card small {
+.methodology-hero__card small {
     margin-top: 10px;
     color: #b8cfdf;
     font-size: 0.78rem;
@@ -126,32 +126,32 @@ body {
 
 
 /* ==================================================
-   SHARED ABOUT SECTION
+   SHARED SECTION
 ================================================== */
 
-.about-section {
-    padding: 84px 0;
+.methodology-section {
+    padding: 76px 0;
 }
 
-.about-section--white {
+.methodology-section--white {
     background: #ffffff;
 }
 
-.about-section--light {
+.methodology-section--light {
     background: #f7f9fb;
 }
 
-.about-section__container {
+.methodology-section__container {
     width: min(1180px, calc(100% - 48px));
     margin: 0 auto;
 }
 
-.about-section__heading {
+.methodology-section__heading {
     max-width: 760px;
-    margin-bottom: 38px;
+    margin-bottom: 34px;
 }
 
-.about-section__eyebrow {
+.methodology-section__eyebrow {
     margin: 0 0 10px;
     color: #1f5f99;
     font-size: 0.72rem;
@@ -160,183 +160,43 @@ body {
     text-transform: uppercase;
 }
 
-.about-section__heading h2 {
+.methodology-section__heading h2,
+.methodology-limitations h2 {
     margin: 0;
     color: #102a43;
     font-family: "Merriweather", Georgia, serif;
-    font-size: clamp(2rem, 4vw, 2.8rem);
+    font-size: clamp(2rem, 4vw, 2.75rem);
     line-height: 1.2;
 }
 
-.about-section__heading > p:last-child {
-    margin: 16px 0 0;
+.methodology-section__heading > p:last-child,
+.methodology-limitations > p {
+    margin: 15px 0 0;
     color: #627d98;
     line-height: 1.75;
 }
 
 
 /* ==================================================
-   SHARED ABOUT PANEL
+   SHARED PANEL
 ================================================== */
 
-.about-panel {
+.methodology-panel {
     overflow: hidden;
     border: 1px solid #d9e2ec;
     border-radius: 16px;
     background: #ffffff;
-    box-shadow: 0 14px 36px rgba(16, 42, 67, 0.07);
-}
-
-
-/* ==================================================
-   ABOUT MISSION
-================================================== */
-
-.about-mission-grid {
-    display: grid;
-    grid-template-columns:
-        repeat(
-            3,
-            minmax(0, 1fr)
-        );
-    gap: 16px;
-}
-
-.about-mission-card {
-    min-width: 0;
-    padding: 26px;
-    border: 1px solid #d9e2ec;
-    border-radius: 14px;
-    background: #ffffff;
     box-shadow:
-        0 10px 24px
-        rgba(16, 42, 67, 0.05);
-}
-
-.about-mission-card__number {
-    color: #1f5f99;
-    font-size: 0.7rem;
-    font-weight: 800;
-    letter-spacing: 0.08em;
-}
-
-.about-mission-card h3 {
-    margin: 13px 0 0;
-    color: #102a43;
-    font-family: "Merriweather", Georgia, serif;
-    font-size: 1.2rem;
-    line-height: 1.4;
-}
-
-.about-mission-card p {
-    margin: 10px 0 0;
-    color: #627d98;
-    font-size: 0.82rem;
-    line-height: 1.7;
+        0 12px 30px
+        rgba(16, 42, 67, 0.06);
 }
 
 
 /* ==================================================
-   MISSION STATEMENT
+   NUMBERED ITEMS
 ================================================== */
 
-.about-mission-statement {
-    display: grid;
-    grid-template-columns:
-        minmax(0, 0.8fr)
-        minmax(0, 1.2fr);
-    gap: 42px;
-    margin-top: 30px;
-    padding: 32px;
-}
-
-.about-mission-statement > div:first-child p {
-    margin: 0 0 9px;
-    color: #1f5f99;
-    font-size: 0.68rem;
-    font-weight: 800;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-}
-
-.about-mission-statement h3 {
-    margin: 0;
-    color: #102a43;
-    font-family: "Merriweather", Georgia, serif;
-    font-size: 1.6rem;
-    line-height: 1.45;
-}
-
-.about-mission-statement > div:last-child p {
-    margin: 0;
-    color: #486581;
-    font-size: 0.84rem;
-    line-height: 1.75;
-}
-
-.about-mission-statement > div:last-child p + p {
-    margin-top: 16px;
-}
-
-
-/* ==================================================
-   ABOUT PRINCIPLES
-================================================== */
-
-.about-principles-grid {
-    display: grid;
-    grid-template-columns:
-        repeat(
-            2,
-            minmax(0, 1fr)
-        );
-    gap: 16px;
-}
-
-.about-principle-card {
-    min-width: 0;
-    padding: 26px;
-    border: 1px solid #d9e2ec;
-    border-radius: 14px;
-    background: #ffffff;
-    box-shadow:
-        0 10px 24px
-        rgba(16, 42, 67, 0.05);
-}
-
-.about-principle-card > span {
-    color: #1f5f99;
-    font-size: 0.68rem;
-    font-weight: 800;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-}
-
-.about-principle-card h3 {
-    margin: 12px 0 0;
-    color: #102a43;
-    font-family: "Merriweather", Georgia, serif;
-    font-size: 1.18rem;
-    line-height: 1.45;
-}
-
-.about-principle-card p {
-    margin: 10px 0 0;
-    color: #627d98;
-    font-size: 0.82rem;
-    line-height: 1.7;
-}
-
-
-/* ==================================================
-   ABOUT METHODOLOGY
-================================================== */
-
-.about-methodology {
-    display: grid;
-}
-
-.about-methodology__item {
+.methodology-item {
     display: grid;
     grid-template-columns:
         52px
@@ -347,11 +207,11 @@ body {
     border-bottom: 1px solid #e5ecf2;
 }
 
-.about-methodology__item:last-child {
+.methodology-item:last-child {
     border-bottom: 0;
 }
 
-.about-methodology__item > span {
+.methodology-item > span {
     display: grid;
     place-items: center;
     width: 42px;
@@ -363,7 +223,7 @@ body {
     font-weight: 800;
 }
 
-.about-methodology__item h3 {
+.methodology-item h3 {
     margin: 0;
     color: #102a43;
     font-family: "Merriweather", Georgia, serif;
@@ -371,37 +231,118 @@ body {
     line-height: 1.45;
 }
 
-.about-methodology__item p {
+.methodology-item p {
     margin: 8px 0 0;
     color: #627d98;
-    font-size: 0.82rem;
+    font-size: 0.84rem;
     line-height: 1.7;
 }
 
 
 /* ==================================================
-   METHODOLOGY NOTICE
+   CARD GRID
 ================================================== */
 
-.about-methodology__notice {
-    margin-top: 26px;
-    padding: 22px 24px;
+.methodology-grid {
+    display: grid;
+    grid-template-columns:
+        repeat(
+            3,
+            minmax(0, 1fr)
+        );
+    gap: 18px;
+}
+
+.methodology-card {
+    min-width: 0;
+    padding: 24px;
+    border: 1px solid #d9e2ec;
+    border-radius: 14px;
+    background: #ffffff;
+    box-shadow:
+        0 10px 24px
+        rgba(16, 42, 67, 0.05);
+}
+
+.methodology-card > span {
+    color: #1f5f99;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.methodology-card h3 {
+    margin: 12px 0 0;
+    color: #102a43;
+    font-family: "Merriweather", Georgia, serif;
+    font-size: 1.12rem;
+    line-height: 1.45;
+}
+
+.methodology-card p {
+    margin: 10px 0 0;
+    color: #627d98;
+    font-size: 0.84rem;
+    line-height: 1.7;
+}
+
+
+/* ==================================================
+   LIMITATIONS
+================================================== */
+
+.methodology-limitations {
+    max-width: 880px;
+    padding: 30px;
     border: 1px solid #d9e2ec;
     border-left: 4px solid #1f5f99;
-    border-radius: 10px;
+    border-radius: 14px;
     background: #f8fafc;
 }
 
-.about-methodology__notice strong {
-    color: #102a43;
-    font-size: 0.82rem;
+.methodology-limitations > p + p {
+    margin-top: 14px;
 }
 
-.about-methodology__notice p {
-    margin: 7px 0 0;
-    color: #627d98;
-    font-size: 0.8rem;
-    line-height: 1.7;
+
+/* ==================================================
+   VERSION
+================================================== */
+
+.methodology-version {
+    display: grid;
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(0, 1fr)
+        );
+    gap: 16px;
+    max-width: 620px;
+    margin-top: 24px;
+}
+
+.methodology-version > div {
+    padding: 20px;
+    border: 1px solid #d9e2ec;
+    border-radius: 12px;
+    background: #ffffff;
+}
+
+.methodology-version span {
+    display: block;
+    color: #7b8fa3;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+}
+
+.methodology-version strong {
+    display: block;
+    margin-top: 8px;
+    color: #102a43;
+    font-size: 1rem;
 }
 
 
@@ -411,35 +352,16 @@ body {
 
 @media (max-width: 980px) {
 
-    .about-hero__container {
+    .methodology-hero__container {
         grid-template-columns: 1fr;
         gap: 40px;
     }
 
-    .about-hero__card {
+    .methodology-hero__card {
         max-width: 620px;
     }
 
-}
-
-
-@media (max-width: 900px) {
-
-    .about-mission-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .about-mission-statement {
-        grid-template-columns: 1fr;
-        gap: 24px;
-    }
-
-}
-
-
-@media (max-width: 760px) {
-
-    .about-principles-grid {
+    .methodology-grid {
         grid-template-columns: 1fr;
     }
 
@@ -448,24 +370,23 @@ body {
 
 @media (max-width: 600px) {
 
-    .about-hero {
+    .methodology-hero {
         padding: 62px 0;
     }
 
-    .about-hero__container,
-    .about-section__container {
-        width:
-            min(
-                1180px,
-                calc(100% - 32px)
-            );
+    .methodology-hero__container,
+    .methodology-section__container {
+        width: min(
+            1180px,
+            calc(100% - 32px)
+        );
     }
 
-    .about-hero__content {
+    .methodology-hero__content {
         padding-top: 0;
     }
 
-    .about-hero__content h1 {
+    .methodology-hero__content h1 {
         font-size:
             clamp(
                 2.35rem,
@@ -474,23 +395,25 @@ body {
             );
     }
 
-    .about-section {
-        padding: 64px 0;
+    .methodology-section {
+        padding: 62px 0;
     }
 
-    .about-mission-card,
-    .about-mission-statement,
-    .about-principle-card {
-        padding: 22px 18px;
-    }
-
-    .about-methodology__item {
+    .methodology-item {
         grid-template-columns: 1fr;
         padding: 20px 18px;
     }
 
-    .about-methodology__notice {
-        padding: 20px 18px;
+    .methodology-card {
+        padding: 21px 18px;
+    }
+
+    .methodology-limitations {
+        padding: 22px 18px;
+    }
+
+    .methodology-version {
+        grid-template-columns: 1fr;
     }
 
 }

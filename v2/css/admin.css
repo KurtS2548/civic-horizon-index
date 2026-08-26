@@ -3519,3 +3519,655 @@ RESPONSIVE
     }
 
 }
+/* ==================================================
+   ADMIN CONTACT MESSAGES
+================================================== */
+
+.admin-contact-messages {
+    display: grid;
+    gap: 22px;
+}
+
+
+/* ==================================================
+   CONTACT MESSAGE TOOLBAR
+================================================== */
+
+.admin-contact-messages__toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding: 20px 22px;
+    border: 1px solid #dbe3eb;
+    border-radius: 14px;
+    background: #ffffff;
+    box-shadow: 0 8px 22px rgba(16, 42, 67, 0.05);
+}
+
+
+.admin-contact-messages__filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+
+.admin-contact-messages__filter {
+    min-height: 38px;
+    padding: 8px 13px;
+    border: 1px solid #bccbd8;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #486581;
+    cursor: pointer;
+    font-family: "Inter", sans-serif;
+    font-size: 0.74rem;
+    font-weight: 800;
+}
+
+
+.admin-contact-messages__filter:hover,
+.admin-contact-messages__filter:focus-visible {
+    border-color: #1f5f99;
+    color: #1f5f99;
+    outline: none;
+}
+
+
+.admin-contact-messages__filter.is-active {
+    border-color: #174f7f;
+    background: #174f7f;
+    color: #ffffff;
+}
+
+
+/* ==================================================
+   CONTACT MESSAGE LIST
+================================================== */
+
+.admin-contact-messages__list {
+    display: grid;
+    gap: 16px;
+}
+
+
+/* ==================================================
+   CONTACT MESSAGE CARD
+================================================== */
+
+.admin-contact-message-card {
+    overflow: hidden;
+    border: 1px solid #dbe3eb;
+    border-radius: 16px;
+    background: #ffffff;
+    box-shadow: 0 8px 24px rgba(16, 42, 67, 0.05);
+}
+
+
+.admin-contact-message-card__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 20px 22px;
+    border-bottom: 1px solid #e5ecf2;
+    background: #f8fafc;
+}
+
+
+.admin-contact-message-card__header h3 {
+    margin: 7px 0 0;
+    color: #102a43;
+    font-family: "Merriweather", Georgia, serif;
+    font-size: 1.05rem;
+    line-height: 1.45;
+}
+
+
+.admin-contact-message-card__status {
+    display: inline-flex;
+    align-items: center;
+    min-height: 26px;
+    padding: 5px 9px;
+    border-radius: 999px;
+    background: #edf2f7;
+    color: #627d98;
+    font-size: 0.66rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+
+.admin-contact-message-card__status[data-status="new"] {
+    background: #fff7e7;
+    color: #8a5a0a;
+}
+
+
+.admin-contact-message-card__status[data-status="reviewed"] {
+    background: #eaf7ef;
+    color: #247447;
+}
+
+
+.admin-contact-message-card__date {
+    flex-shrink: 0;
+    color: #7b8fa3;
+    font-size: 0.72rem;
+    white-space: nowrap;
+}
+
+
+/* ==================================================
+   CONTACT MESSAGE CONTENT
+================================================== */
+
+.admin-contact-message-card__content {
+    display: grid;
+    gap: 18px;
+    padding: 22px;
+}
+
+
+.admin-contact-message-card__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 20px;
+}
+
+
+.admin-contact-message-card__meta span {
+    color: #687686;
+    font-size: 0.76rem;
+    font-weight: 600;
+}
+
+
+.admin-contact-message-card__message {
+    padding: 18px;
+    border: 1px solid #e3eaf0;
+    border-radius: 12px;
+    background: #fbfcfd;
+}
+
+
+.admin-contact-message-card__message strong {
+    display: block;
+    margin-bottom: 8px;
+    color: #334e68;
+    font-size: 0.74rem;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+
+.admin-contact-message-card__message p {
+    margin: 0;
+    color: #334e68;
+    line-height: 1.7;
+    white-space: pre-wrap;
+}
+
+
+/* ==================================================
+   CONTACT MESSAGE ACTIONS
+================================================== */
+
+.admin-contact-message-card__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 18px 22px;
+    border-top: 1px solid #e5ecf2;
+    background: #fbfcfd;
+}
+
+
+.admin-contact-message-card__button {
+    min-height: 40px;
+    padding: 9px 14px;
+    border: 1px solid #bccbd8;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #334e68;
+    cursor: pointer;
+    font-family: "Inter", sans-serif;
+    font-size: 0.74rem;
+    font-weight: 800;
+}
+
+
+.admin-contact-message-card__button:hover,
+.admin-contact-message-card__button:focus-visible {
+    border-color: #1f5f99;
+    color: #1f5f99;
+    outline: none;
+}
+
+
+.admin-contact-message-card__button--primary {
+    border-color: #1f5f99;
+    background: #1f5f99;
+    color: #ffffff;
+}
+
+
+.admin-contact-message-card__button--primary:hover,
+.admin-contact-message-card__button--primary:focus-visible {
+    background: #174f7f;
+    color: #ffffff;
+}
+
+
+/* ==================================================
+   CONTACT MESSAGE EMPTY / LOADING
+================================================== */
+
+.admin-contact-messages__empty,
+.admin-contact-messages__loading {
+    padding: 38px 24px;
+    border: 1px dashed #ccd7e1;
+    border-radius: 14px;
+    background: #ffffff;
+    text-align: center;
+}
+
+
+.admin-contact-messages__empty h3 {
+    margin: 0 0 8px;
+    color: #123f73;
+}
+
+
+.admin-contact-messages__empty p,
+.admin-contact-messages__loading p {
+    margin: 0;
+    color: #71808f;
+    line-height: 1.6;
+}
+
+
+/* ==================================================
+   CONTACT MESSAGE MOBILE
+================================================== */
+
+@media (max-width: 650px) {
+
+    .admin-contact-messages__toolbar {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+
+    .admin-contact-messages__filters {
+        width: 100%;
+    }
+
+
+    .admin-contact-messages__filter {
+        flex: 1;
+    }
+
+
+    .admin-contact-message-card__header {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+
+    .admin-contact-message-card__date {
+        white-space: normal;
+    }
+
+
+    .admin-contact-message-card__meta {
+        flex-direction: column;
+        gap: 6px;
+    }
+
+
+    .admin-contact-message-card__actions {
+        flex-direction: column;
+    }
+
+
+    .admin-contact-message-card__button {
+        width: 100%;
+    }
+
+}
+/* ==================================================
+   CONTACT MESSAGES FINAL ALIGNMENT
+================================================== */
+
+.admin-contact-messages__summary {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(110px, 1fr));
+    gap: 12px;
+    min-width: 360px;
+}
+
+
+.admin-contact-messages__summary-item {
+    padding: 16px;
+    border: 1px solid #dbe3eb;
+    border-radius: 12px;
+    background: #ffffff;
+    text-align: center;
+}
+
+
+.admin-contact-messages__summary-item span {
+    display: block;
+    margin-bottom: 5px;
+    color: #627d98;
+    font-size: 0.72rem;
+    font-weight: 700;
+}
+
+
+.admin-contact-messages__summary-item strong {
+    color: #123f73;
+    font-size: 1.45rem;
+}
+
+
+/* WORKFLOW */
+
+.admin-contact-messages__workflow {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr auto 1fr;
+    align-items: center;
+    gap: 14px;
+    margin: 26px 0;
+}
+
+
+.admin-contact-messages__workflow-step {
+    padding: 20px;
+    border: 1px solid #dbe3eb;
+    border-radius: 14px;
+    background: #ffffff;
+}
+
+
+.admin-contact-messages__workflow-step > span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    margin-bottom: 10px;
+    border-radius: 50%;
+    background: #123f73;
+    color: #ffffff;
+    font-weight: 800;
+}
+
+
+.admin-contact-messages__workflow-step strong {
+    display: block;
+    color: #123f73;
+}
+
+
+.admin-contact-messages__workflow-step p {
+    margin: 6px 0 0;
+    color: #6b7b8b;
+    font-size: 0.86rem;
+    line-height: 1.55;
+}
+
+
+.admin-contact-messages__workflow-arrow {
+    color: #d7ad45;
+    font-size: 1.5rem;
+    font-weight: 900;
+}
+
+
+/* TOOLBAR */
+
+.admin-contact-messages__toolbar {
+    display: grid;
+    grid-template-columns: 1fr 1fr minmax(220px, 1.4fr);
+    gap: 16px;
+    align-items: end;
+}
+
+
+.admin-contact-messages__filter,
+.admin-contact-messages__search {
+    display: grid;
+    gap: 7px;
+}
+
+
+.admin-contact-messages__filter label,
+.admin-contact-messages__search label {
+    color: #334e68;
+    font-size: 0.76rem;
+    font-weight: 800;
+}
+
+
+.admin-contact-messages__filter select,
+.admin-contact-messages__search input {
+    width: 100%;
+    min-height: 44px;
+}
+
+
+/* BADGES */
+
+.admin-contact-message-card__badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+}
+
+
+.admin-contact-message-card__category {
+    display: inline-flex;
+    align-items: center;
+    min-height: 26px;
+    padding: 5px 9px;
+    border-radius: 999px;
+    background: #edf4fb;
+    color: #123f73;
+    font-size: 0.66rem;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+
+.admin-contact-message-card__status[data-status="underReview"] {
+    background: #fff4d8;
+    color: #8a6610;
+}
+
+
+.admin-contact-message-card__status[data-status="resolved"] {
+    background: #eaf7ef;
+    color: #247447;
+}
+
+
+.admin-contact-message-card__status[data-status="archived"] {
+    background: #edf2f7;
+    color: #627d98;
+}
+
+
+/* EMAIL + DATE */
+
+.admin-contact-message-card__email {
+    display: inline-block;
+    margin-top: 5px;
+    color: #1f5f99;
+    font-size: 0.8rem;
+    text-decoration: none;
+}
+
+
+.admin-contact-message-card__email:hover {
+    text-decoration: underline;
+}
+
+
+.admin-contact-message-card__date {
+    text-align: right;
+}
+
+
+.admin-contact-message-card__date span,
+.admin-contact-message-card__date strong {
+    display: block;
+}
+
+
+.admin-contact-message-card__date strong {
+    margin-top: 4px;
+    color: #334e68;
+}
+
+
+/* MESSAGE BODY */
+
+.admin-contact-message-card__content p {
+    margin: 0;
+    color: #334e68;
+    line-height: 1.7;
+    white-space: pre-wrap;
+}
+
+
+/* ACTUAL CONTROLLER BUTTON CLASSES */
+
+.admin-contact-messages__button {
+    min-height: 40px;
+    padding: 9px 14px;
+    border: 1px solid #bccbd8;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #334e68;
+    cursor: pointer;
+    font-family: "Inter", sans-serif;
+    font-size: 0.74rem;
+    font-weight: 800;
+}
+
+
+.admin-contact-messages__button--secondary:hover {
+    border-color: #1f5f99;
+    color: #1f5f99;
+}
+
+
+.admin-contact-messages__button--resolve {
+    border-color: #2f855a;
+    color: #276749;
+}
+
+
+.admin-contact-messages__button--resolve:hover {
+    background: #e7f7eb;
+}
+
+
+.admin-contact-messages__button--archive {
+    border-color: #9fb3c8;
+    color: #486581;
+}
+
+
+.admin-contact-messages__button:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
+}
+
+
+/* ADMIN NOTE */
+
+.admin-contact-messages__note {
+    margin-top: 24px;
+    padding: 20px 22px;
+    border-left: 4px solid #d7ad45;
+    border-radius: 10px;
+    background: #fffaf0;
+}
+
+
+.admin-contact-messages__note strong {
+    color: #123f73;
+}
+
+
+.admin-contact-messages__note p {
+    margin: 6px 0 0;
+    color: #667686;
+    line-height: 1.6;
+}
+
+
+/* MESSAGE FEEDBACK */
+
+.admin-contact-messages__message {
+    min-height: 22px;
+    font-size: 0.78rem;
+    font-weight: 700;
+}
+
+
+.admin-contact-messages__message[data-message-type="success"] {
+    color: #276749;
+}
+
+
+.admin-contact-messages__message[data-message-type="error"] {
+    color: #9b2c2c;
+}
+
+
+/* MOBILE */
+
+@media (max-width: 850px) {
+
+    .admin-contact-messages__summary {
+        min-width: 0;
+    }
+
+    .admin-contact-messages__workflow {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-contact-messages__workflow-arrow {
+        display: none;
+    }
+
+    .admin-contact-messages__toolbar {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .admin-contact-messages__summary {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-contact-message-card__date {
+        text-align: left;
+    }
+
+    .admin-contact-messages__button {
+        width: 100%;
+    }
+
+}

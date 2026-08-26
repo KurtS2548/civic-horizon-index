@@ -1,5 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html
+    lang="en"
+    class="auth-access-pending"
+>
 
 <head>
 
@@ -12,13 +15,34 @@
 
     <meta
         name="description"
-        content="Contact Civic Horizon Index, share feedback, report a problem, or ask for account assistance."
+        content="Contact Civic Horizon Index, ask a question, report a problem, request account help, or share feedback."
     >
 
-    <title>Contact | Civic Horizon Index</title>
+    <title>
+        Contact | Civic Horizon Index
+    </title>
 
 
-    <!-- SITE STYLES -->
+    <!-- GOOGLE FONTS -->
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Merriweather:wght@700&display=swap"
+        rel="stylesheet"
+    >
+
+
+    <!-- SHARED STYLES -->
 
     <link
         rel="stylesheet"
@@ -30,6 +54,9 @@
         href="css/footer.css"
     >
 
+
+    <!-- CONTACT STYLES -->
+
     <link
         rel="stylesheet"
         href="css/contact.css"
@@ -40,212 +67,202 @@
 
 <body>
 
-
-    <!--
-    ==================================================
-    HEADER
-    ==================================================
-    -->
-
-    <div id="siteHeader"></div>
+    <div id="headerContainer"></div>
 
 
-    <!--
-    ==================================================
-    MAIN CONTENT
-    ==================================================
-    -->
-
-    <main>
+    <main class="contact-page">
 
 
-        <!--
-        ==================================================
-        HERO
-        ==================================================
-        -->
+        <!-- ==================================================
+             HERO
+        ================================================== -->
 
         <section class="contact-hero">
 
-            <div class="contact-container">
+            <div class="contact-hero__container">
 
-                <p class="contact-eyebrow">
-                    YOUR VOICE MATTERS
-                </p>
+                <div class="contact-hero__content">
 
-                <h1>
-                    Contact Civic Horizon
-                </h1>
+                    <p class="contact-hero__eyebrow">
+                        Contact Civic Horizon
+                    </p>
 
-                <p class="contact-hero-text">
-                    Ask a question, report a problem, share feedback,
-                    or get help with your Civic Horizon account.
-                </p>
+                    <h1>
+                        Questions, problems, and feedback belong in one place
+                    </h1>
+
+                    <p>
+                        Use the Contact Center for account assistance,
+                        privacy or accessibility questions, technical
+                        problems, general questions, and feedback about
+                        Civic Horizon Index.
+                    </p>
+
+                </div>
+
+
+                <aside class="contact-hero__card">
+
+                    <span>
+                        Participant Support
+                    </span>
+
+                    <strong>
+                        Tell us what you need help with.
+                    </strong>
+
+                    <small>
+                        Clear categories help Civic Horizon organize
+                        messages and identify what needs attention first.
+                    </small>
+
+                </aside>
 
             </div>
 
         </section>
 
 
-        <!--
-        ==================================================
-        CONTACT OPTIONS
-        ==================================================
-        -->
+        <!-- ==================================================
+             CONTACT OPTIONS
+        ================================================== -->
 
-        <section class="contact-section">
+        <section class="contact-section contact-section--white">
 
-            <div class="contact-container">
+            <div class="contact-section__container">
 
-                <div class="contact-section-heading">
+                <header class="contact-section__heading">
 
-                    <p class="contact-eyebrow">
-                        GET IN TOUCH
+                    <p class="contact-section__eyebrow">
+                        How We Can Help
                     </p>
 
                     <h2>
-                        How can we help?
+                        Choose the reason that best matches your message
                     </h2>
 
-                </div>
+                    <p>
+                        Your category helps organize incoming messages
+                        so the most important issues are easier to identify.
+                    </p>
+
+                </header>
 
 
-                <div class="contact-option-grid">
+                <div class="contact-options-grid">
 
+                    <article class="contact-option">
 
-                    <article class="contact-option-card">
+                        <span>
+                            General
+                        </span>
 
                         <h3>
                             General Questions
                         </h3>
 
                         <p>
-                            Ask about Civic Horizon, our polls,
-                            results, Civic Academy, simulations,
-                            or how the platform works.
+                            Ask about Civic Horizon, polling, results,
+                            Civic Academy, the Government Simulator,
+                            methodology, or how the platform works.
                         </p>
 
                     </article>
 
 
-                    <article class="contact-option-card">
+                    <article class="contact-option">
+
+                        <span>
+                            Technical
+                        </span>
 
                         <h3>
                             Report a Problem
                         </h3>
 
                         <p>
-                            Tell us about a broken page, voting
-                            problem, account issue, or information
-                            that may need our attention.
+                            Report a broken page, voting issue, incorrect
+                            display, accessibility problem, or other
+                            technical issue.
                         </p>
 
                     </article>
 
 
-                    <article class="contact-option-card">
+                    <article class="contact-option">
+
+                        <span>
+                            Account
+                        </span>
 
                         <h3>
                             Account Help
                         </h3>
 
                         <p>
-                            Get help with your Civic Horizon account,
-                            profile, verification, or participation
-                            access.
+                            Get help with your account, profile,
+                            verification, sign-in, or participation
+                            eligibility.
                         </p>
 
                     </article>
 
 
-                    <article class="contact-option-card">
+                    <article class="contact-option">
+
+                        <span>
+                            Feedback
+                        </span>
 
                         <h3>
                             Feedback &amp; Ideas
                         </h3>
 
                         <p>
-                            Have an idea that could make Civic
-                            Horizon clearer, fairer, or more useful?
-                            We want to hear it.
+                            Share an idea for making Civic Horizon
+                            clearer, more useful, more accessible,
+                            or easier to participate in.
                         </p>
 
                     </article>
 
 
-                </div>
+                    <article class="contact-option">
 
-            </div>
-
-        </section>
-
-
-        <!--
-        ==================================================
-        CONTACT PRINCIPLES
-        ==================================================
-        -->
-
-        <section class="community-standards-section">
-
-            <div class="contact-container">
-
-                <div class="community-standards-card">
-
-                    <p class="contact-eyebrow">
-                        OUR STANDARD
-                    </p>
-
-                    <h2>
-                        Civic Horizon Is for Everyone
-                    </h2>
-
-                    <p class="community-standards-lead">
-                        Civic Horizon Index exists to give all
-                        Americans a fair opportunity to be heard.
-                    </p>
-
-                    <p>
-                        Questions, feedback, concerns, and constructive
-                        criticism are welcome. Our goal is to make
-                        Civic Horizon accurate, understandable,
-                        transparent, and useful.
-                    </p>
-
-
-                    <div class="zero-tolerance-box">
+                        <span>
+                            Privacy
+                        </span>
 
                         <h3>
-                            Respectful Participation
+                            Privacy Questions
                         </h3>
 
                         <p>
-                            Hate, harassment, bullying, threats, or
-                            attacks against individuals or groups are
-                            not acceptable on Civic Horizon.
+                            Ask about account information, participation
+                            records, geographic eligibility information,
+                            or other privacy-related concerns.
                         </p>
 
-                    </div>
+                    </article>
 
 
-                    <h3>
-                        Nonpartisan by Design
-                    </h3>
+                    <article class="contact-option">
 
-                    <p>
-                        Civic Horizon is designed to measure and
-                        understand public opinion, not to promote a
-                        political party, candidate, ideology, or
-                        preferred outcome.
-                    </p>
+                        <span>
+                            Accessibility
+                        </span>
 
-                    <p class="community-closing-statement">
-                        Our purpose is not to divide people.
-                        <strong>
-                            It is to understand what people actually
-                            think.
-                        </strong>
-                    </p>
+                        <h3>
+                            Accessibility Feedback
+                        </h3>
+
+                        <p>
+                            Tell us about a page, control, form, or
+                            interaction that is difficult to read,
+                            navigate, or use.
+                        </p>
+
+                    </article>
 
                 </div>
 
@@ -254,41 +271,53 @@
         </section>
 
 
-        <!--
-        ==================================================
-        CONTACT FORM
-        ==================================================
-        -->
+        <!-- ==================================================
+             CONTACT FORM
+        ================================================== -->
 
-        <section class="general-contact-section">
+        <section class="contact-section contact-section--light">
 
-            <div class="contact-container">
+            <div class="contact-section__container">
 
-                <div class="general-contact-layout">
+                <div class="contact-form-layout">
 
+                    <div class="contact-form-intro">
 
-                    <div>
-
-                        <p class="contact-eyebrow">
-                            CONTACT US
+                        <p class="contact-section__eyebrow">
+                            Send a Message
                         </p>
 
                         <h2>
-                            Send us a message
+                            Contact Civic Horizon
                         </h2>
 
                         <p>
-                            Use this form for general questions,
-                            feedback, account assistance, privacy
-                            questions, or to report a problem with
-                            Civic Horizon.
+                            Choose the category that best describes
+                            your message and provide enough information
+                            for the issue or question to be understood.
                         </p>
+
+
+                        <div class="contact-form-guidance">
+
+                            <strong>
+                                Please do not include sensitive information
+                            </strong>
+
+                            <p>
+                                Never send your password, payment
+                                information, Social Security number,
+                                or other highly sensitive personal
+                                information through this form.
+                            </p>
+
+                        </div>
 
                     </div>
 
 
                     <form
-                        class="general-contact-form"
+                        class="contact-form"
                         id="generalContactForm"
                     >
 
@@ -303,6 +332,7 @@
                                 id="contactName"
                                 name="name"
                                 maxlength="100"
+                                autocomplete="name"
                                 required
                             >
 
@@ -320,6 +350,7 @@
                                 id="contactEmail"
                                 name="email"
                                 maxlength="150"
+                                autocomplete="email"
                                 required
                             >
 
@@ -363,7 +394,7 @@
                                 </option>
 
                                 <option value="other">
-                                    Other
+                                    Accessibility or other
                                 </option>
 
                             </select>
@@ -380,10 +411,14 @@
                             <textarea
                                 id="contactMessage"
                                 name="message"
-                                rows="6"
+                                rows="7"
                                 maxlength="1500"
                                 required
                             ></textarea>
+
+                            <span class="contact-field__help">
+                                Maximum 1,500 characters
+                            </span>
 
                         </div>
 
@@ -397,20 +432,51 @@
 
                         <button
                             type="submit"
-                            class="contact-primary-button"
+                            class="contact-submit-button"
                         >
                             Send Message
                         </button>
 
-
-                        <p class="contact-form-note">
-                            Never send your password, financial
-                            information, or other sensitive personal
-                            information through this form.
-                        </p>
-
                     </form>
 
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ==================================================
+             CONTACT STANDARD
+        ================================================== -->
+
+        <section class="contact-section contact-section--white">
+
+            <div class="contact-section__container">
+
+                <div class="contact-standard">
+
+                    <p class="contact-section__eyebrow">
+                        Our Standard
+                    </p>
+
+                    <h2>
+                        Questions and criticism are welcome
+                    </h2>
+
+                    <p>
+                        Civic Horizon Index is designed to improve through
+                        participant feedback. Questions, concerns,
+                        corrections, and constructive criticism are
+                        welcome regardless of political viewpoint.
+                    </p>
+
+                    <p>
+                        Messages should remain focused on legitimate
+                        questions, problems, feedback, or civic concerns
+                        rather than harassment, threats, spam, or attempts
+                        to disrupt the platform.
+                    </p>
 
                 </div>
 
@@ -422,26 +488,18 @@
     </main>
 
 
-    <!--
-    ==================================================
-    FOOTER
-    ==================================================
-    -->
+    <div id="footerContainer"></div>
 
-    <div id="siteFooter"></div>
-
-
-    <!--
-    ==================================================
-    PAGE CONTROLLER
-    ==================================================
-    -->
 
     <script
         type="module"
         src="js/contact.js"
     ></script>
 
+    <script
+        type="module"
+        src="js/site-auth.js"
+    ></script>
 
 </body>
 

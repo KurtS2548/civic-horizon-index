@@ -18,7 +18,8 @@ import {
 
     ref,
     push,
-    set
+    get,
+    update
 
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
@@ -246,7 +247,9 @@ async function handlePollSuggestion(
         auth.currentUser;
 
 
-    if (!user) {
+    if (
+        !user
+    ) {
 
         showMessage(
             "You must be signed in to submit a poll suggestion.",
@@ -324,6 +327,169 @@ async function handlePollSuggestion(
 
     /*
     ----------------------------------------------
+    NORMALIZED QUESTION
+    ----------------------------------------------
+    */
+
+    const questionKey =
+        normalizeQuestion(
+            question
+        );
+
+
+    /*
+    ----------------------------------------------
+    SUGGESTION HISTORY CHECK
+    ----------------------------------------------
+    */
+
+    const suggestionHistoryReference =
+        ref(
+            database,
+            `userActivity/${user.uid}/pollSuggestions`
+        );
+
+
+    try {
+
+        const historySnapshot =
+            await get(
+                suggestionHistoryReference
+            );
+
+
+        if (
+            historySnapshot.exists()
+        ) {
+
+            const historyValue =
+                historySnapshot.val() ||
+                {};
+
+
+            const previousSuggestions =
+                Object.values(
+                    historyValue
+                );
+
+
+            /*
+            ------------------------------------------
+            DUPLICATE CHECK
+            ------------------------------------------
+            */
+
+            const duplicateFound =
+                previousSuggestions.some(
+                    previousSuggestion => {
+
+                        return (
+                            String(
+                                previousSuggestion
+                                    ?.questionKey ||
+                                ""
+                            ) ===
+                            questionKey
+                        );
+
+                    }
+                );
+
+
+            if (
+                duplicateFound
+            ) {
+
+                showMessage(
+                    "You have already submitted this poll question.",
+                    "error"
+                );
+
+                return;
+
+            }
+
+
+            /*
+            ------------------------------------------
+            24-HOUR SUBMISSION LIMIT
+            ------------------------------------------
+            */
+
+            const submissionTimes =
+                previousSuggestions
+                    .map(
+                        previousSuggestion => {
+
+                            return Date.parse(
+                                previousSuggestion
+                                    ?.submittedAt ||
+                                ""
+                            );
+
+                        }
+                    )
+                    .filter(
+                        Number.isFinite
+                    );
+
+
+            const mostRecentSubmission =
+                submissionTimes.length >
+                0
+                    ? Math.max(
+                        ...submissionTimes
+                    )
+                    : null;
+
+
+            const twentyFourHours =
+                24 *
+                60 *
+                60 *
+                1000;
+
+
+            if (
+                Number.isFinite(
+                    mostRecentSubmission
+                ) &&
+                Date.now() -
+                    mostRecentSubmission <
+                    twentyFourHours
+            ) {
+
+                showMessage(
+                    "You can submit one poll suggestion every 24 hours.",
+                    "error"
+                );
+
+                return;
+
+            }
+
+        }
+
+    } catch (error) {
+
+        console.error(
+            "Poll suggestion history could not be checked:",
+            error
+        );
+
+
+        showMessage(
+            "Your suggestion history could not be checked. Please try again.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    /*
+    ----------------------------------------------
     SUBMIT
     ----------------------------------------------
     */
@@ -349,6 +515,26 @@ async function handlePollSuggestion(
             );
 
 
+        if (
+            !suggestionReference.key
+        ) {
+
+            throw new Error(
+                "A suggestion ID could not be created."
+            );
+
+        }
+
+
+        const suggestionId =
+            suggestionReference.key;
+
+
+        const submittedAt =
+            new Date()
+                .toISOString();
+
+
         const record = {
 
             level,
@@ -363,16 +549,10 @@ async function handlePollSuggestion(
             status:
                 "pendingReview",
 
-            submittedAt:
-                new Date().toISOString(),
-
-            /*
-            Firebase currently validates this existing
-            source value for poll suggestions.
-            */
+            submittedAt,
 
             source:
-                "contactPage",
+                "profilePage",
 
             submittedByUid:
                 user.uid,
@@ -383,9 +563,39 @@ async function handlePollSuggestion(
         };
 
 
-        await set(
-            suggestionReference,
-            record
+        /*
+        ------------------------------------------
+        WRITE PUBLIC QUEUE + PRIVATE HISTORY
+        TOGETHER
+        ------------------------------------------
+        */
+
+        const updates =
+            {};
+
+
+        updates[
+            `pollSuggestions/${suggestionId}`
+        ] =
+            record;
+
+
+        updates[
+            `userActivity/${user.uid}/pollSuggestions/${suggestionId}`
+        ] = {
+
+            questionKey,
+
+            submittedAt
+
+        };
+
+
+        await update(
+            ref(
+                database
+            ),
+            updates
         );
 
 
@@ -425,6 +635,34 @@ async function handlePollSuggestion(
 
 /*
 ==================================================
+NORMALIZE QUESTION
+==================================================
+*/
+
+function normalizeQuestion(
+    value
+) {
+
+    return String(
+        value ||
+        ""
+    )
+        .trim()
+        .toLowerCase()
+        .replace(
+            /[^a-z0-9\s]/g,
+            ""
+        )
+        .replace(
+            /\s+/g,
+            " "
+        );
+
+}
+
+
+/*
+==================================================
 INPUT HELPER
 ==================================================
 */
@@ -439,7 +677,9 @@ function getInputValue(
         );
 
 
-    if (!element) {
+    if (
+        !element
+    ) {
 
         return "";
 
@@ -471,7 +711,9 @@ function showMessage(
         );
 
 
-    if (!element) {
+    if (
+        !element
+    ) {
 
         return;
 
@@ -500,7 +742,9 @@ function setButtonBusy(
     text
 ) {
 
-    if (!button) {
+    if (
+        !button
+    ) {
 
         return;
 

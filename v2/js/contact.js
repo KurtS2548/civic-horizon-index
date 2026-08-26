@@ -55,12 +55,12 @@ async function initializeContactPage() {
     await Promise.all([
 
         loadComponent(
-            "siteHeader",
+            "headerContainer",
             "components/header.html"
         ),
 
         loadComponent(
-            "siteFooter",
+            "footerContainer",
             "components/footer.html"
         )
 
@@ -92,6 +92,10 @@ async function loadComponent(
 
 
     if (!container) {
+
+        console.error(
+            `Container not found: ${containerId}`
+        );
 
         return false;
 
@@ -692,7 +696,7 @@ function showMessage(
 
 /*
 ==================================================
-HEADER
+HEADER INTERACTIONS
 ==================================================
 */
 
@@ -733,9 +737,7 @@ function initializeHeader() {
 
                 menuButton.setAttribute(
                     "aria-expanded",
-                    String(
-                        isOpen
-                    )
+                    String(isOpen)
                 );
 
 
@@ -747,9 +749,7 @@ function initializeHeader() {
                 );
 
 
-                if (
-                    !isOpen
-                ) {
+                if (!isOpen) {
 
                     closeDropdowns();
 
@@ -793,9 +793,7 @@ function initializeHeader() {
                     closeDropdowns();
 
 
-                    if (
-                        !isOpen
-                    ) {
+                    if (!isOpen) {
 
                         group.classList.add(
                             "open"
@@ -833,6 +831,96 @@ function initializeHeader() {
         }
     );
 
+
+    document.addEventListener(
+        "keydown",
+        event => {
+
+            if (
+                event.key !== "Escape"
+            ) {
+
+                return;
+
+            }
+
+
+            closeDropdowns();
+
+
+            if (
+                navigation &&
+                navigation.classList.contains(
+                    "open"
+                )
+            ) {
+
+                navigation.classList.remove(
+                    "open"
+                );
+
+
+                if (menuButton) {
+
+                    menuButton.setAttribute(
+                        "aria-expanded",
+                        "false"
+                    );
+
+
+                    menuButton.setAttribute(
+                        "aria-label",
+                        "Open navigation menu"
+                    );
+
+                }
+
+            }
+
+        }
+    );
+
+
+    window.addEventListener(
+        "resize",
+        () => {
+
+            if (
+                window.innerWidth > 980 &&
+                navigation &&
+                navigation.classList.contains(
+                    "open"
+                )
+            ) {
+
+                navigation.classList.remove(
+                    "open"
+                );
+
+
+                if (menuButton) {
+
+                    menuButton.setAttribute(
+                        "aria-expanded",
+                        "false"
+                    );
+
+
+                    menuButton.setAttribute(
+                        "aria-label",
+                        "Open navigation menu"
+                    );
+
+                }
+
+
+                closeDropdowns();
+
+            }
+
+        }
+    );
+
 }
 
 
@@ -862,9 +950,7 @@ function closeDropdowns() {
                     );
 
 
-                if (
-                    button
-                ) {
+                if (button) {
 
                     button.setAttribute(
                         "aria-expanded",
