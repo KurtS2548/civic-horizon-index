@@ -9,13 +9,12 @@ Purpose:
 Provide one clean, consistent data structure for
 supported elected officials.
 
-Supported offices:
+Launch-supported offices:
 
 - President
 - U.S. Senator
 - U.S. Representative
 - Governor
-- Mayor
 
 This service handles:
 
@@ -46,9 +45,7 @@ const supportedOfficeTypes = [
 
     "representative",
 
-    "governor",
-
-    "mayor"
+    "governor"
 
 ];
 
@@ -154,20 +151,6 @@ export function normalizePublicOfficial(
         );
 
 
-    const municipality =
-        normalizeText(
-            official.municipality
-        );
-
-
-    const municipalityGeoid =
-        normalizeMunicipalityGeoid(
-            official.municipalityGeoid ||
-            official.jurisdiction
-                ?.municipalityGeoid
-        );
-
-
     const servingSince =
         normalizeDate(
             official.servingSince
@@ -185,9 +168,7 @@ export function normalizePublicOfficial(
             official.jurisdiction,
             officeType,
             stateCode,
-            district,
-            municipality,
-            municipalityGeoid
+            district
         );
 
 
@@ -225,8 +206,7 @@ export function normalizePublicOfficial(
             createOfficeLabel(
                 officeType,
                 stateCode,
-                district,
-                municipality
+                district
             ),
 
         party,
@@ -239,10 +219,6 @@ export function normalizePublicOfficial(
         stateCode,
 
         district,
-
-        municipality,
-
-        municipalityGeoid,
 
         jurisdiction,
 
@@ -399,9 +375,7 @@ function normalizeJurisdiction(
     jurisdiction,
     officeType,
     stateCode,
-    district,
-    municipality,
-    municipalityGeoid
+    district
 ) {
 
     const suppliedJurisdiction =
@@ -440,21 +414,6 @@ function normalizeJurisdiction(
                 suppliedJurisdiction.district
             ) ||
             district ||
-            "",
-
-        municipality:
-            normalizeText(
-                suppliedJurisdiction.municipality
-            ) ||
-            municipality ||
-            "",
-
-        municipalityGeoid:
-            normalizeMunicipalityGeoid(
-                suppliedJurisdiction
-                    .municipalityGeoid
-            ) ||
-            municipalityGeoid ||
             ""
 
     };
@@ -486,9 +445,7 @@ function normalizeJurisdictionType(
 
         "state",
 
-        "congressional-district",
-
-        "municipality"
+        "congressional-district"
 
     ];
 
@@ -531,9 +488,9 @@ function inferJurisdictionType(
 
     if (
         officeType ===
-        "senator" ||
+            "senator" ||
         officeType ===
-        "governor"
+            "governor"
     ) {
 
         return "state";
@@ -547,16 +504,6 @@ function inferJurisdictionType(
     ) {
 
         return "congressional-district";
-
-    }
-
-
-    if (
-        officeType ===
-        "mayor"
-    ) {
-
-        return "municipality";
 
     }
 
@@ -973,8 +920,7 @@ OFFICE LABEL
 function createOfficeLabel(
     officeType,
     stateCode,
-    district,
-    municipality
+    district
 ) {
 
     if (
@@ -1031,18 +977,6 @@ function createOfficeLabel(
         return (
             `Governor — ${stateCode}`
         );
-
-    }
-
-
-    if (
-        officeType ===
-        "mayor"
-    ) {
-
-        return municipality
-            ? `Mayor — ${municipality}`
-            : "Mayor";
 
     }
 
@@ -1368,9 +1302,7 @@ function normalizeStateCode(
             .toUpperCase();
 
 
-    if (
-        !stateCode
-    ) {
+    if (!stateCode) {
 
         return "";
 
@@ -1448,38 +1380,6 @@ function normalizeDistrict(
     return String(
         number
     );
-
-}
-
-
-/*
-==================================================
-MUNICIPALITY GEOID
-==================================================
-*/
-
-function normalizeMunicipalityGeoid(
-    value
-) {
-
-    const geoid =
-        String(
-            value || ""
-        ).trim();
-
-
-    if (
-        !/^\d{10}$/.test(
-            geoid
-        )
-    ) {
-
-        return "";
-
-    }
-
-
-    return geoid;
 
 }
 

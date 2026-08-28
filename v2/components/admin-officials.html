@@ -1,0 +1,316 @@
+<!--
+==================================================
+CIVIC HORIZON INDEX V2
+ADMIN PUBLIC OFFICIALS
+==================================================
+
+Purpose:
+
+Allow the administrator to manage current
+public officeholders without editing source code.
+
+Launch offices:
+
+- President
+- Governor
+- U.S. Senator
+- U.S. Representative
+==================================================
+-->
+
+<section
+    class="admin-section admin-officials"
+    aria-labelledby="adminOfficialsTitle"
+>
+
+    <div class="admin-section__header">
+
+        <div>
+
+            <p class="admin-section__eyebrow">
+                PUBLIC OFFICIALS
+            </p>
+
+            <h2 id="adminOfficialsTitle">
+                Manage Current Officials
+            </h2>
+
+            <p class="admin-section__description">
+                Update current officeholders when an elected
+                official changes. Select a state and office
+                to find the seat you need to update.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!--
+    ==================================================
+    FILTERS
+    ==================================================
+    -->
+
+    <div class="admin-officials__filters">
+
+        <div class="admin-field">
+
+            <label for="adminOfficialsState">
+                State
+            </label>
+
+            <select id="adminOfficialsState">
+
+                <option value="">
+                    Select a state
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="admin-field">
+
+            <label for="adminOfficialsOffice">
+                Office
+            </label>
+
+            <select id="adminOfficialsOffice">
+
+                <option value="all">
+                    All offices
+                </option>
+
+                <option value="governor">
+                    Governor
+                </option>
+
+                <option value="senator">
+                    U.S. Senator
+                </option>
+
+                <option value="representative">
+                    U.S. Representative
+                </option>
+
+            </select>
+
+        </div>
+
+    </div>
+
+
+    <!--
+    ==================================================
+    OFFICIAL LIST
+    ==================================================
+    -->
+
+    <div
+        class="admin-officials__list"
+        id="adminOfficialsList"
+    >
+
+        <div class="admin-officials__empty">
+
+            <h3>
+                Select a state
+            </h3>
+
+            <p>
+                Choose a state above to view its current
+                governor, senators, and representatives.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!--
+    ==================================================
+    EDITOR
+    ==================================================
+    -->
+
+    <div
+        class="admin-officials__editor"
+        id="adminOfficialsEditor"
+        hidden
+    >
+
+        <div class="admin-officials__editor-header">
+
+            <div>
+
+                <p class="admin-section__eyebrow">
+                    EDIT OFFICIAL
+                </p>
+
+                <h3 id="adminOfficialsEditorTitle">
+                    Update Officeholder
+                </h3>
+
+            </div>
+
+            <button
+                type="button"
+                class="admin-officials__close"
+                id="adminOfficialsEditorClose"
+                aria-label="Close official editor"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <form id="adminOfficialsForm">
+
+            <input
+                type="hidden"
+                id="adminOfficialSeatKey"
+                name="seatKey"
+            >
+
+
+            <div class="admin-officials__form-grid">
+
+                <div class="admin-field">
+
+                    <label for="adminOfficialName">
+                        Official Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="adminOfficialName"
+                        name="name"
+                        autocomplete="off"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="admin-field">
+
+                    <label for="adminOfficialParty">
+                        Party
+                    </label>
+
+                    <select
+                        id="adminOfficialParty"
+                        name="party"
+                        required
+                    >
+
+                        <option value="D">
+                            Democratic
+                        </option>
+
+                        <option value="R">
+                            Republican
+                        </option>
+
+                        <option value="I">
+                            Independent
+                        </option>
+
+                        <option value="OTHER">
+                            Other
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="admin-field">
+
+                    <label for="adminOfficialServingSince">
+                        Serving Since
+                    </label>
+
+                    <input
+                        type="date"
+                        id="adminOfficialServingSince"
+                        name="servingSince"
+                    >
+
+                </div>
+
+
+                <div class="admin-field">
+
+                    <label for="adminOfficialTermBegan">
+                        Current Term Began
+                    </label>
+
+                    <input
+                        type="date"
+                        id="adminOfficialTermBegan"
+                        name="currentTermBegan"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="admin-field">
+
+                <label for="adminOfficialSourceUrl">
+                    Official Source
+                </label>
+
+                <input
+                    type="url"
+                    id="adminOfficialSourceUrl"
+                    name="sourceUrl"
+                    placeholder="https://"
+                >
+
+                <p class="admin-field__help">
+                    Use an authoritative government source
+                    confirming the current officeholder.
+                </p>
+
+            </div>
+
+
+            <div
+                class="admin-officials__message"
+                id="adminOfficialsMessage"
+                role="status"
+                aria-live="polite"
+            ></div>
+
+
+            <div class="admin-officials__actions">
+
+                <button
+                    type="button"
+                    class="admin-button admin-button--secondary"
+                    id="adminOfficialsCancel"
+                >
+                    Cancel
+                </button>
+
+                <button
+                    type="submit"
+                    class="admin-button admin-button--primary"
+                    id="adminOfficialsSave"
+                >
+                    Save Official
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</section>

@@ -687,7 +687,7 @@ function renderSelectedStatePanel(
 
     setText(
         "statesSelectedDescription",
-        `Explore Civic Horizon Index results, participation, representatives, and future state and local civic information for ${stateName}.`
+        `Explore Civic Horizon Index questions, elected officials, approval ratings, and civic information for ${stateName}.`
     );
 
 

@@ -20,6 +20,10 @@ Eligibility:
 
 Public results contain no UID.
 Private weekly locks contain the UID.
+
+If the private weekly lock succeeds but the public
+anonymous result fails, the service can automatically
+repair the missing public result.
 ==================================================
 */
 
@@ -175,6 +179,164 @@ export function getGovernorVotingPeriodLabel(
 
 /*
 ==================================================
+PRIVATE VOTE REFERENCE
+==================================================
+*/
+
+function getGovernorVoteReference(
+    period,
+    governorId,
+    uid
+) {
+
+    return ref(
+        database,
+        `weeklyGovernorVotes/${period}/${governorId}/${uid}`
+    );
+
+}
+
+
+/*
+==================================================
+PUBLIC RESULT REFERENCE
+==================================================
+*/
+
+function getGovernorPublicResultReference(
+    governorId,
+    votingPeriod,
+    publicResponseId
+) {
+
+    return ref(
+        database,
+        `governorApproval/${governorId}/responses/${votingPeriod}/${publicResponseId}`
+    );
+
+}
+
+
+/*
+==================================================
+CREATE PUBLIC RECORD FROM PRIVATE RECORD
+==================================================
+*/
+
+function createGovernorPublicRecord(
+    privateVote
+) {
+
+    return {
+
+        governorId:
+            privateVote.governorId,
+
+        seatKey:
+            privateVote.seatKey,
+
+        stateCode:
+            privateVote.stateCode,
+
+        response:
+            privateVote.response,
+
+        submittedAt:
+            privateVote.submittedAt,
+
+        votingPeriod:
+            privateVote.votingPeriod
+
+    };
+
+}
+
+
+/*
+==================================================
+REPAIR PUBLIC GOVERNOR RESULT
+==================================================
+
+If the private weekly lock exists but its anonymous
+public result is missing, recreate the public result.
+
+The Firebase UID is never copied into the public
+results collection.
+==================================================
+*/
+
+async function repairGovernorPublicResultIfNeeded(
+    privateVote
+) {
+
+    if (
+        !privateVote ||
+        !privateVote.governorId ||
+        !privateVote.votingPeriod ||
+        !privateVote.publicResponseId
+    ) {
+
+        return false;
+
+    }
+
+
+    try {
+
+        const publicReference =
+            getGovernorPublicResultReference(
+                privateVote.governorId,
+                privateVote.votingPeriod,
+                privateVote.publicResponseId
+            );
+
+
+        const publicSnapshot =
+            await get(
+                publicReference
+            );
+
+
+        if (
+            publicSnapshot.exists()
+        ) {
+
+            return true;
+
+        }
+
+
+        const publicVote =
+            createGovernorPublicRecord(
+                privateVote
+            );
+
+
+        await set(
+            publicReference,
+            publicVote
+        );
+
+
+        return true;
+
+    } catch (error) {
+
+        console.error(
+            "Governor approval public-result repair failed:",
+            error
+        );
+
+
+        return false;
+
+    }
+
+}
+
+
+/*
+==================================================
 STATUS
 ==================================================
 */
@@ -284,6 +446,11 @@ export async function getGovernorApprovalStatus(
         snapshot.exists()
     ) {
 
+        await repairGovernorPublicResultIfNeeded(
+            snapshot.val()
+        );
+
+
         return {
 
             eligible:
@@ -366,7 +533,16 @@ export async function getMyGovernorApprovalVote(
     }
 
 
-    return snapshot.val();
+    const privateVote =
+        snapshot.val();
+
+
+    await repairGovernorPublicResultIfNeeded(
+        privateVote
+    );
+
+
+    return privateVote;
 
 }
 
@@ -478,6 +654,11 @@ export async function submitGovernorApproval(
         existingSnapshot.exists()
     ) {
 
+        await repairGovernorPublicResultIfNeeded(
+            existingSnapshot.val()
+        );
+
+
         throw createGovernorError(
             "already-participated-this-week",
             "You have already rated this governor this week."
@@ -520,6 +701,12 @@ export async function submitGovernorApproval(
             .toISOString();
 
 
+    /*
+    ----------------------------------------------
+    PRIVATE WEEKLY RECORD
+    ----------------------------------------------
+    */
+
     const privateVote = {
 
         governorId:
@@ -543,41 +730,82 @@ export async function submitGovernorApproval(
     };
 
 
-    const publicVote = {
+    /*
+    ----------------------------------------------
+    PUBLIC ANONYMOUS RECORD
+    ----------------------------------------------
+    */
 
-        governorId:
-            governor.id,
-
-        seatKey:
-            governor.seatKey,
-
-        stateCode:
-            governor.stateCode,
-
-        response,
-
-        submittedAt,
-
-        votingPeriod:
-            period
-
-    };
+    const publicVote =
+        createGovernorPublicRecord(
+            privateVote
+        );
 
 
     /*
     ----------------------------------------------
-    PRIVATE LOCK FIRST
+    STEP 1
 
-    Firebase rules will require the private lock
-    before the anonymous public response is accepted.
+    Create the private weekly lock first.
+
+    Firebase rules prevent this record from being
+    overwritten during the same voting week.
     ----------------------------------------------
     */
 
-    await set(
-        privateVoteReference,
-        privateVote
-    );
+    try {
 
+        await set(
+            privateVoteReference,
+            privateVote
+        );
+
+    } catch (error) {
+
+        /*
+        ------------------------------------------
+        HANDLE TWO TABS / FAST DOUBLE CLICK
+        ------------------------------------------
+        */
+
+        const latestSnapshot =
+            await get(
+                privateVoteReference
+            );
+
+
+        if (
+            latestSnapshot.exists()
+        ) {
+
+            await repairGovernorPublicResultIfNeeded(
+                latestSnapshot.val()
+            );
+
+
+            throw createGovernorError(
+                "already-participated-this-week",
+                "You have already rated this governor this week."
+            );
+
+        }
+
+
+        throw error;
+
+    }
+
+
+    /*
+    ----------------------------------------------
+    STEP 2
+
+    Create the anonymous public result.
+
+    Firebase rules can now validate the result
+    against the private weekly lock.
+    ----------------------------------------------
+    */
 
     try {
 
@@ -594,10 +822,33 @@ export async function submitGovernorApproval(
         );
 
 
-        throw createGovernorError(
-            "public-write-failed",
-            "Your Governor rating could not be completed."
+        /*
+        ------------------------------------------
+        TRY IMMEDIATE REPAIR
+        ------------------------------------------
+        */
+
+        await repairGovernorPublicResultIfNeeded(
+            privateVote
         );
+
+
+        const repairedSnapshot =
+            await get(
+                publicResponseReference
+            );
+
+
+        if (
+            !repairedSnapshot.exists()
+        ) {
+
+            throw createGovernorError(
+                "public-write-failed",
+                "Your Governor rating was secured, but the public result could not finish syncing. Refresh the page and it will try again automatically."
+            );
+
+        }
 
     }
 
@@ -770,26 +1021,6 @@ function summarizeGovernorApproval(
             getGovernorVotingPeriod()
 
     };
-
-}
-
-
-/*
-==================================================
-PRIVATE VOTE REFERENCE
-==================================================
-*/
-
-function getGovernorVoteReference(
-    period,
-    governorId,
-    uid
-) {
-
-    return ref(
-        database,
-        `weeklyGovernorVotes/${period}/${governorId}/${uid}`
-    );
 
 }
 

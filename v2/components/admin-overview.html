@@ -11,12 +11,18 @@
         </h2>
 
         <p>
-            Review the live participation numbers across Civic Horizon Index
-            before making changes to active polls or public trackers.
+            Review participation, polling activity, and the items
+            that need administrator attention.
         </p>
 
     </header>
 
+
+    <!--
+    ==================================================
+    PLATFORM ACTIVITY
+    ==================================================
+    -->
 
     <div class="admin-overview-grid">
 
@@ -104,87 +110,268 @@
 
     <!--
     ==================================================
-    CIVIC PULSE HISTORY
+    ADMIN ATTENTION
     ==================================================
     -->
 
-    <section class="admin-card">
+    <section class="admin-attention">
 
-        <div class="admin-card__header">
+        <header class="admin-attention__heading">
 
             <div>
 
-                <p class="admin-eyebrow">
-                    Civic Pulse History
+                <p class="admin-section__eyebrow">
+                    Needs Your Attention
                 </p>
 
-                <h2>
-                    Capture Today's Snapshot
-                </h2>
+                <h3>
+                    Admin workload
+                </h3>
 
             </div>
+
+            <p>
+                Start with these items before reviewing
+                general platform activity.
+            </p>
+
+        </header>
+
+
+        <div class="admin-attention-grid">
+
+
+            <!-- POLL SUGGESTIONS -->
+
+            <a
+                href="#adminPollSuggestionsContainer"
+                class="admin-attention-card"
+            >
+
+                <span class="admin-attention-card__label">
+                    Poll Suggestions
+                </span>
+
+                <strong
+                    class="admin-attention-card__value"
+                    id="adminPendingSuggestionCount"
+                >
+                    0
+                </strong>
+
+                <small>
+                    Awaiting review
+                </small>
+
+            </a>
+
+
+            <!-- CONTACT MESSAGES -->
+
+            <a
+                href="#adminContactMessagesContainer"
+                class="admin-attention-card"
+            >
+
+                <span class="admin-attention-card__label">
+                    Contact Messages
+                </span>
+
+                <strong
+                    class="admin-attention-card__value"
+                    id="adminNewContactMessageCount"
+                >
+                    0
+                </strong>
+
+                <small>
+                    New participant messages
+                </small>
+
+            </a>
+
+
+            <!-- STATE QUESTIONS -->
+
+            <a
+                href="#adminStateQuestionsContainer"
+                class="admin-attention-card"
+            >
+
+                <span class="admin-attention-card__label">
+                    State Coverage
+                </span>
+
+                <strong
+                    class="admin-attention-card__value"
+                    id="adminStatesNeedingQuestionsCount"
+                >
+                    50
+                </strong>
+
+                <small>
+                    States with no active questions
+                </small>
+
+            </a>
+
+
+            <!-- ACTIVE POLLS -->
+
+            <a
+                href="#adminCommunityPollsContainer"
+                class="admin-attention-card"
+            >
+
+                <span class="admin-attention-card__label">
+                    Active Polls
+                </span>
+
+                <strong
+                    class="admin-attention-card__value"
+                    id="adminAttentionActivePollCount"
+                >
+                    0
+                </strong>
+
+                <small>
+                    Community polls currently active
+                </small>
+
+            </a>
+
+        </div>
+
+    </section>
+
+
+    <!--
+==================================================
+CIVIC PULSE HISTORY
+==================================================
+-->
+
+<section class="admin-snapshot-panel">
+
+    <div class="admin-snapshot-panel__header">
+
+        <div>
+
+            <p class="admin-section__eyebrow">
+                Civic Pulse History
+            </p>
+
+            <h2>
+                Capture today's snapshot
+            </h2>
+
+            <p>
+                Save the current Civic Pulse results so public
+                trend charts can show how sentiment changes over time.
+            </p>
 
         </div>
 
 
-        <p>
-            Save today's Civic Pulse results so the public trend charts
-            can show how sentiment changes over time.
-        </p>
+        <div class="admin-snapshot-panel__status">
+
+            <span>
+                Daily Record
+            </span>
+
+            <strong id="adminSnapshotStatus">
+                Checking...
+            </strong>
+
+        </div>
+
+    </div>
 
 
-        <div class="admin-snapshot-grid">
+    <div class="admin-snapshot-grid">
 
-            <div>
+        <article class="admin-snapshot-card">
 
-                <span>
-                    Presidential Approval
-                </span>
+            <span>
+                Presidential Approval
+            </span>
 
-                <strong id="adminSnapshotApproval">
-                    —
-                </strong>
+            <strong id="adminSnapshotApproval">
+                —
+            </strong>
 
-            </div>
+            <small>
+                Current approval
+            </small>
 
-
-            <div>
-
-                <span>
-                    Right Direction
-                </span>
-
-                <strong id="adminSnapshotDirection">
-                    —
-                </strong>
-
-            </div>
+        </article>
 
 
-            <div>
+        <article class="admin-snapshot-card">
 
-                <span>
-                    Economic Confidence
-                </span>
+            <span>
+                Right Direction
+            </span>
 
-                <strong id="adminSnapshotEconomy">
-                    —
-                </strong>
+            <strong id="adminSnapshotDirection">
+                —
+            </strong>
 
-            </div>
+            <small>
+                Country direction
+            </small>
+
+        </article>
 
 
-            <div>
+        <article class="admin-snapshot-card">
 
-                <span>
-                    Institutional Confidence
-                </span>
+            <span>
+                Economic Confidence
+            </span>
 
-                <strong id="adminSnapshotInstitutions">
-                    —
-                </strong>
+            <strong id="adminSnapshotEconomy">
+                —
+            </strong>
 
-            </div>
+            <small>
+                Average confidence
+            </small>
+
+        </article>
+
+
+        <article class="admin-snapshot-card">
+
+            <span>
+                Institutional Confidence
+            </span>
+
+            <strong id="adminSnapshotInstitutions">
+                —
+            </strong>
+
+            <small>
+                Average confidence
+            </small>
+
+        </article>
+
+    </div>
+
+
+    <div class="admin-snapshot-panel__footer">
+
+        <div>
+
+            <strong>
+                Save today's Civic Pulse record
+            </strong>
+
+            <p>
+                Capture once the current response totals
+                are ready for the public trend history.
+            </p>
 
         </div>
 
@@ -192,18 +379,20 @@
         <button
             type="button"
             id="captureCivicPulseSnapshotButton"
-            class="admin-primary-button"
+            class="admin-snapshot-button"
         >
             Capture Today's Snapshot
         </button>
 
+    </div>
 
-        <p
-            id="adminSnapshotMessage"
-            class="admin-status-message"
-            aria-live="polite"
-        ></p>
 
-    </section>
+    <p
+        id="adminSnapshotMessage"
+        class="admin-snapshot-message"
+        aria-live="polite"
+    ></p>
+
+</section>
 
 </div>

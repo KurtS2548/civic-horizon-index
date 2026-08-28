@@ -39,11 +39,12 @@ PUBLIC OFFICIAL DATA
 ==================================================
 */
 
+
 import {
 
-    getStatePublicOfficials
+    getCurrentStateOfficials
 
-} from "./services/public-official-data-service.js";
+} from "./services/public-official-admin-service.js";
 
 /*
 ==================================================
@@ -617,7 +618,7 @@ PUBLIC OFFICIALS
 ==================================================
 */
 
-function initializePublicOfficials(
+async function initializePublicOfficials(
     stateCode,
     stateName
 ) {
@@ -652,9 +653,9 @@ function initializePublicOfficials(
 
 
     const officials =
-        getStatePublicOfficials(
-            stateCode
-        );
+    await getCurrentStateOfficials(
+        stateCode
+    );
 
 
     const governor =
@@ -691,20 +692,20 @@ function initializePublicOfficials(
 
         container.innerHTML = `
 
-            <div class="state-placeholder-card">
+    <div class="state-placeholder-card">
 
-                <strong>
-                    Public official information is being prepared
-                </strong>
+        <strong>
+            Public official information unavailable
+        </strong>
 
-                <p>
-                    Verified public-official information has not
-                    yet been added for this state.
-                </p>
+        <p>
+            Public-official information could not be loaded
+            right now. Please try again later.
+        </p>
 
-            </div>
+    </div>
 
-        `;
+`;
 
 
         return;

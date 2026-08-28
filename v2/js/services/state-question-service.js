@@ -340,6 +340,124 @@ export function subscribeToStateQuestions(
 
 }
 
+/*
+==================================================
+GET ALL STATE QUESTIONS
+==================================================
+*/
+
+export async function getAllStateQuestions() {
+
+    const stateQuestionsReference =
+        ref(
+            database,
+            "stateQuestions"
+        );
+
+
+    const snapshot =
+        await get(
+            stateQuestionsReference
+        );
+
+
+    const stateQuestionData =
+        {};
+
+
+    /*
+    Always return all 50 states, including states
+    that do not have any questions yet.
+    */
+
+    validStateCodes.forEach(
+        stateCode => {
+
+            stateQuestionData[
+                stateCode
+            ] =
+                [];
+
+        }
+    );
+
+
+    if (
+        !snapshot.exists()
+    ) {
+
+        return stateQuestionData;
+
+    }
+
+
+    snapshot.forEach(
+        stateSnapshot => {
+
+            const stateCode =
+                String(
+                    stateSnapshot.key ||
+                    ""
+                )
+                    .trim()
+                    .toUpperCase();
+
+
+            if (
+                !validStateCodes.includes(
+                    stateCode
+                )
+            ) {
+
+                return;
+
+            }
+
+
+            const questions =
+                [];
+
+
+            stateSnapshot.forEach(
+                questionSnapshot => {
+
+                    const value =
+                        questionSnapshot.val() ||
+                        {};
+
+
+                    questions.push({
+
+                        id:
+                            questionSnapshot.key,
+
+                        stateCode,
+
+                        ...value
+
+                    });
+
+                }
+            );
+
+
+            questions.sort(
+                compareStateQuestions
+            );
+
+
+            stateQuestionData[
+                stateCode
+            ] =
+                questions;
+
+        }
+    );
+
+
+    return stateQuestionData;
+
+}
 
 /*
 ==================================================

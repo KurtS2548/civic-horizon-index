@@ -126,24 +126,23 @@ async function handlePollSuggestion(
     */
 
     if (
-        ![
-            "national",
-            "state",
-            "local",
-            "community"
-        ].includes(
-            level
-        )
-    ) {
+    ![
+        "national",
+        "state",
+        "community"
+    ].includes(
+        level
+    )
+) {
 
-        showMessage(
-            "Choose the level that best fits your suggestion.",
-            "error"
-        );
+    showMessage(
+        "Choose the level that best fits your suggestion.",
+        "error"
+    );
 
-        return;
+    return;
 
-    }
+}
 
 
     if (

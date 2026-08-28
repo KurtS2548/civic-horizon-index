@@ -369,6 +369,14 @@ function updateSummary() {
 
 
     setText(
+        "adminNewContactMessageCount",
+        countByStatus(
+            "new"
+        )
+    );
+
+
+    setText(
         "adminContactReviewCount",
         countByStatus(
             "underReview"
@@ -1160,25 +1168,28 @@ function formatCategory(
 
     const labels = {
 
-        general:
-            "General",
+    general:
+        "General",
 
-        problem:
-            "Problem",
+    problem:
+        "Problem",
 
-        account:
-            "Account",
+    account:
+        "Account",
 
-        feedback:
-            "Feedback",
+    feedback:
+        "Feedback",
 
-        privacy:
-            "Privacy",
+    privacy:
+        "Privacy",
 
-        other:
-            "Accessibility / Other"
+    accessibility:
+        "Accessibility",
 
-    };
+    other:
+        "Other"
+
+};
 
 
     return (

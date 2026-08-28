@@ -5,9 +5,9 @@ STATE QUESTION VOTE SERVICE
 ==================================================
 */
 
-
 import {
 
+    auth,
     database
 
 } from "../../../js/firebase.js";
@@ -19,6 +19,7 @@ import {
     get,
     push,
     set,
+    remove,
     onValue
 
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
@@ -39,6 +40,7 @@ export async function getStateQuestionVote(
         validateId(
             questionId
         );
+
 
     const cleanUid =
         validateId(
@@ -79,25 +81,53 @@ export async function submitStateQuestionVote(
     {
         questionId,
         stateCode,
-        response,
-        uid
+        response
     }
 ) {
+
+    const user =
+        auth.currentUser;
+
+
+    if (
+        !user
+    ) {
+
+        throw new Error(
+            "You must be signed in to participate."
+        );
+
+    }
+
+
+    if (
+        !user.emailVerified
+    ) {
+
+        throw new Error(
+            "Verify your email before participating."
+        );
+
+    }
+
 
     const cleanQuestionId =
         validateId(
             questionId
         );
 
+
     const cleanUid =
         validateId(
-            uid
+            user.uid
         );
+
 
     const cleanStateCode =
         validateStateCode(
             stateCode
         );
+
 
     const cleanResponse =
         validateResponse(
@@ -127,8 +157,10 @@ export async function submitStateQuestionVote(
                 "You have already answered this state question."
             );
 
+
         error.code =
             "already-voted";
+
 
         throw error;
 
@@ -205,10 +237,43 @@ export async function submitStateQuestionVote(
     ==================================================
     */
 
-    await set(
-        privateVoteReference,
-        privateRecord
-    );
+    try {
+
+        await set(
+            privateVoteReference,
+            privateRecord
+        );
+
+    } catch (error) {
+
+        const latestVote =
+            await get(
+                privateVoteReference
+            );
+
+
+        if (
+            latestVote.exists()
+        ) {
+
+            const duplicateError =
+                new Error(
+                    "You have already answered this state question."
+                );
+
+
+            duplicateError.code =
+                "already-voted";
+
+
+            throw duplicateError;
+
+        }
+
+
+        throw error;
+
+    }
 
 
     /*
@@ -216,12 +281,46 @@ export async function submitStateQuestionVote(
     STEP 2
     SAVE ANONYMOUS PUBLIC RESULT
     ==================================================
+
+    The public database rule verifies that this record
+    matches the participant's private vote.
+    ==================================================
     */
 
-    await set(
-        publicResponseReference,
-        publicRecord
-    );
+    try {
+
+        await set(
+            publicResponseReference,
+            publicRecord
+        );
+
+    } catch (error) {
+
+        /*
+        The private lock saved but the public result did
+        not. Remove the incomplete private lock so the
+        participant may safely try again.
+        */
+
+        try {
+
+            await remove(
+                privateVoteReference
+            );
+
+        } catch (rollbackError) {
+
+            console.error(
+                "State question vote rollback failed:",
+                rollbackError
+            );
+
+        }
+
+
+        throw error;
+
+    }
 
 
     return privateRecord;
@@ -255,24 +354,16 @@ export function subscribeToStateQuestionResults(
 
 
     return onValue(
-
         responsesReference,
 
         snapshot => {
 
             const summary = {
 
-                yes:
-                    0,
-
-                no:
-                    0,
-
-                unsure:
-                    0,
-
-                total:
-                    0
+                yes: 0,
+                no: 0,
+                unsure: 0,
+                total: 0
 
             };
 
@@ -297,8 +388,7 @@ export function subscribeToStateQuestionResults(
                             "Yes"
                         ) {
 
-                            summary.yes +=
-                                1;
+                            summary.yes += 1;
 
                         }
 
@@ -308,8 +398,7 @@ export function subscribeToStateQuestionResults(
                             "No"
                         ) {
 
-                            summary.no +=
-                                1;
+                            summary.no += 1;
 
                         }
 
@@ -319,8 +408,7 @@ export function subscribeToStateQuestionResults(
                             "Unsure"
                         ) {
 
-                            summary.unsure +=
-                                1;
+                            summary.unsure += 1;
 
                         }
 
@@ -343,7 +431,6 @@ export function subscribeToStateQuestionResults(
         },
 
         errorCallback
-
     );
 
 }

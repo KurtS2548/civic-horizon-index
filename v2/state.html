@@ -115,14 +115,13 @@
             
 
 
-        <p
-            class="state-hero__description"
-            id="statePageDescription"
-        >
-            Explore state-level civic participation,
-            results, representatives, congressional
-            approval, and public records.
-        </p>
+                <p
+                    class="state-hero__description"
+                    id="statePageDescription"
+>
+                    Explore state questions, public officials,
+                    approval ratings, and civic information.
+                </p>
 
         </div>
 
@@ -154,8 +153,8 @@
                         </h2>
 
                         <p>
-                            Active Civic Horizon questions for this state
-                            will appear here.
+                            Participate in active Civic Horizon questions
+                            and see how people across your state are responding.
                         </p>
 
                     </div>
@@ -232,8 +231,7 @@
                         </strong>
 
                        <p>
-                           Current public officials and approval information
-                           will appear here.
+                            Loading current public officials and approval information.
                        </p>
 
                     </div>
@@ -283,45 +281,10 @@
 
     <!-- STATE PROFILE APPLICATION -->
 
-    <script type="module">
-
-    import("./js/state.js")
-        .catch(error => {
-
-            const message =
-                document.createElement(
-                    "div"
-                );
-
-            message.style.cssText = `
-                position: fixed;
-                left: 12px;
-                right: 12px;
-                bottom: 12px;
-                z-index: 99999;
-                padding: 16px;
-                background: white;
-                border: 3px solid red;
-                color: black;
-                font-family: monospace;
-                white-space: pre-wrap;
-            `;
-
-            message.textContent =
-                "STATE.JS ERROR:\n\n" +
-                (
-                    error?.stack ||
-                    error?.message ||
-                    String(error)
-                );
-
-            document.body.appendChild(
-                message
-            );
-
-        });
-
-</script>
+    <script
+    type="module"
+    src="js/state.js"
+></script>
 
     <script
         type="module"

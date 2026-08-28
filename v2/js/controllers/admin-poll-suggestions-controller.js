@@ -479,6 +479,13 @@ function updateSummary() {
 
     );
 
+        setText(
+        "adminPendingSuggestionCount",
+        countByStatus(
+            "pendingReview"
+        )
+    );
+
 
     setText(
 
@@ -1763,19 +1770,19 @@ function formatLevel(
 
     const labels = {
 
-        national:
-            "National",
+    national:
+        "National",
 
-        state:
-            "State",
+    state:
+        "State",
 
-        local:
-            "Local",
+    local:
+        "Local",
 
-        community:
-            "Community"
+    community:
+        "Community"
 
-    };
+};
 
 
     return (

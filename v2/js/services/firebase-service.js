@@ -1330,6 +1330,203 @@ export async function submitPrioritySubmission(
         getCurrentVotingPeriod();
 
 
+        /*
+    ----------------------------------------------
+    CHECK FOR EXISTING PRIVATE MONTHLY LOCK
+    ----------------------------------------------
+    */
+
+    const monthlyReference =
+        getMonthlyParticipantReference(
+            "nationalPriorities",
+            user.uid
+        );
+
+
+    const existingSnapshot =
+        await get(
+            monthlyReference
+        );
+
+
+    if (
+        existingSnapshot.exists()
+    ) {
+
+        const existingLock =
+            existingSnapshot.val() ||
+            {};
+
+
+        const existingPublicSubmissionId =
+            String(
+                existingLock.publicSubmissionId ||
+                ""
+            ).trim();
+
+
+        /*
+        ------------------------------------------
+        LEGACY LOCK WITHOUT PUBLIC ID
+        ------------------------------------------
+        */
+
+        if (
+            !existingPublicSubmissionId
+        ) {
+
+            const error =
+                new Error(
+                    `You have already participated in ${getCurrentVotingPeriodLabel()}. Voting will reopen automatically next month.`
+                );
+
+
+            error.code =
+                "already-participated-this-month";
+
+
+            throw error;
+
+        }
+
+
+        const existingPublicReference =
+            ref(
+                database,
+                `prioritySubmissions/${existingPublicSubmissionId}`
+            );
+
+
+        const existingPublicSnapshot =
+            await get(
+                existingPublicReference
+            );
+
+
+        /*
+        ------------------------------------------
+        PUBLIC SUBMISSION ALREADY EXISTS
+        ------------------------------------------
+        */
+
+        if (
+            existingPublicSnapshot.exists()
+        ) {
+
+            const error =
+                new Error(
+                    `You have already participated in ${getCurrentVotingPeriodLabel()}. Voting will reopen automatically next month.`
+                );
+
+
+            error.code =
+                "already-participated-this-month";
+
+
+            throw error;
+
+        }
+
+
+        /*
+        ------------------------------------------
+        RECOVER INCOMPLETE PUBLIC SUBMISSION
+        ------------------------------------------
+        */
+
+        const recoveredPublicSubmissionData = {
+
+            ratings:
+                existingLock.ratings,
+
+            ageGroup:
+                existingLock.ageGroup,
+
+            submittedAt:
+                existingLock.submittedAt,
+
+            survey:
+                existingLock.survey,
+
+            surveyVersion:
+                existingLock.surveyVersion,
+
+            votingPeriod:
+                existingLock.votingPeriod
+
+        };
+
+
+        await set(
+            existingPublicReference,
+            recoveredPublicSubmissionData
+        );
+
+
+        await safelySavePrivateNationalPriorityHistory(
+            user,
+            {
+                submittedAt:
+                    existingLock.submittedAt,
+
+                ratings:
+                    existingLock.ratings,
+
+                votingPeriod:
+                    existingLock.votingPeriod
+            }
+        );
+
+
+        return {
+
+            id:
+                existingPublicSubmissionId,
+
+            recovered:
+                true,
+
+            votingPeriod:
+                existingLock.votingPeriod,
+
+            ...recoveredPublicSubmissionData
+
+        };
+
+    }
+
+
+    /*
+    ----------------------------------------------
+    CREATE ANONYMOUS PUBLIC SUBMISSION ID
+    ----------------------------------------------
+    */
+
+    const submissionReference =
+        push(
+            prioritySubmissionsRef
+        );
+
+
+    const publicSubmissionId =
+        submissionReference.key;
+
+
+    if (!publicSubmissionId) {
+
+        throw new Error(
+            "A National Priorities submission ID could not be created."
+        );
+
+    }
+
+
+    /*
+    ----------------------------------------------
+    PRIVATE MONTHLY PARTICIPATION RECORD
+    ----------------------------------------------
+    */
+
     const monthlyData = {
 
         ratings,
@@ -1342,61 +1539,93 @@ export async function submitPrioritySubmission(
             "nationalPriorities",
 
         surveyVersion:
-            "2.1"
+            "2.1",
+
+        votingPeriod,
+
+        publicSubmissionId
 
     };
 
 
     /*
     ----------------------------------------------
-    PRIVATE MONTHLY RECORD
-
-    This prevents the same account from submitting
-    National Priorities more than once in the same
-    YYYY-MM voting period.
+    ANONYMOUS PUBLIC RESULT
     ----------------------------------------------
     */
 
-    await saveMonthlyVote(
-        "nationalPriorities",
-        monthlyData
-    );
+    const publicSubmissionData = {
+
+        ratings,
+
+        ageGroup,
+
+        submittedAt,
+
+        survey:
+            "nationalPriorities",
+
+        surveyVersion:
+            "2.1",
+
+        votingPeriod
+
+    };
 
 
     /*
     ----------------------------------------------
-    CURRENT PUBLIC RESULTS
-
-    Keep the existing anonymous public results path
-    working during the migration.
-
-    No UID, email, birthday, name, or ZIP is copied
-    into this public record.
+    CREATE PRIVATE MONTHLY LOCK FIRST
     ----------------------------------------------
     */
 
-    const submissionReference =
-        push(
-            prioritySubmissionsRef
+    try {
+
+        await set(
+            monthlyReference,
+            monthlyData
         );
 
+    } catch (error) {
 
-    const publicSubmissionData = {
+        const latestSnapshot =
+            await get(
+                monthlyReference
+            );
 
-    ratings,
 
-    ageGroup,
+        if (
+            latestSnapshot.exists()
+        ) {
 
-    submittedAt,
+            const duplicateError =
+                new Error(
+                    `You have already participated in ${getCurrentVotingPeriodLabel()}. Voting will reopen automatically next month.`
+                );
 
-    survey:
-        "nationalPriorities",
 
-    surveyVersion:
-        "2.1"
+            duplicateError.code =
+                "already-participated-this-month";
 
-};
 
+            throw duplicateError;
+
+        }
+
+
+        throw error;
+
+    }
+
+
+    /*
+    ----------------------------------------------
+    WRITE ANONYMOUS PUBLIC RESULT
+
+    If this write fails, the private lock remains.
+    The next attempt will safely recover it.
+    ----------------------------------------------
+    */
 
     await set(
         submissionReference,
@@ -1407,6 +1636,13 @@ export async function submitPrioritySubmission(
     /*
     ----------------------------------------------
     PRIVATE PARTICIPANT HISTORY
+
+    History is intentionally non-critical.
+
+    The monthly vote and anonymous public result
+    have already succeeded. A history failure must
+    never make the participant believe the vote
+    failed.
     ----------------------------------------------
     */
 
@@ -1423,7 +1659,7 @@ export async function submitPrioritySubmission(
     return {
 
         id:
-            submissionReference.key,
+            publicSubmissionId,
 
         votingPeriod,
 
@@ -2083,6 +2319,11 @@ export async function submitCommunityVote(
 
     }
 
+    const choiceIndex =
+    allowedChoices.indexOf(
+        cleanChoice
+    );
+
 
     /*
     ----------------------------------------------
@@ -2229,6 +2470,8 @@ export async function submitCommunityVote(
             choice:
                 existingChoice,
 
+            choiceIndex:
+    allowedChoices.indexOf(existingChoice),
             submittedAt:
                 existingLock.submittedAt ||
                 new Date().toISOString(),
@@ -2304,6 +2547,8 @@ export async function submitCommunityVote(
 
         choice:
             cleanChoice,
+        
+        choiceIndex,
 
         publicVoteId,
 
@@ -2389,6 +2634,8 @@ export async function submitCommunityVote(
 
         choice:
             cleanChoice,
+
+        choiceIndex,
 
         submittedAt,
 
@@ -2592,16 +2839,13 @@ async function saveWeeklyCivicPulseResponse(
     const user =
         getVerifiedCurrentUser();
 
-
     const validatedTracker =
         validateWeeklyTracker(
             tracker
         );
 
-
     const votingPeriod =
         getCurrentWeeklyVotingPeriod();
-
 
     const weeklyReference =
         getWeeklyParticipantReference(
@@ -2609,40 +2853,171 @@ async function saveWeeklyCivicPulseResponse(
             user.uid
         );
 
+    const cleanedParticipantId =
+        validateParticipantId(
+            participantId
+        );
+
+    /*
+    ==================================================
+    CHECK EXISTING PRIVATE LOCK
+    ==================================================
+    */
 
     const existingSnapshot =
         await get(
             weeklyReference
         );
 
-
     if (
         existingSnapshot.exists()
     ) {
 
-        const error =
-            new Error(
-                `You have already participated in ${getCurrentWeeklyVotingPeriodLabel()}. Voting will reopen automatically next Monday.`
+        const existingLock =
+            existingSnapshot.val() ||
+            {};
+
+        const existingPublicResponseId =
+            String(
+                existingLock.publicResponseId ||
+                ""
+            ).trim();
+
+        if (
+            !existingPublicResponseId
+        ) {
+
+            const error =
+                new Error(
+                    `You have already participated in ${getCurrentWeeklyVotingPeriodLabel()}. Voting will reopen automatically next Monday.`
+                );
+
+            error.code =
+                "already-participated-this-week";
+
+            throw error;
+        }
+
+        const existingPublicReference =
+            ref(
+                database,
+                `${publicPath}/${existingPublicResponseId}`
             );
 
+        const existingPublicSnapshot =
+            await get(
+                existingPublicReference
+            );
 
-        error.code =
-            "already-participated-this-week";
+        /*
+        ----------------------------------------------
+        PUBLIC RESPONSE ALREADY EXISTS
+        ----------------------------------------------
+        */
 
+        if (
+            existingPublicSnapshot.exists()
+        ) {
 
-        throw error;
+            const error =
+                new Error(
+                    `You have already participated in ${getCurrentWeeklyVotingPeriodLabel()}. Voting will reopen automatically next Monday.`
+                );
 
-    }
+            error.code =
+                "already-participated-this-week";
 
+            throw error;
+        }
 
-    const cleanedParticipantId =
-        validateParticipantId(
-            participantId
+        /*
+        ----------------------------------------------
+        RECOVER AN INCOMPLETE PUBLIC WRITE
+        ----------------------------------------------
+        */
+
+        const recoveredResponseData = {
+
+            response:
+                existingLock.response,
+
+            submittedAt:
+                existingLock.submittedAt,
+
+            tracker:
+                existingLock.tracker,
+
+            trackerVersion:
+                existingLock.trackerVersion,
+
+            votingPeriod:
+                existingLock.votingPeriod,
+
+            votingCadence:
+                "weekly",
+
+            ...(existingLock.participantId
+                ? {
+                    participantId:
+                        existingLock.participantId
+                }
+                : {})
+
+        };
+
+        await set(
+            existingPublicReference,
+            recoveredResponseData
         );
 
+        const recoveredHistoryData = {
+
+    response:
+        existingLock.response,
+
+    submittedAt:
+        existingLock.submittedAt,
+
+    tracker:
+        existingLock.tracker,
+
+    trackerVersion:
+        existingLock.trackerVersion
+
+};
+
+
+
+await safelySavePrivateCivicPulseHistory(
+    validatedTracker,
+    recoveredHistoryData
+);
+
+        return {
+
+            id:
+                existingPublicResponseId,
+
+            recovered:
+                true,
+
+            votingPeriod,
+
+            votingCadence:
+                "weekly",
+
+            ...recoveredResponseData
+
+        };
+    }
+
+    /*
+    ==================================================
+    CREATE ANONYMOUS PUBLIC RESPONSE ID
+    ==================================================
+    */
 
     let publicResponseId;
-
 
     if (
         cleanedParticipantId
@@ -2661,12 +3036,9 @@ async function saveWeeklyCivicPulseResponse(
                 )
             );
 
-
         publicResponseId =
             temporaryReference.key;
-
     }
-
 
     if (
         !publicResponseId
@@ -2675,40 +3047,73 @@ async function saveWeeklyCivicPulseResponse(
         throw new Error(
             "A public response ID could not be created."
         );
-
     }
-
 
     /*
     ==================================================
-    CRITICAL WEEKLY VOTE
-
-    Only the duplicate-vote lock and anonymous
-    public response are part of this atomic write.
+    CREATE PRIVATE WEEKLY LOCK FIRST
     ==================================================
     */
 
-    const updates =
-        {};
-
-
-    updates[
-        `weeklyVotes/${votingPeriod}/${validatedTracker}/${user.uid}`
-    ] = {
+    const lockData = {
 
         ...responseData,
 
         votingPeriod,
 
         votingCadence:
-            "weekly"
+            "weekly",
+
+        publicResponseId,
+
+        ...(cleanedParticipantId
+            ? {
+                participantId:
+                    cleanedParticipantId
+            }
+            : {})
 
     };
 
+    try {
 
-    updates[
-        `${publicPath}/${publicResponseId}`
-    ] = {
+        await set(
+            weeklyReference,
+            lockData
+        );
+
+    } catch (error) {
+
+        const latestSnapshot =
+            await get(
+                weeklyReference
+            );
+
+        if (
+            latestSnapshot.exists()
+        ) {
+
+            const duplicateError =
+                new Error(
+                    `You have already participated in ${getCurrentWeeklyVotingPeriodLabel()}. Voting will reopen automatically next Monday.`
+                );
+
+            duplicateError.code =
+                "already-participated-this-week";
+
+            throw duplicateError;
+        }
+
+        throw error;
+    }
+
+    /*
+    ==================================================
+    PUBLIC ANONYMOUS RESPONSE
+    ==================================================
+    */
+
+    const publicResponseData = {
 
         ...responseData,
 
@@ -2726,21 +3131,20 @@ async function saveWeeklyCivicPulseResponse(
 
     };
 
-
-    await update(
+    const publicReference =
         ref(
-            database
-        ),
-        updates
-    );
+            database,
+            `${publicPath}/${publicResponseId}`
+        );
 
+    await set(
+        publicReference,
+        publicResponseData
+    );
 
     /*
     ==================================================
     PRIVATE HISTORY
-
-    History is intentionally saved AFTER the vote.
-    A history error must never undo a valid vote.
     ==================================================
     */
 
@@ -2748,7 +3152,6 @@ async function saveWeeklyCivicPulseResponse(
         validatedTracker,
         responseData
     );
-
 
     return {
 
@@ -2758,6 +3161,9 @@ async function saveWeeklyCivicPulseResponse(
         participantId:
             cleanedParticipantId,
 
+        recovered:
+            false,
+
         votingPeriod,
 
         votingCadence:
@@ -2766,7 +3172,6 @@ async function saveWeeklyCivicPulseResponse(
         ...responseData
 
     };
-
 }
 
 /*
@@ -2785,16 +3190,13 @@ async function saveMonthlyCivicPulseResponse(
     const user =
         getVerifiedCurrentUser();
 
-
     const validatedTracker =
         validateMonthlyTracker(
             tracker
         );
 
-
     const votingPeriod =
         getCurrentVotingPeriod();
-
 
     const monthlyReference =
         getMonthlyParticipantReference(
@@ -2802,13 +3204,15 @@ async function saveMonthlyCivicPulseResponse(
             user.uid
         );
 
+    const cleanedParticipantId =
+        validateParticipantId(
+            participantId
+        );
 
     /*
-    ----------------------------------------------
-    FRIENDLY DUPLICATE CHECK
-
-    Firebase Rules remain the final protection.
-    ----------------------------------------------
+    ==================================================
+    CHECK EXISTING PRIVATE LOCK
+    ==================================================
     */
 
     const existingSnapshot =
@@ -2816,60 +3220,152 @@ async function saveMonthlyCivicPulseResponse(
             monthlyReference
         );
 
-
     if (
         existingSnapshot.exists()
     ) {
 
-        const error =
-            new Error(
-                `You have already participated in ${getCurrentVotingPeriodLabel()}. Voting will reopen automatically next month.`
+        const existingLock =
+            existingSnapshot.val() ||
+            {};
+
+        const existingPublicResponseId =
+            String(
+                existingLock.publicResponseId ||
+                ""
+            ).trim();
+
+        if (
+            !existingPublicResponseId
+        ) {
+
+            const error =
+                new Error(
+                    `You have already participated in ${getCurrentVotingPeriodLabel()}. Voting will reopen automatically next month.`
+                );
+
+            error.code =
+                "already-participated-this-month";
+
+            throw error;
+        }
+
+        const existingPublicReference =
+            ref(
+                database,
+                `${publicPath}/${existingPublicResponseId}`
             );
 
+        const existingPublicSnapshot =
+            await get(
+                existingPublicReference
+            );
 
-        error.code =
-            "already-participated-this-month";
+        /*
+        ----------------------------------------------
+        PUBLIC RESPONSE ALREADY EXISTS
+        ----------------------------------------------
+        */
 
+        if (
+            existingPublicSnapshot.exists()
+        ) {
 
-        throw error;
+            const error =
+                new Error(
+                    `You have already participated in ${getCurrentVotingPeriodLabel()}. Voting will reopen automatically next month.`
+                );
 
-    }
+            error.code =
+                "already-participated-this-month";
 
+            throw error;
+        }
 
-    /*
-    ----------------------------------------------
-    ANONYMOUS PUBLIC PARTICIPANT ID
+        /*
+        ----------------------------------------------
+        RECOVER AN INCOMPLETE PUBLIC WRITE
+        ----------------------------------------------
+        */
 
-    The Firebase UID is NEVER placed into the
-    public Civic Pulse record.
-    ----------------------------------------------
-    */
+        const recoveredResponseData = {
 
-    const cleanedParticipantId =
-        validateParticipantId(
-            participantId
+            ratings:
+                existingLock.ratings,
+
+            submittedAt:
+                existingLock.submittedAt,
+
+            tracker:
+                existingLock.tracker,
+
+            trackerVersion:
+                existingLock.trackerVersion,
+
+            votingPeriod:
+                existingLock.votingPeriod,
+
+            ...(existingLock.participantId
+                ? {
+                    participantId:
+                        existingLock.participantId
+                }
+                : {})
+
+        };
+
+        await set(
+            existingPublicReference,
+            recoveredResponseData
         );
 
+        const recoveredHistoryData = {
+
+    ratings:
+        existingLock.ratings,
+
+    submittedAt:
+        existingLock.submittedAt,
+
+    tracker:
+        existingLock.tracker,
+
+    trackerVersion:
+        existingLock.trackerVersion
+
+};
+
+
+await safelySavePrivateCivicPulseHistory(
+    validatedTracker,
+    recoveredHistoryData
+);
+
+        return {
+
+            id:
+                existingPublicResponseId,
+
+            recovered:
+                true,
+
+            votingPeriod,
+
+            ...recoveredResponseData
+
+        };
+    }
+
+    /*
+    ==================================================
+    CREATE ANONYMOUS PUBLIC RESPONSE ID
+    ==================================================
+    */
 
     let publicResponseId;
-
 
     if (
         cleanedParticipantId
     ) {
-
-        /*
-        Example:
-
-        2026-08-participant-abc123
-
-        When September arrives it naturally becomes:
-
-        2026-09-participant-abc123
-
-        Therefore the public record can be created again
-        without overwriting the August response.
-        */
 
         publicResponseId =
             `${votingPeriod}-${cleanedParticipantId}`;
@@ -2884,12 +3380,9 @@ async function saveMonthlyCivicPulseResponse(
                 )
             );
 
-
         publicResponseId =
             temporaryReference.key;
-
     }
-
 
     if (
         !publicResponseId
@@ -2898,70 +3391,70 @@ async function saveMonthlyCivicPulseResponse(
         throw new Error(
             "A public response ID could not be created."
         );
-
     }
 
-
     /*
-    ----------------------------------------------
-    PRIVATE HISTORY ID
-    ----------------------------------------------
+    ==================================================
+    CREATE PRIVATE MONTHLY LOCK FIRST
+    ==================================================
     */
 
-    const privateHistoryReference =
-        push(
-            ref(
-                database,
-                `userActivity/${user.uid}/civicPulse/${validatedTracker}`
-            )
-        );
-
-
-    const historyId =
-        privateHistoryReference.key;
-
-
-    if (
-        !historyId
-    ) {
-
-        throw new Error(
-            "A private history record could not be created."
-        );
-
-    }
-
-
-    /*
-    ----------------------------------------------
-    MULTI-LOCATION ATOMIC UPDATE
-
-    All three records succeed together or fail
-    together.
-
-    1. Private monthly eligibility record
-    2. Anonymous public result
-    3. Private account history
-    ----------------------------------------------
-    */
-
-    const updates = {};
-
-
-    updates[
-        `monthlyVotes/${votingPeriod}/${validatedTracker}/${user.uid}`
-    ] = {
+    const lockData = {
 
         ...responseData,
 
-        votingPeriod
+        votingPeriod,
+
+        publicResponseId,
+
+        ...(cleanedParticipantId
+            ? {
+                participantId:
+                    cleanedParticipantId
+            }
+            : {})
 
     };
 
+    try {
 
-    updates[
-        `${publicPath}/${publicResponseId}`
-    ] = {
+        await set(
+            monthlyReference,
+            lockData
+        );
+
+    } catch (error) {
+
+        const latestSnapshot =
+            await get(
+                monthlyReference
+            );
+
+        if (
+            latestSnapshot.exists()
+        ) {
+
+            const duplicateError =
+                new Error(
+                    `You have already participated in ${getCurrentVotingPeriodLabel()}. Voting will reopen automatically next month.`
+                );
+
+            duplicateError.code =
+                "already-participated-this-month";
+
+            throw duplicateError;
+        }
+
+        throw error;
+    }
+
+    /*
+    ==================================================
+    PUBLIC ANONYMOUS RESPONSE
+    ==================================================
+    */
+
+    const publicResponseData = {
 
         ...responseData,
 
@@ -2976,30 +3469,27 @@ async function saveMonthlyCivicPulseResponse(
 
     };
 
-
-    /*
-    The existing userActivity rules do not require
-    votingPeriod, so private history keeps its current
-    compatible structure. submittedAt still preserves
-    the exact month and year.
-    */
-
-    updates[
-    `userActivity/${user.uid}/civicPulse/${validatedTracker}/${historyId}`
-] = {
-
-    ...responseData
-
-};
-
-
-    await update(
+    const publicReference =
         ref(
-            database
-        ),
-        updates
+            database,
+            `${publicPath}/${publicResponseId}`
+        );
+
+    await set(
+        publicReference,
+        publicResponseData
     );
 
+    /*
+    ==================================================
+    PRIVATE HISTORY
+    ==================================================
+    */
+
+    await safelySavePrivateCivicPulseHistory(
+        validatedTracker,
+        responseData
+    );
 
     return {
 
@@ -3009,12 +3499,14 @@ async function saveMonthlyCivicPulseResponse(
         participantId:
             cleanedParticipantId,
 
+        recovered:
+            false,
+
         votingPeriod,
 
         ...responseData
 
     };
-
 }
 
 

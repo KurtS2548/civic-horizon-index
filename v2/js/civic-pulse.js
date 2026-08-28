@@ -1096,7 +1096,7 @@ function renderDirectionTracker() {
         "directionParticipation",
         total > 0
             ? `${total} total response${total === 1 ? "" : "s"}.`
-            : "Awaiting responses."
+            : "No data yet."
     );
 
 
@@ -1104,7 +1104,7 @@ function renderDirectionTracker() {
         "pulseDirectionSummary",
         total > 0
             ? `${rightPercent}% right direction`
-            : "Awaiting responses"
+            : "No data yet."
     );
 
 }
@@ -1655,7 +1655,7 @@ function renderConfidenceSnapshot(
 
         setText(
             "pulseEconomySummary",
-            "Awaiting responses"
+            "No data yet"
         );
 
     }
@@ -1721,7 +1721,7 @@ function renderConfidenceSnapshot(
 
         setText(
             "pulseInstitutionSummary",
-            "Awaiting responses"
+            "No data yet"
         );
 
     }

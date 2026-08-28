@@ -686,17 +686,14 @@ async function submitResponse(
 
         await submitStateQuestionVote({
 
-            questionId:
-                question.id,
+    questionId:
+        question.id,
 
-            stateCode,
+    stateCode,
 
-            response,
+    response
 
-            uid:
-                user.uid
-
-        });
+});
 
 
         highlightResponse(

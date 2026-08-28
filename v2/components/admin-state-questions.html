@@ -15,8 +15,9 @@
                 </h2>
 
                 <p>
-                    Choose a state to review and manage
-                    questions shown to participants in that state.
+                    Review question coverage across all 50 states,
+                    then choose a state to manage its active
+                    and inactive questions.
                 </p>
 
             </div>
@@ -25,6 +26,90 @@
 
 
         <div class="admin-state-questions">
+
+
+            <!--
+            ==================================================
+            STATE COVERAGE
+            ==================================================
+            -->
+
+            <section class="admin-state-coverage">
+
+                <div class="admin-state-coverage__heading">
+
+                    <div>
+
+                        <span>
+                            Nationwide Coverage
+                        </span>
+
+                        <strong>
+                            State question readiness
+                        </strong>
+
+                    </div>
+
+
+                    <div class="admin-state-coverage__summary">
+
+                        <div>
+
+                            <span>
+                                States Ready
+                            </span>
+
+                            <strong id="adminStateCoverageReadyCount">
+                                0
+                            </strong>
+
+                        </div>
+
+
+                        <div>
+
+                            <span>
+                                No Active Questions
+                            </span>
+
+                            <strong id="adminStateCoverageMissingCount">
+                                50
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    class="admin-state-coverage__list"
+                    id="adminStateCoverageList"
+                >
+
+                    <div class="admin-placeholder-card">
+
+                        <strong>
+                            Loading state coverage
+                        </strong>
+
+                        <p>
+                            Checking active questions across all states.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!--
+            ==================================================
+            STATE SELECTOR
+            ==================================================
+            -->
 
             <div class="admin-state-questions__controls">
 
@@ -42,6 +127,12 @@
 
             </div>
 
+
+            <!--
+            ==================================================
+            QUESTION EDITOR
+            ==================================================
+            -->
 
             <div
                 class="admin-state-questions__editor"
@@ -68,6 +159,12 @@
 
             </div>
 
+
+            <!--
+            ==================================================
+            STATE QUESTION LIST
+            ==================================================
+            -->
 
             <div
                 class="admin-state-questions__list"

@@ -24,12 +24,8 @@ import {
 
 
 import {
-
     ref,
-    get,
-    push,
-    set
-
+    get
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 
@@ -239,29 +235,6 @@ export async function submitNationalPriorityRatings(
         );
 
 
-    /*
-    ----------------------------------------------
-    PRIVATE PERSONAL HISTORY
-    ----------------------------------------------
-    */
-
-    try {
-
-        await savePrivatePriorityHistory(
-            user.uid,
-            validatedRatings
-        );
-
-    } catch (error) {
-
-        console.error(
-            "Private National Priority history could not be saved:",
-            error
-        );
-
-    }
-
-
     return publicSubmission;
 
 }
@@ -342,69 +315,6 @@ function normalizeAgeGroup(
 
 
     return null;
-
-}
-
-
-/*
-==================================================
-PRIVATE PRIORITY HISTORY
-==================================================
-*/
-
-async function savePrivatePriorityHistory(
-    uid,
-    ratings
-) {
-
-    if (!uid) {
-
-        throw new Error(
-            "Participant UID is required."
-        );
-
-    }
-
-
-    const historyReference =
-        ref(
-            database,
-            `userActivity/${uid}/nationalPriorities`
-        );
-
-
-    const submissionReference =
-        push(
-            historyReference
-        );
-
-
-    const submittedAt =
-        new Date().toISOString();
-
-
-    await set(
-        submissionReference,
-        {
-
-            submittedAt,
-
-            ratings: {
-                ...ratings
-            }
-
-        }
-    );
-
-
-    return {
-
-        id:
-            submissionReference.key,
-
-        submittedAt
-
-    };
 
 }
 

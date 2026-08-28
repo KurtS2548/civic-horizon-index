@@ -61,344 +61,172 @@
 
     <main class="account-page">
 
-        <section class="account-compact">
+        <section class="account-hero">
 
-            <div class="account-compact__container">
-
-                <div class="account-compact__intro">
-
-                    <p class="account-eyebrow">
-                        Civic Horizon Account
-                    </p>
-
-                    <h1>
-                        Sign in to participate
-                    </h1>
-
-                    <p>
-                        Create a verified account in just a few steps.
-                    </p>
-
-                </div>
-
-
-                <div class="account-switcher">
-
-                    <button
-                        type="button"
-                        id="showSignInButton"
-                        class="account-switcher__button is-active"
-                    >
-                        Sign In
-                    </button>
-
-                    <button
-                        type="button"
-                        id="showCreateAccountButton"
-                        class="account-switcher__button"
-                    >
-                        Create Account
-                    </button>
-
-                </div>
+            <div class="account-hero__container">
 
 
                 <!-- ==========================================
-                SIGN IN
+                WELCOME
                 =========================================== -->
 
-                <section
-                    id="signInPanel"
-                    class="account-panel"
-                >
+                <div class="account-welcome">
 
-                    <div class="account-panel__heading">
+                    <p class="account-welcome__eyebrow">
+                        Civic Horizon Index
+                    </p>
+
+                    <h1>
+                        <span class="account-welcome__headline-main">
+                            America Is Talking.
+                        </span>
+
+                        <span class="account-welcome__headline-sub">
+                            Come See What They’re Saying.
+                        </span>
+                    </h1>
+
+                    <p class="account-welcome__description">
+                        See what people across the country are saying about
+                        the issues that matter — then add your voice to the
+                        conversation.
+                    </p>
+
+                    <div class="account-welcome__points">
+
+                        <div class="account-welcome__point">
+                            <span class="account-welcome__point-icon">✓</span>
+
+                            <span>
+                                Participate in national and community polls
+                            </span>
+                        </div>
+
+                        <div class="account-welcome__point">
+                            <span class="account-welcome__point-icon">✓</span>
+
+                            <span>
+                                See what participants across America are saying
+                            </span>
+                        </div>
+
+                        <div class="account-welcome__point">
+                            <span class="account-welcome__point-icon">✓</span>
+
+                            <span>
+                                Make your voice part of the conversation
+                            </span>
+                        </div>
+
+                    </div>
+
+
+                    <div class="account-welcome__slogan">
+
+                        <span class="account-welcome__slogan-line"></span>
+
+                        <p>
+                            A Better Future Starts With Your Voice.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- ==========================================
+                ACCOUNT CARD
+                =========================================== -->
+
+                <div class="account-card">
+
+                    <div class="account-card__intro">
+
+                        <p class="account-card__eyebrow">
+                            Your Civic Horizon Account
+                        </p>
 
                         <h2>
-                            Welcome back
+                            Join the conversation
                         </h2>
 
                         <p>
-                            Sign in and continue where you left off.
+                            Sign in or create your account to participate.
                         </p>
 
                     </div>
 
 
-                    <form
-                        id="signInForm"
-                        class="account-form"
-                        novalidate
-                    >
+                    <!-- ==========================================
+                    ACCOUNT SWITCHER
+                    =========================================== -->
 
-                        <label>
-
-                            <span>
-                                Email
-                            </span>
-
-                            <input
-                                type="email"
-                                id="signInEmail"
-                                autocomplete="email"
-                                required
-                            >
-
-                        </label>
-
-
-                        <label>
-
-                            <span>
-                                Password
-                            </span>
-
-                            <input
-                                type="password"
-                                id="signInPassword"
-                                autocomplete="current-password"
-                                required
-                            >
-
-                        </label>
-
+                    <div class="account-switcher">
 
                         <button
-                            type="submit"
-                            id="signInButton"
-                            class="account-button account-button--primary"
+                            type="button"
+                            id="showSignInButton"
+                            class="account-switcher__button is-active"
                         >
                             Sign In
                         </button>
 
-
                         <button
                             type="button"
-                            id="forgotPasswordButton"
-                            class="account-text-button"
+                            id="showCreateAccountButton"
+                            class="account-switcher__button"
                         >
-                            Forgot password?
+                            Create Account
                         </button>
-
-
-                        <p
-                            id="signInMessage"
-                            class="account-message"
-                            aria-live="polite"
-                        ></p>
-
-
-                        <div
-                            id="verificationActions"
-                            class="account-verification-actions"
-                            hidden
-                        >
-
-                            <button
-                                type="button"
-                                id="resendVerificationButton"
-                                class="account-text-button"
-                            >
-                                Resend verification email
-                            </button>
-
-                            <button
-                                type="button"
-                                id="verificationSignOutButton"
-                                class="account-text-button"
-                            >
-                                Sign out / Use another account
-                            </button>
-
-                        </div>
-
-                    </form>
-
-                </section>
-
-
-                <!-- ==========================================
-                CREATE ACCOUNT
-                =========================================== -->
-
-                <section
-                    id="createAccountPanel"
-                    class="account-panel"
-                    hidden
-                >
-
-                    <div class="account-panel__heading">
-
-                        <h2>
-                            Create your account
-                        </h2>
-
-                        <p>
-                            Quick setup. Email verification is required
-                            before protected participation.
-                        </p>
 
                     </div>
 
 
-                    <form
-                        id="createAccountForm"
-                        class="account-form"
-                        novalidate
+
+                    <!-- ==========================================
+                    SIGN IN
+                    =========================================== -->
+
+                    <section
+                        id="signInPanel"
+                        class="account-panel"
                     >
 
-                        <div class="account-form__row">
+                        <div class="account-panel__heading">
+
+                            <h3>
+                                Welcome back
+                            </h3>
+
+                            <p>
+                                Sign in and continue where you left off.
+                            </p>
+
+                        </div>
+
+
+                        <form
+                            id="signInForm"
+                            class="account-form"
+                            novalidate
+                        >
 
                             <label>
 
                                 <span>
-                                    Name
+                                    Email
                                 </span>
 
                                 <input
-                                    type="text"
-                                    id="createDisplayName"
-                                    autocomplete="name"
-                                    maxlength="60"
+                                    type="email"
+                                    id="signInEmail"
+                                    autocomplete="email"
                                     required
                                 >
 
                             </label>
 
-
-                            <label>
-
-                                <span>
-                                    ZIP Code
-                                </span>
-
-                                <input
-                                    type="text"
-                                    id="createZipCode"
-                                    inputmode="numeric"
-                                    autocomplete="postal-code"
-                                    maxlength="5"
-                                    pattern="[0-9]{5}"
-                                    placeholder="12345"
-                                    required
-                                >
-
-                            </label>
-
-                        </div>
-
-
-                        <!-- ==========================================
-                        BIRTHDAY
-                        =========================================== -->
-
-                        <div class="account-birthday-field">
-
-                            <span class="account-birthday-field__label">
-                                Birthday
-                            </span>
-
-                            <div class="account-birthday-selects">
-
-                                <label>
-
-                                    <span class="account-birthday-selects__small-label">
-                                        Month
-                                    </span>
-
-                                    <select
-                                        id="createBirthMonth"
-                                        autocomplete="bday-month"
-                                        required
-                                    >
-                                        <option value="">
-                                            Month
-                                        </option>
-
-                                        <option value="01">January</option>
-                                        <option value="02">February</option>
-                                        <option value="03">March</option>
-                                        <option value="04">April</option>
-                                        <option value="05">May</option>
-                                        <option value="06">June</option>
-                                        <option value="07">July</option>
-                                        <option value="08">August</option>
-                                        <option value="09">September</option>
-                                        <option value="10">October</option>
-                                        <option value="11">November</option>
-                                        <option value="12">December</option>
-
-                                    </select>
-
-                                </label>
-
-
-                                <label>
-
-                                    <span class="account-birthday-selects__small-label">
-                                        Day
-                                    </span>
-
-                                    <select
-                                        id="createBirthDay"
-                                        autocomplete="bday-day"
-                                        required
-                                    >
-                                        <option value="">
-                                            Day
-                                        </option>
-                                    </select>
-
-                                </label>
-
-
-                                <label>
-
-                                    <span class="account-birthday-selects__small-label">
-                                        Year
-                                    </span>
-
-                                    <select
-                                        id="createBirthYear"
-                                        autocomplete="bday-year"
-                                        required
-                                    >
-                                        <option value="">
-                                            Year
-                                        </option>
-                                    </select>
-
-                                </label>
-
-                            </div>
-
-
-                            <input
-                                type="hidden"
-                                id="createBirthday"
-                                name="birthday"
-                            >
-
-                        </div>
-
-
-                        <label>
-
-                            <span>
-                                Email
-                            </span>
-
-                            <input
-                                type="email"
-                                id="createEmail"
-                                autocomplete="email"
-                                required
-                            >
-
-                        </label>
-
-
-                        <div class="account-form__row">
 
                             <label>
 
@@ -408,78 +236,351 @@
 
                                 <input
                                     type="password"
-                                    id="createPassword"
-                                    autocomplete="new-password"
+                                    id="signInPassword"
+                                    autocomplete="current-password"
                                     required
                                 >
 
                             </label>
+
+
+                            <button
+                                type="submit"
+                                id="signInButton"
+                                class="account-button account-button--primary"
+                            >
+                                Sign In
+                            </button>
+
+
+                            <button
+                                type="button"
+                                id="forgotPasswordButton"
+                                class="account-text-button"
+                            >
+                                Forgot password?
+                            </button>
+
+
+                            <p
+                                id="signInMessage"
+                                class="account-message"
+                                aria-live="polite"
+                            ></p>
+
+
+                            <div
+                                id="verificationActions"
+                                class="account-verification-actions"
+                                hidden
+                            >
+
+                                <button
+                                    type="button"
+                                    id="resendVerificationButton"
+                                    class="account-text-button"
+                                >
+                                    Resend verification email
+                                </button>
+
+                                <button
+                                    type="button"
+                                    id="verificationSignOutButton"
+                                    class="account-text-button"
+                                >
+                                    Sign out / Use another account
+                                </button>
+
+                            </div>
+
+                        </form>
+
+                    </section>
+
+
+
+                    <!-- ==========================================
+                    CREATE ACCOUNT
+                    =========================================== -->
+
+                    <section
+                        id="createAccountPanel"
+                        class="account-panel"
+                        hidden
+                    >
+
+                        <div class="account-panel__heading">
+
+                            <h3>
+                                Create your account
+                            </h3>
+
+                            <p>
+                                Create your account and make your voice part
+                                of the conversation.
+                            </p>
+
+                        </div>
+
+
+                        <form
+                            id="createAccountForm"
+                            class="account-form"
+                            novalidate
+                        >
+
+                            <div class="account-form__row">
+
+                                <label>
+
+                                    <span>
+                                        Name
+                                    </span>
+
+                                    <input
+                                        type="text"
+                                        id="createDisplayName"
+                                        autocomplete="name"
+                                        maxlength="60"
+                                        required
+                                    >
+
+                                </label>
+
+
+                                <label>
+
+                                    <span>
+                                        ZIP Code
+                                    </span>
+
+                                    <input
+                                        type="text"
+                                        id="createZipCode"
+                                        inputmode="numeric"
+                                        autocomplete="postal-code"
+                                        maxlength="5"
+                                        pattern="[0-9]{5}"
+                                        placeholder="12345"
+                                        required
+                                    >
+
+                                </label>
+
+                            </div>
+
+
+
+                            <!-- ==========================================
+                            BIRTHDAY
+                            =========================================== -->
+
+                            <div class="account-birthday-field">
+
+                                <span class="account-birthday-field__label">
+                                    Birthday
+                                </span>
+
+                                <div class="account-birthday-selects">
+
+                                    <label>
+
+                                        <span class="account-birthday-selects__small-label">
+                                            Month
+                                        </span>
+
+                                        <select
+                                            id="createBirthMonth"
+                                            autocomplete="bday-month"
+                                            required
+                                        >
+                                            <option value="">
+                                                Month
+                                            </option>
+
+                                            <option value="01">January</option>
+                                            <option value="02">February</option>
+                                            <option value="03">March</option>
+                                            <option value="04">April</option>
+                                            <option value="05">May</option>
+                                            <option value="06">June</option>
+                                            <option value="07">July</option>
+                                            <option value="08">August</option>
+                                            <option value="09">September</option>
+                                            <option value="10">October</option>
+                                            <option value="11">November</option>
+                                            <option value="12">December</option>
+
+                                        </select>
+
+                                    </label>
+
+
+                                    <label>
+
+                                        <span class="account-birthday-selects__small-label">
+                                            Day
+                                        </span>
+
+                                        <select
+                                            id="createBirthDay"
+                                            autocomplete="bday-day"
+                                            required
+                                        >
+                                            <option value="">
+                                                Day
+                                            </option>
+                                        </select>
+
+                                    </label>
+
+
+                                    <label>
+
+                                        <span class="account-birthday-selects__small-label">
+                                            Year
+                                        </span>
+
+                                        <select
+                                            id="createBirthYear"
+                                            autocomplete="bday-year"
+                                            required
+                                        >
+                                            <option value="">
+                                                Year
+                                            </option>
+                                        </select>
+
+                                    </label>
+
+                                </div>
+
+
+                                <input
+                                    type="hidden"
+                                    id="createBirthday"
+                                    name="birthday"
+                                >
+
+                            </div>
+
 
 
                             <label>
 
                                 <span>
-                                    Confirm Password
+                                    Email
                                 </span>
 
                                 <input
-                                    type="password"
-                                    id="createPasswordConfirm"
-                                    autocomplete="new-password"
+                                    type="email"
+                                    id="createEmail"
+                                    autocomplete="email"
                                     required
                                 >
 
                             </label>
 
-                        </div>
+
+                            <div class="account-form__row">
+
+                                <label>
+
+                                    <span>
+                                        Password
+                                    </span>
+
+                                    <input
+                                        type="password"
+                                        id="createPassword"
+                                        autocomplete="new-password"
+                                        required
+                                    >
+
+                                </label>
 
 
-                        <p class="account-form__hint">
-                            Password: at least 10 characters with an uppercase
-                            letter, lowercase letter, and number.
-                        </p>
+                                <label>
+
+                                    <span>
+                                        Confirm Password
+                                    </span>
+
+                                    <input
+                                        type="password"
+                                        id="createPasswordConfirm"
+                                        autocomplete="new-password"
+                                        required
+                                    >
+
+                                </label>
+
+                            </div>
 
 
-                        <p class="account-form__hint">
-                            Birthday is private and is used to determine
-                            participant age category automatically.
-                        </p>
+                            <p class="account-form__hint">
+                                Password: at least 10 characters with an uppercase
+                                letter, lowercase letter, and number.
+                            </p>
 
 
-                        <label class="account-consent">
+                            <p class="account-form__hint">
+                                Birthday is private and is used to determine
+                                participant age category automatically.
+                            </p>
 
-                            <input
-                                type="checkbox"
-                                id="createAgreement"
-                                required
+
+                            <label class="account-consent">
+
+    <input
+        type="checkbox"
+        id="createAgreement"
+        required
+    >
+
+    <span>
+        I agree to the
+        <a
+            href="terms.html"
+            target="_blank"
+            rel="noopener noreferrer"
+        >
+            Terms
+        </a>
+        and
+        <a
+            href="privacy.html"
+            target="_blank"
+            rel="noopener noreferrer"
+        >
+            Privacy Policy
+        </a>
+        and will maintain only one Civic Horizon account.
+    </span>
+
+</label>
+
+
+                            <button
+                                type="submit"
+                                id="createAccountButton"
+                                class="account-button account-button--primary"
                             >
-
-                            <span>
-                                I agree to the Terms and Privacy Policy and
-                                will maintain only one Civic Horizon account.
-                            </span>
-
-                        </label>
+                                Create Account
+                            </button>
 
 
-                        <button
-                            type="submit"
-                            id="createAccountButton"
-                            class="account-button account-button--primary"
-                        >
-                            Create Account
-                        </button>
+                            <p
+                                id="createAccountMessage"
+                                class="account-message"
+                                aria-live="polite"
+                            ></p>
 
+                        </form>
 
-                        <p
-                            id="createAccountMessage"
-                            class="account-message"
-                            aria-live="polite"
-                        ></p>
+                    </section>
 
-                    </form>
-
-                </section>
+                </div>
 
             </div>
 

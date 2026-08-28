@@ -11,6 +11,16 @@ normalization layer.
 
 Pages should request officials from this service
 rather than importing raw data directly.
+
+Launch-supported offices:
+
+- Governor
+- U.S. Senator
+- U.S. Representative
+
+President data is handled through the national
+public-official pathway.
+
 ==================================================
 */
 
@@ -106,11 +116,6 @@ export function getStatePublicOfficials(
         representatives:
             normalizeOfficialList(
                 stateData.representatives
-            ),
-
-        mayors:
-            normalizeOfficialList(
-                stateData.mayors
             )
 
     };
@@ -204,128 +209,6 @@ export function getPublicOfficialRepresentativeByDistrict(
             official =>
                 official.district ===
                 normalizedDistrict
-        ) ||
-        null
-    );
-
-}
-
-
-/*
-==================================================
-GET MAYORS
-==================================================
-*/
-
-export function getStateMayors(
-    stateCode
-) {
-
-    return getStatePublicOfficials(
-        stateCode
-    ).mayors;
-
-}
-
-
-/*
-==================================================
-GET MAYOR BY MUNICIPALITY
-==================================================
-*/
-
-export function getMayorByMunicipality(
-    stateCode,
-    municipality
-) {
-
-    const municipalityName =
-        normalizeText(
-            municipality
-        )
-            .toLowerCase();
-
-
-    if (!municipalityName) {
-
-        return null;
-
-    }
-
-
-    const mayors =
-        getStateMayors(
-            stateCode
-        );
-
-
-    return (
-        mayors.find(
-            official =>
-                String(
-                    official.municipality ||
-                    ""
-                )
-                    .trim()
-                    .toLowerCase() ===
-                municipalityName
-        ) ||
-        null
-    );
-
-}
-
-/*
-==================================================
-GET MAYOR BY MUNICIPALITY GEOID
-==================================================
-*/
-
-export function getMayorByMunicipalityGeoid(
-    stateCode,
-    municipalityGeoid
-) {
-
-    const normalizedStateCode =
-        normalizeStateCode(
-            stateCode
-        );
-
-
-    const normalizedMunicipalityGeoid =
-        String(
-            municipalityGeoid || ""
-        ).trim();
-
-
-    if (
-        !normalizedStateCode ||
-        !/^\d{10}$/.test(
-            normalizedMunicipalityGeoid
-        )
-    ) {
-
-        return null;
-
-    }
-
-
-    const mayors =
-        getStateMayors(
-            normalizedStateCode
-        );
-
-
-    return (
-        mayors.find(
-            official =>
-                String(
-                    official.municipalityGeoid ||
-                    official.jurisdiction
-                        ?.municipalityGeoid ||
-                    ""
-                ).trim() ===
-                normalizedMunicipalityGeoid
         ) ||
         null
     );
@@ -475,9 +358,7 @@ export function getAllStateOfficials(
 
         ...stateOfficials.senators,
 
-        ...stateOfficials.representatives,
-
-        ...stateOfficials.mayors
+        ...stateOfficials.representatives
 
     ];
 
@@ -559,9 +440,7 @@ function createEmptyStateResult() {
 
         senators: [],
 
-        representatives: [],
-
-        mayors: []
+        representatives: []
 
     };
 
@@ -691,22 +570,5 @@ function normalizeIdentifier(
 
 
     return identifier;
-
-}
-
-
-/*
-==================================================
-TEXT
-==================================================
-*/
-
-function normalizeText(
-    value
-) {
-
-    return String(
-        value || ""
-    ).trim();
 
 }

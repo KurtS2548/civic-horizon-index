@@ -7,16 +7,16 @@ AUTHENTICATION GUARD
 
 SITE ACCESS POLICY
 
-1. A Firebase-authenticated user may enter Civic Horizon.
+1. A participant must be signed in to access Civic Horizon.
 
-2. Email verification is NOT required merely to view
-   the site.
+2. The participant's email must be verified before
+   protected site pages are revealed.
 
-3. Voting and other participant actions perform their
-   own verified-email checks.
+3. Voting and participant actions perform their own
+   additional eligibility checks.
 
-4. Temporary Firebase refresh failures do NOT destroy
-   the user's session.
+4. Temporary Firebase refresh failures do not destroy
+   an otherwise valid authenticated session.
 
 5. Admin security remains separate.
 ==================================================
@@ -182,21 +182,31 @@ export function protectCurrentPage() {
 
 
             /*
-            ------------------------------------------
-            ACCESS GRANTED
+------------------------------------------
+EMAIL VERIFICATION REQUIRED
+------------------------------------------
+*/
 
-            Email verification is intentionally NOT
-            checked here.
+if (
+    !refreshedUser.emailVerified
+) {
 
-            Voting eligibility is enforced separately
-            by auth-service.js, firebase-service.js,
-            and Firebase Realtime Database Rules.
-            ------------------------------------------
-            */
+    redirectToAccount();
 
-            grantAccess(
-                refreshedUser
-            );
+    return;
+
+}
+
+
+/*
+------------------------------------------
+ACCESS GRANTED
+------------------------------------------
+*/
+
+grantAccess(
+    refreshedUser
+);
 
         },
 

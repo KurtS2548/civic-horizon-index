@@ -1,7 +1,16 @@
-/* ==================================================
-   CIVIC HORIZON INDEX V2
-   COMPACT ACCOUNT EXPERIENCE
-================================================== */
+/*
+==================================================
+CIVIC HORIZON INDEX V2
+ACCOUNT EXPERIENCE
+==================================================
+*/
+
+
+/*
+==================================================
+BASE
+==================================================
+*/
 
 *,
 *::before,
@@ -22,84 +31,320 @@ body {
 }
 
 .account-page {
-    min-height: 68vh;
+    min-height: 72vh;
 }
 
 
-/* ==================================================
-   MAIN LAYOUT
-================================================== */
+/*
+==================================================
+ACCOUNT HERO
+==================================================
+*/
 
-.account-compact {
-    padding: 28px 0 40px;
+.account-hero {
+    position: relative;
+    overflow: hidden;
+    padding: 58px 0 72px;
+
+    background:
+        radial-gradient(
+            circle at 12% 20%,
+            rgba(31, 95, 153, 0.10),
+            transparent 34%
+        ),
+        radial-gradient(
+            circle at 88% 78%,
+            rgba(201, 162, 39, 0.10),
+            transparent 30%
+        ),
+        linear-gradient(
+            135deg,
+            #f8fbfe 0%,
+            #eef5fa 55%,
+            #f9fafb 100%
+        );
 }
 
-.account-compact__container {
-    width: min(680px, calc(100% - 32px));
+.account-hero::before {
+    content: "";
+    position: absolute;
+    top: -130px;
+    right: -130px;
+    width: 340px;
+    height: 340px;
+    border: 1px solid rgba(31, 95, 153, 0.08);
+    border-radius: 50%;
+}
+
+.account-hero::after {
+    content: "";
+    position: absolute;
+    bottom: -180px;
+    left: -150px;
+    width: 380px;
+    height: 380px;
+    border: 1px solid rgba(201, 162, 39, 0.10);
+    border-radius: 50%;
+}
+
+.account-hero__container {
+    position: relative;
+    z-index: 1;
+
+    display: grid;
+    grid-template-columns:
+        minmax(0, 1.05fr)
+        minmax(400px, 0.85fr);
+
+    gap: 72px;
+    align-items: center;
+
+    width: min(1120px, calc(100% - 48px));
     margin: 0 auto;
 }
 
-.account-compact__intro {
-    margin-bottom: 16px;
-    text-align: center;
+
+/*
+==================================================
+WELCOME SIDE
+==================================================
+*/
+
+.account-welcome {
+    max-width: 590px;
 }
 
-.account-eyebrow {
-    margin: 0 0 6px;
+.account-welcome__eyebrow {
+    margin: 0 0 14px;
+
     color: #1f5f99;
-    font-size: 0.64rem;
+
+    font-size: 0.72rem;
     font-weight: 800;
-    letter-spacing: 0.09em;
+    letter-spacing: 0.13em;
     text-transform: uppercase;
 }
 
-.account-compact__intro h1 {
+.account-welcome h1 {
     margin: 0;
+
     color: #102a43;
+
     font-family: "Merriweather", Georgia, serif;
-    font-size: clamp(1.75rem, 4vw, 2.35rem);
-    line-height: 1.15;
+    font-size: clamp(2.4rem, 5vw, 4.15rem);
+    line-height: 1.08;
+    letter-spacing: -0.035em;
 }
 
-.account-compact__intro p:last-child {
+.account-welcome__headline-main {
+    display: block;
+    color: #1f5f99;
+}
+
+.account-welcome__headline-sub {
+    display: block;
+    margin-top: 9px;
+    color: #102a43;
+    font-size: 0.68em;
+    line-height: 1.2;
+}
+
+.account-welcome__description {
+    max-width: 540px;
+    margin: 24px 0 0;
+
+    color: #526d82;
+
+    font-size: 1rem;
+    line-height: 1.75;
+}
+
+
+/*
+==================================================
+WELCOME POINTS
+==================================================
+*/
+
+.account-welcome__points {
+    display: grid;
+    gap: 13px;
+
+    margin-top: 30px;
+}
+
+.account-welcome__point {
+    display: flex;
+    gap: 11px;
+    align-items: center;
+
+    color: #334e68;
+
+    font-size: 0.82rem;
+    font-weight: 600;
+    line-height: 1.45;
+}
+
+.account-welcome__point-icon {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+
+    width: 24px;
+    height: 24px;
+
+    border: 1px solid rgba(201, 162, 39, 0.42);
+    border-radius: 50%;
+
+    background: rgba(201, 162, 39, 0.10);
+    color: #9b7412;
+
+    font-size: 0.68rem;
+    font-weight: 900;
+}
+
+
+/*
+==================================================
+SLOGAN
+==================================================
+*/
+
+.account-welcome__slogan {
+    display: flex;
+    gap: 13px;
+    align-items: center;
+
+    margin-top: 34px;
+}
+
+.account-welcome__slogan-line {
+    display: block;
+
+    width: 36px;
+    height: 2px;
+
+    background: #c9a227;
+}
+
+.account-welcome__slogan p {
+    margin: 0;
+
+    color: #526d82;
+
+    font-family: "Merriweather", Georgia, serif;
+    font-size: 0.82rem;
+    font-style: italic;
+}
+
+
+/*
+==================================================
+ACCOUNT CARD
+==================================================
+*/
+
+.account-card {
+    width: 100%;
+    max-width: 480px;
+    justify-self: end;
+
+    padding: 30px;
+
+    border: 1px solid #d9e2ec;
+    border-radius: 20px;
+
+    background: rgba(255, 255, 255, 0.97);
+
+    box-shadow:
+        0 24px 60px rgba(16, 42, 67, 0.11),
+        0 4px 12px rgba(16, 42, 67, 0.04);
+}
+
+.account-card__intro {
+    margin-bottom: 21px;
+    text-align: center;
+}
+
+.account-card__eyebrow {
+    margin: 0 0 7px;
+
+    color: #1f5f99;
+
+    font-size: 0.63rem;
+    font-weight: 800;
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+}
+
+.account-card__intro h2 {
+    margin: 0;
+
+    color: #102a43;
+
+    font-family: "Merriweather", Georgia, serif;
+    font-size: 1.55rem;
+    line-height: 1.25;
+}
+
+.account-card__intro > p:last-child {
     margin: 8px 0 0;
+
     color: #627d98;
+
     font-size: 0.76rem;
     line-height: 1.5;
 }
 
 
-/* ==================================================
-   SWITCHER
-================================================== */
+/*
+==================================================
+SWITCHER
+==================================================
+*/
 
 .account-switcher {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
+
     gap: 5px;
-    max-width: 400px;
-    margin: 0 auto 12px;
+
+    margin: 0 0 22px;
     padding: 4px;
+
     border: 1px solid #d9e2ec;
-    border-radius: 10px;
-    background: #ffffff;
+    border-radius: 11px;
+
+    background: #f5f8fb;
 }
 
 .account-switcher__button {
-    min-height: 38px;
+    min-height: 42px;
+
+    padding: 8px 12px;
+
     border: 0;
-    border-radius: 7px;
+    border-radius: 8px;
+
     background: transparent;
     color: #627d98;
+
     font-family: "Inter", sans-serif;
-    font-size: 0.75rem;
+    font-size: 0.76rem;
     font-weight: 800;
+
     cursor: pointer;
+
+    transition:
+        background 0.18s ease,
+        color 0.18s ease,
+        box-shadow 0.18s ease;
 }
 
 .account-switcher__button:hover,
 .account-switcher__button:focus-visible {
-    background: #f1f5f9;
+    background: #eaf1f7;
     color: #174f7f;
     outline: none;
 }
@@ -107,6 +352,8 @@ body {
 .account-switcher__button.is-active {
     background: #1f5f99;
     color: #ffffff;
+
+    box-shadow: 0 3px 8px rgba(31, 95, 153, 0.18);
 }
 
 .account-switcher__button:disabled {
@@ -115,16 +362,16 @@ body {
 }
 
 
-/* ==================================================
-   PANEL
-================================================== */
+/*
+==================================================
+PANEL
+==================================================
+*/
 
 .account-panel {
-    padding: 20px;
-    border: 1px solid #d9e2ec;
-    border-radius: 14px;
-    background: #ffffff;
-    box-shadow: 0 10px 26px rgba(16, 42, 67, 0.06);
+    padding: 0;
+    border: 0;
+    background: transparent;
 }
 
 .account-panel[hidden] {
@@ -132,47 +379,55 @@ body {
 }
 
 .account-panel__heading {
-    margin-bottom: 14px;
+    margin-bottom: 17px;
 }
 
+.account-panel__heading h3,
 .account-panel__heading h2,
 .account-panel__heading h1 {
     margin: 0;
+
     color: #102a43;
+
     font-family: "Merriweather", Georgia, serif;
-    font-size: 1.25rem;
+    font-size: 1.18rem;
 }
 
 .account-panel__heading p {
     margin: 6px 0 0;
+
     color: #627d98;
+
     font-size: 0.72rem;
     line-height: 1.5;
 }
 
 
-/* ==================================================
-   FORM
-================================================== */
+/*
+==================================================
+FORM
+==================================================
+*/
 
 .account-form {
     display: grid;
-    gap: 11px;
+    gap: 13px;
 }
 
 .account-form__row {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 10px;
+    gap: 11px;
 }
 
 .account-form label {
     display: grid;
-    gap: 5px;
+    gap: 6px;
 }
 
 .account-form label > span {
     color: #334e68;
+
     font-size: 0.7rem;
     font-weight: 800;
 }
@@ -180,20 +435,37 @@ body {
 .account-form input,
 .account-form select {
     width: 100%;
-    min-height: 40px;
-    padding: 8px 10px;
+    min-height: 44px;
+
+    padding: 9px 11px;
+
     border: 1px solid #bcccdc;
-    border-radius: 8px;
+    border-radius: 9px;
+
     background: #ffffff;
     color: #102a43;
+
     font-family: "Inter", sans-serif;
-    font-size: 0.78rem;
+    font-size: 0.79rem;
+
+    transition:
+        border-color 0.18s ease,
+        box-shadow 0.18s ease,
+        background 0.18s ease;
+}
+
+.account-form input:hover,
+.account-form select:hover {
+    border-color: #9fb3c8;
 }
 
 .account-form input:focus,
 .account-form select:focus {
     border-color: #1f5f99;
-    outline: 3px solid rgba(31, 95, 153, 0.1);
+
+    outline: none;
+
+    box-shadow: 0 0 0 3px rgba(31, 95, 153, 0.10);
 }
 
 .account-form input:disabled,
@@ -204,16 +476,20 @@ body {
 }
 
 .account-form__hint {
-    margin: -1px 0 0;
+    margin: -2px 0 0;
+
     color: #829ab1;
-    font-size: 0.64rem;
-    line-height: 1.4;
+
+    font-size: 0.63rem;
+    line-height: 1.45;
 }
 
 
-/* ==================================================
-   BIRTHDAY SELECTORS
-================================================== */
+/*
+==================================================
+BIRTHDAY
+==================================================
+*/
 
 .account-birthday-field {
     display: grid;
@@ -222,16 +498,19 @@ body {
 
 .account-birthday-field__label {
     color: #334e68;
+
     font-size: 0.7rem;
     font-weight: 800;
 }
 
 .account-birthday-selects {
     display: grid;
+
     grid-template-columns:
         minmax(0, 1.35fr)
         minmax(0, 0.8fr)
         minmax(0, 1fr);
+
     gap: 8px;
 }
 
@@ -242,6 +521,7 @@ body {
 
 .account-birthday-selects__small-label {
     color: #829ab1 !important;
+
     font-size: 0.6rem !important;
     font-weight: 700 !important;
 }
@@ -249,88 +529,83 @@ body {
 .account-birthday-selects select {
     min-height: 44px;
     padding: 8px 9px;
-    font-size: 0.78rem;
+
+    font-size: 0.77rem;
+
     cursor: pointer;
 }
 
 
-/* ==================================================
-   BIRTHDAY MOBILE
-================================================== */
-
-@media (max-width: 620px) {
-
-    .account-birthday-selects {
-        grid-template-columns:
-            minmax(0, 1.25fr)
-            minmax(0, 0.75fr)
-            minmax(0, 0.9fr);
-        gap: 6px;
-    }
-
-    .account-birthday-selects select {
-        min-height: 46px;
-        padding: 8px 7px;
-        font-size: 0.76rem;
-    }
-
-}
-
-
-@media (max-width: 390px) {
-
-    .account-birthday-selects {
-        grid-template-columns: 1fr;
-    }
-
-}
-
-/* ==================================================
-   CONSENT
-================================================== */
+/*
+==================================================
+CONSENT
+==================================================
+*/
 
 .account-consent {
     display: grid !important;
+
     grid-template-columns: auto minmax(0, 1fr);
-    gap: 9px !important;
+
+    gap: 10px !important;
     align-items: start;
-    padding: 10px 11px;
+
+    padding: 11px 12px;
+
     border: 1px solid #e1e8ef;
     border-radius: 9px;
+
     background: #f8fafc;
+
     cursor: pointer;
 }
 
 .account-consent input {
     width: 16px;
-    min-height: 16px;
     height: 16px;
+    min-height: 16px;
+
     margin: 2px 0 0;
 }
 
 .account-consent span {
     color: #627d98 !important;
+
     font-size: 0.67rem !important;
     font-weight: 500 !important;
     line-height: 1.45;
 }
 
 
-/* ==================================================
-   BUTTONS
-================================================== */
+/*
+==================================================
+BUTTONS
+==================================================
+*/
 
 .account-button {
     display: inline-flex;
+
     align-items: center;
     justify-content: center;
-    min-height: 40px;
-    padding: 8px 14px;
-    border-radius: 8px;
+
+    min-height: 44px;
+
+    padding: 9px 15px;
+
+    border-radius: 9px;
+
     font-family: "Inter", sans-serif;
-    font-size: 0.75rem;
+    font-size: 0.77rem;
     font-weight: 800;
+
     cursor: pointer;
+
+    transition:
+        background 0.18s ease,
+        border-color 0.18s ease,
+        box-shadow 0.18s ease,
+        transform 0.18s ease;
 }
 
 .account-button:disabled {
@@ -340,19 +615,29 @@ body {
 
 .account-button--primary {
     border: 1px solid #1f5f99;
+
     background: #1f5f99;
     color: #ffffff;
+
+    box-shadow: 0 5px 12px rgba(31, 95, 153, 0.15);
 }
 
 .account-button--primary:hover:not(:disabled),
 .account-button--primary:focus-visible:not(:disabled) {
     border-color: #174f7f;
+
     background: #174f7f;
+
     outline: none;
+
+    box-shadow: 0 7px 16px rgba(31, 95, 153, 0.20);
+
+    transform: translateY(-1px);
 }
 
 .account-button--secondary {
     border: 1px solid #bcccdc;
+
     background: #ffffff;
     color: #334e68;
 }
@@ -360,30 +645,48 @@ body {
 .account-button--secondary:hover:not(:disabled),
 .account-button--secondary:focus-visible:not(:disabled) {
     border-color: #1f5f99;
+
     background: #eef6fc;
     color: #174f7f;
+
     outline: none;
 }
 
+
+/*
+==================================================
+TEXT BUTTONS
+==================================================
+*/
+
 .account-text-button {
     display: inline-flex;
+
     align-items: center;
     justify-content: flex-start;
+
     justify-self: start;
-    min-height: 32px;
-    padding: 4px 0;
+
+    min-height: 30px;
+
+    padding: 3px 0;
+
     border: 0;
+
     background: transparent;
     color: #1f5f99;
+
     font-family: "Inter", sans-serif;
     font-size: 0.68rem;
     font-weight: 800;
+
     cursor: pointer;
     pointer-events: auto;
 }
 
 .account-text-button:hover,
 .account-text-button:focus-visible {
+    color: #174f7f;
     text-decoration: underline;
     outline: none;
 }
@@ -394,26 +697,33 @@ body {
 }
 
 
-/* ==================================================
-   MESSAGE
-================================================== */
+/*
+==================================================
+MESSAGE
+==================================================
+*/
 
 .account-message {
     min-height: 16px;
     margin: 0;
+
     color: #627d98;
+
     font-size: 0.69rem;
     line-height: 1.4;
 }
 
 
-/* ==================================================
-   VERIFICATION
-================================================== */
+/*
+==================================================
+VERIFICATION
+==================================================
+*/
 
 .account-verification-actions {
     display: grid;
     gap: 10px;
+
     margin-top: 6px;
     padding: 12px 0 2px;
 }
@@ -425,7 +735,9 @@ body {
 .account-verification-actions .account-text-button {
     position: relative;
     z-index: 2;
+
     width: fit-content;
+
     pointer-events: auto;
 }
 
@@ -436,14 +748,18 @@ body {
 
 .account-verification-status {
     padding: 14px;
+
     border: 1px solid #e1e8ef;
     border-radius: 10px;
+
     background: #f8fafc;
 }
 
 .account-verification-status > span {
     display: block;
+
     color: #7b8fa3;
+
     font-size: 0.62rem;
     font-weight: 800;
     letter-spacing: 0.07em;
@@ -452,22 +768,29 @@ body {
 
 .account-verification-status > strong {
     display: block;
+
     margin-top: 5px;
+
     color: #102a43;
+
     font-size: 1rem;
 }
 
 .account-verification-status > p {
     margin: 5px 0 0;
+
     color: #627d98;
+
     font-size: 0.69rem;
     line-height: 1.45;
 }
 
 
-/* ==================================================
-   ACCESSIBILITY / INTERACTION SAFETY
-================================================== */
+/*
+==================================================
+ACCESSIBILITY / INTERACTION SAFETY
+==================================================
+*/
 
 button,
 input,
@@ -484,26 +807,174 @@ a:focus-visible {
 }
 
 
-/* ==================================================
-   RESPONSIVE
-================================================== */
+/*
+==================================================
+TABLET
+==================================================
+*/
+
+@media (max-width: 900px) {
+
+    .account-hero {
+        padding: 42px 0 56px;
+    }
+
+    .account-hero__container {
+        grid-template-columns: 1fr;
+        gap: 36px;
+
+        width: min(680px, calc(100% - 36px));
+    }
+
+    .account-welcome {
+        max-width: 620px;
+        margin: 0 auto;
+        text-align: center;
+    }
+
+    .account-welcome__description {
+        margin-right: auto;
+        margin-left: auto;
+    }
+
+    .account-welcome__points {
+        width: fit-content;
+        margin-right: auto;
+        margin-left: auto;
+        text-align: left;
+    }
+
+    .account-welcome__slogan {
+        justify-content: center;
+    }
+
+    .account-card {
+        max-width: 520px;
+        justify-self: center;
+    }
+
+}
+
+
+/*
+==================================================
+MOBILE
+==================================================
+*/
 
 @media (max-width: 620px) {
 
-    .account-compact {
-        padding: 22px 0 32px;
+    .account-hero {
+        padding: 30px 0 42px;
     }
 
-    .account-compact__container {
-        width: min(680px, calc(100% - 24px));
+    .account-hero__container {
+        width: min(100% - 24px, 520px);
+        gap: 27px;
+    }
+
+    .account-welcome__eyebrow {
+        margin-bottom: 10px;
+        font-size: 0.64rem;
+    }
+
+    .account-welcome h1 {
+        font-size: clamp(2rem, 10vw, 2.75rem);
+        line-height: 1.1;
+    }
+
+    .account-welcome__description {
+        margin-top: 17px;
+
+        font-size: 0.85rem;
+        line-height: 1.65;
+    }
+
+    .account-welcome__points {
+        gap: 10px;
+        margin-top: 22px;
+    }
+
+    .account-welcome__point {
+        font-size: 0.74rem;
+    }
+
+    .account-welcome__point-icon {
+        width: 22px;
+        height: 22px;
+    }
+
+    .account-welcome__slogan {
+        margin-top: 24px;
+    }
+
+    .account-welcome__slogan p {
+        font-size: 0.74rem;
+    }
+
+    .account-card {
+        padding: 22px 17px;
+
+        border-radius: 16px;
+
+        box-shadow:
+            0 16px 36px rgba(16, 42, 67, 0.09),
+            0 3px 8px rgba(16, 42, 67, 0.03);
+    }
+
+    .account-card__intro h2 {
+        font-size: 1.35rem;
     }
 
     .account-form__row {
         grid-template-columns: 1fr;
     }
 
-    .account-panel {
-        padding: 17px;
+    .account-birthday-selects {
+        grid-template-columns:
+            minmax(0, 1.25fr)
+            minmax(0, 0.75fr)
+            minmax(0, 0.9fr);
+
+        gap: 6px;
+    }
+
+    .account-birthday-selects select {
+        min-height: 46px;
+        padding: 8px 7px;
+
+        font-size: 0.75rem;
+    }
+
+}
+
+
+/*
+==================================================
+SMALL MOBILE
+==================================================
+*/
+
+@media (max-width: 390px) {
+
+    .account-hero__container {
+        width: calc(100% - 18px);
+    }
+
+    .account-welcome h1 {
+        font-size: 1.9rem;
+    }
+
+    .account-welcome__points {
+        width: 100%;
+    }
+
+    .account-card {
+        padding: 19px 14px;
+    }
+
+    .account-birthday-selects {
+        grid-template-columns: 1fr;
     }
 
 }

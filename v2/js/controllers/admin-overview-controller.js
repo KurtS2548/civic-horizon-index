@@ -33,7 +33,11 @@ import {
 
 
 import {
-    saveCivicPulseDailySnapshot
+
+    saveCivicPulseDailySnapshot,
+
+    getTodayCivicPulseSnapshot
+
 } from "../services/civic-pulse-history-service.js";
 
 
@@ -69,6 +73,10 @@ let unsubscribePulseDirection =
 
 let unsubscribePulseConfidence =
     null;
+
+
+let snapshotCapturedToday =
+    false;
 
 
 const pulseSnapshotState = {
@@ -113,6 +121,8 @@ export function initializeAdminOverviewController() {
 
     initializeSnapshotButton();
 
+    initializeSnapshotStatus();
+
 }
 
 
@@ -138,6 +148,14 @@ function subscribeToCommunityData() {
 
 
                 setText(
+                    "adminAttentionActivePollCount",
+                    formatNumber(
+                        summary?.activePollCount
+                    )
+                );
+
+
+                setText(
                     "adminCommunityVoteCount",
                     formatNumber(
                         summary?.communityVoteCount
@@ -156,6 +174,12 @@ function subscribeToCommunityData() {
 
                 setText(
                     "adminActivePollCount",
+                    "—"
+                );
+
+
+                setText(
+                    "adminAttentionActivePollCount",
                     "—"
                 );
 
@@ -805,6 +829,162 @@ function calculateConfidence() {
 
 /*
 ==================================================
+SNAPSHOT STATUS INITIALIZATION
+==================================================
+*/
+
+async function initializeSnapshotStatus() {
+
+    setText(
+        "adminSnapshotStatus",
+        "Checking..."
+    );
+
+
+    try {
+
+        const existingSnapshot =
+            await getTodayCivicPulseSnapshot();
+
+
+        if (
+            existingSnapshot
+        ) {
+
+            snapshotCapturedToday =
+                true;
+
+
+            renderCapturedSnapshotStatus();
+
+
+            return;
+
+        }
+
+
+        snapshotCapturedToday =
+            false;
+
+
+        renderReadySnapshotStatus();
+
+    } catch (error) {
+
+        console.error(
+            "Today's Civic Pulse snapshot status could not be checked:",
+            error
+        );
+
+
+        snapshotCapturedToday =
+            false;
+
+
+        setText(
+            "adminSnapshotStatus",
+            "Unavailable"
+        );
+
+
+        const button =
+            document.getElementById(
+                "captureCivicPulseSnapshotButton"
+            );
+
+
+        if (button) {
+
+            button.disabled =
+                false;
+
+
+            button.textContent =
+                "Capture Today's Snapshot";
+
+        }
+
+    }
+
+}
+
+
+/*
+==================================================
+READY SNAPSHOT STATUS
+==================================================
+*/
+
+function renderReadySnapshotStatus() {
+
+    setText(
+        "adminSnapshotStatus",
+        "Ready to Capture"
+    );
+
+
+    const button =
+        document.getElementById(
+            "captureCivicPulseSnapshotButton"
+        );
+
+
+    if (!button) {
+
+        return;
+
+    }
+
+
+    button.disabled =
+        false;
+
+
+    button.textContent =
+        "Capture Today's Snapshot";
+
+}
+
+
+/*
+==================================================
+CAPTURED SNAPSHOT STATUS
+==================================================
+*/
+
+function renderCapturedSnapshotStatus() {
+
+    setText(
+        "adminSnapshotStatus",
+        "Captured Today"
+    );
+
+
+    const button =
+        document.getElementById(
+            "captureCivicPulseSnapshotButton"
+        );
+
+
+    if (!button) {
+
+        return;
+
+    }
+
+
+    button.disabled =
+        true;
+
+
+    button.textContent =
+        "Captured Today";
+
+}
+
+
+/*
+==================================================
 SNAPSHOT BUTTON
 ==================================================
 */
@@ -846,6 +1026,24 @@ async function captureTodaySnapshot() {
         );
 
 
+    if (
+        snapshotCapturedToday
+    ) {
+
+        setText(
+            "adminSnapshotMessage",
+            "Today's Civic Pulse snapshot has already been captured."
+        );
+
+
+        renderCapturedSnapshotStatus();
+
+
+        return;
+
+    }
+
+
     const snapshot =
         calculateCurrentPulseSnapshot();
 
@@ -875,7 +1073,17 @@ async function captureTodaySnapshot() {
         button.disabled =
             true;
 
+
+        button.textContent =
+            "Saving...";
+
     }
+
+
+    setText(
+        "adminSnapshotStatus",
+        "Saving..."
+    );
 
 
     setText(
@@ -892,10 +1100,17 @@ async function captureTodaySnapshot() {
             );
 
 
+        snapshotCapturedToday =
+            true;
+
+
         setText(
             "adminSnapshotMessage",
             `Snapshot saved for ${savedSnapshot.date}.`
         );
+
+
+        renderCapturedSnapshotStatus();
 
     } catch (error) {
 
@@ -905,17 +1120,30 @@ async function captureTodaySnapshot() {
         );
 
 
+        snapshotCapturedToday =
+            false;
+
+
         setText(
             "adminSnapshotMessage",
             "The snapshot could not be saved. Make sure you are signed in as the authorized administrator."
         );
 
-    } finally {
+
+        setText(
+            "adminSnapshotStatus",
+            "Ready to Capture"
+        );
+
 
         if (button) {
 
             button.disabled =
                 false;
+
+
+            button.textContent =
+                "Capture Today's Snapshot";
 
         }
 
@@ -999,7 +1227,7 @@ export function destroyAdminOverviewController() {
 
     if (
         typeof unsubscribeSnapshotSummary ===
-        "function"
+            "function"
     ) {
 
         unsubscribeSnapshotSummary();
@@ -1009,7 +1237,7 @@ export function destroyAdminOverviewController() {
 
     if (
         typeof unsubscribePrioritySummary ===
-        "function"
+            "function"
     ) {
 
         unsubscribePrioritySummary();
@@ -1019,7 +1247,7 @@ export function destroyAdminOverviewController() {
 
     if (
         typeof unsubscribeApprovalSummary ===
-        "function"
+            "function"
     ) {
 
         unsubscribeApprovalSummary();
@@ -1029,7 +1257,7 @@ export function destroyAdminOverviewController() {
 
     if (
         typeof unsubscribePulseApproval ===
-        "function"
+            "function"
     ) {
 
         unsubscribePulseApproval();
@@ -1039,7 +1267,7 @@ export function destroyAdminOverviewController() {
 
     if (
         typeof unsubscribePulseDirection ===
-        "function"
+            "function"
     ) {
 
         unsubscribePulseDirection();
@@ -1049,7 +1277,7 @@ export function destroyAdminOverviewController() {
 
     if (
         typeof unsubscribePulseConfidence ===
-        "function"
+            "function"
     ) {
 
         unsubscribePulseConfidence();
@@ -1079,6 +1307,10 @@ export function destroyAdminOverviewController() {
 
     unsubscribePulseConfidence =
         null;
+
+
+    snapshotCapturedToday =
+        false;
 
 
     controllerInitialized =

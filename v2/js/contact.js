@@ -250,15 +250,16 @@ async function handleGeneralContact(
 
     if (
         ![
-            "general",
-            "problem",
-            "account",
-            "feedback",
-            "privacy",
-            "other"
-        ].includes(
-            category
-        )
+    "general",
+    "problem",
+    "account",
+    "feedback",
+    "privacy",
+    "accessibility",
+    "other"
+].includes(
+    category
+)
     ) {
 
         showMessage(

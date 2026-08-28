@@ -82,7 +82,8 @@ export async function saveCivicPulseDailySnapshot(
 
     if (
         !snapshotData ||
-        typeof snapshotData !== "object"
+        typeof snapshotData !==
+            "object"
     ) {
 
         throw new Error(
@@ -111,41 +112,49 @@ export async function saveCivicPulseDailySnapshot(
             dateKey,
 
         capturedAt:
-            new Date().toISOString(),
+            new Date()
+                .toISOString(),
 
         presidentialApproval:
             normalizePercentage(
-                snapshotData.presidentialApproval
+                snapshotData
+                    .presidentialApproval
             ),
 
         countryDirection:
             normalizePercentage(
-                snapshotData.countryDirection
+                snapshotData
+                    .countryDirection
             ),
 
         economicConfidence:
             normalizePercentage(
-                snapshotData.economicConfidence
+                snapshotData
+                    .economicConfidence
             ),
 
         institutionalConfidence:
             normalizePercentage(
-                snapshotData.institutionalConfidence
+                snapshotData
+                    .institutionalConfidence
             ),
 
         approvalResponses:
             normalizeCount(
-                snapshotData.approvalResponses
+                snapshotData
+                    .approvalResponses
             ),
 
         directionResponses:
             normalizeCount(
-                snapshotData.directionResponses
+                snapshotData
+                    .directionResponses
             ),
 
         confidenceResponses:
             normalizeCount(
-                snapshotData.confidenceResponses
+                snapshotData
+                    .confidenceResponses
             )
 
     };
@@ -164,6 +173,52 @@ export async function saveCivicPulseDailySnapshot(
 
 /*
 ==================================================
+GET TODAY'S SNAPSHOT
+==================================================
+*/
+
+export async function getTodayCivicPulseSnapshot() {
+
+    const dateKey =
+        getDateKey();
+
+
+    const snapshotReference =
+        ref(
+            database,
+            `civicPulse/history/${dateKey}`
+        );
+
+
+    const snapshot =
+        await get(
+            snapshotReference
+        );
+
+
+    if (
+        !snapshot.exists()
+    ) {
+
+        return null;
+
+    }
+
+
+    return {
+
+        id:
+            dateKey,
+
+        ...(snapshot.val() || {})
+
+    };
+
+}
+
+
+/*
+==================================================
 LIVE HISTORY SUBSCRIPTION
 ==================================================
 */
@@ -175,6 +230,7 @@ export function subscribeToCivicPulseHistory(
 
     return onValue(
         civicPulseHistoryRef,
+
         snapshot => {
 
             callback(
@@ -184,6 +240,7 @@ export function subscribeToCivicPulseHistory(
             );
 
         },
+
         errorCallback
     );
 
@@ -262,10 +319,12 @@ function historySnapshotToArray(
         ) => {
 
             return String(
-                first.date || first.id
+                first.date ||
+                first.id
             ).localeCompare(
                 String(
-                    second.date || second.id
+                    second.date ||
+                    second.id
                 )
             );
 
@@ -339,7 +398,7 @@ function normalizeCount(
             number
         ) ||
         number <
-        0
+            0
     ) {
 
         return 0;

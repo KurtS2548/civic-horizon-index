@@ -12,7 +12,8 @@ import {
     subscribeToStateQuestions,
     updateStateQuestion,
     deleteStateQuestion,
-    reorderStateQuestions
+    reorderStateQuestions,
+    getAllStateQuestions
 
 } from "../services/state-question-service.js";
 
@@ -133,6 +134,10 @@ export function initializeAdminStateQuestions() {
         select
     );
 
+        void loadStateCoverage(
+        select
+    );
+
 
     select.addEventListener(
         "change",
@@ -207,21 +212,26 @@ export function initializeAdminStateQuestions() {
 
                     questions => {
 
-                        currentQuestions =
-                            Array.isArray(
-                                questions
-                            )
-                                ? questions
-                                : [];
+    currentQuestions =
+        Array.isArray(
+            questions
+        )
+            ? questions
+            : [];
 
 
-                        renderStateQuestions(
-                            list,
-                            stateCode,
-                            currentQuestions
-                        );
+    renderStateQuestions(
+        list,
+        stateCode,
+        currentQuestions
+    );
 
-                    },
+
+    void loadStateCoverage(
+        select
+    );
+
+},
 
                     error => {
 
@@ -789,6 +799,321 @@ async function handleDeleteQuestion(
 
 }
 
+/*
+==================================================
+LOAD STATE COVERAGE
+==================================================
+*/
+
+async function loadStateCoverage(
+    select
+) {
+
+    const coverageList =
+        document.getElementById(
+            "adminStateCoverageList"
+        );
+
+
+    if (
+        !coverageList
+    ) {
+
+        return;
+
+    }
+
+
+    try {
+
+        const allStateQuestions =
+            await getAllStateQuestions();
+
+
+        const coverage =
+            Object.entries(
+                states
+            )
+                .map(
+                    (
+                        [
+                            stateCode,
+                            stateName
+                        ]
+                    ) => {
+
+                        const questions =
+                            Array.isArray(
+                                allStateQuestions[
+                                    stateCode
+                                ]
+                            )
+                                ? allStateQuestions[
+                                    stateCode
+                                ]
+                                : [];
+
+
+                        const activeCount =
+                            questions.filter(
+                                question =>
+                                    question.active ===
+                                    true
+                            ).length;
+
+
+                        return {
+
+                            stateCode,
+                            stateName,
+                            activeCount,
+                            totalCount:
+                                questions.length
+
+                        };
+
+                    }
+                )
+                .sort(
+                    (
+                        first,
+                        second
+                    ) => {
+
+                        if (
+                            first.activeCount ===
+                                0 &&
+                            second.activeCount !==
+                                0
+                        ) {
+
+                            return -1;
+
+                        }
+
+
+                        if (
+                            first.activeCount !==
+                                0 &&
+                            second.activeCount ===
+                                0
+                        ) {
+
+                            return 1;
+
+                        }
+
+
+                        return first.stateName
+                            .localeCompare(
+                                second.stateName
+                            );
+
+                    }
+                );
+
+
+        const readyCount =
+            coverage.filter(
+                state =>
+                    state.activeCount >
+                    0
+            ).length;
+
+
+        const missingCount =
+            coverage.length -
+            readyCount;
+
+
+        setText(
+            "adminStateCoverageReadyCount",
+            readyCount
+        );
+
+
+        setText(
+            "adminStateCoverageMissingCount",
+            missingCount
+        );
+
+        setText(
+            "adminStatesNeedingQuestionsCount",
+            missingCount
+        );
+
+
+        renderStateCoverage(
+            coverageList,
+            coverage
+        );
+
+
+        coverageList
+            .querySelectorAll(
+                "[data-state-coverage-code]"
+            )
+            .forEach(
+                button => {
+
+                    button.addEventListener(
+                        "click",
+                        () => {
+
+                            const stateCode =
+                                button.dataset
+                                    .stateCoverageCode;
+
+
+                            if (
+                                !stateCode ||
+                                !states[
+                                    stateCode
+                                ]
+                            ) {
+
+                                return;
+
+                            }
+
+
+                            select.value =
+                                stateCode;
+
+
+                            select.dispatchEvent(
+                                new Event(
+                                    "change"
+                                )
+                            );
+
+
+                            document
+                                .getElementById(
+                                    "adminStateQuestionEditor"
+                                )
+                                ?.scrollIntoView(
+                                    {
+                                        behavior:
+                                            "smooth",
+
+                                        block:
+                                            "start"
+                                    }
+                                );
+
+                        }
+                    );
+
+                }
+            );
+
+    } catch (error) {
+
+        console.error(
+            "State coverage could not be loaded:",
+            error
+        );
+
+
+        coverageList.innerHTML = `
+
+            <div class="admin-placeholder-card">
+
+                <strong>
+                    State coverage unavailable
+                </strong>
+
+                <p>
+                    The nationwide state question summary
+                    could not be loaded.
+                </p>
+
+            </div>
+
+        `;
+
+    }
+
+}
+
+
+/*
+==================================================
+RENDER STATE COVERAGE
+==================================================
+*/
+
+function renderStateCoverage(
+    container,
+    coverage
+) {
+
+    container.innerHTML =
+        coverage
+            .map(
+                state => {
+
+                    const needsQuestions =
+                        state.activeCount ===
+                        0;
+
+
+                    return `
+
+                        <button
+                            type="button"
+                            class="
+                                admin-state-coverage__item
+                                ${
+                                    needsQuestions
+                                        ? "needs-questions"
+                                        : "is-ready"
+                                }
+                            "
+                            data-state-coverage-code="${escapeHtml(
+                                state.stateCode
+                            )}"
+                        >
+
+                            <span class="admin-state-coverage__state">
+
+                                <strong>
+                                    ${escapeHtml(
+                                        state.stateName
+                                    )}
+                                </strong>
+
+                                <small>
+                                    ${escapeHtml(
+                                        state.stateCode
+                                    )}
+                                </small>
+
+                            </span>
+
+
+                            <span class="admin-state-coverage__count">
+
+                                ${
+                                    needsQuestions
+                                        ? "No Active Questions"
+                                        : `${formatNumber(
+                                            state.activeCount
+                                        )} Active`
+                                }
+
+                            </span>
+
+                        </button>
+
+                    `;
+
+                }
+            )
+            .join("");
+
+}
 
 /*
 ==================================================
@@ -1316,6 +1641,35 @@ function stopActiveSubscription() {
 
 }
 
+/*
+==================================================
+SET TEXT
+==================================================
+*/
+
+function setText(
+    elementId,
+    value
+) {
+
+    const element =
+        document.getElementById(
+            elementId
+        );
+
+
+    if (
+        element
+    ) {
+
+        element.textContent =
+            String(
+                value
+            );
+
+    }
+
+}
 
 /*
 ==================================================

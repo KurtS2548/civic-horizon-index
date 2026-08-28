@@ -1,7 +1,7 @@
 /*
 ==================================================
 CIVIC HORIZON INDEX V2
-POLLS CENTER TEST INITIALIZATION
+POLLS CENTER INITIALIZATION
 ==================================================
 */
 
@@ -22,6 +22,7 @@ async function loadComponent(
             containerId
         );
 
+
     if (!container) {
 
         console.error(
@@ -32,12 +33,14 @@ async function loadComponent(
 
     }
 
+
     try {
 
         const response =
             await fetch(
                 componentPath
             );
+
 
         if (!response.ok) {
 
@@ -47,8 +50,10 @@ async function loadComponent(
 
         }
 
+
         container.innerHTML =
             await response.text();
+
 
         return true;
 
@@ -58,6 +63,7 @@ async function loadComponent(
             `Could not load ${componentPath}:`,
             error
         );
+
 
         container.innerHTML = `
             <div
@@ -71,6 +77,7 @@ async function loadComponent(
                 This section could not be loaded.
             </div>
         `;
+
 
         return false;
 
@@ -173,6 +180,7 @@ async function initializeLivePolls() {
             error
         );
 
+
         showPollsFallback();
 
     }
@@ -265,16 +273,24 @@ function initializeHeader() {
             "mobileMenuButton"
         );
 
+
     const navigation =
         document.getElementById(
             "primaryNavigation"
         );
+
 
     const dropdownButtons =
         document.querySelectorAll(
             ".navigation-group__button"
         );
 
+
+    /*
+    --------------------------------------------------
+    MOBILE MENU
+    --------------------------------------------------
+    */
 
     if (
         menuButton &&
@@ -317,6 +333,12 @@ function initializeHeader() {
     }
 
 
+    /*
+    --------------------------------------------------
+    DESKTOP DROPDOWNS
+    --------------------------------------------------
+    */
+
     dropdownButtons.forEach(
         button => {
 
@@ -334,7 +356,9 @@ function initializeHeader() {
 
 
                     if (!group) {
+
                         return;
+
                     }
 
 
@@ -368,6 +392,12 @@ function initializeHeader() {
     );
 
 
+    /*
+    --------------------------------------------------
+    CLOSE DROPDOWNS WHEN CLICKING OUTSIDE
+    --------------------------------------------------
+    */
+
     document.addEventListener(
         "click",
         event => {
@@ -386,6 +416,12 @@ function initializeHeader() {
     );
 
 
+    /*
+    --------------------------------------------------
+    ESCAPE KEY
+    --------------------------------------------------
+    */
+
     document.addEventListener(
         "keydown",
         event => {
@@ -394,7 +430,9 @@ function initializeHeader() {
                 event.key !==
                 "Escape"
             ) {
+
                 return;
+
             }
 
 
@@ -427,6 +465,53 @@ function initializeHeader() {
                     );
 
                 }
+
+            }
+
+        }
+    );
+
+
+    /*
+    --------------------------------------------------
+    RESET MOBILE MENU ON DESKTOP RESIZE
+    --------------------------------------------------
+    */
+
+    window.addEventListener(
+        "resize",
+        () => {
+
+            if (
+                window.innerWidth > 980 &&
+                navigation &&
+                navigation.classList.contains(
+                    "open"
+                )
+            ) {
+
+                navigation.classList.remove(
+                    "open"
+                );
+
+
+                if (menuButton) {
+
+                    menuButton.setAttribute(
+                        "aria-expanded",
+                        "false"
+                    );
+
+
+                    menuButton.setAttribute(
+                        "aria-label",
+                        "Open navigation menu"
+                    );
+
+                }
+
+
+                closeDropdowns();
 
             }
 

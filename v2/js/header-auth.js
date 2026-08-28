@@ -70,9 +70,9 @@ async function handleDocumentClick(
 ) {
 
     const logoutButton =
-        event.target.closest(
-            "#headerLogoutButton"
-        );
+    event.target.closest(
+        "#headerLogoutButton, #mobileLogoutButton"
+    );
 
 
     if (!logoutButton) {

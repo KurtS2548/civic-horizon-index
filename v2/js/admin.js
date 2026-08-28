@@ -34,6 +34,9 @@ let pollSuggestionsStarted =
 let stateQuestionsStarted =
     false;
  
+let officialsStarted =
+    false;
+
 let contactMessagesStarted =
     false;
 
@@ -763,6 +766,23 @@ async function showAuthenticatedAdmin(
 
     /*
     ----------------------------------------------
+    PUBLIC OFFICIALS CONTROLLER
+    ----------------------------------------------
+    */
+
+    if (
+        !officialsStarted
+    ) {
+
+        await startOfficialsController();
+
+        officialsStarted =
+            true;
+
+    }
+
+    /*
+    ----------------------------------------------
     CONTACT MESSAGES CONTROLLER
     ----------------------------------------------
     */
@@ -817,6 +837,50 @@ async function startContactMessagesController() {
 
         console.error(
             "Contact Messages manager could not start:",
+            error
+        );
+
+    }
+
+}
+
+/*
+==================================================
+START PUBLIC OFFICIALS CONTROLLER
+==================================================
+*/
+
+async function startOfficialsController() {
+
+    try {
+
+        const controllerModule =
+            await import(
+                "./controllers/admin-officials-controller.js"
+            );
+
+
+        if (
+            typeof controllerModule
+                .initializeAdminOfficials !==
+            "function"
+        ) {
+
+            throw new Error(
+                "Public Officials controller initialization function was not found."
+            );
+
+        }
+
+
+        controllerModule
+            .initializeAdminOfficials();
+
+
+    } catch (error) {
+
+        console.error(
+            "Public Officials manager could not start:",
             error
         );
 
@@ -944,6 +1008,11 @@ async function loadAdminComponents() {
         loadComponent(
             "adminStateQuestionsContainer",
             "components/admin-state-questions.html"
+        ),
+
+        loadComponent(
+            "adminOfficialsContainer",
+            "components/admin-officials.html"
         ),
 
         loadComponent(
