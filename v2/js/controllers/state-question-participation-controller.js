@@ -26,7 +26,7 @@ import {
 
     auth
 
-} from "../../../js/firebase.js";
+} from "../firebase.js";
 
 
 const resultSubscriptions =

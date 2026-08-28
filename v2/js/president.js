@@ -1,4 +1,4 @@
-ï»¿/*
+/*
 ==================================================
 CIVIC HORIZON INDEX V2
 PRESIDENT SIMULATION
@@ -1151,7 +1151,7 @@ const newsFeed =
     );
     /*
 ==================================================
-FOREIGN POLICY â€” STABLE ADMINISTRATION
+FOREIGN POLICY — STABLE ADMINISTRATION
 ==================================================
 */
 
@@ -1381,7 +1381,7 @@ const foreignPolicyStableScenario = {
 
 /*
 ==================================================
-FOREIGN POLICY â€” FRAGILE ADMINISTRATION
+FOREIGN POLICY — FRAGILE ADMINISTRATION
 ==================================================
 */
 
@@ -1611,7 +1611,7 @@ const foreignPolicyFragileScenario = {
 
 /*
 ==================================================
-BUDGET â€” COOPERATIVE PATH
+BUDGET — COOPERATIVE PATH
 ==================================================
 */
 
@@ -1841,7 +1841,7 @@ const budgetCooperativeScenario = {
 
 /*
 ==================================================
-BUDGET â€” HOSTILE PATH
+BUDGET — HOSTILE PATH
 ==================================================
 */
 
@@ -2074,7 +2074,7 @@ const budgetHostileScenario = {
 
 /*
 ==================================================
-OVERSIGHT â€” NORMAL PATH
+OVERSIGHT — NORMAL PATH
 ==================================================
 */
 
@@ -2307,7 +2307,7 @@ const oversightNormalScenario = {
 
 /*
 ==================================================
-OVERSIGHT â€” CRISIS PATH
+OVERSIGHT — CRISIS PATH
 ==================================================
 */
 
@@ -2549,7 +2549,7 @@ const oversightCrisisScenario = {
 
 /*
 ==================================================
-ACCOUNTABILITY â€” STABLE TERM
+ACCOUNTABILITY — STABLE TERM
 ==================================================
 */
 
@@ -2767,7 +2767,7 @@ const accountabilityStableScenario = {
 
 /*
 ==================================================
-ACCOUNTABILITY â€” CRISIS TERM
+ACCOUNTABILITY — CRISIS TERM
 ==================================================
 */
 
@@ -3918,7 +3918,7 @@ function renderChoiceOutcome(
         ) {
 
             outcomeIcon.textContent =
-                "âœ“";
+                "?";
 
         } else if (
             totalChange <=
@@ -3931,7 +3931,7 @@ function renderChoiceOutcome(
         } else {
 
             outcomeIcon.textContent =
-                "â€¢";
+                "•";
 
         }
 
@@ -4436,7 +4436,7 @@ function calculateGrade() {
         82
     ) {
 
-        return "Aâˆ’";
+        return "A-";
 
     }
 
@@ -4466,7 +4466,7 @@ function calculateGrade() {
         64
     ) {
 
-        return "Bâˆ’";
+        return "B-";
 
     }
 
@@ -4523,7 +4523,7 @@ function getFinalPerformanceMessage(
 
 
     if (
-        grade === "Aâˆ’" ||
+        grade === "A-" ||
         grade === "B+"
     ) {
 
@@ -4536,7 +4536,7 @@ function getFinalPerformanceMessage(
 
     if (
         grade === "B" ||
-        grade === "Bâˆ’"
+        grade === "B-"
     ) {
 
         return (

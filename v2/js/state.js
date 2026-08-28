@@ -125,7 +125,7 @@ import {
 
     auth
 
-} from "../../js/firebase.js";
+} from "./firebase.js";
 
 
 import {

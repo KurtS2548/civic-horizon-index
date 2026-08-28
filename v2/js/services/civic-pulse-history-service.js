@@ -8,7 +8,7 @@ CIVIC PULSE HISTORY SERVICE
 
 import {
     database
-} from "../../../js/firebase.js";
+} from "../firebase.js";
 
 
 import {

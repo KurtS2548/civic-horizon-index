@@ -9,7 +9,7 @@ SHARED AUTHENTICATION SERVICE
 import {
     auth,
     database
-} from "../../../js/firebase.js";
+} from "../firebase.js";
 
 
 import {

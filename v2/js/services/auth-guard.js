@@ -25,7 +25,7 @@ SITE ACCESS POLICY
 
 import {
     auth
-} from "../../../js/firebase.js";
+} from "../firebase.js";
 
 
 import {

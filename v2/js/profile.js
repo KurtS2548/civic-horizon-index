@@ -1,4 +1,4 @@
-﻿/*
+/*
 ==================================================
 CIVIC HORIZON INDEX V2
 MY CIVIC DASHBOARD CONTROLLER
@@ -1097,7 +1097,7 @@ function renderPriorityComparison() {
                             personalValue
                         )
                             ? `${personalValue.toFixed(1)} / 10`
-                            : "—"
+                            : "�"
                     )
                 );
 
