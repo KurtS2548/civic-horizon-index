@@ -1,0 +1,1309 @@
+<!DOCTYPE html>
+<html
+    lang="en"
+    class="auth-access-pending"
+>
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="Explore clear, nonpartisan answers to common civic questions using reliable data and authoritative sources."
+    >
+
+    <title>
+        Just the Facts | Civic Horizon Index
+    </title>
+
+
+    <!-- GOOGLE FONTS -->
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Merriweather:wght@700&display=swap"
+        rel="stylesheet"
+    >
+
+
+    <!-- SHARED STYLES -->
+
+    <link
+        rel="stylesheet"
+        href="css/header.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="css/footer.css"
+    >
+
+
+    <!-- JUST THE FACTS STYLES -->
+
+    <link
+        rel="stylesheet"
+        href="css/facts.css"
+    >
+
+</head>
+
+
+<body>
+
+
+    <!--
+    ==================================================
+    SHARED HEADER
+    ==================================================
+    -->
+
+    <div id="headerContainer"></div>
+
+
+    <main class="facts-page">
+
+
+        <!--
+        ==================================================
+        HERO
+        ==================================================
+        -->
+
+        <section class="facts-hero">
+
+            <div class="facts-container">
+
+                <p class="facts-eyebrow">
+                    JUST THE FACTS
+                </p>
+
+                <h1>
+                    No Parties. No Personalities.
+                    <span>
+                        Just the Evidence.
+                    </span>
+                </h1>
+
+                <p class="facts-hero__description">
+                    Simple answers to common questions using
+                    reliable data and authoritative sources.
+                </p>
+
+
+                <div class="facts-standard">
+
+                    <strong>
+                        Our Standard
+                    </strong>
+
+                    <p>
+                        We look at the evidence, not who made
+                        the claim. When the facts are clear,
+                        we show them. When they are not,
+                        we say so.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!--
+        ==================================================
+        NATIONAL DEBT TRACKER
+        ==================================================
+        -->
+
+        <section class="facts-debt">
+
+            <div class="facts-container">
+
+                <article class="facts-debt__card">
+
+                    <div class="facts-debt__heading">
+
+                        <div>
+
+                            <p class="facts-eyebrow">
+                                U.S. NATIONAL DEBT
+                            </p>
+
+                            <h2>
+                                National Debt Tracker
+                            </h2>
+
+                        </div>
+
+
+                        <span class="facts-debt__status">
+                            U.S. Treasury
+                        </span>
+
+                    </div>
+
+
+                    <div
+                        class="facts-debt__total"
+                        id="nationalDebtTotal"
+                        aria-live="polite"
+                    >
+                        Loading official data...
+                    </div>
+
+
+                    <p class="facts-debt__updated">
+
+                        Latest official figure ·
+
+                        <span id="nationalDebtDate">
+                            —
+                        </span>
+
+                    </p>
+
+
+                    <div class="facts-debt__breakdown">
+
+                        <div>
+
+                            <span>
+                                Held by the Public
+                            </span>
+
+                            <strong id="publicDebtAmount">
+                                —
+                            </strong>
+
+                        </div>
+
+
+                        <div>
+
+                            <span>
+                                Intragovernmental
+                            </span>
+
+                            <strong id="intragovDebtAmount">
+                                —
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <p class="facts-debt__explanation">
+                        The national debt is money the federal
+                        government has borrowed and has not
+                        yet repaid.
+                    </p>
+
+                    <div class="facts-source">
+
+                        <a
+                            class="facts-source__link"
+                            href="https://fiscaldata.treasury.gov/datasets/debt-to-the-penny/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            View official U.S. Treasury data ↗
+                        </a>
+
+                    </div>
+
+
+                    <p
+                        class="facts-debt__error"
+                        id="nationalDebtError"
+                        hidden
+                    >
+                        Official Treasury data is temporarily
+                        unavailable.
+                    </p>
+
+                </article>
+
+            </div>
+
+        </section>
+
+
+        <!--
+        ==================================================
+        FACT TOPICS
+        ==================================================
+        -->
+
+        <section class="facts-topics">
+
+            <div class="facts-container">
+
+
+                <header class="facts-section-heading">
+
+                    <p class="facts-eyebrow">
+                        COMMON QUESTIONS
+                    </p>
+
+                    <h2>
+                        What do the facts show?
+                    </h2>
+
+                    <p>
+                        Select a question for the simple answer.
+                    </p>
+
+                </header>
+
+
+                <div class="facts-grid">
+
+
+                    <!--
+                    ==================================================
+                    01 TARIFFS
+                    ==================================================
+                    -->
+
+                    <details class="facts-card">
+
+                        <summary>
+
+                            <span class="facts-card__number">
+                                01
+                            </span>
+
+                            <div>
+
+                                <h3>
+                                    Tariffs
+                                </h3>
+
+                                <p>
+                                    Who actually pays tariffs?
+                                </p>
+
+                            </div>
+
+                            <span class="facts-card__toggle">
+                                +
+                            </span>
+
+                        </summary>
+
+
+                        <div class="facts-answer">
+
+                            <strong class="facts-answer__label">
+                                SIMPLE ANSWER
+                            </strong>
+
+                            <p>
+                                The U.S. importer is responsible
+                                for paying applicable tariffs,
+                                duties and fees when goods are
+                                imported into the United States.
+                            </p>
+
+                            <p>
+                                The importer may then raise prices,
+                                absorb some of the cost, or negotiate
+                                a lower price from its supplier.
+                            </p>
+
+
+                            <div class="facts-bottom-line">
+
+                                <strong>
+                                    Bottom line:
+                                </strong>
+
+                                A tariff is not simply a foreign
+                                government sending money to the
+                                United States.
+
+                            </div>
+
+
+                            <div class="facts-source">
+
+                                Source:
+
+                                <a
+                                    class="facts-source__link"
+                                    href="https://www.cbp.gov/trade/basic-import-export/importer-exporter-tips"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    U.S. Customs and Border Protection ↗
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    </details>
+
+
+                    <!--
+                    ==================================================
+                    02 NONCITIZEN VOTING
+                    ==================================================
+                    -->
+
+                    <details class="facts-card">
+
+                        <summary>
+
+                            <span class="facts-card__number">
+                                02
+                            </span>
+
+                            <div>
+
+                                <h3>
+                                    Noncitizen Voting
+                                </h3>
+
+                                <p>
+                                    Can noncitizens legally vote?
+                                </p>
+
+                            </div>
+
+                            <span class="facts-card__toggle">
+                                +
+                            </span>
+
+                        </summary>
+
+
+                        <div class="facts-answer">
+
+                            <strong class="facts-answer__label">
+                                SIMPLE ANSWER
+                            </strong>
+
+                            <p>
+                                Noncitizens cannot legally register
+                                or vote in federal elections.
+                            </p>
+
+                            <p>
+                                Illegal voting does happen and
+                                people can be prosecuted for it.
+                                Individual cases, however, do not
+                                tell us how common it is nationwide.
+                            </p>
+
+
+                            <div class="facts-number-box">
+
+                                <strong>
+                                    3
+                                </strong>
+
+                                <span>
+                                    noncitizens pleaded guilty in
+                                    three separate federal cases in
+                                    Florida in June 2026.
+                                </span>
+
+                            </div>
+
+
+                            <div class="facts-bottom-line">
+
+                                <strong>
+                                    Bottom line:
+                                </strong>
+
+                                Federal elections require
+                                U.S. citizenship. Documented
+                                violations exist.
+
+                            </div>
+
+
+                            <div class="facts-source">
+
+                                Source:
+
+                                <a
+                                    class="facts-source__link"
+                                    href="https://www.justice.gov/usao-sdfl/pr/three-noncitizens-convicted-illegal-voting-and-related-election-offenses-federal"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    U.S. Department of Justice ↗
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    </details>
+
+
+                    <!--
+                    ==================================================
+                    03 SOCIAL SECURITY
+                    ==================================================
+                    -->
+
+                    <details class="facts-card">
+
+                        <summary>
+
+                            <span class="facts-card__number">
+                                03
+                            </span>
+
+                            <div>
+
+                                <h3>
+                                    Social Security
+                                </h3>
+
+                                <p>
+                                    Can noncitizens receive benefits?
+                                </p>
+
+                            </div>
+
+                            <span class="facts-card__toggle">
+                                +
+                            </span>
+
+                        </summary>
+
+
+                        <div class="facts-answer">
+
+                            <strong class="facts-answer__label">
+                                SIMPLE ANSWER
+                            </strong>
+
+                            <p>
+                                Yes. Some lawfully present
+                                noncitizens can receive Social
+                                Security benefits.
+                            </p>
+
+                            <p>
+                                They still have to meet the
+                                program's normal eligibility
+                                requirements, including enough
+                                work credits when required.
+                            </p>
+
+
+                            <div class="facts-bottom-line">
+
+                                <strong>
+                                    Bottom line:
+                                </strong>
+
+                                Citizenship is not always required,
+                                but lawful presence and normal
+                                eligibility rules matter.
+
+                            </div>
+
+
+                            <div class="facts-source">
+
+                                Source:
+
+                                <a
+                                    class="facts-source__link"
+                                    href="https://www.ssa.gov/faqs/en/questions/KA-02447.html"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    Social Security Administration ↗
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    </details>
+
+
+                    <!--
+                    ==================================================
+                    04 MEDICARE AND MEDICAID
+                    ==================================================
+                    -->
+
+                    <details class="facts-card">
+
+                        <summary>
+
+                            <span class="facts-card__number">
+                                04
+                            </span>
+
+                            <div>
+
+                                <h3>
+                                    Medicare & Medicaid
+                                </h3>
+
+                                <p>
+                                    Who can actually qualify?
+                                </p>
+
+                            </div>
+
+                            <span class="facts-card__toggle">
+                                +
+                            </span>
+
+                        </summary>
+
+
+                        <div class="facts-answer">
+
+                            <strong class="facts-answer__label">
+                                SIMPLE ANSWER
+                            </strong>
+
+                            <p>
+                                Medicare and Medicaid are different
+                                programs and have different
+                                eligibility rules.
+                            </p>
+
+                            <p>
+                                Some qualified noncitizens can
+                                receive Medicaid if they meet
+                                their state's income, residency
+                                and other eligibility requirements.
+                            </p>
+
+
+                            <div class="facts-number-box">
+
+                                <strong>
+                                    5 years
+                                </strong>
+
+                                <span>
+                                    is the general Medicaid and CHIP
+                                    waiting period for many qualified
+                                    noncitizens. Important exceptions
+                                    exist.
+                                </span>
+
+                            </div>
+
+
+                            <p class="facts-context">
+                                Medicare has separate eligibility
+                                and immigration-status rules. The
+                                requirements should not be confused
+                                with Medicaid's five-year rule.
+                            </p>
+
+
+                            <div class="facts-source">
+
+                                Sources:
+
+                                <a
+                                    class="facts-source__link"
+                                    href="https://www.healthcare.gov/immigrants/lawfully-present-immigrants/"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    HealthCare.gov
+                                </a>
+
+                                ·
+
+                                <a
+                                    class="facts-source__link"
+                                    href="https://www.medicare.gov/basics/get-started-with-medicare/get-more-coverage/joining-a-plan"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    Medicare.gov ↗
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    </details>
+
+
+                    <!--
+                    ==================================================
+                    05 IMMIGRATION AND TAXES
+                    ==================================================
+                    -->
+
+                    <details class="facts-card">
+
+                        <summary>
+
+                            <span class="facts-card__number">
+                                05
+                            </span>
+
+                            <div>
+
+                                <h3>
+                                    Immigration & Taxes
+                                </h3>
+
+                                <p>
+                                    Do undocumented immigrants pay taxes?
+                                </p>
+
+                            </div>
+
+                            <span class="facts-card__toggle">
+                                +
+                            </span>
+
+                        </summary>
+
+
+                        <div class="facts-answer">
+
+                            <strong class="facts-answer__label">
+                                SIMPLE ANSWER
+                            </strong>
+
+                            <p>
+                                Yes. Immigration status and federal
+                                tax obligations are separate issues.
+                            </p>
+
+                            <p>
+                                People who are not eligible for a
+                                Social Security number can use an
+                                Individual Taxpayer Identification
+                                Number, or ITIN, when they have a
+                                federal tax filing or reporting
+                                requirement.
+                            </p>
+
+
+                            <div class="facts-bottom-line">
+
+                                <strong>
+                                    Important:
+                                </strong>
+
+                                An ITIN does not provide legal
+                                immigration status, work
+                                authorization or Social Security
+                                benefits.
+
+                            </div>
+
+
+                            <div class="facts-source">
+
+                                Source:
+
+                                <a
+                                    class="facts-source__link"
+                                    href="https://www.irs.gov/tin/itin/individual-taxpayer-identification-number-itin"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    Internal Revenue Service ↗
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    </details>
+
+
+                    <!--
+                    ==================================================
+                    06 VACCINES
+                    ==================================================
+                    -->
+
+                    <details class="facts-card">
+
+                        <summary>
+
+                            <span class="facts-card__number">
+                                06
+                            </span>
+
+                            <div>
+
+                                <h3>
+                                    Vaccines
+                                </h3>
+
+                                <p>
+                                    What do vaccine reports actually mean?
+                                </p>
+
+                            </div>
+
+                            <span class="facts-card__toggle">
+                                +
+                            </span>
+
+                        </summary>
+
+
+                        <div class="facts-answer">
+
+                            <strong class="facts-answer__label">
+                                SIMPLE ANSWER
+                            </strong>
+
+                            <p>
+                                Vaccines can cause side effects,
+                                and vaccine safety continues to be
+                                monitored after approval.
+                            </p>
+
+                            <p>
+                                A report submitted to VAERS does
+                                not by itself prove that a vaccine
+                                caused the reported health problem.
+                            </p>
+
+
+                            <div class="facts-bottom-line">
+
+                                <strong>
+                                    Bottom line:
+                                </strong>
+
+                                VAERS is an early-warning system.
+                                Possible safety signals require
+                                further scientific investigation.
+
+                            </div>
+
+
+                            <div class="facts-source">
+
+                                Source:
+
+                                <a
+                                    class="facts-source__link"
+                                    href="https://www.cdc.gov/vaccine-safety-systems/vaers/index.html"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    CDC Vaccine Safety Systems ↗
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    </details>
+
+
+                    <!--
+                    ==================================================
+                    07 INFLATION
+                    ==================================================
+                    -->
+
+                    <details class="facts-card">
+
+                        <summary>
+
+                            <span class="facts-card__number">
+                                07
+                            </span>
+
+                            <div>
+
+                                <h3>
+                                    Inflation
+                                </h3>
+
+                                <p>
+                                    Does lower inflation mean lower prices?
+                                </p>
+
+                            </div>
+
+                            <span class="facts-card__toggle">
+                                +
+                            </span>
+
+                        </summary>
+
+
+                        <div class="facts-answer">
+
+                            <strong class="facts-answer__label">
+                                SIMPLE ANSWER
+                            </strong>
+
+                            <p>
+                                Usually, no.
+                            </p>
+
+                            <p>
+                                Lower inflation normally means
+                                prices are rising more slowly.
+                                It does not necessarily mean
+                                prices are falling.
+                            </p>
+
+
+                            <div class="facts-number-box">
+
+                                <strong>
+                                    3.4%
+                                </strong>
+
+                                <span>
+                                    U.S. consumer-price inflation
+                                    over the 12 months ending
+                                    July 2026.
+                                </span>
+
+                            </div>
+
+
+                            <div class="facts-example">
+
+                                <strong>
+                                    Simple example
+                                </strong>
+
+                                <span>
+                                    $100 + 6% = $106
+                                </span>
+
+                                <span>
+                                    $106 + 3% = $109.18
+                                </span>
+
+                                <p>
+                                    Inflation fell from 6% to 3%,
+                                    but the price still increased.
+                                </p>
+
+                            </div>
+
+
+                            <div class="facts-source">
+
+                                Source:
+
+                                <a
+                                    class="facts-source__link"
+                                    href="https://www.bls.gov/news.release/archives/cpi_08122026.htm"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    U.S. Bureau of Labor Statistics ↗
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    </details>
+
+
+                    <!--
+                    ==================================================
+                    08 GAS PRICES
+                    ==================================================
+                    -->
+
+                    <details class="facts-card">
+
+                        <summary>
+
+                            <span class="facts-card__number">
+                                08
+                            </span>
+
+                            <div>
+
+                                <h3>
+                                    Gas Prices
+                                </h3>
+
+                                <p>
+                                    Does the president set gas prices?
+                                </p>
+
+                            </div>
+
+                            <span class="facts-card__toggle">
+                                +
+                            </span>
+
+                        </summary>
+
+
+                        <div class="facts-answer">
+
+                            <strong class="facts-answer__label">
+                                SIMPLE ANSWER
+                            </strong>
+
+                            <p>
+                                No. A president does not directly
+                                set the price shown at the gas pump.
+                            </p>
+
+                            <p>
+                                Gas prices are affected by crude
+                                oil prices, refining, distribution,
+                                marketing and taxes.
+                            </p>
+
+
+                            <div class="facts-number-box">
+
+                                <strong>
+                                    51.9%
+                                </strong>
+
+                                <span>
+                                    of the average U.S. gasoline
+                                    price in May 2026 came from
+                                    the crude-oil component.
+                                </span>
+
+                            </div>
+
+
+                            <p class="facts-context">
+                                Government policies can influence
+                                energy markets, but they are only
+                                one part of gasoline pricing.
+                            </p>
+
+
+                            <div class="facts-source">
+
+                                Source:
+
+                                <a
+                                    class="facts-source__link"
+                                    href="https://www.eia.gov/petroleum/gasdiesel/gaspump_hist.php"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    U.S. Energy Information Administration ↗
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    </details>
+
+
+                    <!--
+                    ==================================================
+                    09 CRIME
+                    ==================================================
+                    -->
+
+                    <details class="facts-card">
+
+                        <summary>
+
+                            <span class="facts-card__number">
+                                09
+                            </span>
+
+                            <div>
+
+                                <h3>
+                                    Crime
+                                </h3>
+
+                                <p>
+                                    Is violent crime rising or falling?
+                                </p>
+
+                            </div>
+
+                            <span class="facts-card__toggle">
+                                +
+                            </span>
+
+                        </summary>
+
+
+                        <div class="facts-answer">
+
+                            <strong class="facts-answer__label">
+                                SIMPLE ANSWER
+                            </strong>
+
+                            <p>
+                                Nationally, violent crime fell
+                                significantly from 2024 to 2025.
+                            </p>
+
+
+                            <div class="facts-stat-grid">
+
+                                <div>
+
+                                    <strong>
+                                        -9.3%
+                                    </strong>
+
+                                    <span>
+                                        Violent crime
+                                    </span>
+
+                                </div>
+
+                                <div>
+
+                                    <strong>
+                                        -18.1%
+                                    </strong>
+
+                                    <span>
+                                        Murder
+                                    </span>
+
+                                </div>
+
+                                <div>
+
+                                    <strong>
+                                        -18.5%
+                                    </strong>
+
+                                    <span>
+                                        Robbery
+                                    </span>
+
+                                </div>
+
+                                <div>
+
+                                    <strong>
+                                        -7.2%
+                                    </strong>
+
+                                    <span>
+                                        Aggravated assault
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+
+                            <p class="facts-context">
+                                National trends do not mean crime
+                                changed the same way in every
+                                city or state.
+                            </p>
+
+
+                            <div class="facts-source">
+
+                                Source:
+
+                                <a
+                                    class="facts-source__link"
+                                    href="https://www.fbi.gov/news/press-releases/fbi-releases-2025-reported-crimes-in-the-nation-statistics"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    Federal Bureau of Investigation ↗
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    </details>
+
+
+                    <!--
+                    ==================================================
+                    10 ELECTION FRAUD
+                    ==================================================
+                    -->
+
+                    <details class="facts-card">
+
+                        <summary>
+
+                            <span class="facts-card__number">
+                                10
+                            </span>
+
+                            <div>
+
+                                <h3>
+                                    Election Fraud
+                                </h3>
+
+                                <p>
+                                    Does election fraud happen?
+                                </p>
+
+                            </div>
+
+                            <span class="facts-card__toggle">
+                                +
+                            </span>
+
+                        </summary>
+
+
+                        <div class="facts-answer">
+
+                            <strong class="facts-answer__label">
+                                SIMPLE ANSWER
+                            </strong>
+
+                            <p>
+                                Yes. Election crimes happen and
+                                people are prosecuted for them.
+                            </p>
+
+                            <p>
+                                Federal election crimes can include
+                                voting fraud, vote buying, absentee
+                                ballot fraud and other election
+                                offenses.
+                            </p>
+
+
+                            <div class="facts-bottom-line">
+
+                                <strong>
+                                    Important:
+                                </strong>
+
+                                A documented case proves that the
+                                specific violation occurred. It
+                                does not by itself prove that fraud
+                                was widespread throughout an
+                                election.
+
+                            </div>
+
+
+                            <p class="facts-context">
+                                There is no single federal statistic
+                                that counts every type of election
+                                fraud nationwide.
+                            </p>
+
+
+                            <div class="facts-source">
+
+                                Source:
+
+                                <a
+                                    class="facts-source__link"
+                                    href="https://www.justice.gov/criminal/criminal-pin/election-crimes-branch"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    DOJ Election Crimes Branch ↗
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    </details>
+
+
+                </div>
+
+
+                <!--
+                ==================================================
+                REVIEW NOTE
+                ==================================================
+                -->
+
+                <div class="facts-review-note">
+
+                    <strong>
+                        Last reviewed:
+                    </strong>
+
+                    August 29, 2026
+
+                    <span>
+                        Facts and numbers will be updated as
+                        newer official data become available.
+                    </span>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+
+    <!--
+    ==================================================
+    SHARED FOOTER
+    ==================================================
+    -->
+
+    <div id="footerContainer"></div>
+
+
+    <script
+        type="module"
+        src="js/facts.js"
+    ></script>
+
+    <script
+        type="module"
+        src="js/site-auth.js"
+    ></script>
+
+
+</body>
+
+</html>
