@@ -122,7 +122,7 @@
 
       "$voteId": {
         ".write": "auth != null && auth.token.email_verified === true && !data.exists() && newData.exists() && newData.child('surveyId').isString() && root.child('communityPollVotes').child(newData.child('surveyId').val()).child(auth.uid).exists() && root.child('communityPollVotes').child(newData.child('surveyId').val()).child(auth.uid).child('publicVoteId').val() === $voteId && root.child('communityPollVotes').child(newData.child('surveyId').val()).child(auth.uid).child('surveyId').val() === newData.child('surveyId').val() && root.child('communityPollVotes').child(newData.child('surveyId').val()).child(auth.uid).child('choice').val() === newData.child('choice').val()",
-        
+
         ".validate": "newData.hasChildren(['surveyId', 'choice', 'choiceIndex', 'submittedAt', 'source']) && newData.child('surveyId').isString() && newData.child('surveyId').val().length > 0 && newData.child('surveyId').val().length <= 100 && newData.child('choice').isString() && newData.child('choice').val().length > 0 && newData.child('choice').val().length <= 120 && newData.child('submittedAt').isString() && newData.child('submittedAt').val().length >= 20 && newData.child('submittedAt').val().length <= 40 && newData.child('source').isString() && newData.child('source').val() === 'v2PollsCenter' && root.child('createdSurveys').child(newData.child('surveyId').val()).child('active').val() === true",
         "surveyId": {
           ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 100"
@@ -133,7 +133,7 @@
         },
 
         "choiceIndex": {
-          ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() % 1 === 0 && root.child('createdSurveys').child(newData.parent().child('surveyId').val()).child('choices').child(newData.val()).val() === newData.parent().child('choice').val()"
+          ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() % 1 === 0 && root.child('createdSurveys').child(newData.parent().child('surveyId').val()).child('choices').child(newData.val() + '').val() === newData.parent().child('choice').val()"
         },
 
         "submittedAt": {
@@ -167,7 +167,7 @@
           },
 
           "choiceIndex": {
-            ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() % 1 === 0 && root.child('createdSurveys').child($pollId).child('choices').child(newData.val()).val() === newData.parent().child('choice').val()"
+            ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() % 1 === 0 && root.child('createdSurveys').child($pollId).child('choices').child(newData.val() + '').val() === newData.parent().child('choice').val()"
           },
 
           "publicVoteId": {
