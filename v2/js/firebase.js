@@ -113,23 +113,16 @@ const app =
 APP CHECK CONFIGURATION
 ==================================================
 
-Production:
+Production websites use reCAPTCHA Enterprise.
 
-https://kurts2548.github.io
+Local development uses Firebase App Check
+debug mode.
 
-App Check runs automatically.
+The local debug token is registered privately
+in Firebase Console and is never stored in
+this source file.
 
-Local development:
-
-http://127.0.0.1
-http://localhost
-
-App Check is temporarily skipped while we continue
-developing and testing V2 locally.
-
-Do NOT enable Firebase App Check enforcement until
-the V2 site is published and production traffic has
-been verified in the Firebase App Check dashboard.
+Realtime Database App Check enforcement is active.
 ==================================================
 */
 
@@ -150,45 +143,67 @@ const isLocalDevelopment =
         "localhost";
 
 
+/*
+==================================================
+LOCAL APP CHECK DEBUG MODE
+==================================================
+
+Firebase generates/uses the registered debug token
+when running locally.
+
+Never replace this value with the actual debug token.
+==================================================
+*/
+
+if (
+    isLocalDevelopment
+) {
+
+    self.FIREBASE_APPCHECK_DEBUG_TOKEN =
+        true;
+
+}
+
+
+/*
+==================================================
+INITIALIZE APP CHECK
+==================================================
+*/
+
 let appCheck =
     null;
 
 
-if (
-    !isLocalDevelopment
-) {
+try {
 
-    try {
+    appCheck =
+        initializeAppCheck(
+            app,
+            {
 
-        appCheck =
-            initializeAppCheck(
-                app,
-                {
+                provider:
+                    new ReCaptchaEnterpriseProvider(
+                        reCaptchaEnterpriseSiteKey
+                    ),
 
-                    provider:
-                        new ReCaptchaEnterpriseProvider(
-                            reCaptchaEnterpriseSiteKey
-                        ),
+                /*
+                Firebase automatically refreshes
+                App Check tokens before expiration.
+                */
 
-                    /*
-                    Firebase will automatically refresh
-                    App Check tokens before they expire.
-                    */
+                isTokenAutoRefreshEnabled:
+                    true
 
-                    isTokenAutoRefreshEnabled:
-                        true
-
-                }
-            );
-
-    } catch (error) {
-
-        console.error(
-            "Firebase App Check could not be initialized:",
-            error
+            }
         );
 
-    }
+} catch (error) {
+
+    console.error(
+        "Firebase App Check could not be initialized:",
+        error
+    );
 
 }
 
@@ -197,8 +212,8 @@ if (
 ==================================================
 INITIALIZE FIREBASE SERVICES
 
-App Check is initialized above these services on
-the production website as recommended by Firebase.
+App Check is initialized before Realtime Database
+and Authentication.
 ==================================================
 */
 

@@ -1,33 +1,187 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Page Not Found</title>
+<html lang="en">
 
-    <style media="screen">
-      body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 0; }
-      #message { background: white; max-width: 360px; margin: 100px auto 16px; padding: 32px 24px 16px; border-radius: 3px; }
-      #message h3 { color: #888; font-weight: normal; font-size: 16px; margin: 16px 0 12px; }
-      #message h2 { color: #ffa100; font-weight: bold; font-size: 16px; margin: 0 0 8px; }
-      #message h1 { font-size: 22px; font-weight: 300; color: rgba(0,0,0,0.6); margin: 0 0 16px;}
-      #message p { line-height: 140%; margin: 16px 0 24px; font-size: 14px; }
-      #message a { display: block; text-align: center; background: #039be5; text-transform: uppercase; text-decoration: none; color: white; padding: 16px; border-radius: 4px; }
-      #message, #message a { box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); }
-      #load { color: rgba(0,0,0,0.4); text-align: center; font-size: 13px; }
-      @media (max-width: 600px) {
-        body, #message { margin-top: 0; background: white; box-shadow: none; }
-        body { border-top: 16px solid #ffa100; }
-      }
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Page Not Found | Civic Horizon Index
+    </title>
+
+    <link
+        rel="icon"
+        type="image/png"
+        href="/images/logo.png"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Merriweather:wght@700&display=swap"
+        rel="stylesheet"
+    >
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            min-height: 100%;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 32px 20px;
+            background: #f7f9fb;
+            color: #243b53;
+            font-family: "Inter", sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .error-page {
+            width: 100%;
+            max-width: 620px;
+            text-align: center;
+        }
+
+        .error-page__logo {
+            width: 78px;
+            height: 78px;
+            object-fit: contain;
+            margin-bottom: 24px;
+        }
+
+        .error-page__code {
+            margin: 0 0 10px;
+            color: #486581;
+            font-size: 15px;
+            font-weight: 800;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+        }
+
+        .error-page__title {
+            margin: 0;
+            color: #102a43;
+            font-family: "Merriweather", serif;
+            font-size: clamp(32px, 6vw, 48px);
+            line-height: 1.15;
+        }
+
+        .error-page__message {
+            max-width: 500px;
+            margin: 18px auto 30px;
+            color: #627d98;
+            font-size: 17px;
+            line-height: 1.65;
+        }
+
+        .error-page__button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 50px;
+            padding: 0 24px;
+            border-radius: 10px;
+            background: #243b53;
+            color: #ffffff;
+            font-size: 15px;
+            font-weight: 700;
+            text-decoration: none;
+            transition:
+                transform 0.2s ease,
+                background 0.2s ease;
+        }
+
+        .error-page__button:hover {
+            background: #102a43;
+            transform: translateY(-1px);
+        }
+
+        .error-page__button:focus-visible {
+            outline: 3px solid #9fb3c8;
+            outline-offset: 4px;
+        }
+
+        @media (max-width: 600px) {
+
+            body {
+                padding: 24px 18px;
+            }
+
+            .error-page__logo {
+                width: 64px;
+                height: 64px;
+            }
+
+            .error-page__message {
+                font-size: 16px;
+            }
+
+            .error-page__button {
+                width: 100%;
+            }
+
+        }
+
     </style>
-  </head>
-  <body>
-    <div id="message">
-      <h2>404</h2>
-      <h1>Page Not Found</h1>
-      <p>The specified file was not found on this website. Please check the URL for mistakes and try again.</p>
-      <h3>Why am I seeing this?</h3>
-      <p>This page was generated by the Firebase Command-Line Interface. To modify it, edit the <code>404.html</code> file in your project's configured <code>public</code> directory.</p>
-    </div>
-  </body>
+
+</head>
+
+<body>
+
+    <main class="error-page">
+
+        <img
+            class="error-page__logo"
+            src="/images/logo.png"
+            alt="Civic Horizon Index"
+        >
+
+        <p class="error-page__code">
+            Error 404
+        </p>
+
+        <h1 class="error-page__title">
+            Page Not Found
+        </h1>
+
+        <p class="error-page__message">
+            The page you were looking for could not be found.
+            It may have been moved, removed, or the address may be incorrect.
+        </p>
+
+        <a
+            class="error-page__button"
+            href="/"
+        >
+            Return Home
+        </a>
+
+    </main>
+
+</body>
+
 </html>
