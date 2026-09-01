@@ -825,26 +825,39 @@ export async function getMonthlyParticipationStatus(
     }
 
 
-    const alreadyParticipated =
-        await hasParticipatedThisMonth(
+    const validatedTracker =
+        validateMonthlyTracker(
             tracker
         );
 
 
+    const monthlyReference =
+        getMonthlyParticipantReference(
+            validatedTracker,
+            user.uid
+        );
+
+
+    const monthlySnapshot =
+        await get(
+            monthlyReference
+        );
+
+
     if (
-        alreadyParticipated
+        !monthlySnapshot.exists()
     ) {
 
         return {
 
             eligible:
-                false,
+                true,
 
             reason:
-                "alreadyParticipatedThisMonth",
+                "eligible",
 
             alreadyParticipated:
-                true,
+                false,
 
             votingPeriod,
 
@@ -855,16 +868,92 @@ export async function getMonthlyParticipationStatus(
     }
 
 
+    /*
+    ==================================================
+    NATIONAL PRIORITIES COMPLETION CHECK
+
+    A private monthly lock by itself does NOT mean
+    the vote completed successfully.
+
+    If the anonymous public result is missing,
+    allow submitPrioritySubmission() to run again
+    so its existing recovery logic can finish
+    the incomplete submission.
+    ==================================================
+    */
+
+    if (
+        validatedTracker ===
+        "nationalPriorities"
+    ) {
+
+        const monthlyData =
+            monthlySnapshot.val() ||
+            {};
+
+
+        const publicSubmissionId =
+            String(
+                monthlyData.publicSubmissionId ||
+                ""
+            ).trim();
+
+
+        if (
+            publicSubmissionId
+        ) {
+
+            const publicReference =
+                ref(
+                    database,
+                    `prioritySubmissions/${publicSubmissionId}`
+                );
+
+
+            const publicSnapshot =
+                await get(
+                    publicReference
+                );
+
+
+            if (
+                !publicSnapshot.exists()
+            ) {
+
+                return {
+
+                    eligible:
+                        true,
+
+                    reason:
+                        "incompleteSubmission",
+
+                    alreadyParticipated:
+                        false,
+
+                    votingPeriod,
+
+                    votingPeriodLabel
+
+                };
+
+            }
+
+        }
+
+    }
+
+
     return {
 
         eligible:
-            true,
+            false,
 
         reason:
-            "eligible",
+            "alreadyParticipatedThisMonth",
 
         alreadyParticipated:
-            false,
+            true,
 
         votingPeriod,
 

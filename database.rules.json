@@ -186,85 +186,86 @@
     },
 
     "prioritySubmissions": {
-      ".read": "auth != null",
+  ".read": "auth != null",
 
-      "$submissionId": {
-        ".write": "auth != null && auth.token.email_verified === true && !data.exists() && newData.exists() && newData.child('votingPeriod').isString() && root.child('monthlyVotes').child(newData.child('votingPeriod').val()).child('nationalPriorities').child(auth.uid).exists() && root.child('monthlyVotes').child(newData.child('votingPeriod').val()).child('nationalPriorities').child(auth.uid).child('publicSubmissionId').val() === $submissionId && root.child('monthlyVotes').child(newData.child('votingPeriod').val()).child('nationalPriorities').child(auth.uid).child('ratings').val() === newData.child('ratings').val() && root.child('monthlyVotes').child(newData.child('votingPeriod').val()).child('nationalPriorities').child(auth.uid).child('ageGroup').val() === newData.child('ageGroup').val() && root.child('monthlyVotes').child(newData.child('votingPeriod').val()).child('nationalPriorities').child(auth.uid).child('submittedAt').val() === newData.child('submittedAt').val() && root.child('monthlyVotes').child(newData.child('votingPeriod').val()).child('nationalPriorities').child(auth.uid).child('survey').val() === newData.child('survey').val() && root.child('monthlyVotes').child(newData.child('votingPeriod').val()).child('nationalPriorities').child(auth.uid).child('surveyVersion').val() === newData.child('surveyVersion').val() && root.child('monthlyVotes').child(newData.child('votingPeriod').val()).child('nationalPriorities').child(auth.uid).child('votingPeriod').val() === newData.child('votingPeriod').val()",
-        ".validate": "newData.hasChildren(['ratings', 'ageGroup', 'submittedAt', 'survey', 'surveyVersion', 'votingPeriod'])",
+  "$submissionId": {
+    ".write": "auth != null && auth.token.email_verified === true && !data.exists() && newData.exists() && newData.child('votingPeriod').isString() && root.child('monthlyVotes').child(newData.child('votingPeriod').val()).child('nationalPriorities').child(auth.uid).exists() && root.child('monthlyVotes').child(newData.child('votingPeriod').val()).child('nationalPriorities').child(auth.uid).child('publicSubmissionId').val() === $submissionId && root.child('monthlyVotes').child(newData.child('votingPeriod').val()).child('nationalPriorities').child(auth.uid).child('ratings').child('economy').val() === newData.child('ratings').child('economy').val() && root.child('monthlyVotes').child(newData.child('votingPeriod').val()).child('nationalPriorities').child(auth.uid).child('ratings').child('healthcare').val() === newData.child('ratings').child('healthcare').val() && root.child('monthlyVotes').child(newData.child('votingPeriod').val()).child('nationalPriorities').child(auth.uid).child('ratings').child('education').val() === newData.child('ratings').child('education').val() && root.child('monthlyVotes').child(newData.child('votingPeriod').val()).child('nationalPriorities').child(auth.uid).child('ratings').child('housing').val() === newData.child('ratings').child('housing').val() && root.child('monthlyVotes').child(newData.child('votingPeriod').val()).child('nationalPriorities').child(auth.uid).child('ratings').child('immigration').val() === newData.child('ratings').child('immigration').val() && root.child('monthlyVotes').child(newData.child('votingPeriod').val()).child('nationalPriorities').child(auth.uid).child('ratings').child('publicSafety').val() === newData.child('ratings').child('publicSafety').val() && root.child('monthlyVotes').child(newData.child('votingPeriod').val()).child('nationalPriorities').child(auth.uid).child('ratings').child('nationalSecurity').val() === newData.child('ratings').child('nationalSecurity').val() && root.child('monthlyVotes').child(newData.child('votingPeriod').val()).child('nationalPriorities').child(auth.uid).child('ratings').child('environment').val() === newData.child('ratings').child('environment').val() && root.child('monthlyVotes').child(newData.child('votingPeriod').val()).child('nationalPriorities').child(auth.uid).child('ratings').child('governmentAccountability').val() === newData.child('ratings').child('governmentAccountability').val() && root.child('monthlyVotes').child(newData.child('votingPeriod').val()).child('nationalPriorities').child(auth.uid).child('ratings').child('childrenFamilies').val() === newData.child('ratings').child('childrenFamilies').val() && root.child('monthlyVotes').child(newData.child('votingPeriod').val()).child('nationalPriorities').child(auth.uid).child('ageGroup').val() === newData.child('ageGroup').val() && root.child('monthlyVotes').child(newData.child('votingPeriod').val()).child('nationalPriorities').child(auth.uid).child('submittedAt').val() === newData.child('submittedAt').val() && root.child('monthlyVotes').child(newData.child('votingPeriod').val()).child('nationalPriorities').child(auth.uid).child('survey').val() === newData.child('survey').val() && root.child('monthlyVotes').child(newData.child('votingPeriod').val()).child('nationalPriorities').child(auth.uid).child('surveyVersion').val() === newData.child('surveyVersion').val() && root.child('monthlyVotes').child(newData.child('votingPeriod').val()).child('nationalPriorities').child(auth.uid).child('votingPeriod').val() === newData.child('votingPeriod').val()",
 
-        "ratings": {
-          ".validate": "newData.hasChildren(['economy', 'healthcare', 'education', 'housing', 'immigration', 'publicSafety', 'nationalSecurity', 'environment', 'governmentAccountability', 'childrenFamilies'])",
+    ".validate": "newData.hasChildren(['ratings', 'ageGroup', 'submittedAt', 'survey', 'surveyVersion', 'votingPeriod'])",
 
-          "economy": {
-            ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 10"
-          },
+    "ratings": {
+      ".validate": "newData.hasChildren(['economy', 'healthcare', 'education', 'housing', 'immigration', 'publicSafety', 'nationalSecurity', 'environment', 'governmentAccountability', 'childrenFamilies'])",
 
-          "healthcare": {
-            ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 10"
-          },
+      "economy": {
+        ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 10"
+      },
 
-          "education": {
-            ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 10"
-          },
+      "healthcare": {
+        ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 10"
+      },
 
-          "housing": {
-            ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 10"
-          },
+      "education": {
+        ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 10"
+      },
 
-          "immigration": {
-            ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 10"
-          },
+      "housing": {
+        ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 10"
+      },
 
-          "publicSafety": {
-            ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 10"
-          },
+      "immigration": {
+        ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 10"
+      },
 
-          "nationalSecurity": {
-            ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 10"
-          },
+      "publicSafety": {
+        ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 10"
+      },
 
-          "environment": {
-            ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 10"
-          },
+      "nationalSecurity": {
+        ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 10"
+      },
 
-          "governmentAccountability": {
-            ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 10"
-          },
+      "environment": {
+        ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 10"
+      },
 
-          "childrenFamilies": {
-            ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 10"
-          },
+      "governmentAccountability": {
+        ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 10"
+      },
 
-          "$other": {
-            ".validate": false
-          }
-        },
+      "childrenFamilies": {
+        ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 10"
+      },
 
-        "ageGroup": {
-          ".validate": "newData.isString() && (newData.val() === 'youth' || newData.val() === 'adult')"
-        },
-
-        "submittedAt": {
-          ".validate": "newData.isString() && newData.val().length >= 20 && newData.val().length <= 40"
-        },
-
-        "survey": {
-          ".validate": "newData.isString() && newData.val() === 'nationalPriorities'"
-        },
-
-        "surveyVersion": {
-          ".validate": "newData.isString() && newData.val() === '2.1'"
-        },
-
-        "votingPeriod": {
-          ".validate": "newData.isString() && newData.val().matches(/^\\d{4}-\\d{2}$/)"
-        },
-
-        "$other": {
-          ".validate": false
-        }
+      "$other": {
+        ".validate": false
       }
     },
+
+    "ageGroup": {
+      ".validate": "newData.isString() && (newData.val() === 'youth' || newData.val() === 'adult')"
+    },
+
+    "submittedAt": {
+      ".validate": "newData.isString() && newData.val().length >= 20 && newData.val().length <= 40"
+    },
+
+    "survey": {
+      ".validate": "newData.isString() && newData.val() === 'nationalPriorities'"
+    },
+
+    "surveyVersion": {
+      ".validate": "newData.isString() && newData.val() === '2.1'"
+    },
+
+    "votingPeriod": {
+      ".validate": "newData.isString() && newData.val().matches(/^\\d{4}-\\d{2}$/)"
+    },
+
+    "$other": {
+      ".validate": false
+    }
+  }
+},
 
     "monthlyVotes": {
   "$period": {
