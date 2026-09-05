@@ -4,25 +4,42 @@
 ================================================== */
 
 .hero {
-    padding: 76px 0 82px;
+    padding: 72px 0 78px;
+
     background:
+        radial-gradient(
+            circle at top right,
+            rgba(45, 115, 173, 0.24),
+            transparent 34%
+        ),
         linear-gradient(
             135deg,
             #071d2f 0%,
             #0b253d 55%,
             #174f7f 100%
         );
+
     color: #ffffff;
 }
 
+
 .hero__container {
     display: grid;
+
     grid-template-columns:
-        minmax(0, 1.2fr)
-        minmax(340px, 0.8fr);
-    align-items: start;
-    gap: 64px;
-    width: min(1180px, calc(100% - 48px));
+        minmax(0, 1.15fr)
+        minmax(360px, 0.85fr);
+
+    align-items: center;
+
+    gap: 60px;
+
+    width:
+        min(
+            1180px,
+            calc(100% - 48px)
+        );
+
     margin: 0 auto;
 }
 
@@ -33,40 +50,106 @@
 
 .hero__content {
     max-width: 760px;
-    padding-top: 12px;
 }
+
 
 .hero__eyebrow {
     margin: 0 0 16px;
+
     color: #efc75d;
+
     font-size: 0.74rem;
     font-weight: 800;
-    letter-spacing: 0.11em;
+
+    line-height: 1.5;
+
+    letter-spacing: 0.1em;
+
+    text-transform: uppercase;
 }
+
 
 .hero__content h1 {
     margin: 0;
+
     max-width: 760px;
+
     color: #ffffff;
-    font-family: "Merriweather", Georgia, serif;
-    font-size: clamp(2.8rem, 6vw, 5rem);
-    line-height: 1.05;
+
+    font-family:
+        "Merriweather",
+        Georgia,
+        serif;
+
+    font-size:
+        clamp(
+            2.8rem,
+            5.6vw,
+            4.8rem
+        );
+
+    line-height: 1.06;
+
     letter-spacing: -0.035em;
 }
 
+
 .hero__description {
-    max-width: 690px;
+    max-width: 700px;
+
     margin: 24px 0 0;
-    color: #d0e1ed;
-    font-size: 1.06rem;
+
+    color: #d7e5ef;
+
+    font-size: 1.05rem;
+
     line-height: 1.8;
 }
 
+
+.hero__trust {
+    max-width: 680px;
+
+    margin: 20px 0 0;
+
+    padding: 14px 17px;
+
+    border-left: 4px solid #efc75d;
+
+    border-radius: 0 8px 8px 0;
+
+    background:
+        rgba(255, 255, 255, 0.07);
+
+    color: #ffffff;
+
+    font-size: 0.9rem;
+    font-weight: 700;
+
+    line-height: 1.6;
+}
+
+
 .hero__actions {
     display: flex;
+
     flex-wrap: wrap;
+
     gap: 14px;
-    margin-top: 30px;
+
+    margin-top: 28px;
+}
+
+
+.hero__note {
+    margin: 14px 0 0;
+
+    color: #aac4d9;
+
+    font-size: 0.76rem;
+    font-weight: 700;
+
+    letter-spacing: 0.02em;
 }
 
 
@@ -76,17 +159,26 @@
 
 .button {
     display: inline-flex;
+
     align-items: center;
     justify-content: center;
-    min-height: 48px;
-    padding: 12px 21px;
+
+    min-height: 50px;
+
+    padding: 13px 23px;
+
     border: 1px solid transparent;
+
     border-radius: 8px;
+
     font-size: 0.92rem;
     font-weight: 800;
+
     line-height: 1;
+
     text-align: center;
     text-decoration: none;
+
     transition:
         background-color 180ms ease,
         border-color 180ms ease,
@@ -94,110 +186,116 @@
         transform 180ms ease;
 }
 
+
 .button--primary {
     background: #2d73ad;
+
     color: #ffffff;
+
     box-shadow:
         0 8px 20px
         rgba(0, 0, 0, 0.18);
 }
 
+
 .button--primary:hover,
 .button--primary:focus-visible {
     background: #3b82b8;
+
     outline: none;
+
     transform: translateY(-1px);
 }
+
 
 .button--secondary {
     border-color:
         rgba(255, 255, 255, 0.6);
+
     background: transparent;
+
     color: #ffffff;
 }
+
 
 .button--secondary:hover,
 .button--secondary:focus-visible {
     border-color: #ffffff;
+
     background:
         rgba(255, 255, 255, 0.08);
+
     outline: none;
+
+    transform: translateY(-1px);
 }
 
 
 /* ==================================================
-   PRESIDENTIAL POLL CARD
+   HERO FEATURE CARD
 ================================================== */
 
 .hero__card {
     min-width: 0;
-    align-self: start;
 }
+
 
 .pulse-card {
     overflow: hidden;
+
     border:
         1px solid
         rgba(255, 255, 255, 0.18);
+
     border-radius: 18px;
+
     background:
         rgba(255, 255, 255, 0.09);
+
     box-shadow:
         0 24px 60px
         rgba(0, 0, 0, 0.22);
+
     backdrop-filter: blur(8px);
 }
 
+
 .pulse-card__header {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 20px;
     padding: 22px 24px;
+
     border-bottom:
         1px solid
         rgba(255, 255, 255, 0.14);
 }
 
-.pulse-card__header > div {
-    min-width: 0;
-}
 
 .pulse-card__eyebrow {
     margin: 0 0 7px;
+
     color: #efc75d;
+
     font-size: 0.68rem;
     font-weight: 800;
+
     letter-spacing: 0.08em;
+
     text-transform: uppercase;
 }
 
+
 .pulse-card__header h2 {
     margin: 0;
+
     color: #ffffff;
+
     font-family:
         "Merriweather",
         Georgia,
         serif;
-    font-size: 1.2rem;
-    line-height: 1.4;
-}
 
-.pulse-card__party {
-    display: inline-flex;
-    align-items: center;
-    flex-shrink: 0;
-    min-height: 30px;
-    padding: 6px 10px;
-    border:
-        1px solid
-        rgba(255, 255, 255, 0.2);
-    border-radius: 999px;
-    background:
-        rgba(255, 255, 255, 0.08);
-    color: #d0e1ed;
-    font-size: 0.7rem;
-    font-weight: 800;
+    font-size: 1.25rem;
+
+    line-height: 1.4;
 }
 
 
@@ -206,75 +304,50 @@
 ================================================== */
 
 .pulse-card__body {
-    padding: 26px 24px 24px;
-}
-
-.pulse-card__approval {
-    padding-bottom: 22px;
-    border-bottom:
-        1px solid
-        rgba(255, 255, 255, 0.12);
-}
-
-.pulse-card__approval span {
-    display: block;
-    color: #aac4d9;
-    font-size: 0.7rem;
-    font-weight: 800;
-    letter-spacing: 0.07em;
-    text-transform: uppercase;
-}
-
-.pulse-card__approval strong {
-    display: block;
-    margin-top: 10px;
-    color: #efc75d;
-    font-size: clamp(
-        2.7rem,
-        5vw,
-        3.7rem
-    );
-    font-weight: 800;
-    line-height: 1;
-    letter-spacing: -0.04em;
+    padding: 10px 24px 24px;
 }
 
 
 /* ==================================================
-   CARD STATS
+   HERO FEATURES
 ================================================== */
 
-.pulse-card__stats {
-    display: grid;
-    grid-template-columns:
-        repeat(
-            2,
-            minmax(0, 1fr)
-        );
-    gap: 12px;
-    margin-top: 20px;
+.hero-feature {
+    padding: 16px 0;
+
+    border-bottom:
+        1px solid
+        rgba(255, 255, 255, 0.11);
 }
 
-.pulse-card__stats > div {
-    padding: 15px;
-    border-radius: 10px;
-    background:
-        rgba(7, 29, 47, 0.42);
+
+.hero-feature:last-of-type {
+    border-bottom: 0;
 }
 
-.pulse-card__stats strong {
+
+.hero-feature strong {
     display: block;
+
+    margin-bottom: 5px;
+
     color: #ffffff;
-    font-size: 1.08rem;
+
+    font-size: 0.9rem;
+    font-weight: 800;
+
+    line-height: 1.35;
 }
 
-.pulse-card__stats small {
+
+.hero-feature span {
     display: block;
-    margin-top: 4px;
-    color: #aac4d9;
-    font-size: 0.68rem;
-    font-weight: 700;
-    text-transform: uppercase;
+
+    color: #bcd1e1;
+
+    font-size: 0.79rem;
+
+    line-height: 1.55;
 }
 
 
@@ -284,17 +357,24 @@
 
 .pulse-card__link {
     display: inline-flex;
-    margin-top: 22px;
-    color: #ffffff;
+
+    margin-top: 20px;
+
+    color: #efc75d;
+
     font-size: 0.82rem;
     font-weight: 800;
+
     text-decoration: none;
 }
 
+
 .pulse-card__link:hover,
 .pulse-card__link:focus-visible {
-    color: #efc75d;
+    color: #ffffff;
+
     outline: none;
+
     text-decoration: underline;
 }
 
@@ -305,66 +385,139 @@
 
 @media (max-width: 900px) {
 
+    .hero {
+        padding: 60px 0 66px;
+    }
+
+
     .hero__container {
         grid-template-columns: 1fr;
-        gap: 42px;
+
+        gap: 40px;
     }
+
 
     .hero__content {
-        padding-top: 0;
+        max-width: 760px;
     }
 
+
     .hero__card {
-        max-width: 620px;
+        max-width: 680px;
     }
 
 }
 
 
+/* ==================================================
+   MOBILE
+================================================== */
+
 @media (max-width: 600px) {
 
     .hero {
-        padding: 58px 0 64px;
+        padding: 42px 0 48px;
     }
+
 
     .hero__container {
         width:
             min(
                 1180px,
-                calc(100% - 32px)
+                calc(100% - 28px)
             );
+
+        gap: 32px;
     }
+
+
+    .hero__eyebrow {
+        margin-bottom: 12px;
+
+        font-size: 0.66rem;
+
+        line-height: 1.6;
+    }
+
 
     .hero__content h1 {
         font-size:
             clamp(
-                2.45rem,
-                12vw,
-                3.8rem
+                2.25rem,
+                11vw,
+                3.4rem
             );
+
+        line-height: 1.08;
     }
+
+
+    .hero__description {
+        margin-top: 18px;
+
+        font-size: 0.94rem;
+
+        line-height: 1.7;
+    }
+
+
+    .hero__trust {
+        margin-top: 17px;
+
+        padding: 12px 14px;
+
+        font-size: 0.82rem;
+    }
+
 
     .hero__actions {
         display: grid;
+
         grid-template-columns: 1fr;
+
+        gap: 10px;
+
+        margin-top: 22px;
     }
+
 
     .button {
         width: 100%;
+
+        min-height: 50px;
     }
+
+
+    .hero__note {
+        text-align: center;
+    }
+
 
     .pulse-card__header {
-        align-items: flex-start;
-        flex-direction: column;
-        padding: 20px;
+        padding: 19px 20px;
     }
+
 
     .pulse-card__body {
-        padding: 22px 20px 20px;
+        padding:
+            8px
+            20px
+            20px;
     }
 
-    .pulse-card__stats {
-        grid-template-columns: 1fr;
+
+    .hero-feature {
+        padding: 14px 0;
+    }
+
+
+    .hero-feature strong {
+        font-size: 0.86rem;
+    }
+
+
+    .hero-feature span {
+        font-size: 0.76rem;
     }
 
 }

@@ -32,17 +32,69 @@ let headerAuthInitialized =
 
 /*
 ==================================================
-START AUTH GUARD IMMEDIATELY
+PUBLIC HOMEPAGE CHECK
 ==================================================
 */
 
-document.documentElement
-    .classList.add(
-        "auth-access-pending"
+function isPublicHomepage() {
+
+    const path =
+        window.location.pathname
+            .replace(/\/+$/, "")
+            .toLowerCase();
+
+
+    return (
+        path === "" ||
+        path === "/" ||
+        path.endsWith("/index.html") ||
+        path.endsWith("/v2")
     );
 
+}
 
-protectCurrentPage();
+
+/*
+==================================================
+START AUTHENTICATION
+==================================================
+*/
+
+if (
+    isPublicHomepage()
+) {
+
+    /*
+    --------------------------------------------------
+    HOMEPAGE IS PUBLIC
+    --------------------------------------------------
+    Visitors arriving from Instagram, search engines,
+    shared links, or other sources can understand the
+    platform before being asked to create an account.
+    --------------------------------------------------
+    */
+
+    revealProtectedPage();
+
+    initializeHeaderWhenReady();
+
+} else {
+
+    /*
+    --------------------------------------------------
+    PROTECTED SITE PAGES
+    --------------------------------------------------
+    */
+
+    document.documentElement
+        .classList.add(
+            "auth-access-pending"
+        );
+
+
+    protectCurrentPage();
+
+}
 
 
 /*

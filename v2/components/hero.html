@@ -5,7 +5,7 @@
         <div class="hero__content">
 
             <p class="hero__eyebrow">
-                CIVIC HORIZON INDEX
+                INDEPENDENT • NONPARTISAN • BUILT FOR EVERYDAY AMERICANS
             </p>
 
             <h1>
@@ -13,9 +13,16 @@
             </h1>
 
             <p class="hero__description">
-                See what Civic Horizon participants care about,
-                explore live national results, and take part in
-                civic decisions that matter.
+                Civic Horizon Index is an independent, nonpartisan
+                civic platform where Americans can share what matters
+                to them, participate in polls, see public results,
+                explore their state, and rate how their elected
+                officials are doing.
+            </p>
+
+            <p class="hero__trust">
+                No political party. No candidate. No political agenda.
+                Just your voice and the results.
             </p>
 
             <div class="hero__actions">
@@ -24,17 +31,21 @@
                     href="polls.html"
                     class="button button--primary"
                 >
-                    Civic Polls
+                    Add Your Voice
                 </a>
 
                 <a
                     href="results.html"
                     class="button button--secondary"
                 >
-                    Explore Results
+                    See the Results
                 </a>
 
             </div>
+
+            <p class="hero__note">
+                Free to participate • Ages 13+
+            </p>
 
         </div>
 
@@ -48,73 +59,115 @@
                     <div>
 
                         <p class="pulse-card__eyebrow">
-                            Presidential Poll
+                            WHAT YOU CAN DO
                         </p>
 
                         <h2>
-                            President Donald J. Trump
+                            Your Voice. Real Results.
                         </h2>
 
                     </div>
-
-                    <span class="pulse-card__party">
-                        Republican
-                    </span>
 
                 </div>
 
 
                 <div class="pulse-card__body">
 
-                    <div class="pulse-card__approval">
+                    <div class="hero-feature">
+
+                        <strong>
+                            Rate the Issues
+                        </strong>
 
                         <span>
-                            Participant Approval
+                            Tell us which issues matter most to you.
                         </span>
-
-                        <strong id="homePresidentApproval">
-                            0.0%
-                        </strong>
 
                     </div>
 
 
-                    <div class="pulse-card__stats">
+                    <div class="hero-feature">
 
-                        <div>
+                        <strong>
+                            Take the Polls
+                        </strong>
 
-                            <strong id="homePresidentDisapproval">
-                                0.0%
-                            </strong>
+                        <span>
+                            Share your opinion on national and community questions.
+                        </span>
 
-                            <small>
-                                Disapproval
-                            </small>
-
-                        </div>
+                    </div>
 
 
-                        <div>
+                    <div class="hero-feature">
 
-                            <strong id="homePresidentResponses">
-                                0
-                            </strong>
+                        <strong>
+                            Rate Your Elected Officials
+                        </strong>
 
-                            <small>
-                                Responses
-                            </small>
+                        <span>
+                            Share how you think your elected representatives are doing.
+                        </span>
 
-                        </div>
+                    </div>
+
+
+                    <div class="hero-feature">
+
+                        <strong>
+                            See What Americans Are Saying
+                        </strong>
+
+                        <span>
+                            Explore participant results as they grow.
+                        </span>
+
+                    </div>
+
+
+                    <div class="hero-feature">
+
+                        <strong>
+                            Explore Your State
+                        </strong>
+
+                        <span>
+                            See civic information, officials, issues, and results
+                            for your state.
+                        </span>
 
                     </div>
 
 
                     <a
-                        href="polls.html#presidential-approval"
+                        href="polls.html"
                         class="pulse-card__link"
                     >
-                        View Presidential Poll →
+                        Start Participating →
                     </a>
+
+
+                    <!--
+                    Keep these elements available for the homepage
+                    controller without displaying presidential data
+                    in the landing-page hero.
+                    -->
+
+                    <div hidden>
+
+                        <span id="homePresidentApproval">
+                            0.0%
+                        </span>
+
+                        <span id="homePresidentDisapproval">
+                            0.0%
+                        </span>
+
+                        <span id="homePresidentResponses">
+                            0
+                        </span>
+
+                    </div>
 
                 </div>
 
